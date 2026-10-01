@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 02 - Ética y Seguridad en Automatizaciones con IA | Coderhouse</title>
+    <!-- Coder 4.0 Core Typography: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ==========================================================================
+           CODER 4.0 DESIGN SYSTEM & VARS
+           ========================================================================== */
+        :root {
+            --blanco-lienzo: #F8F2E8;
+            --negro-coder: #171717;
+            --naranja-oscuro: #260700;
+            --naranja-horizonte: #FF632B;
+            --amarillo-solar: #FE872D;
+            --rosa-energia: #FE64A3;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --transition-speed: 0.4s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #dcd6cd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: var(--font-main);
+            overflow: hidden;
+        }
+
+        /* Slide Viewer (Absolute 1280x720 No-Scale-Shift) */
+        .presentation-viewport {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            border-radius: 16px;
+            overflow: hidden;
+            background-color: var(--blanco-lienzo);
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            color: var(--negro-coder);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 50px 70px 40px 70px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity var(--transition-speed) ease-in-out, visibility var(--transition-speed) ease-in-out;
+            z-index: 1;
+        }
+
+        .slide-container.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        /* Abstract Brand Accents: Subtly warm gradients connecting to Coder 4.0 */
+        .slide-container::before {
+            content: '';
+            position: absolute;
+            top: -150px;
+            right: -150px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(255,99,43,0.06) 0%, rgba(248,242,232,0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .slide-container > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Typography & Hierarchy */
+        h1 {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+        }
+
+        .slide-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.2;
+            letter-spacing: -1px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .slide-title::after {
+            content: '';
+            flex-grow: 1;
+            height: 2px;
+            background-color: rgba(38, 7, 0, 0.1);
+            margin-left: 15px;
+        }
+
+        p, li {
+            font-size: 17px;
+            line-height: 1.5;
+            color: #3d3430;
+            font-weight: 400;
+        }
+
+        /* Content Area Layout Wrapper */
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* Grid & Column Definitions */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 45px;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Coder 4.0 Split Card layouts */
+        .two-column.tiled > div {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            padding: 35px;
+            height: 360px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+        }
+
+        .two-column.tiled h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--naranja-horizonte);
+            margin-bottom: 12px;
+        }
+
+        /* Warm Retro Photography Frame */
+        .image-wrapper {
+            border-radius: 16px;
+            height: 340px;
+            overflow: hidden;
+            width: 100%;
+            border: 4px solid #ffffff;
+            box-shadow: 0 10px 25px rgba(38, 7, 0, 0.08);
+        }
+
+        .image-wrapper img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        /* Custom 2D Filled Icons & Tiles */
+        .tiled-content {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        .tile {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+        }
+
+        .tile .icon-box {
+            background-color: rgba(255, 99, 43, 0.1);
+            color: var(--naranja-horizonte);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .tile h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--naranja-oscuro);
+            margin-bottom: 8px;
+        }
+
+        .tile p {
+            font-size: 14px;
+        }
+
+        /* Bullet List styling */
+        .bullet-list ul {
+            list-style: none;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+        }
+
+        .bullet-list li i {
+            position: absolute;
+            left: 0;
+            top: 3px;
+            color: var(--naranja-horizonte);
+            font-size: 16px;
+        }
+
+        /* Footer & Brand Branding Mark */
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(38, 7, 0, 0.06);
+            padding-top: 15px;
+            width: 100%;
+        }
+
+        .slide-footer .brand-logo {
+            font-weight: 800;
+            font-size: 16px;
+            color: var(--naranja-oscuro);
+            letter-spacing: -0.5px;
+        }
+
+        .slide-footer .brand-logo span {
+            color: var(--naranja-horizonte);
+        }
+
+        .slide-footer .slide-index {
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(38, 7, 0, 0.4);
+        }
+
+        /* Slide Type Banners ("Momentos de la Clase") */
+        .moment-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 30px;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            align-self: flex-start;
+        }
+
+        .moment-badge.live {
+            background-color: var(--naranja-horizonte);
+        }
+
+        .moment-badge.bug {
+            background-color: var(--rosa-energia);
+        }
+
+        .moment-badge.tip {
+            background-color: var(--amarillo-solar);
+            color: var(--naranja-oscuro);
+        }
+
+        /* Slido Interactive layout */
+        .slido-box {
+            background-color: #ffffff;
+            border: 2px dashed var(--naranja-horizonte);
+            border-radius: 20px;
+            padding: 35px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(255, 99, 43, 0.05);
+        }
+
+        .slido-box h3 {
+            font-size: 26px;
+            color: var(--naranja-oscuro);
+            margin-bottom: 10px;
+        }
+
+        .slido-code {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--naranja-horizonte);
+            margin: 15px 0;
+            letter-spacing: -1px;
+        }
+
+        /* Transition slide */
+        .transition-layout {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .transition-layout h2 {
+            font-size: 60px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.1;
+            margin-bottom: 15px;
+            letter-spacing: -2px;
+        }
+
+        .transition-layout hr {
+            width: 80px;
+            height: 5px;
+            background-color: var(--naranja-horizonte);
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        /* Clean retro table */
+        .table-layout {
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+            width: 100%;
+        }
+
+        .table-layout table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-layout th, .table-layout td {
+            padding: 12px 20px;
+            text-align: left;
+            border-bottom: 1px solid rgba(38, 7, 0, 0.06);
+            font-size: 14px;
+        }
+
+        .table-layout th {
+            background-color: rgba(38, 7, 0, 0.03);
+            color: var(--naranja-oscuro);
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .table-layout tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Break Slide Design */
+        .break-slide {
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+        }
+
+        .break-slide::before {
+            display: none;
+        }
+
+        .break-slide h2 {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--blanco-lienzo);
+            margin-bottom: 20px;
+            letter-spacing: -1.5px;
+        }
+
+        .break-slide p {
+            color: rgba(248, 242, 232, 0.75);
+            font-size: 22px;
+        }
+
+        .break-logo {
+            font-size: 80px;
+            color: var(--naranja-horizonte);
+            margin-bottom: 30px;
+        }
+
+        /* Q&A / Legal section */
+        .legal-notice {
+            font-size: 10px;
+            line-height: 1.4;
+            color: rgba(38, 7, 0, 0.4);
+            text-align: justify;
+            margin-top: 20px;
+        }
+
+        /* Presentation controls toolbar */
+        .controls-toolbar {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            align-items: center;
+        }
+
+        .control-btn {
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .control-btn:hover {
+            background-color: var(--naranja-horizonte);
+        }
+
+        .slide-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(38, 7, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .dot.active {
+            background-color: var(--naranja-horizonte);
+            width: 25px;
+            border-radius: 10px;
+        }
+
+        /* Code Block Container */
+        .code-block {
+            background-color: #ffffff;
+            border-left: 4px solid var(--naranja-horizonte);
+            padding: 15px 20px;
+            font-family: monospace;
+            font-size: 13px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            white-space: pre-wrap;
+            line-height: 1.4;
+        }
+
+        /* Small note under tables */
+        .note-text {
+            margin-top: 18px;
+            font-size: 14px;
+            font-style: italic;
+            color: rgba(38, 7, 0, 0.6);
+        }
+
+        /* ==========================================================================
+           FLOWCHART (Óvalo / Rectángulo / Rombo) — extensión para diagramas de flujo
+           ========================================================================== */
+        .flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            gap: 10px;
+        }
+
+        .flow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fnode {
+            background-color: #ffffff;
+            color: var(--naranja-oscuro);
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.3;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.04);
+        }
+
+        .fnode.oval {
+            border: 2px solid var(--naranja-horizonte);
+            border-radius: 999px;
+            width: 170px;
+            min-height: 70px;
+            padding: 10px 18px;
+        }
+
+        .fnode.rect {
+            border: 2px solid var(--naranja-oscuro);
+            border-radius: 6px;
+            width: 170px;
+            min-height: 64px;
+            padding: 10px 14px;
+        }
+
+        .fnode.diamond {
+            width: 180px;
+            height: 120px;
+            background-color: var(--amarillo-solar);
+            clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+            box-shadow: none;
+            position: relative;
+        }
+
+        .fnode.diamond span {
+            position: absolute;
+            inset: 2px 3px;
+            background-color: #FFF4EA;
+            clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 34px;
+        }
+
+        .ftag {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--naranja-horizonte);
+        }
+
+        .farrow {
+            color: rgba(38, 7, 0, 0.35);
+            font-size: 18px;
+        }
+
+        .fbranch {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .fbranch-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fchip {
+            font-size: 11px;
+            font-weight: 800;
+            padding: 3px 9px;
+            border-radius: 20px;
+            color: #ffffff;
+            background-color: var(--naranja-horizonte);
+            min-width: 34px;
+            text-align: center;
+        }
+
+        .fchip.no {
+            background-color: var(--rosa-energia);
+        }
+
+        .flow-legend {
+            margin-top: 28px;
+            font-size: 14px;
+            color: rgba(38, 7, 0, 0.6);
+            text-align: center;
+        }
+
+        .flow-legend strong {
+            color: var(--naranja-oscuro);
+        }
+
+        /* Tile with a shape preview instead of an icon */
+        .shape-preview {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .shape-preview .fnode {
+            font-size: 12px;
+            width: 130px;
+            min-height: 52px;
+        }
+
+        .shape-preview .fnode.diamond {
+            width: 130px;
+            height: 70px;
+        }
+
+        .shape-preview .fnode.diamond span {
+            padding: 0 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="presentation-viewport">
+
+    <!-- SLIDE: Portada -->
+    <div class="slide-container active">
+        <div></div>
+        <div class="transition-layout" style="margin-bottom: 30px;">
+            <span class="moment-badge">CODER 4.0 • MÓDULO 1 • CLASE 02</span>
+            <h1 style="font-size: 46px;">Ética y Seguridad en Automatizaciones con IA</h1>
+            <p style="font-size: 20px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">
+                Cómo hacer que tus flujos sean seguros, justos y transparentes, y todo lo que necesitás para tu Pre-Entrega 1
+            </p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">01 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Repaso -->
+    <div class="slide-container">
+        <h2 class="slide-title">¿Dónde Quedamos?</h2>
+        <div class="content-area">
+            <span class="moment-badge live"><i class="fa-solid fa-video"></i> Esta clase queda grabada para que la veas después</span>
+            <div class="bullet-list">
+                <ul>
+                    <li><i class="fa-solid fa-gears"></i> <strong>BPA:</strong> usar tecnología para que tus procesos funcionen bajo reglas: "Si pasa X, entonces hacé Y".</li>
+                    <li><i class="fa-solid fa-sitemap"></i> Todo flujo se descompone en <strong>Trigger → Inputs → Acciones/Decisión → Output</strong>, y el output de un paso es el input del siguiente.</li>
+                    <li><i class="fa-solid fa-shapes"></i> Lo dibujamos con <strong>3 símbolos</strong>: óvalo (inicio/fin), rectángulo (acción) y rombo (decisión Sí/No).</li>
+                    <li><i class="fa-solid fa-lightbulb"></i> La lógica es el mapa; la IA es el motor.</li>
+                </ul>
+            </div>
+            <p class="note-text">Hoy sumamos la capa que falta: que ese flujo sea seguro, ético y legal.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">02 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: FindTheBug -->
+    <div class="slide-container">
+        <h2 class="slide-title">Mostranos tu Diagrama</h2>
+        <div class="content-area">
+            <span class="moment-badge bug"><i class="fa-solid fa-bug"></i> #FindTheBug · los errores más comunes</span>
+            <div class="table-layout">
+                <table>
+                    <thead>
+                        <tr><th>Error</th><th>Cómo se corrige</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Rombo con 3 o más salidas</strong></td><td>La decisión es solo Sí / No. Si hay más opciones, encadená rombos.</td></tr>
+                        <tr><td><strong>Trigger dibujado como rectángulo</strong></td><td>El inicio siempre es un óvalo.</td></tr>
+                        <tr><td><strong>Falta el óvalo de Fin</strong></td><td>Todo flujo termina en un Output concreto: un mensaje, una fila, un archivo.</td></tr>
+                        <tr><td><strong>Trigger, Inputs y Output sin etiquetar</strong></td><td>Escribilos de forma explícita al lado de cada nodo.</td></tr>
+                        <tr><td><strong>La IA aparece "de la nada"</strong></td><td>Que se vea qué dato recibe la IA y de dónde viene.</td></tr>
+                        <tr><td><strong>Proceso demasiado grande</strong></td><td>Acotalo a una sola tarea. Se evalúa la lógica clara, no la cantidad de pasos.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">03 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Objetivos -->
+    <div class="slide-container">
+        <h2 class="slide-title">Objetivos de la Clase</h2>
+        <div class="content-area">
+            <div class="bullet-list">
+                <ul>
+                    <li><i class="fa-solid fa-scale-balanced"></i> Conocer los <strong>3 pilares éticos</strong> de la IA: privacidad, equidad y transparencia.</li>
+                    <li><i class="fa-solid fa-shield-halved"></i> Aplicar <strong>minimización, trazabilidad, anonimización, eliminación y retención</strong> a un flujo concreto.</li>
+                    <li><i class="fa-solid fa-gavel"></i> Ubicar un flujo en los <strong>4 niveles de riesgo de la IA Act</strong> y saber qué exige el GDPR.</li>
+                    <li><i class="fa-solid fa-flag-checkered"></i> Salir con tu diagrama + la <strong>capa de gobernanza</strong> y la consigna de la <strong>Pre-Entrega 1</strong> clara.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">04 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: División Tema 1 -->
+    <div class="slide-container">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Tema 01</span>
+            <h2>Ética y Seguridad: el Código de Honor del Arquitecto</h2>
+            <p style="font-size: 20px;">Contratás un asistente con las llaves de tu oficina, tus mails y tu base de ventas. Un día descubrís que comparte los teléfonos de tus clientes con desconocidos. Eso pasa cuando automatizás sin un marco ético.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">05 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: 3 pilares -->
+    <div class="slide-container">
+        <h2 class="slide-title">Los 3 Pilares de la Ética en la IA</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-user-lock"></i></div>
+                    <h3>Privacidad</h3>
+                    <p>Las personas controlan su información. Sabé qué datos recogés, para qué y con quién los compartís. Un bot de WhatsApp no debería guardar la foto de perfil si solo necesita el nombre.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-scale-balanced"></i></div>
+                    <h3>Equidad</h3>
+                    <p>La IA aprende de datos pasados y repite sus prejuicios. Un filtro de CVs que prioriza hombres para puestos técnicos es una "barrera invisible". Revisá tus filtros y prompts.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-eye"></i></div>
+                    <h3>Transparencia</h3>
+                    <p>Tenés que poder explicar por qué el flujo tomó una decisión. Si un cliente pregunta "¿por qué no recibí el descuento?", no vale responder "la IA decidió así".</p>
+                </div>
+            </div>
+            <p class="note-text">Tu trabajo no es solo "conectar cables digitales": es proteger la confianza, el activo más valioso de cualquier profesional.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">06 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: HITL -->
+    <div class="slide-container">
+        <h2 class="slide-title">Supervisión Humana: Human-in-the-Loop</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge bug"><i class="fa-solid fa-triangle-exclamation"></i> Una automatización no es "configurar y olvidar"</span>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-landmark"></i> Regulaciones como la <strong>IA Act</strong> de la Unión Europea exigen que en sistemas de alto riesgo siempre haya un humano que pueda supervisar y, si hace falta, frenar el proceso.</li>
+                            <li><i class="fa-solid fa-hand"></i> Si el flujo toma decisiones importantes (aprobar un reembolso, enviar un contrato), incluí un <strong>paso de aprobación manual</strong> antes de la acción final.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="tile" style="height: 260px;">
+                        <div class="icon-box"><i class="fa-solid fa-circle-stop"></i></div>
+                        <h3>El "botón de parada"</h3>
+                        <p>En Make o n8n se traduce en enviar una notificación a Slack o un mail con botones <strong>Aprobar / Rechazar</strong> antes de que la IA ejecute la acción final.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">07 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Minimización y trazabilidad -->
+    <div class="slide-container">
+        <h2 class="slide-title">Minimización y Trazabilidad</h2>
+        <div class="content-area">
+            <div class="two-column tiled" style="grid-template-columns: 1fr 1fr;">
+                <div>
+                    <h3><i class="fa-solid fa-filter"></i> Minimización</h3>
+                    <p><strong>"Si no lo usás, no lo pidas."</strong></p>
+                    <p style="margin-top: 12px;">No pidas el teléfono si el contacto es por mail. Menos datos guardados significan menos riesgo si te hackean.</p>
+                </div>
+                <div>
+                    <h3><i class="fa-solid fa-route"></i> Trazabilidad</h3>
+                    <p>El registro de todo lo que pasa en tu flujo: <strong>qué entró, qué decidió la IA y qué salió</strong> en cada paso.</p>
+                    <p style="margin-top: 12px;">Si el flujo falla o manda un mensaje incorrecto, los logs te dicen en qué paso ocurrió y qué dato o prompt lo causó.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">08 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Dónde se ve la trazabilidad -->
+    <div class="slide-container">
+        <h2 class="slide-title">¿Dónde se Ve la Trazabilidad?</h2>
+        <div class="content-area">
+            <span class="moment-badge tip"><i class="fa-solid fa-lightbulb"></i> No tenés que crear los logs: las herramientas ya los guardan</span>
+            <div class="table-layout">
+                <table>
+                    <thead>
+                        <tr><th>Herramienta</th><th>Dónde</th><th>Qué ves</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Make</strong></td><td>Pestaña <strong>History</strong> (ícono de reloj, arriba a la derecha)</td><td>Cada ejecución con fecha, hora y punto verde (éxito) o rojo (error). Clic en un módulo para ver en burbujas el Input y el Output.</td></tr>
+                        <tr><td><strong>n8n</strong></td><td>Pestaña <strong>Executions</strong> (menú lateral izquierdo)</td><td>Las ejecuciones fallidas en rojo. Al abrir una, el nodo roto queda resaltado y ves el JSON de entrada y salida.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="note-text">Buena práctica: ante errores críticos, sumá un paso que mande el detalle a Slack o a una fila de Sheets/Airtable. Te enterás al instante.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">09 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Demo bot -->
+    <div class="slide-container">
+        <h2 class="slide-title">Demo: el Botón de Parada del Bot de Películas</h2>
+        <div class="content-area">
+            <span class="moment-badge live" style="align-self: center;"><i class="fa-solid fa-play"></i> En vivo: History de Make + botones en Telegram</span>
+            <div class="flow">
+                <div class="flow-step">
+                    <span class="ftag">Trigger</span>
+                    <div class="fnode oval">Llega un mensaje por Telegram</div>
+                </div>
+                <div class="farrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="flow-step">
+                    <span class="ftag">Acción (IA)</span>
+                    <div class="fnode rect">La IA arma la ficha y el bot la muestra con ✅ / ❌</div>
+                </div>
+                <div class="farrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="flow-step">
+                    <span class="ftag">Revisión humana</span>
+                    <div class="fnode diamond"><span>¿La ficha está bien?</span></div>
+                </div>
+                <div class="farrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="fbranch">
+                    <div class="fbranch-row"><span class="fchip">Sí</span><div class="fnode rect">Guardar la fila en Google Sheets</div></div>
+                    <div class="fbranch-row"><span class="fchip no">No</span><div class="fnode rect">No se guarda nada</div></div>
+                </div>
+                <div class="farrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="flow-step">
+                    <span class="ftag">Fin / Output</span>
+                    <div class="fnode oval">Confirmación por Telegram</div>
+                </div>
+            </div>
+            <p class="flow-legend">La IA propone, <strong>un humano aprueba</strong>. Y cada paso queda registrado en el History.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">10 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Anonimización, eliminación, retención -->
+    <div class="slide-container">
+        <h2 class="slide-title">Anonimización, Eliminación y Retención</h2>
+        <div class="content-area">
+            <div class="table-layout">
+                <table>
+                    <thead>
+                        <tr><th>Medida</th><th>Qué es</th><th>Cómo se hace en Make / n8n</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Anonimización</strong></td><td>Quitar lo que identifica a la persona antes de guardar o procesar.</td><td>Un módulo de transformación ("Set variable" / "Edit Fields") que reemplace el email por un hash o por <code>cliente_001</code>.</td></tr>
+                        <tr><td><strong>Eliminación</strong> (derecho al olvido)</td><td>Borrar los datos de alguien cuando lo pide (GDPR).</td><td>Trigger "llega un pedido de baja" → buscar la fila por email → <em>Delete row/record</em>. Guardás la fecha del borrado, no el dato.</td></tr>
+                        <tr><td><strong>Retención limitada</strong></td><td>No guardar los datos para siempre: definís un plazo (30 o 90 días).</td><td>Un escenario programado diario que busque registros más viejos que X días y los elimine.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="note-text">Para tu Pre-Entrega vas a elegir 2 o 3 de estas medidas (más minimización y trazabilidad) y explicar con qué módulo o nodo las implementarías.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">11 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: GDPR -->
+    <div class="slide-container">
+        <h2 class="slide-title">El Marco Legal: GDPR</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge"><i class="fa-solid fa-gavel"></i> Reglamento General de Protección de Datos</span>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-earth-europe"></i> Es la ley europea, pero afecta a <strong>cualquiera que interactúe con ciudadanos europeos</strong>.</li>
+                            <li><i class="fa-solid fa-square-check"></i> Exige <strong>consentimiento explícito</strong>: no podés suscribir a alguien a tu lista de mails solo porque te escribió por WhatsApp. Tiene que hacer clic y aceptar.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="tile" style="height: 260px;">
+                        <div class="icon-box"><i class="fa-solid fa-user-tie"></i></div>
+                        <h3>"Yo soy freelance, no me afecta"</h3>
+                        <p>Aunque seas un profesional independiente o una agencia chica, las leyes digitales te alcanzan. Ignorarlas puede terminar en sanciones de millones de euros o en el cierre de tu operación.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">12 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: IA Act niveles -->
+    <div class="slide-container">
+        <h2 class="slide-title">IA Act: los 4 Niveles de Riesgo</h2>
+        <div class="content-area">
+            <div class="table-layout">
+                <table>
+                    <thead>
+                        <tr><th>Nivel</th><th>Qué implica</th><th>Ejemplos</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Inaceptable</strong> (prohibido)</td><td>Atenta contra derechos fundamentales. No puede desplegarse en la UE.</td><td>Scoring social de personas, manipulación subliminal del comportamiento.</td></tr>
+                        <tr><td><strong>Alto</strong> (regulado)</td><td>Gestión de riesgos, datos de calidad, documentación, supervisión humana y registro. El más costoso de cumplir.</td><td>Filtrado de CVs, scoring crediticio, IA en educación o en dispositivos médicos.</td></tr>
+                        <tr><td><strong>Limitado</strong> (transparencia)</td><td>El usuario tiene que saber que habla con una IA; el contenido generado por IA se etiqueta.</td><td>Chatbots de atención, la mayoría de las automatizaciones de marketing.</td></tr>
+                        <tr><td><strong>Mínimo</strong> (sin obligaciones específicas)</td><td>Uso libre, con buenas prácticas recomendadas.</td><td>Filtros anti-spam, sugerencias simples de productos.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="note-text">La IA Act no regula la tecnología en sí: clasifica cada uso. A más riesgo, más obligaciones.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">13 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Dimensionar -->
+    <div class="slide-container">
+        <h2 class="slide-title">¿Dónde Caen tus Flujos?</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge tip"><i class="fa-solid fa-magnifying-glass"></i> Antes de construir, clasificá el uso</span>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-comments"></i> Un bot que responde consultas o un flujo que redacta mails es casi siempre <strong>riesgo limitado</strong>: es legal, pero tenés que avisar que hay una IA detrás.</li>
+                            <li><i class="fa-solid fa-arrow-trend-up"></i> Si tu flujo decide <strong>a quién se contrata o quién recibe un crédito</strong>, subís a alto riesgo y tus obligaciones cambian por completo.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="tile" style="height: 260px;">
+                        <div class="icon-box"><i class="fa-solid fa-euro-sign"></i></div>
+                        <h3>Para dimensionar</h3>
+                        <p>Las sanciones por usos prohibidos llegan a <strong>35 millones de euros o el 7 % de la facturación anual global</strong>. Las prohibiciones rigen desde 2025; las obligaciones de alto riesgo se completan entre 2026 y 2027.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">14 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Actividad riesgo -->
+    <div class="slide-container">
+        <h2 class="slide-title">Actividad: ¿Qué Nivel de Riesgo Es?</h2>
+        <div class="content-area">
+            <span class="moment-badge live"><i class="fa-solid fa-flask-vial"></i> Respondé en el chat: Inaceptable, Alto, Limitado o Mínimo</span>
+            <div class="bullet-list">
+                <ul>
+                    <li><i class="fa-solid fa-1"></i> Un chatbot de WhatsApp que responde horarios y precios.</li>
+                    <li><i class="fa-solid fa-2"></i> Un sistema que filtra CVs y descarta candidatos.</li>
+                    <li><i class="fa-solid fa-3"></i> El filtro anti-spam de tu mail.</li>
+                    <li><i class="fa-solid fa-4"></i> Un puntaje de "buen ciudadano" que decide el acceso a servicios.</li>
+                    <li><i class="fa-solid fa-5"></i> Imágenes para Instagram generadas con IA.</li>
+                    <li><i class="fa-solid fa-6"></i> Una IA que aprueba o rechaza préstamos.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">15 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Respuestas -->
+    <div class="slide-container">
+        <h2 class="slide-title">Respuestas</h2>
+        <div class="content-area">
+            <div class="table-layout">
+                <table>
+                    <thead>
+                        <tr><th>Caso</th><th>Nivel</th><th>Por qué</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1. Chatbot de horarios y precios</td><td><strong>Limitado</strong></td><td>Tiene que avisar que es un bot.</td></tr>
+                        <tr><td>2. Filtro de CVs</td><td><strong>Alto</strong></td><td>Afecta el acceso al empleo: exige supervisión humana y registro.</td></tr>
+                        <tr><td>3. Filtro anti-spam</td><td><strong>Mínimo</strong></td><td>Sin obligaciones específicas.</td></tr>
+                        <tr><td>4. Puntaje de "buen ciudadano"</td><td><strong>Inaceptable</strong></td><td>Es scoring social: está prohibido.</td></tr>
+                        <tr><td>5. Imágenes generadas con IA</td><td><strong>Limitado</strong></td><td>Hay que etiquetarlas como contenido generado por IA.</td></tr>
+                        <tr><td>6. IA que aprueba préstamos</td><td><strong>Alto</strong></td><td>Scoring crediticio: afecta derechos.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">16 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Mitos -->
+    <div class="slide-container">
+        <h2 class="slide-title">Mitos que Conviene Desarmar</h2>
+        <div class="content-area">
+            <div class="table-layout">
+                <table>
+                    <thead>
+                        <tr><th>Mito</th><th>Realidad</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>"La automatización es 100 % autónoma"</strong></td><td>Falso. Un cambio en el modelo puede hacer que tu prompt se comporte distinto mañana. La supervisión es obligatoria.</td></tr>
+                        <tr><td><strong>"Más datos hacen más inteligente a mi IA"</strong></td><td>Falso. Más datos aumentan el riesgo de filtraciones y complican la privacidad. La calidad supera a la cantidad.</td></tr>
+                        <tr><td><strong>"La ética es solo para grandes corporaciones"</strong></td><td>Falso. Un freelance que maneja mal los datos de 10 clientes puede arruinar su reputación. La ética es una ventaja competitiva.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">17 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Checklist de integridad -->
+    <div class="slide-container">
+        <h2 class="slide-title">Tu Checklist de Integridad</h2>
+        <div class="content-area">
+            <span class="moment-badge tip"><i class="fa-solid fa-lightbulb"></i> Para recordar · pasalo por cada automatización</span>
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-filter"></i></div>
+                    <h3>¿Es necesario?</h3>
+                    <p>¿Realmente necesito guardar este dato personal?</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-user-shield"></i></div>
+                    <h3>¿Hay un humano cerca?</h3>
+                    <p>Para las decisiones críticas, ¿hay un paso de validación humana?</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-eye"></i></div>
+                    <h3>¿Soy transparente?</h3>
+                    <p>¿El usuario sabe que habla con un bot o que sus datos se procesan automáticamente?</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                    <h3>¿Tengo un registro?</h3>
+                    <p>Si algo sale mal, ¿puedo ver qué pasó en cada paso del flujo?</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">18 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Práctica 3 -->
+    <div class="slide-container">
+        <h2 class="slide-title">Práctica 3: Sumale Gobernanza a tu Diagrama</h2>
+        <div class="content-area">
+            <span class="moment-badge live"><i class="fa-solid fa-flask-vial"></i> Paso 3 de la Pre-Entrega 1 · 13 minutos</span>
+            <div class="bullet-list">
+                <ul>
+                    <li><i class="fa-solid fa-list-check"></i> Pasá tu flujo por el <strong>checklist de integridad</strong>.</li>
+                    <li><i class="fa-solid fa-circle-stop"></i> Marcá en el diagrama dónde iría el <strong>botón de parada</strong> (revisión humana), si corresponde.</li>
+                    <li><i class="fa-solid fa-shield-halved"></i> Elegí <strong>2 o 3 medidas</strong> (minimización, trazabilidad, anonimización, eliminación, retención, consentimiento, revisión humana) y anotá con qué módulo o nodo concreto las implementarías.</li>
+                    <li><i class="fa-solid fa-gavel"></i> Clasificá tu flujo según la <strong>IA Act</strong>.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">19 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Break -->
+    <div class="slide-container break-slide">
+        <div></div>
+        <div class="transition-layout">
+            <div class="break-logo"><i class="fa-solid fa-mug-hot"></i></div>
+            <h2>Break</h2>
+            <p>Andá por un cafecito o un mate… ¡volvemos en un ratito!</p>
+        </div>
+        <div class="slide-footer" style="border-top-color: rgba(248, 242, 232, 0.15);">
+            <div class="brand-logo" style="color: var(--blanco-lienzo);">CODER<span>HOUSE</span></div>
+            <div class="slide-index" style="color: rgba(248, 242, 232, 0.5);">20 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: División PE1 -->
+    <div class="slide-container">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge live">✅ Entregable evaluado del Módulo</span>
+            <h2>Pre-Entrega 1: Diagrama de Arquitectura Lógica</h2>
+            <p style="font-size: 20px;">Lo único que se corrige en este módulo. Junta todo lo que practicaste: tu proceso, su diagrama y su capa de gobernanza.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">21 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Misión -->
+    <div class="slide-container">
+        <h2 class="slide-title">Contexto y Misión</h2>
+        <div class="content-area">
+            <div class="two-column tiled" style="grid-template-columns: 1fr 1fr;">
+                <div>
+                    <h3><i class="fa-solid fa-building"></i> Contexto</h3>
+                    <p>Un Arquitecto de Automatización no conecta herramientas a ciegas: primero diseña un mapa lógico. En 2026, las empresas exigen que los flujos inteligentes respeten normativas de privacidad como la <strong>IA Act</strong> o el <strong>GDPR</strong> antes de interactuar con motores de IA.</p>
+                </div>
+                <div>
+                    <h3><i class="fa-solid fa-bullseye"></i> Tu misión</h3>
+                    <p>Diseñar el diagrama lógico de un proceso que conecte una <strong>entrada de datos externa (Trigger)</strong> con un <strong>motor de Inteligencia Artificial</strong>, mostrando la trazabilidad de la información de forma segura y ética.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">22 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Pasos -->
+    <div class="slide-container">
+        <h2 class="slide-title">Pasos a Seguir</h2>
+        <div class="content-area">
+            <div class="bullet-list">
+                <ul>
+                    <li><i class="fa-solid fa-1"></i> Seleccioná un <strong>proceso cotidiano</strong> de tu negocio (responder consultas de clientes, registrar presupuestos).</li>
+                    <li><i class="fa-solid fa-2"></i> Usá una herramienta de diagramado: papel y lápiz, <strong>Draw.io, Canva o Lucidchart</strong>.</li>
+                    <li><i class="fa-solid fa-3"></i> Dibujá usando <strong>estrictamente</strong> los símbolos correctos: óvalo para Inicio/Trigger, rectángulo para Acciones, rombo para Decisiones Sí/No.</li>
+                    <li><i class="fa-solid fa-4"></i> Etiquetá de forma explícita el <strong>Trigger</strong>, los <strong>Inputs</strong> y el <strong>Output</strong> final.</li>
+                    <li><i class="fa-solid fa-5"></i> Agregá un <strong>párrafo de gobernanza</strong> (3-4 líneas) con 2 o 3 medidas concretas según GDPR / IA Act: anonimización, consentimiento, minimización, retención limitada o revisión humana.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">23 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Alcance y formato -->
+    <div class="slide-container">
+        <h2 class="slide-title">Alcance Mínimo y Formato de Entrega</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-diagram-project"></i></div>
+                    <h3>Al menos 5 nodos</h3>
+                    <p>1 óvalo (Trigger), 2 o más rectángulos (Acciones), 1 rombo (Decisión Sí/No) y 1 óvalo de Fin (Output).</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-file-export"></i></div>
+                    <h3>Formato</h3>
+                    <p>Diagrama (.drawio, Miro, Lucidchart) o documento PDF con la imagen legible del flujo y el párrafo de gobernanza.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-feather"></i></div>
+                    <h3>Sin complejidad de más</h3>
+                    <p>Se evalúa la lógica clara, no la cantidad de pasos.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">24 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Ejemplo resuelto -->
+    <div class="slide-container">
+        <h2 class="slide-title">Ejemplo Resuelto: Responder Consultas de Clientes</h2>
+        <div class="content-area">
+            <div class="flow">
+                <div class="flow-step">
+                    <span class="ftag">Trigger</span>
+                    <div class="fnode oval">Llega un email de consulta del cliente</div>
+                </div>
+                <div class="farrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="flow-step">
+                    <span class="ftag">Acción (IA)</span>
+                    <div class="fnode rect">La IA lee y clasifica la consulta</div>
+                </div>
+                <div class="farrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="flow-step">
+                    <span class="ftag">Decisión</span>
+                    <div class="fnode diamond"><span>¿Es simple y frecuente?</span></div>
+                </div>
+                <div class="farrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="fbranch">
+                    <div class="fbranch-row"><span class="fchip">Sí</span><div class="fnode rect">La IA responde sola</div></div>
+                    <div class="fbranch-row"><span class="fchip no">No</span><div class="fnode rect">Se deriva a un agente humano</div></div>
+                </div>
+                <div class="farrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="flow-step">
+                    <span class="ftag">Fin / Output</span>
+                    <div class="fnode oval">Respuesta enviada al cliente</div>
+                </div>
+            </div>
+            <p class="flow-legend"><strong>Trigger:</strong> email entrante · <strong>Input:</strong> texto de la consulta · <strong>Output:</strong> respuesta enviada</p>
+            <p class="note-text" style="text-align: center;">Tomalo de molde y adaptalo a tu propio proceso.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">25 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Párrafo de gobernanza -->
+    <div class="slide-container">
+        <h2 class="slide-title">Párrafo de Gobernanza de Muestra</h2>
+        <div class="content-area">
+            <span class="moment-badge tip"><i class="fa-solid fa-copy"></i> Molde: adaptalo a tu caso</span>
+            <div class="code-block" style="font-family: var(--font-main); font-size: 19px; line-height: 1.6; padding: 30px 35px; font-style: italic;">"Para proteger los datos personales del cliente (nombre y email), el flujo procesa solo la información estrictamente necesaria para responder la consulta (principio de minimización de datos, GDPR). El email no se almacena más de 30 días ni se usa para entrenar el modelo de IA, y los datos sensibles se anonimizan antes de derivar a un humano. Bajo el enfoque de riesgo de la IA Act, este flujo se clasifica como de riesgo limitado."</div>
+            <p class="note-text">Fijate: nombra los datos, dice qué medidas aplica (minimización, retención de 30 días, anonimización) y clasifica el riesgo.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">26 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Escribí tu párrafo -->
+    <div class="slide-container">
+        <h2 class="slide-title">Escribí tu Párrafo</h2>
+        <div class="content-area" style="align-items: center;">
+            <div class="slido-box" style="width: 820px;">
+                <h3>5 minutos: tu párrafo de gobernanza</h3>
+                <p>Usá el molde con los datos de tu propio flujo.</p>
+                <div class="slido-code">3-4 líneas · 2-3 medidas</div>
+                <p>Después, dos voluntarios lo leen en voz alta: ¿las medidas son concretas? ¿dice cómo se implementan?</p>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">27 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Rúbrica -->
+    <div class="slide-container">
+        <h2 class="slide-title">¿Cómo se Evalúa?</h2>
+        <div class="content-area">
+            <div class="table-layout">
+                <table>
+                    <thead>
+                        <tr><th>Criterio</th><th>Qué se evalúa</th><th>Peso</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Diseño técnico visual</strong></td><td>Modelado de la trazabilidad del dato usando estrictamente los 3 símbolos: óvalo, rectángulo y rombo.</td><td><strong>30 %</strong></td></tr>
+                        <tr><td><strong>Lógica de integración</strong></td><td>Conexión coherente, fluida y sin saltos entre la entrada de datos externa (Trigger) y el motor de IA.</td><td><strong>25 %</strong></td></tr>
+                        <tr><td><strong>Cumplimiento normativo y privacidad</strong></td><td>Párrafo de gobernanza con 2-3 medidas concretas alineadas con GDPR / IA Act.</td><td><strong>30 %</strong></td></tr>
+                        <tr><td><strong>Etiquetado de Trigger, Inputs y Output</strong></td><td>Identificados de forma explícita y correcta, con la trazabilidad clara de punta a punta.</td><td><strong>15 %</strong></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="note-text">Total: 100 pts · Aprobación: 70 pts</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">28 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Checklist de entrega -->
+    <div class="slide-container">
+        <h2 class="slide-title">Checklist de Entrega</h2>
+        <div class="content-area">
+            <span class="moment-badge tip"><i class="fa-solid fa-list-check"></i> Revisalo antes de subir</span>
+            <div class="bullet-list">
+                <ul>
+                    <li><i class="fa-regular fa-square-check"></i> Diagrama con los 3 símbolos correctos: óvalo (Trigger/Fin), rectángulo (Acción), rombo (Decisión). <strong>Mínimo 5 nodos.</strong></li>
+                    <li><i class="fa-regular fa-square-check"></i> <strong>Trigger, Inputs y Output</strong> etiquetados de forma explícita.</li>
+                    <li><i class="fa-regular fa-square-check"></i> <strong>Párrafo de gobernanza</strong> con 2-3 medidas concretas (anonimización, consentimiento, minimización, retención o revisión humana) alineadas con GDPR / IA Act.</li>
+                    <li><i class="fa-regular fa-square-check"></i> Entregado como diagrama (.drawio / Miro / Lucidchart) o <strong>PDF</strong> con el flujo legible + el párrafo.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">29 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Taller -->
+    <div class="slide-container">
+        <h2 class="slide-title">Taller: Manos a la Obra</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge live"><i class="fa-solid fa-pen-ruler"></i> 15 minutos · avanzá tu Pre-Entrega</span>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-display"></i> Abrí un lienzo en blanco en <strong>Draw.io o Lucidchart</strong>.</li>
+                            <li><i class="fa-solid fa-shapes"></i> Buscá las formas <strong>óvalo, rectángulo y rombo</strong> en el panel de figuras.</li>
+                            <li><i class="fa-solid fa-copy"></i> Armá tu flujo sobre el ejemplo resuelto y sumá tu párrafo de gobernanza.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="tile" style="height: 260px;">
+                        <div class="icon-box"><i class="fa-solid fa-hand"></i></div>
+                        <h3>¿Te trabaste?</h3>
+                        <p>Levantá la mano o escribí en el chat. Vamos recorriendo los diagramas con la rúbrica en la mano.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">30 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Síntesis y próximo módulo -->
+    <div class="slide-container">
+        <h2 class="slide-title">Cerramos el Módulo 1</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div class="bullet-list">
+                    <ul>
+                        <li><i class="fa-solid fa-map"></i> Aprendiste a pensar en flujos y a dibujarlos con los 3 símbolos.</li>
+                        <li><i class="fa-solid fa-shield-halved"></i> Ahora sabés hacerlo de forma <strong>segura y profesional</strong>: minimización, supervisión humana, trazabilidad y marco legal.</li>
+                        <li><i class="fa-solid fa-calendar-check"></i> <strong>Pre-Entrega 1:</strong> se recomienda entregarla antes de la <strong>clase 5</strong>.</li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="tile" style="height: 260px;">
+                        <div class="icon-box"><i class="fa-solid fa-forward"></i></div>
+                        <h3>Próximo: Módulo 2</h3>
+                        <p><strong>Ecosistema No-Code y Low-Code.</strong> Del mapa lógico pasamos a las herramientas reales, empezando por el "cerebro" de datos de tu sistema.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">31 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Para profundizar -->
+    <div class="slide-container">
+        <h2 class="slide-title">Material para Profundizar</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-landmark"></i></div>
+                    <h3>Comisión Europea — AI Act</h3>
+                    <p>El marco regulatorio completo de la IA en la Unión Europea.</p>
+                    <p style="margin-top: 10px; color: var(--naranja-horizonte); font-weight: 600;">digital-strategy.ec.europa.eu</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-building-columns"></i></div>
+                    <h3>Parlamento Europeo</h3>
+                    <p>"Qué es el AI Act": un resumen accesible de la primera regulación de IA.</p>
+                    <p style="margin-top: 10px; color: var(--naranja-horizonte); font-weight: 600;">europarl.europa.eu</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-book"></i></div>
+                    <h3>Anthropic — Documentación</h3>
+                    <p>Uso responsable de Claude en tus automatizaciones.</p>
+                    <p style="margin-top: 10px; color: var(--naranja-horizonte); font-weight: 600;">docs.anthropic.com</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">32 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: ¿Dudas? -->
+    <div class="slide-container">
+        <div class="content-area" style="align-items: center; justify-content: center; text-align: center;">
+            <div style="display: flex; gap: 25px; align-items: flex-end; justify-content: center; margin-bottom: 20px;">
+                <i class="fa-solid fa-circle-question" style="font-size: 50px; color: var(--amarillo-solar);"></i>
+                <i class="fa-solid fa-circle-question" style="font-size: 90px; color: var(--naranja-horizonte);"></i>
+                <i class="fa-solid fa-circle-question" style="font-size: 60px; color: var(--rosa-energia);"></i>
+            </div>
+            <h1 style="font-size: 64px;">¿Dudas? ¿Consultas?</h1>
+            <p style="font-size: 22px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">
+                ¡Cerramos el Módulo 1, arquitectos!
+            </p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">33 / 33</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Presentation navigation controls toolbar -->
+<div class="controls-toolbar">
+    <button class="control-btn" id="prev-slide"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+    <div class="slide-dots" id="slide-dots"></div>
+    <button class="control-btn" id="next-slide">Siguiente <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<script>
+    // Slider Presentation Logic
+    const slides = document.querySelectorAll('.slide-container');
+    const prevBtn = document.getElementById('prev-slide');
+    const nextBtn = document.getElementById('next-slide');
+    const dotsContainer = document.getElementById('slide-dots');
+
+    let currentSlideIndex = 0;
+
+    // Create Navigation Indicators Dynamically
+    slides.forEach((slide, idx) => {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (idx === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => {
+            goToSlide(idx);
+        });
+        dotsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.dot');
+
+    function updateControls() {
+        dots.forEach((dot, idx) => {
+            if (idx === currentSlideIndex) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }
+
+    function goToSlide(index) {
+        if (index < 0 || index >= slides.length) return;
+
+        slides[currentSlideIndex].classList.remove('active');
+        currentSlideIndex = index;
+        slides[currentSlideIndex].classList.add('active');
+
+        updateControls();
+    }
+
+    // Keyboard Navigation Handlers
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') {
+            goToSlide(currentSlideIndex + 1);
+        } else if (e.key === 'ArrowLeft') {
+            goToSlide(currentSlideIndex - 1);
+        }
+    });
+
+    // Button Click Event Listeners
+    prevBtn.addEventListener('click', () => {
+        goToSlide(currentSlideIndex - 1);
+    });
+
+    nextBtn.addEventListener('click', () => {
+        goToSlide(currentSlideIndex + 1);
+    });
+</script>
+
+</body>
+</html>

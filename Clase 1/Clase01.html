@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 01 - Automatización de Procesos y Arquitectura de Flujos | Coderhouse</title>
+    <!-- Coder 4.0 Core Typography: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ==========================================================================
+           CODER 4.0 DESIGN SYSTEM & VARS
+           ========================================================================== */
+        :root {
+            --blanco-lienzo: #F8F2E8;
+            --negro-coder: #171717;
+            --naranja-oscuro: #260700;
+            --naranja-horizonte: #FF632B;
+            --amarillo-solar: #FE872D;
+            --rosa-energia: #FE64A3;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --transition-speed: 0.4s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #dcd6cd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: var(--font-main);
+            overflow: hidden;
+        }
+
+        /* Slide Viewer (Absolute 1280x720 No-Scale-Shift) */
+        .presentation-viewport {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            border-radius: 16px;
+            overflow: hidden;
+            background-color: var(--blanco-lienzo);
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            color: var(--negro-coder);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 50px 70px 40px 70px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity var(--transition-speed) ease-in-out, visibility var(--transition-speed) ease-in-out;
+            z-index: 1;
+        }
+
+        .slide-container.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        /* Abstract Brand Accents: Subtly warm gradients connecting to Coder 4.0 */
+        .slide-container::before {
+            content: '';
+            position: absolute;
+            top: -150px;
+            right: -150px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(255,99,43,0.06) 0%, rgba(248,242,232,0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .slide-container > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Typography & Hierarchy */
+        h1 {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+        }
+
+        .slide-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.2;
+            letter-spacing: -1px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .slide-title::after {
+            content: '';
+            flex-grow: 1;
+            height: 2px;
+            background-color: rgba(38, 7, 0, 0.1);
+            margin-left: 15px;
+        }
+
+        p, li {
+            font-size: 17px;
+            line-height: 1.5;
+            color: #3d3430;
+            font-weight: 400;
+        }
+
+        /* Content Area Layout Wrapper */
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* Grid & Column Definitions */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 45px;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Coder 4.0 Split Card layouts */
+        .two-column.tiled > div {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            padding: 35px;
+            height: 360px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+        }
+
+        .two-column.tiled h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--naranja-horizonte);
+            margin-bottom: 12px;
+        }
+
+        /* Warm Retro Photography Frame */
+        .image-wrapper {
+            border-radius: 16px;
+            height: 340px;
+            overflow: hidden;
+            width: 100%;
+            border: 4px solid #ffffff;
+            box-shadow: 0 10px 25px rgba(38, 7, 0, 0.08);
+        }
+
+        .image-wrapper img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        /* Custom 2D Filled Icons & Tiles */
+        .tiled-content {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        .tile {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+        }
+
+        .tile .icon-box {
+            background-color: rgba(255, 99, 43, 0.1);
+            color: var(--naranja-horizonte);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .tile h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--naranja-oscuro);
+            margin-bottom: 8px;
+        }
+
+        .tile p {
+            font-size: 14px;
+        }
+
+        /* Bullet List styling */
+        .bullet-list ul {
+            list-style: none;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+        }
+
+        .bullet-list li i {
+            position: absolute;
+            left: 0;
+            top: 3px;
+            color: var(--naranja-horizonte);
+            font-size: 16px;
+        }
+
+        /* Footer & Brand Branding Mark */
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(38, 7, 0, 0.06);
+            padding-top: 15px;
+            width: 100%;
+        }
+
+        .slide-footer .brand-logo {
+            font-weight: 800;
+            font-size: 16px;
+            color: var(--naranja-oscuro);
+            letter-spacing: -0.5px;
+        }
+
+        .slide-footer .brand-logo span {
+            color: var(--naranja-horizonte);
+        }
+
+        .slide-footer .slide-index {
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(38, 7, 0, 0.4);
+        }
+
+        /* Slide Type Banners ("Momentos de la Clase") */
+        .moment-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 30px;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            align-self: flex-start;
+        }
+
+        .moment-badge.live {
+            background-color: var(--naranja-horizonte);
+        }
+
+        .moment-badge.bug {
+            background-color: var(--rosa-energia);
+        }
+
+        .moment-badge.tip {
+            background-color: var(--amarillo-solar);
+            color: var(--naranja-oscuro);
+        }
+
+        /* Slido Interactive layout */
+        .slido-box {
+            background-color: #ffffff;
+            border: 2px dashed var(--naranja-horizonte);
+            border-radius: 20px;
+            padding: 35px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(255, 99, 43, 0.05);
+        }
+
+        .slido-box h3 {
+            font-size: 26px;
+            color: var(--naranja-oscuro);
+            margin-bottom: 10px;
+        }
+
+        .slido-code {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--naranja-horizonte);
+            margin: 15px 0;
+            letter-spacing: -1px;
+        }
+
+        /* Transition slide */
+        .transition-layout {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .transition-layout h2 {
+            font-size: 60px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.1;
+            margin-bottom: 15px;
+            letter-spacing: -2px;
+        }
+
+        .transition-layout hr {
+            width: 80px;
+            height: 5px;
+            background-color: var(--naranja-horizonte);
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        /* Clean retro table */
+        .table-layout {
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+            width: 100%;
+        }
+
+        .table-layout table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-layout th, .table-layout td {
+            padding: 12px 20px;
+            text-align: left;
+            border-bottom: 1px solid rgba(38, 7, 0, 0.06);
+            font-size: 14px;
+        }
+
+        .table-layout th {
+            background-color: rgba(38, 7, 0, 0.03);
+            color: var(--naranja-oscuro);
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .table-layout tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Break Slide Design */
+        .break-slide {
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+        }
+
+        .break-slide::before {
+            display: none;
+        }
+
+        .break-slide h2 {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--blanco-lienzo);
+            margin-bottom: 20px;
+            letter-spacing: -1.5px;
+        }
+
+        .break-slide p {
+            color: rgba(248, 242, 232, 0.75);
+            font-size: 22px;
+        }
+
+        .break-logo {
+            font-size: 80px;
+            color: var(--naranja-horizonte);
+            margin-bottom: 30px;
+        }
+
+        /* Q&A / Legal section */
+        .legal-notice {
+            font-size: 10px;
+            line-height: 1.4;
+            color: rgba(38, 7, 0, 0.4);
+            text-align: justify;
+            margin-top: 20px;
+        }
+
+        /* Presentation controls toolbar */
+        .controls-toolbar {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            align-items: center;
+        }
+
+        .control-btn {
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .control-btn:hover {
+            background-color: var(--naranja-horizonte);
+        }
+
+        .slide-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(38, 7, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .dot.active {
+            background-color: var(--naranja-horizonte);
+            width: 25px;
+            border-radius: 10px;
+        }
+
+        /* Code Block Container */
+        .code-block {
+            background-color: #ffffff;
+            border-left: 4px solid var(--naranja-horizonte);
+            padding: 15px 20px;
+            font-family: monospace;
+            font-size: 13px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            white-space: pre-wrap;
+            line-height: 1.4;
+        }
+
+        /* Small note under tables */
+        .note-text {
+            margin-top: 18px;
+            font-size: 14px;
+            font-style: italic;
+            color: rgba(38, 7, 0, 0.6);
+        }
+
+        /* ==========================================================================
+           FLOWCHART (Óvalo / Rectángulo / Rombo) — extensión para diagramas de flujo
+           ========================================================================== */
+        .flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            gap: 10px;
+        }
+
+        .flow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fnode {
+            background-color: #ffffff;
+            color: var(--naranja-oscuro);
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.3;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.04);
+        }
+
+        .fnode.oval {
+            border: 2px solid var(--naranja-horizonte);
+            border-radius: 999px;
+            width: 170px;
+            min-height: 70px;
+            padding: 10px 18px;
+        }
+
+        .fnode.rect {
+            border: 2px solid var(--naranja-oscuro);
+            border-radius: 6px;
+            width: 170px;
+            min-height: 64px;
+            padding: 10px 14px;
+        }
+
+        .fnode.diamond {
+            width: 180px;
+            height: 120px;
+            background-color: var(--amarillo-solar);
+            clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+            box-shadow: none;
+            position: relative;
+        }
+
+        .fnode.diamond span {
+            position: absolute;
+            inset: 2px 3px;
+            background-color: #FFF4EA;
+            clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 34px;
+        }
+
+        .ftag {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--naranja-horizonte);
+        }
+
+        .farrow {
+            color: rgba(38, 7, 0, 0.35);
+            font-size: 18px;
+        }
+
+        .fbranch {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .fbranch-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fchip {
+            font-size: 11px;
+            font-weight: 800;
+            padding: 3px 9px;
+            border-radius: 20px;
+            color: #ffffff;
+            background-color: var(--naranja-horizonte);
+            min-width: 34px;
+            text-align: center;
+        }
+
+        .fchip.no {
+            background-color: var(--rosa-energia);
+        }
+
+        .flow-legend {
+            margin-top: 28px;
+            font-size: 14px;
+            color: rgba(38, 7, 0, 0.6);
+            text-align: center;
+        }
+
+        .flow-legend strong {
+            color: var(--naranja-oscuro);
+        }
+
+        /* Tile with a shape preview instead of an icon */
+        .shape-preview {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .shape-preview .fnode {
+            font-size: 12px;
+            width: 130px;
+            min-height: 52px;
+        }
+
+        .shape-preview .fnode.diamond {
+            width: 130px;
+            height: 70px;
+        }
+
+        .shape-preview .fnode.diamond span {
+            padding: 0 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="presentation-viewport">
+
+    <!-- SLIDE: Portada -->
+    <div class="slide-container active">
+        <div></div>
+        <div class="transition-layout" style="margin-bottom: 30px;">
+            <span class="moment-badge">CODER 4.0 • MÓDULO 1 • CLASE 01</span>
+            <h1 style="font-size: 46px;">Automatización de Procesos y Arquitectura de Flujos</h1>
+            <p style="font-size: 20px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">
+                Qué es automatizar, por qué es tu nueva superpotencia, y cómo pensar cualquier proceso como un flujo antes de construirlo
+            </p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">01 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Equipo docente -->
+    <div class="slide-container">
+        <h2 class="slide-title">Presentación del Equipo</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="tile" style="align-items: center; text-align: center; justify-content: center;">
+                    <div class="icon-box" style="width: 80px; height: 80px; border-radius: 50%; font-size: 34px;"><i class="fa-solid fa-chalkboard-user"></i></div>
+                    <span class="ftag">Profesor/a</span>
+                    <h3 style="margin-top: 6px;">[Nombre y apellido]</h3>
+                    <p>[A qué te dedicás · de dónde sos]</p>
+                </div>
+                <div class="tile" style="align-items: center; text-align: center; justify-content: center;">
+                    <div class="icon-box" style="width: 80px; height: 80px; border-radius: 50%; font-size: 34px;"><i class="fa-solid fa-user-gear"></i></div>
+                    <span class="ftag">Coordinador/a</span>
+                    <h3 style="margin-top: 6px;">[Nombre y apellido]</h3>
+                    <p>[A qué se dedica · de dónde es]</p>
+                </div>
+                <div class="tile" style="align-items: center; text-align: center; justify-content: center;">
+                    <div class="icon-box" style="width: 80px; height: 80px; border-radius: 50%; font-size: 34px;"><i class="fa-solid fa-user-check"></i></div>
+                    <span class="ftag">Tutor/a</span>
+                    <h3 style="margin-top: 6px;">[Nombre y apellido]</h3>
+                    <p>[A qué se dedica · de dónde es]</p>
+                </div>
+            </div>
+            <p class="note-text" style="text-align: center;">Comisión N° [XXXX] · IA Automation</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">02 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Modalidad Coderflex -->
+    <div class="slide-container">
+        <h2 class="slide-title">¿Cómo Funciona la Modalidad Coderflex?</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-video"></i></div>
+                    <h3>Clases en vivo</h3>
+                    <p>Nos encontramos en vivo, como cohorte, con el mismo grupo durante todo el curso. Es el momento de preguntar, practicar y ver demos.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-circle-play"></i></div>
+                    <h3>Todo queda grabado</h3>
+                    <p>Si te perdés una clase o querés repasar, la grabación queda disponible para verla después.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-book-open-reader"></i></div>
+                    <h3>Material de lectura</h3>
+                    <p>Cada módulo tiene su material en la plataforma: lo que vemos en clase, más ejemplos resueltos y links para profundizar.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-diagram-project"></i></div>
+                    <h3>Entregas y proyecto final</h3>
+                    <p>Una Pre-Entrega por módulo, corregida con devolución, que va armando tu Proyecto Integrador.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">03 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Cómo funciona el curso -->
+    <div class="slide-container">
+        <h2 class="slide-title">Bienvenidos a IA Automation</h2>
+        <div class="content-area">
+            <span class="moment-badge live"><i class="fa-solid fa-video"></i> Esta clase queda grabada para que la veas después</span>
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-layer-group"></i></div>
+                    <h3>8 módulos</h3>
+                    <p>7 módulos de contenido + 1 Proyecto Integrador. Del diagrama en papel a un ecosistema autónomo con IA, datos y canales reales.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-clipboard-check"></i></div>
+                    <h3>Una Pre-Entrega por módulo</h3>
+                    <p>Cada módulo cierra con una entrega que suma al proyecto final. Todas son sobre <strong>100 pts</strong> y se aprueban con <strong>70</strong>.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-diagram-project"></i></div>
+                    <h3>Este módulo</h3>
+                    <p>Lo único que se corrige es la <strong>Pre-Entrega 1: Diagrama de Arquitectura Lógica</strong>. Todo lo demás es práctica guiada.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">04 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Presentación de los alumnos -->
+    <div class="slide-container">
+        <h2 class="slide-title">¡Ahora Contanos de Vos!</h2>
+        <div class="content-area" style="align-items: center;">
+            <div class="slido-box" style="width: 900px;">
+                <h3>Presentate en el chat o abriendo el micrófono</h3>
+                <div class="tiled-content" style="margin-top: 25px; text-align: left;">
+                    <div class="tile">
+                        <div class="icon-box"><i class="fa-solid fa-location-dot"></i></div>
+                        <h3>¿De dónde sos?</h3>
+                        <p>Ciudad, país… ¡y a qué te dedicás!</p>
+                    </div>
+                    <div class="tile">
+                        <div class="icon-box"><i class="fa-solid fa-rocket"></i></div>
+                        <h3>¿Qué te impulsó a tomar el curso?</h3>
+                        <p>¿Qué te gustaría poder automatizar cuando termine?</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">05 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Objetivos -->
+    <div class="slide-container">
+        <h2 class="slide-title">Objetivos de la Clase</h2>
+        <div class="content-area">
+            <div class="bullet-list">
+                <ul>
+                    <li><i class="fa-solid fa-gears"></i> Entender qué es la <strong>automatización de procesos (BPA)</strong> y en qué se diferencia del RPA.</li>
+                    <li><i class="fa-solid fa-sitemap"></i> Descomponer cualquier proceso en <strong>Trigger → Inputs → Acciones/Decisión → Output</strong>.</li>
+                    <li><i class="fa-solid fa-shapes"></i> Dibujar un flujo con los <strong>3 símbolos</strong>: óvalo, rectángulo y rombo.</li>
+                    <li><i class="fa-solid fa-flag-checkered"></i> Salir con <strong>un proceso real elegido</strong> y el borrador de su diagrama: la base de tu Pre-Entrega 1.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">06 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Demo del bot -->
+    <div class="slide-container">
+        <h2 class="slide-title">Antes de la Teoría: Una Automatización Real</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge live"><i class="fa-solid fa-play"></i> Demo en vivo</span>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-brands fa-telegram"></i> Le escribo a un bot de Telegram el nombre de una película que vi.</li>
+                            <li><i class="fa-solid fa-wand-magic-sparkles"></i> La IA completa la ficha sola: director, año, país y género.</li>
+                            <li><i class="fa-solid fa-table"></i> Se guarda como fila nueva en Google Sheets…</li>
+                            <li><i class="fa-solid fa-globe"></i> …y aparece en un sitio web con estadísticas. Sin que yo toque nada más.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="tile" style="height: 260px;">
+                        <div class="icon-box"><i class="fa-solid fa-film"></i></div>
+                        <h3>Al final del curso, esto lo armás vos</h3>
+                        <p>Hoy no vamos a construirlo: vamos a aprender a <strong>dibujarlo</strong>. Todo sistema automatizado empieza como un mapa en papel.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">07 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: División Tema 1 -->
+    <div class="slide-container">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Tema 01</span>
+            <h2>Automatización de Procesos (BPA): Del Caos al Control</h2>
+            <p style="font-size: 20px;">15 mails de clientes. 45 minutos copiando y pegando la misma respuesta, adjuntando el catálogo y anotando nombres en un Excel. ¿Te suena?</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">08 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Qué es BPA -->
+    <div class="slide-container">
+        <h2 class="slide-title">¿Qué es la Automatización de Procesos (BPA)?</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge tip"><i class="fa-solid fa-briefcase"></i> Business Process Automation</span>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-book-open"></i> <strong>Definición:</strong> usar tecnología para ejecutar tareas y procesos recurrentes con la <strong>mínima intervención humana posible</strong>.</li>
+                            <li><i class="fa-solid fa-person-running"></i> En vez de ser vos el "motor" que mueve la información (del mail al Excel, del Excel al calendario, del calendario a la factura), creás un sistema que lo hace por vos siguiendo reglas.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="tile" style="height: 260px;">
+                        <div class="icon-box"><i class="fa-solid fa-unlock"></i></div>
+                        <h3>¿Por qué ahora?</h3>
+                        <p>Antes, automatizar requería contratar programadores y gastar miles de dólares. Hoy, con herramientas <strong>No-Code</strong> como Zapier, Make o n8n, cualquiera que sepa usar un navegador puede orquestar sus propios procesos.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">09 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Trigger → Acción -->
+    <div class="slide-container">
+        <h2 class="slide-title">La Lógica de Base: Disparador → Acción</h2>
+        <div class="content-area">
+            <div class="flow" style="gap: 30px;">
+                <div class="flow-step">
+                    <span class="ftag">Disparador (Trigger)</span>
+                    <div class="fnode oval" style="width: 380px; min-height: 110px; font-size: 17px;">"Cuando ocurra este evento…"<br>Llega un mail con la palabra "Presupuesto"</div>
+                </div>
+                <div class="farrow" style="font-size: 30px;"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="flow-step">
+                    <span class="ftag">Acción (Action)</span>
+                    <div class="fnode rect" style="width: 380px; min-height: 110px; font-size: 17px;">"…hacé esto automáticamente"<br>Responder con mis tarifas y guardar el contacto</div>
+                </div>
+            </div>
+            <p class="flow-legend" style="font-size: 17px;">La automatización no es magia ni "tiene mente propia": es la lógica de <strong>"Si pasa X, entonces hacé Y"</strong>.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">10 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: 3 beneficios -->
+    <div class="slide-container">
+        <h2 class="slide-title">Los 3 Beneficios que Cambian tu Día a Día</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-stopwatch"></i></div>
+                    <h3>Eficiencia</h3>
+                    <p>Mientras dormís, tu sistema clasifica leads, envía facturas o actualiza reportes. Lo que te llevaba 10 minutos, automatizado toma segundos.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-bullseye"></i></div>
+                    <h3>Cero error humano</h3>
+                    <p>Los humanos nos cansamos y distraemos; las máquinas no. Bien configurada, la automatización hace la tarea igual la vez 1 y la vez 1.000.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-chart-line"></i></div>
+                    <h3>Escalabilidad</h3>
+                    <p>Hoy tenés 5 clientes, mañana 50. Un negocio automatizado maneja 10 veces más volumen con el mismo esfuerzo, sin multiplicar costos ni estrés.</p>
+                </div>
+            </div>
+            <p class="note-text">Si sos emprendedor o freelancer, tu recurso más escaso no es el dinero: es el tiempo.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">11 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Interacción -->
+    <div class="slide-container">
+        <h2 class="slide-title">Hagamos la Cuenta</h2>
+        <div class="content-area" style="align-items: center;">
+            <div class="slido-box" style="width: 760px;">
+                <h3>¿Qué tarea repetís varias veces por día?</h3>
+                <p>Escribila en el chat, con cuánto te lleva cada vez.</p>
+                <div class="slido-code">10 min × 10 veces = 100 min/día</div>
+                <p>Casi <strong>una hora y media por día</strong> que podrías recuperar. ¿Cuánto da la tuya por semana?</p>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">12 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: BPA vs RPA -->
+    <div class="slide-container">
+        <h2 class="slide-title">BPA vs. RPA: No te Confundas</h2>
+        <div class="content-area">
+            <div class="two-column tiled" style="grid-template-columns: 1fr 1fr;">
+                <div>
+                    <h3><i class="fa-solid fa-computer-mouse"></i> RPA — el "mono digital"</h3>
+                    <p>Bots de software que <strong>imitan</strong> lo que hace un humano en pantalla: clic en un botón, copiar un texto, abrir una aplicación. Se usa mucho con sistemas viejos que no se conectan fácilmente.</p>
+                    <p style="margin-top: 14px;"><strong>Ej.:</strong> un bot entra a la web del banco, descarga el extracto y lo guarda en una carpeta.</p>
+                </div>
+                <div>
+                    <h3><i class="fa-solid fa-wand-sparkles"></i> BPA — el "director de orquesta"</h3>
+                    <p>No imita clics: <strong>rediseña y conecta</strong> un flujo completo entre aplicaciones (Gmail con Google Sheets, por ejemplo) para que la información fluya sola.</p>
+                    <p style="margin-top: 14px;"><strong>Ej.:</strong> el extracto llega por API, se extraen y categorizan los datos en tu contabilidad, y si el saldo es bajo te llega un resumen por Slack.</p>
+                </div>
+            </div>
+            <p class="note-text">En este curso nos enfocamos en BPA combinado con IA: sistemas inteligentes y flexibles.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">13 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Del caos al control -->
+    <div class="slide-container">
+        <h2 class="slide-title">Ejemplos Cotidianos: Del Caos al Control</h2>
+        <div class="content-area">
+            <div class="table-layout">
+                <table>
+                    <thead>
+                        <tr><th>Caso</th><th>Proceso manual</th><th>Proceso automatizado (BPA)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Atención post-venta</strong></td><td>Cada viernes el dueño de la tienda revisa quién compró, escribe un mail uno por uno y anota los comentarios en un cuaderno.</td><td>Cuando la orden se marca "entregada" en Shopify, el sistema espera 3 días y envía una encuesta. Una IA analiza la respuesta: si es negativa, avisa al dueño; si es positiva, pide una reseña en Google.</td></tr>
+                        <tr><td><strong>Ventas y onboarding</strong></td><td>Un freelancer recibe un mensaje por Instagram, pide el mail, manda la propuesta en PDF, espera, arma el contrato a mano y lo envía a firmar.</td><td>El cliente llena un formulario, el sistema genera el contrato y lo manda a firma digital. Una vez firmado, crea la carpeta en Drive y envía el mail de bienvenida.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">14 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Errores comunes -->
+    <div class="slide-container">
+        <h2 class="slide-title">Errores Comunes al Empezar a Automatizar</h2>
+        <div class="content-area">
+            <div class="table-layout">
+                <table>
+                    <thead>
+                        <tr><th>Error</th><th>Qué hacer en cambio</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Automatizar un proceso que no funciona</strong></td><td>Si tu proceso es desordenado, automatizarlo solo hace que el desorden ocurra más rápido. <strong>Primero optimizá, después automatizá.</strong></td></tr>
+                        <tr><td><strong>Automatizar "todo" de golpe</strong></td><td>No busques el sistema perfecto desde el día 1. Identificá la tarea más repetitiva, la que más tiempo te quita, y empezá por ahí.</td></tr>
+                        <tr><td><strong>Olvidar el toque humano</strong></td><td>Automatizar no es ser un robot frío. Usá la automatización para lo mecánico (mover datos) y liberá tiempo para lo humano: empatía, creatividad, estrategia.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">15 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Síntesis Tema 1 -->
+    <div class="slide-container">
+        <h2 class="slide-title">Síntesis del Tema</h2>
+        <div class="content-area">
+            <div class="bullet-list">
+                <ul>
+                    <li><i class="fa-solid fa-gears"></i> <strong>BPA</strong> es usar tecnología para que tus procesos funcionen bajo reglas, sin que intervengas en cada paso.</li>
+                    <li><i class="fa-solid fa-clock-rotate-left"></i> Su objetivo: <strong>liberar tu tiempo, eliminar errores</strong> y permitir que tu negocio crezca.</li>
+                    <li><i class="fa-solid fa-wand-sparkles"></i> A diferencia del RPA (que imita clics), el BPA <strong>conecta herramientas</strong> para crear flujos inteligentes.</li>
+                    <li><i class="fa-solid fa-code-branch"></i> No necesitás programar: solo entender la lógica de <strong>"Si pasa X, entonces hacé Y"</strong>.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">16 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Práctica 1 -->
+    <div class="slide-container">
+        <h2 class="slide-title">Práctica 1: Elegí tu Proceso Real</h2>
+        <div class="content-area">
+            <span class="moment-badge live"><i class="fa-solid fa-flask-vial"></i> Paso 1 de la Pre-Entrega 1 · 13 minutos</span>
+            <div class="bullet-list">
+                <ul>
+                    <li><i class="fa-solid fa-magnifying-glass"></i> Elegí una tarea <strong>repetitiva</strong> de tu trabajo o negocio que te quite tiempo: responder consultas de clientes, registrar presupuestos, cargar datos de formularios…</li>
+                    <li><i class="fa-solid fa-crop-simple"></i> Que sea <strong>real y acotada</strong>: una sola tarea, no "todo mi negocio".</li>
+                    <li><i class="fa-solid fa-stopwatch"></i> Anotá cada cuánto ocurre y cuánto tiempo te lleva hacerla a mano.</li>
+                    <li><i class="fa-solid fa-comments"></i> Compartila en voz alta o en el chat.</li>
+                </ul>
+            </div>
+            <p class="note-text">Este es el proceso que vas a diagramar en tu Pre-Entrega 1.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">17 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Pausa -->
+    <div class="slide-container break-slide">
+        <div></div>
+        <div class="transition-layout">
+            <div class="break-logo"><i class="fa-solid fa-mug-hot"></i></div>
+            <h2>Break</h2>
+            <p>Andá por un cafecito o un mate… ¡volvemos en un ratito!</p>
+        </div>
+        <div class="slide-footer" style="border-top-color: rgba(248, 242, 232, 0.15);">
+            <div class="brand-logo" style="color: var(--blanco-lienzo);">CODER<span>HOUSE</span></div>
+            <div class="slide-index" style="color: rgba(248, 242, 232, 0.5);">18 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: División Tema 2 -->
+    <div class="slide-container">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Tema 02</span>
+            <h2>Arquitectura de Flujos: Triggers, Inputs y Outputs</h2>
+            <p style="font-size: 20px;">Una cafetería: entra un cliente, le tomás el pedido, preparás el café y se lo entregás con el ticket. Sin un sistema claro, es un caos.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">19 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: El esqueleto -->
+    <div class="slide-container">
+        <h2 class="slide-title">El Esqueleto de una Automatización</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-bolt"></i></div>
+                    <h3>Trigger — el "cuándo"</h3>
+                    <p>El evento que le dice al flujo: "¡Despertá, hay trabajo!". Sin trigger, tu flujo es un auto estacionado sin conductor: potente, pero no va a ningún lado.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-suitcase"></i></div>
+                    <h3>Input — el "con qué"</h3>
+                    <p>La materia prima que el flujo necesita. Si el trigger es "recibir un email", los inputs son el remitente, su dirección y el contenido del mensaje.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-box-open"></i></div>
+                    <h3>Output — el "resultado"</h3>
+                    <p>El producto final: un PDF generado, un mensaje en Slack, una fila nueva en Google Sheets.</p>
+                </div>
+            </div>
+            <p class="note-text">Clave: el output de un paso suele ser el input del siguiente.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">20 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Tipos de trigger -->
+    <div class="slide-container">
+        <h2 class="slide-title">Los Dos Tipos de Trigger</h2>
+        <div class="content-area">
+            <div class="two-column tiled" style="grid-template-columns: 1fr 1fr;">
+                <div>
+                    <h3><i class="fa-solid fa-bell"></i> Por evento</h3>
+                    <p>Se dispara cuando <strong>algo sucede</strong> en otra aplicación.</p>
+                    <div class="bullet-list" style="margin-top: 16px;">
+                        <ul>
+                            <li><i class="fa-solid fa-file-pen"></i> Un cliente llena un formulario en tu sitio web.</li>
+                            <li><i class="fa-solid fa-envelope"></i> Recibís un mail con la palabra "Factura" en el asunto.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <h3><i class="fa-solid fa-calendar-days"></i> Programado (Recurrence)</h3>
+                    <p>Se dispara en un <strong>momento específico</strong> del tiempo.</p>
+                    <div class="bullet-list" style="margin-top: 16px;">
+                        <ul>
+                            <li><i class="fa-solid fa-sun"></i> Todos los lunes a las 8:00 AM.</li>
+                            <li><i class="fa-solid fa-rotate"></i> Cada 15 minutos, para revisar si hay novedades.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">21 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Ejemplo trabajado -->
+    <div class="slide-container">
+        <h2 class="slide-title">Ejemplo Trabajado: una Inmobiliaria, Pieza por Pieza</h2>
+        <div class="content-area">
+            <div class="two-column" style="grid-template-columns: 0.8fr 1.2fr;">
+                <div>
+                    <span class="moment-badge tip"><i class="fa-solid fa-suitcase"></i> La "maleta de datos" que trae el trigger</span>
+                    <div class="code-block" style="font-size: 16px;">nombre:      Ana Pérez
+email:       ana@mail.com
+zona:        Palermo
+presupuesto: 120000</div>
+                </div>
+                <div class="bullet-list">
+                    <ul>
+                        <li><i class="fa-solid fa-bolt"></i> <strong>Trigger:</strong> un visitante completa el formulario "Quiero información" (trigger por evento).</li>
+                        <li><i class="fa-solid fa-suitcase"></i> <strong>Input:</strong> los datos que cargó la persona (a la izquierda).</li>
+                        <li><i class="fa-solid fa-table"></i> <strong>Acción A:</strong> guardar los datos como fila nueva en el Google Sheets "Leads".</li>
+                        <li><i class="fa-solid fa-code-branch"></i> <strong>Acción B — decisión:</strong> ¿presupuesto ≥ 100.000? Sí → avisar al vendedor senior por Slack. No → sumar a la lista de seguimiento por mail.</li>
+                        <li><i class="fa-solid fa-box-open"></i> <strong>Output:</strong> la fila en Sheets y el mensaje en Slack: "Nuevo lead premium: Ana Pérez — Palermo — $120.000".</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">22 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Encadenar maletas -->
+    <div class="slide-container">
+        <h2 class="slide-title">El Detalle que lo Conecta Todo</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge"><i class="fa-solid fa-link"></i> El output de un paso es el input del siguiente</span>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-arrow-right"></i> Los datos de Ana (output del trigger) son el input de la acción de Sheets.</li>
+                            <li><i class="fa-solid fa-arrow-right"></i> El presupuesto que guardaste es el input de la decisión.</li>
+                            <li><i class="fa-solid fa-arrow-right"></i> Diseñar un flujo es <strong>encadenar maletas de datos</strong>: cada nodo recibe una, la lee o la modifica, y pasa la suya al siguiente.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="tile" style="height: 260px;">
+                        <div class="icon-box"><i class="fa-solid fa-pen-to-square"></i></div>
+                        <h3>Antes de abrir Make o n8n</h3>
+                        <p>Escribí tu proceso así en una hoja: <strong>Trigger → Input → Acciones/Decisión → Output</strong>. Si podés completar las 4 piezas con datos concretos como los de Ana, ya tenés el plano listo.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">23 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: 3 símbolos -->
+    <div class="slide-container">
+        <h2 class="slide-title">Pensamiento Lógico: los 3 Símbolos</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="shape-preview"><div class="fnode oval">Inicio / Fin</div></div>
+                    <h3>Óvalo</h3>
+                    <p>Dónde empieza el proceso (el <strong>Trigger</strong>) y dónde termina (el <strong>Output</strong>).</p>
+                </div>
+                <div class="tile">
+                    <div class="shape-preview"><div class="fnode rect">Acción</div></div>
+                    <h3>Rectángulo</h3>
+                    <p>Algo que la computadora o la IA <strong>hace</strong>: "Enviar email", "Resumir texto", "Guardar fila".</p>
+                </div>
+                <div class="tile">
+                    <div class="shape-preview"><div class="fnode diamond"><span>¿Decisión?</span></div></div>
+                    <h3>Rombo</h3>
+                    <p>La bifurcación del camino: una pregunta con <strong>solo dos respuestas posibles, Sí o No</strong>.</p>
+                </div>
+            </div>
+            <p class="note-text">No necesitás software complejo: con estos tres símbolos podés diseñar cualquier sistema.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">24 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Mapa y motor -->
+    <div class="slide-container">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge tip"><i class="fa-solid fa-lightbulb"></i> Para recordar</span>
+            <h2>La lógica es el mapa;<br>la IA es el motor.</h2>
+            <p style="font-size: 20px;">Mucha gente intenta "conectar ChatGPT con Gmail" sin dibujar el flujo antes, y termina con respuestas incoherentes o mails a las personas equivocadas. Un motor potente sin mapa solo te lleva más rápido al lugar equivocado.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">25 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Caso WhatsApp inmobiliaria (diagrama) -->
+    <div class="slide-container">
+        <h2 class="slide-title">Del Caso al Diagrama: Soporte con IA</h2>
+        <div class="content-area">
+            <div class="flow">
+                <div class="flow-step">
+                    <span class="ftag">Trigger</span>
+                    <div class="fnode oval">Llega un mensaje por WhatsApp</div>
+                </div>
+                <div class="farrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="flow-step">
+                    <span class="ftag">Acción (IA)</span>
+                    <div class="fnode rect">La IA detecta si quiere comprar o alquilar</div>
+                </div>
+                <div class="farrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="flow-step">
+                    <span class="ftag">Decisión</span>
+                    <div class="fnode diamond"><span>¿Es consulta de compra?</span></div>
+                </div>
+                <div class="farrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="fbranch">
+                    <div class="fbranch-row"><span class="fchip">Sí</span><div class="fnode rect">Agendar cita con el vendedor senior</div></div>
+                    <div class="fbranch-row"><span class="fchip no">No</span><div class="fnode rect">Enviar PDF con catálogo de alquiler</div></div>
+                </div>
+                <div class="farrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="flow-step">
+                    <span class="ftag">Fin / Output</span>
+                    <div class="fnode oval">Respuesta enviada al cliente</div>
+                </div>
+            </div>
+            <p class="flow-legend"><strong>Trigger:</strong> mensaje nuevo · <strong>Inputs:</strong> nombre del contacto + texto del mensaje · <strong>Output:</strong> respuesta enviada</p>
+            <p class="note-text" style="text-align: center;">Esta estructura es exactamente lo que vas a entregar en la Pre-Entrega 1, con tu propio proceso.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">26 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Demo draw.io con el bot -->
+    <div class="slide-container">
+        <h2 class="slide-title">Demo: Diagramemos el Bot de Películas</h2>
+        <div class="content-area">
+            <span class="moment-badge live" style="align-self: center;"><i class="fa-solid fa-pen-ruler"></i> En vivo en draw.io</span>
+            <div class="flow">
+                <div class="flow-step">
+                    <span class="ftag">Trigger</span>
+                    <div class="fnode oval">Llega un mensaje por Telegram</div>
+                </div>
+                <div class="farrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="flow-step">
+                    <span class="ftag">Acción (IA)</span>
+                    <div class="fnode rect">La IA interpreta el mensaje y arma la ficha</div>
+                </div>
+                <div class="farrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="flow-step">
+                    <span class="ftag">Decisión</span>
+                    <div class="fnode diamond"><span>¿Quiere registrar una peli?</span></div>
+                </div>
+                <div class="farrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="fbranch">
+                    <div class="fbranch-row"><span class="fchip">Sí</span><div class="fnode rect">Guardar la fila en Google Sheets</div></div>
+                    <div class="fbranch-row"><span class="fchip no">No</span><div class="fnode rect">Buscar en el catálogo y responder</div></div>
+                </div>
+                <div class="farrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="flow-step">
+                    <span class="ftag">Fin / Output</span>
+                    <div class="fnode oval">Respuesta enviada por Telegram</div>
+                </div>
+            </div>
+            <p class="flow-legend"><strong>Input:</strong> el texto del mensaje · el output de la IA (la ficha) es el input de la decisión y de la fila en Sheets</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">27 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Reporte programado + receta -->
+    <div class="slide-container">
+        <h2 class="slide-title">Otro Caso y una Regla para Llevarte</h2>
+        <div class="content-area">
+            <div class="two-column tiled" style="grid-template-columns: 1fr 1fr;">
+                <div>
+                    <h3><i class="fa-solid fa-chart-column"></i> Reporte de ventas programado</h3>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-bolt"></i> <strong>Trigger:</strong> programado, todos los viernes a las 17:00.</li>
+                            <li><i class="fa-solid fa-suitcase"></i> <strong>Inputs:</strong> ventas de la semana desde Shopify o Stripe.</li>
+                            <li><i class="fa-solid fa-gears"></i> <strong>Acción:</strong> sumar los totales y generar un gráfico.</li>
+                            <li><i class="fa-solid fa-box-open"></i> <strong>Output:</strong> resumen en el canal de Slack del equipo.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <h3><i class="fa-solid fa-cake-candles"></i> La regla de la receta de cocina</h3>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-bolt"></i> <strong>Trigger:</strong> el horno llega a 180 °C.</li>
+                            <li><i class="fa-solid fa-suitcase"></i> <strong>Inputs:</strong> harina, huevos, azúcar.</li>
+                            <li><i class="fa-solid fa-gears"></i> <strong>Acción:</strong> mezclar. <strong>Decisión:</strong> ¿está esponjosa? Si no, seguir batiendo.</li>
+                            <li><i class="fa-solid fa-box-open"></i> <strong>Output:</strong> pastel terminado.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <p class="note-text">Si podés explicar tu proceso de negocio como una receta, lo podés automatizar.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">28 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Síntesis Tema 2 -->
+    <div class="slide-container">
+        <h2 class="slide-title">Síntesis y Conexiones</h2>
+        <div class="content-area">
+            <div class="bullet-list">
+                <ul>
+                    <li><i class="fa-solid fa-bolt"></i> El <strong>Trigger</strong> es la chispa que inicia todo: por evento o programado.</li>
+                    <li><i class="fa-solid fa-suitcase"></i> Los <strong>Inputs</strong> son la información necesaria; los <strong>Outputs</strong>, el valor entregado. El output de un paso alimenta al siguiente.</li>
+                    <li><i class="fa-solid fa-shapes"></i> Los <strong>diagramas de flujo</strong> son tu mejor herramienta para evitar el caos: óvalo, rectángulo y rombo.</li>
+                    <li><i class="fa-solid fa-user-gear"></i> Dominar la arquitectura de flujos es lo que separa a un usuario de herramientas de un <strong>Arquitecto de Automatización</strong>.</li>
+                </ul>
+            </div>
+            <p class="note-text">Próxima clase: cómo hacer que estos flujos sean seguros, éticos y responsables con los datos.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">29 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Práctica 2 -->
+    <div class="slide-container">
+        <h2 class="slide-title">Práctica 2: Tu Proceso en 4 Piezas</h2>
+        <div class="content-area">
+            <span class="moment-badge live"><i class="fa-solid fa-flask-vial"></i> Paso 2 de la Pre-Entrega 1 · 12 minutos</span>
+            <div class="two-column" style="grid-template-columns: 1fr 1fr;">
+                <div>
+                    <p style="margin-bottom: 12px;"><strong>1.</strong> Escribí las 4 piezas con datos concretos, como los de Ana:</p>
+                    <div class="code-block" style="font-size: 15px;">Trigger:             ...
+Inputs:              ...
+Acciones / Decisión: ...
+Output:              ...</div>
+                </div>
+                <div class="bullet-list">
+                    <p style="margin-bottom: 12px;"><strong>2.</strong> Hacé el borrador del diagrama (papel y lápiz sirve):</p>
+                    <ul>
+                        <li><i class="fa-solid fa-circle"></i> Óvalo para el Trigger y el Fin.</li>
+                        <li><i class="fa-solid fa-square"></i> Rectángulo para cada acción.</li>
+                        <li><i class="fa-solid fa-diamond"></i> Rombo para la decisión Sí / No.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">30 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Tarea -->
+    <div class="slide-container">
+        <h2 class="slide-title">Tarea para la Próxima Clase</h2>
+        <div class="content-area">
+            <span class="moment-badge tip"><i class="fa-solid fa-house-laptop"></i> Traelo para mostrar al inicio de la clase 2</span>
+            <div class="bullet-list">
+                <ul>
+                    <li><i class="fa-solid fa-display"></i> Pasá tu diagrama a digital: <strong>Draw.io, Lucidchart, Canva o Miro</strong>.</li>
+                    <li><i class="fa-solid fa-diagram-project"></i> Mínimo <strong>5 nodos</strong>: 1 óvalo (Trigger), 2 o más rectángulos (Acciones), 1 rombo (Decisión Sí/No) y 1 óvalo de Fin (Output).</li>
+                    <li><i class="fa-solid fa-tags"></i> <strong>Etiquetá explícitamente</strong> el Trigger, los Inputs y el Output.</li>
+                    <li><i class="fa-solid fa-link"></i> Que se vea la conexión entre la entrada de datos y el paso donde interviene la IA.</li>
+                </ul>
+            </div>
+            <p class="note-text">No busques complejidad: se evalúa la lógica clara, no la cantidad de pasos.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">31 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: Para profundizar -->
+    <div class="slide-container">
+        <h2 class="slide-title">Material para Profundizar</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-circle-info"></i></div>
+                    <h3>Make — Centro de ayuda</h3>
+                    <p>Cómo se estructuran triggers, módulos y escenarios en la práctica.</p>
+                    <p style="margin-top: 10px; color: var(--naranja-horizonte); font-weight: 600;">help.make.com</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-book"></i></div>
+                    <h3>n8n — Documentación</h3>
+                    <p>Conceptos, nodos de trigger, inputs y outputs con ejemplos.</p>
+                    <p style="margin-top: 10px; color: var(--naranja-horizonte); font-weight: 600;">docs.n8n.io</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-route"></i></div>
+                    <h3>n8n — Learning paths</h3>
+                    <p>Ruta guiada para arrancar de cero y diseñar tu primer flujo.</p>
+                    <p style="margin-top: 10px; color: var(--naranja-horizonte); font-weight: 600;">docs.n8n.io/learning-paths</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">32 / 33</div>
+        </div>
+    </div>
+
+    <!-- SLIDE: ¿Dudas? -->
+    <div class="slide-container">
+        <div class="content-area" style="align-items: center; justify-content: center; text-align: center;">
+            <div style="display: flex; gap: 25px; align-items: flex-end; justify-content: center; margin-bottom: 20px;">
+                <i class="fa-solid fa-circle-question" style="font-size: 50px; color: var(--amarillo-solar);"></i>
+                <i class="fa-solid fa-circle-question" style="font-size: 90px; color: var(--naranja-horizonte);"></i>
+                <i class="fa-solid fa-circle-question" style="font-size: 60px; color: var(--rosa-energia);"></i>
+            </div>
+            <h1 style="font-size: 64px;">¿Dudas? ¿Consultas?</h1>
+            <p style="font-size: 22px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">
+                No hay preguntas chicas en los fundamentos
+            </p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">33 / 33</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Presentation navigation controls toolbar -->
+<div class="controls-toolbar">
+    <button class="control-btn" id="prev-slide"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+    <div class="slide-dots" id="slide-dots"></div>
+    <button class="control-btn" id="next-slide">Siguiente <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<script>
+    // Slider Presentation Logic
+    const slides = document.querySelectorAll('.slide-container');
+    const prevBtn = document.getElementById('prev-slide');
+    const nextBtn = document.getElementById('next-slide');
+    const dotsContainer = document.getElementById('slide-dots');
+
+    let currentSlideIndex = 0;
+
+    // Create Navigation Indicators Dynamically
+    slides.forEach((slide, idx) => {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (idx === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => {
+            goToSlide(idx);
+        });
+        dotsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.dot');
+
+    function updateControls() {
+        dots.forEach((dot, idx) => {
+            if (idx === currentSlideIndex) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }
+
+    function goToSlide(index) {
+        if (index < 0 || index >= slides.length) return;
+
+        slides[currentSlideIndex].classList.remove('active');
+        currentSlideIndex = index;
+        slides[currentSlideIndex].classList.add('active');
+
+        updateControls();
+    }
+
+    // Keyboard Navigation Handlers
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') {
+            goToSlide(currentSlideIndex + 1);
+        } else if (e.key === 'ArrowLeft') {
+            goToSlide(currentSlideIndex - 1);
+        }
+    });
+
+    // Button Click Event Listeners
+    prevBtn.addEventListener('click', () => {
+        goToSlide(currentSlideIndex - 1);
+    });
+
+    nextBtn.addEventListener('click', () => {
+        goToSlide(currentSlideIndex + 1);
+    });
+</script>
+
+</body>
+</html>
