@@ -218,6 +218,7 @@ Trigger: email entrante | Input: texto de la consulta | Output: respuesta enviad
 
 - Los alumnos avanzan su PE1 en draw.io mientras vos recorrés las dudas.
 - **Plantilla para empezar (según el PDF):** abrir un lienzo en blanco en Draw.io o Lucidchart, buscar las formas óvalo, rectángulo y rombo en el panel de figuras y armar el flujo sobre el ejemplo resuelto.
+- **Archivos listos en esta carpeta:** `plantilla-pe1.drawio` (para compartir con los alumnos: nodos con [texto a reemplazar], etiquetas de Trigger/Inputs/Output y recuadro para el párrafo de gobernanza) y `ejemplo-resuelto-pe1.drawio` (el ejemplo del PDF armado, con su párrafo de gobernanza). Se abren en app.diagrams.net → Archivo → Abrir desde → Dispositivo.
 - Prioridad: los alumnos cuyo proceso anotaste como "demasiado grande" en la clase 1.
 - Si sobra tiempo, revisá diagramas con la rúbrica en la mano.
 

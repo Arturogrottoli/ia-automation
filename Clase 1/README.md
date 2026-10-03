@@ -163,6 +163,8 @@ en Google Sheets            y responder la consulta
 
 Mientras dibujás, señalá dónde está cada pieza (Trigger / Input / Output) y cómo el output de un paso entra como input del siguiente.
 
+**Respaldo:** el diagrama terminado está en `diagrama-bot-peliculas.drawio` (en esta carpeta). Tenelo abierto en otra pestaña de app.diagrams.net por si querés mostrarlo armado.
+
 **Otro caso del PDF, con trigger programado (reporte de ventas de un e-commerce):** viernes 17:00 (trigger) → ventas de la semana desde Shopify o Stripe (inputs) → sumar totales y generar un gráfico (acción) → resumen en el canal de Slack del equipo (output).
 
 **Buena práctica, la regla de la receta de cocina:** horno a 180 °C (trigger) → harina, huevos y azúcar (inputs) → mezclar (acción) → ¿está esponjosa? Si no, seguir batiendo (decisión) → pastel terminado (output). *Si podés explicar tu proceso como una receta, lo podés automatizar.*

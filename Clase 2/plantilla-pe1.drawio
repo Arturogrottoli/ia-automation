@@ -1,0 +1,76 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="plantilla-pe1" name="Plantilla PE1">
+    <mxGraphModel dx="1200" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="670" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Pre-Entrega 1 · Diagrama de Arquitectura Lógica: [nombre de tu proceso]" style="text;html=1;fontSize=20;fontStyle=1;fontColor=#260700;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="30" width="1100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" value="Reemplazá cada [texto entre corchetes]. Podés sumar rectángulos o rombos, pero respetá los símbolos: óvalo = inicio/fin, rectángulo = acción, rombo = decisión Sí/No." style="text;html=1;fontSize=13;fontStyle=2;fontColor=#3D3430;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="65" width="1100" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="tag-trigger" value="TRIGGER" style="text;html=1;fontSize=11;fontStyle=1;fontColor=#FF632B;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="40" y="170" width="170" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="tag-ia" value="ACCIÓN (IA)" style="text;html=1;fontSize=11;fontStyle=1;fontColor=#FF632B;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="270" y="170" width="170" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="tag-decision" value="DECISIÓN" style="text;html=1;fontSize=11;fontStyle=1;fontColor=#FF632B;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="455" y="160" width="130" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="tag-si" value="ACCIÓN" style="text;html=1;fontSize=11;fontStyle=1;fontColor=#FF632B;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="760" y="95" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="tag-no" value="ACCIÓN" style="text;html=1;fontSize=11;fontStyle=1;fontColor=#FF632B;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="760" y="365" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="tag-output" value="FIN / OUTPUT" style="text;html=1;fontSize=11;fontStyle=1;fontColor=#FF632B;verticalAlign=middle;align=left;" vertex="1" parent="1">
+          <mxGeometry x="1075" y="170" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="n-trigger" value="[¿Qué evento inicia el flujo?]" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#FF632B;strokeWidth=2;fontColor=#260700;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="200" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="n-ia" value="[¿Qué hace la IA con los datos que llegan?]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#260700;strokeWidth=2;fontColor=#260700;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="270" y="195" width="170" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="n-decision" value="[¿Pregunta de Sí o No?]" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF4EA;strokeColor=#FE872D;strokeWidth=2;fontColor=#260700;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="180" width="190" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="n-si" value="[Qué pasa si la respuesta es Sí]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#260700;strokeWidth=2;fontColor=#260700;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="760" y="120" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="n-no" value="[Qué pasa si la respuesta es No]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#260700;strokeWidth=2;fontColor=#260700;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="760" y="290" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="n-fin" value="[¿Cuál es el resultado final?]" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#FF632B;strokeWidth=2;fontColor=#260700;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="990" y="200" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#260700;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="n-trigger" target="n-ia">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#260700;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="n-ia" target="n-decision">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-si" value="Sí" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#260700;strokeWidth=1.5;endArrow=block;endFill=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=12;fontStyle=1;fontColor=#FF632B;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="n-decision" target="n-si">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-no" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#260700;strokeWidth=1.5;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=12;fontStyle=1;fontColor=#FE64A3;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="n-decision" target="n-no">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-si-fin" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#260700;strokeWidth=1.5;endArrow=block;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="n-si" target="n-fin">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-no-fin" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#260700;strokeWidth=1.5;endArrow=block;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="n-no" target="n-fin">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="etiquetas" value="&lt;b&gt;Trigger:&lt;/b&gt; [el evento que dispara el flujo: por evento o programado]&lt;br&gt;&lt;b&gt;Inputs:&lt;/b&gt; [los datos que trae el trigger y que usa el flujo]&lt;br&gt;&lt;b&gt;Output:&lt;/b&gt; [el resultado final que entrega el flujo]" style="text;html=1;whiteSpace=wrap;fontSize=13;fontColor=#3D3430;align=left;verticalAlign=top;fillColor=#F8F2E8;strokeColor=#E5DCD0;spacingLeft=12;spacingTop=8;spacingRight=12;rounded=1;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="40" y="410" width="1120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="gobernanza" value="&lt;b&gt;Párrafo de gobernanza&lt;/b&gt; (3-4 líneas, 2 o 3 medidas concretas según GDPR / IA Act)&lt;br&gt;[Qué datos personales procesa el flujo y cómo los protegés. Elegí entre: minimización, anonimización, consentimiento, retención limitada (¿cuántos días?) o revisión humana antes de una decisión sensible. Contá con qué paso o módulo lo implementarías.]&lt;br&gt;[Nivel de riesgo según la IA Act: mínimo, limitado, alto o inaceptable, y por qué.]" style="text;html=1;whiteSpace=wrap;fontSize=13;fontColor=#3D3430;align=left;verticalAlign=top;fillColor=#F8F2E8;strokeColor=#E5DCD0;spacingLeft=12;spacingTop=8;spacingRight=12;rounded=1;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="40" y="510" width="1120" height="120" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
