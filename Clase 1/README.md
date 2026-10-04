@@ -21,7 +21,7 @@ Al terminar, cada alumno puede:
 
 ## Preparación previa (docente)
 
-- [ ] Completar tus datos, los del coordinador y el tutor, y el N° de comisión.
+- [ ] Completar el nombre del otro profesor o profesora (a confirmar) y el N° de comisión en la filmina 2.
 - [ ] Abrir una pestaña de [draw.io](https://app.diagrams.net) con un lienzo en blanco para la demo.
 - [ ] Probar el bot de películas: que el escenario de Make esté ON y que Telegram responda.
 - [ ] Tener abiertos el Google Sheet del catálogo y el sitio "Diario de proyección".
@@ -45,7 +45,7 @@ Al terminar, cada alumno puede:
 
 ## 0–15 · Apertura
 
-- Presentación del equipo docente (profesor, coordinador y tutor) y de la comisión.
+- Presentación de los dos profesores y de la comisión.
 - **Modalidad Coderflex:** clases en vivo con el mismo grupo, todo queda grabado para verlo después, material de lectura por módulo, pre-entregas corregidas que arman el proyecto final.
 - **Cómo funciona el curso:** 8 módulos (7 de contenido + Proyecto Integrador). Cada módulo cierra con una Pre-Entrega que suma al proyecto final.
 - **Evaluación:** todas las entregas son sobre **100 pts y se aprueban con 70**.
