@@ -40,11 +40,15 @@ herramientas (Sheets, Gemini y Telegram en vez de Airtable/Notion, OpenAI/Claude
 | Capa | Herramienta | Para qué |
 |---|---|---|
 | Cerebro (datos) | **Airtable** (+ Notion en M7) | Propiedades, consultas, reseñas, contenido |
-| Orquestación | **Make** (M3, M5) y **n8n** (M4, M8) | Los flujos |
+| Orquestación | **n8n** como principal (M4, M6, M7, M8) y **Make** solo en M3 y M5 | Los flujos |
 | Inteligencia | **OpenAI** (M3) y **Claude** (M6, M7) | Calificar, responder, resumir, redactar |
 | Canales | **Gmail, Slack, WhatsApp** (sandbox de Twilio) | Entrada y salida de mensajes |
 | Diagramas | **draw.io** | Arquitectura de cada módulo |
 | Entrega final | **GitHub** | Repo con todo integrado |
+
+**Decisión: n8n es el orquestador principal**, porque es el que el PDF prefiere para la Entrega Final.
+Make se usa solo en los módulos 3 y 5, porque esas pre-entregas piden un blueprint de Make y las demos
+tienen que coincidir. En el Módulo 8, el flujo integrado del proyecto ejemplo queda en n8n.
 
 ---
 
@@ -57,9 +61,9 @@ herramientas (Sheets, Gemini y Telegram en vez de Airtable/Notion, OpenAI/Claude
 | **M3** Make | 5–6 | Formulario → OpenAI califica la consulta → Router prioridad alta / baja → Error Handler con reintentos | Mismo flujo con sus datos | PE3 |
 | **M4** n8n | 7–8 | Agente que responde consultas usando el catálogo (HTTP Request + sub-workflow + rama de error) | Diagrama de su agente | PE4 |
 | **M5** Multicanal | 9–10 | Gmail → la IA resume y prioriza → Slack siempre; WhatsApp si es urgente | Su pipeline multicanal | PE5 |
-| **M6** Claude | 11–12 | Procesamiento en lote de 500 reseñas + caché del catálogo + MCP + matriz de ahorro | Su diseño de eficiencia | PE6 |
-| **M7** Agentes y creatividad | 13–14 | Guía del destino en Notion para que la IA responda + posts de propiedades con aprobación en Slack + dashboard | Su sistema con aprobación humana | PE7 |
-| **M8** Integrador | 15–16 | Todo integrado en un repo de GitHub + video demo | Su Entrega Final | Final |
+| **M6** Claude | 11–12 | En n8n: procesamiento en lote de 500 reseñas + caché del catálogo · MCP con Claude Desktop · matriz de ahorro | Su diseño de eficiencia | PE6 |
+| **M7** Agentes y creatividad | 13–14 | En n8n: guía del destino en Notion para que la IA responda + posts de propiedades con aprobación en Slack + dashboard | Su sistema con aprobación humana | PE7 |
+| **M8** Integrador | 15–16 | El flujo de consultas integrado en n8n (lo de M3 y M5 pasado a n8n) + repo de GitHub + video demo | Su Entrega Final | Final |
 
 Cada pre-entrega es un "ladrillo" del proyecto final, como plantea el PDF.
 
@@ -99,7 +103,7 @@ Cada pre-entrega es un "ladrillo" del proyecto final, como plantea el PDF.
 
 ### Semana 3: M4 en n8n · ~8–10 h
 
-- [ ] Instalar n8n (self-hosted) o abrir la prueba de n8n Cloud
+- [ ] Instalar n8n. Como es el orquestador principal y el curso dura unos dos meses, conviene **self-hosted** (Docker en tu máquina o un servidor de ~5–10 €/mes) en lugar de la prueba de n8n Cloud, que vence. Verificar cuánto dura la prueba para avisarles a los alumnos.
 - [ ] Agente (AI Agent) con memoria y una tool que consulta el catálogo de Airtable por HTTP Request
 - [ ] Switch con 2+ caminos, rama de error y sub-workflow
 - [ ] Diagrama del agente (es lo que se entrega en la PE4)
@@ -131,24 +135,26 @@ Cada pre-entrega es un "ladrillo" del proyecto final, como plantea el PDF.
 - [ ] Dashboard con 3–4 KPIs (consultas por prioridad, tasa de aprobación, tasa de error)
 - [ ] Clases 13–14: README + filminas + materiales
 
-### Durante el curso, semanas 5–6: M8 integrador · ~5–6 h
+### Durante el curso, semanas 5–6: M8 integrador · ~10–12 h
 
+- [ ] Pasar a n8n el flujo de consultas que en M3 y M5 se hizo en Make (calificación + multicanal), con su manejo de errores y la pausa de aprobación humana
 - [ ] Repo en GitHub: diagrama de arquitectura (PDF), blueprints / JSON, link a la base en modo lectura, capturas, dashboard
 - [ ] Test de 5+ ejecuciones incluyendo el "camino infeliz"
 - [ ] Video demo de 3 minutos (sin API keys a la vista)
 - [ ] Clases 15–16: README + filminas + materiales
 
-**Total estimado:** ~35–40 h antes del curso y ~20 h durante. Es una estimación, no algo medido.
+**Total estimado:** ~35–40 h antes del curso y ~25 h durante. Es una estimación, no algo medido.
 
 ---
 
 ## Costos
 
 Casi todo entra en planes gratuitos: Airtable (hasta 1.000 registros), Make (1.000 operaciones por mes),
-n8n self-hosted, Slack, Notion, el sandbox de WhatsApp de Twilio y GitHub.
+n8n self-hosted en tu máquina, Slack, Notion, el sandbox de WhatsApp de Twilio y GitHub.
 
-Lo único pago: **~USD 10–20 de créditos de API** de OpenAI y Anthropic para los módulos 3, 6 y 7
-(y n8n Cloud si no se instala local; tiene prueba gratuita).
+Lo único pago: **~USD 10–20 de créditos de API** de OpenAI y Anthropic para los módulos 3, 6 y 7.
+Si n8n va en un servidor en vez de tu máquina, sumar ~5–10 €/mes. n8n Cloud tiene prueba gratuita y
+después es pago.
 
 ---
 
