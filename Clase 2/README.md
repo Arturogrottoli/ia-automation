@@ -22,10 +22,30 @@ Al terminar, cada alumno puede:
 
 ## Preparación previa (docente)
 
+**Pendientes del bot (en esta clase los botones ✅/❌ son el centro de la demo de HITL):**
+
+- [ ] Construir la rama del botón ❌ (hoy no hace nada).
+- [ ] Agregar el `answerCallbackQuery` para que el botón no quede "cargando" en Telegram.
+- [ ] Borrar el módulo temporal #21 (el `setWebhook` manual).
+- Si no se llega a terminarlo: en la demo, apretar solo ✅.
+
+**Unos días antes:**
+
+- [ ] **Respaldo:** video o capturas del History de Make (una ejecución abierta, con las burbujas de Input/Output) y de la ficha con los botones.
+- [ ] Estudiar las páginas 12 a 20 del PDF (ética y seguridad + consigna de la PE1).
+- [ ] Definir con la otra profesora si la PE1 acepta cualquier proceso o solo de atención al cliente (ver la nota en el brief).
+
+**El día de la clase:**
+
 - [ ] Tener abierto el escenario del bot en Make, pestaña **History** (el ícono de reloj), con alguna ejecución reciente para mostrar.
-- [ ] Probar los botones ✅/❌ del bot (HITL). **Si la rama ❌ todavía no está terminada, en la demo apretá solo ✅.**
 - [ ] Tener a mano los 6 casos de la actividad de riesgo (más abajo).
 - [ ] Tener la consigna de la PE1 lista para compartir: el link o la sección del PDF.
+- [ ] Tener para compartir `plantilla-pe1.drawio` y `ejemplo-resuelto-pe1.drawio`.
+
+> **A definir con la otra profesora:** sumar al cierre un bloque de **15 minutos de panorama del curso**
+> (herramientas y en qué módulo aparecen, Make vs n8n, qué es gratis y qué no, qué cuentas crear y cuándo,
+> y el proyecto ejemplo). Saldría del tiempo del taller. Si se aprueba, hay que armar esas filminas en
+> `Clase02.html`. El contenido está más abajo, en "Bloque opcional".
 
 ---
 
@@ -221,6 +241,18 @@ Trigger: email entrante | Input: texto de la consulta | Output: respuesta enviad
 - **Archivos listos en esta carpeta:** `plantilla-pe1.drawio` (para compartir con los alumnos: nodos con [texto a reemplazar], etiquetas de Trigger/Inputs/Output y recuadro para el párrafo de gobernanza) y `ejemplo-resuelto-pe1.drawio` (el ejemplo del PDF armado, con su párrafo de gobernanza). Se abren en app.diagrams.net → Archivo → Abrir desde → Dispositivo.
 - Prioridad: los alumnos cuyo proceso anotaste como "demasiado grande" en la clase 1.
 - Si sobra tiempo, revisá diagramas con la rúbrica en la mano.
+
+## Bloque opcional (a definir) · Panorama del curso, 15 min
+
+Si se aprueba, va entre el taller y el cierre (el taller pasa a 85–90).
+
+| Tema | Qué decir |
+|---|---|
+| **Las herramientas** | Airtable (M2) · Make (M3 y M5) · n8n (M4 en adelante) · OpenAI (M3) · Claude (M6–M7) · Gmail, Slack y WhatsApp (M5) · Notion (M7) |
+| **Make vs n8n** | Make es No-Code (más simple, cobra por operación); n8n es Low-Code (más potente, se puede instalar gratis). Para la Entrega Final el programa prefiere n8n. El detalle va en la clase 3. |
+| **Qué es gratis y qué no** | Casi todo tiene plan gratuito. Lo único pago son las APIs de OpenAI y Claude: créditos prepagos, sin suscripción. Con una recarga mínima (~USD 5 cada una, verificar al cargar) alcanza para todo el curso. Desactivar la recarga automática. |
+| **Qué cuentas crear y cuándo** | Airtable antes de la clase 4 · Make antes de la 5 · OpenAI (con límite de gasto) antes de la 6 · n8n antes de la 7 · Gmail de prueba, Slack y Twilio antes de la 9 · Anthropic antes de la 11 · Notion antes de la 13 · GitHub antes de la 15 |
+| **El proyecto ejemplo** | La inmobiliaria de alquileres temporarios que se construye en vivo, módulo por módulo. Cada alumno arma lo mismo con su propio proceso. |
 
 ## 100–105 · Cierre
 

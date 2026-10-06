@@ -48,6 +48,39 @@ Todas sobre 100 pts; se aprueban con 70.
 
 ---
 
+## Estado y próximos pasos
+
+### Decisiones tomadas
+
+- **Equipo:** dos profesores, Arturo Grottoli y otra profesora (nombre a confirmar). No hay coordinador ni tutor.
+- **Proyecto ejemplo:** inmobiliaria de alquileres temporarios (ver [Proyecto ejemplo/README.md](Proyecto%20ejemplo/README.md)).
+- **Orquestador principal: n8n**, porque el PDF lo prefiere para la Entrega Final. Make solo en los módulos 3 y 5, porque esas pre-entregas piden un blueprint de Make.
+- **Costos:** todo con planes gratuitos y n8n instalado en la máquina del docente. Lo único pago: una recarga mínima de créditos en OpenAI y en Anthropic (~USD 5 cada una, prepago, sin suscripción).
+- **Demo de la clase 1:** el bot de películas como intro de "algo que se puede hacer", con video o capturas de respaldo.
+
+### Para acordar con la otra profesora
+
+- [ ] Nombre y destino del negocio del proyecto ejemplo (propuesta: "Cabañas del Lago", Bariloche).
+- [ ] Si el proyecto ejemplo se presenta en la clase 1 (después de la demo del bot) o en la clase 2.
+- [ ] Si se suma a la clase 2 el bloque de 15 min de panorama del curso (contenido en el README de la clase 2).
+- [ ] Alcance de la PE1: cualquier proceso o solo de atención al cliente.
+- [ ] Cómo se reparten las clases y las demos.
+
+### Próximos pasos
+
+**De Arturo:**
+- [ ] Mandar el mail a la otra profesora con los puntos de arriba.
+- [ ] Grabar el video de respaldo de la demo del bot (`Clase 1/demo-bot.mp4`).
+- [ ] Terminar los pendientes del bot para la clase 2: rama ❌, `answerCallbackQuery`, borrar el módulo #21.
+- [ ] Completar la filmina 2 de la clase 1 cuando estén el nombre de la otra profesora y el N° de comisión.
+
+**De Claude (cuando estén las definiciones):**
+- [ ] Filmina "El proyecto que vamos a construir" + diagrama de la inmobiliaria en draw.io.
+- [ ] Filminas del panorama del curso en la clase 2 (si se aprueba).
+- [ ] Que las presentaciones se adapten al tamaño de la pantalla (no depende de nada; se puede hacer ya).
+- [ ] Semana 1 del proyecto ejemplo: datos ficticios (propiedades, consultas, reseñas, FAQ, guía del destino).
+- [ ] Presentaciones HTML de las clases 3 a 16.
+
 ## Puntos a definir o verificar
 
 - **PE1:** el PDF dice "un proceso cotidiano de tu negocio" en los pasos, pero "un proceso de soporte al cliente" en la ficha del entregable (ver Clase 2).

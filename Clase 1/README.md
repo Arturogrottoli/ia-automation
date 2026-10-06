@@ -21,11 +21,25 @@ Al terminar, cada alumno puede:
 
 ## Preparación previa (docente)
 
-- [ ] Completar el nombre del otro profesor o profesora (a confirmar) y el N° de comisión en la filmina 2.
+**Unos días antes:**
+
+- [ ] Completar en la filmina 2 el nombre y la descripción de la otra profesora, y el N° de comisión. (El equipo son solo los dos profes: no hay coordinador ni tutor.)
+- [ ] Probar el bot de películas: que el escenario de Make esté ON y que Gemini responda. No usarlo mucho el día de la clase (tuvo cortes por límite diario).
+- [ ] Elegir de antemano una peli conocida para la demo, así la ficha sale bien.
+- [ ] **Respaldo de la demo:** grabar un video corto (`Clase 1/demo-bot.mp4`, 1–2 min) con la Herramienta Recortes (`Win + Shift + S` → video): mensaje en Telegram → ficha → ✅ → fila en el Sheet → peli en el sitio. Alternativa: capturas en `Clase 1/capturas/` (`1-mensaje.png`, `2-ficha.png`, `3-confirmacion.png`, `4-sheet.png`, `5-sitio.png`).
+- [ ] Practicar draw.io: dibujar el flujo del bot y exportarlo a PDF. Respaldo: `diagrama-bot-peliculas.drawio`.
+- [ ] Estudiar las páginas 4 a 11 del PDF y hojear las 17 a 20 (consigna de la PE1).
+- [ ] Ensayo completo con cronómetro, en la pantalla que se va a compartir.
+
+**El día de la clase:**
+
+- [ ] Abrir `Clase01.html` en pantalla completa (F11; si se corta abajo, Ctrl + −).
 - [ ] Abrir una pestaña de [draw.io](https://app.diagrams.net) con un lienzo en blanco para la demo.
-- [ ] Probar el bot de películas: que el escenario de Make esté ON y que Telegram responda.
-- [ ] Tener abiertos el Google Sheet del catálogo y el sitio "Diario de proyección".
+- [ ] Tener abiertos Telegram, el Google Sheet del catálogo y el sitio "Diario de proyección".
+- [ ] Tener a mano el link al PDF del Módulo 1 para pasarlo por el chat.
 - [ ] Avisar que la clase queda grabada para verla después.
+
+**Durante la demo del bot:** apretar solo ✅ (la rama ❌ no está terminada). La peli nueva aparece en el sitio sin póster. Si preguntan por las herramientas: usa Telegram, Gemini y Google Sheets; en el curso usamos Airtable, n8n, OpenAI y Claude, con la misma lógica.
 
 ---
 

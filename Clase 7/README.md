@@ -22,7 +22,8 @@ Al terminar, cada alumno puede:
 
 ## Preparación previa (docente)
 
-- [ ] n8n listo: **n8n Cloud** (prueba gratuita) o **self-hosted** (Docker). Verificar cuánto dura la prueba de Cloud: si vence antes del final del curso, los alumnos van a necesitar plan pago o self-hosted.
+- [ ] n8n listo. Para el proyecto ejemplo, **self-hosted en tu máquina** (Docker o `npx n8n`): gratis y sin límite de ejecuciones. Verificar cuánto dura la prueba de **n8n Cloud**: si vence antes del final del curso, los alumnos van a necesitar plan pago o self-hosted.
+- [ ] **Si n8n corre en tu máquina, no tiene dirección pública:** para recibir webhooks de afuera (un formulario, Twilio, Telegram) hace falta un túnel gratuito, como el modo `n8n start --tunnel` (solo para pruebas) o ngrok. Probalo antes de la clase 8, que usa el nodo Webhook.
 - [ ] Credencial de OpenAI o Anthropic cargada en n8n.
 - [ ] El agente del proyecto ejemplo armado: Chat Trigger → AI Agent (modelo + Window Buffer Memory + tool de Airtable sobre la tabla Propiedades).
 - [ ] Pedir a los alumnos que lleguen con la cuenta de n8n creada.
