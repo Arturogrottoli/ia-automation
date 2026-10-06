@@ -52,13 +52,13 @@ Todas sobre 100 pts; se aprueban con 70.
 
 ### Decisiones tomadas
 
-- **Equipo:** dos profesores, Arturo Grottoli y otra profesora (nombre a confirmar). No hay coordinador ni tutor.
+- **Equipo:** dos profesores, Arturo Grottoli y Romina Diaz. No hay coordinador ni tutor.
 - **Proyecto ejemplo:** inmobiliaria de alquileres temporarios (ver [Proyecto ejemplo/README.md](Proyecto%20ejemplo/README.md)).
 - **Orquestador principal: n8n**, porque el PDF lo prefiere para la Entrega Final. Make solo en los módulos 3 y 5, porque esas pre-entregas piden un blueprint de Make.
 - **Costos:** todo con planes gratuitos y n8n instalado en la máquina del docente. Lo único pago: una recarga mínima de créditos en OpenAI y en Anthropic (~USD 5 cada una, prepago, sin suscripción).
 - **Demo de la clase 1:** el bot de películas como intro de "algo que se puede hacer", con video o capturas de respaldo.
 
-### Para acordar con la otra profesora
+### Para acordar con Romina
 
 - [ ] Nombre y destino del negocio del proyecto ejemplo (propuesta: "Cabañas del Lago", Bariloche).
 - [ ] Si el proyecto ejemplo se presenta en la clase 1 (después de la demo del bot) o en la clase 2.
@@ -69,10 +69,10 @@ Todas sobre 100 pts; se aprueban con 70.
 ### Próximos pasos
 
 **De Arturo:**
-- [ ] Mandar el mail a la otra profesora con los puntos de arriba.
+- [ ] Mandar el mail a Romina con los puntos de arriba.
 - [ ] Grabar el video de respaldo de la demo del bot (`Clase 1/demo-bot.mp4`).
 - [ ] Terminar los pendientes del bot para la clase 2: rama ❌, `answerCallbackQuery`, borrar el módulo #21.
-- [ ] Completar la filmina 2 de la clase 1 cuando estén el nombre de la otra profesora y el N° de comisión.
+- [ ] Completar la filmina 2 de la clase 1 cuando estén la descripción de Romina y el N° de comisión.
 
 **De Claude (cuando estén las definiciones):**
 - [ ] Filmina "El proyecto que vamos a construir" + diagrama de la inmobiliaria en draw.io.

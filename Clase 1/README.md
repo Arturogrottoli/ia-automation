@@ -23,7 +23,7 @@ Al terminar, cada alumno puede:
 
 **Unos días antes:**
 
-- [ ] Completar en la filmina 2 el nombre y la descripción de la otra profesora, y el N° de comisión. (El equipo son solo los dos profes: no hay coordinador ni tutor.)
+- [ ] Completar en la filmina 2 la descripción de Romina Diaz (a qué se dedica) y el N° de comisión. (El equipo son solo los dos profes: no hay coordinador ni tutor.)
 - [ ] Probar el bot de películas: que el escenario de Make esté ON y que Gemini responda. No usarlo mucho el día de la clase (tuvo cortes por límite diario).
 - [ ] Elegir de antemano una peli conocida para la demo, así la ficha sale bien.
 - [ ] **Respaldo de la demo:** grabar un video corto (`Clase 1/demo-bot.mp4`, 1–2 min) con la Herramienta Recortes (`Win + Shift + S` → video): mensaje en Telegram → ficha → ✅ → fila en el Sheet → peli en el sitio. Alternativa: capturas en `Clase 1/capturas/` (`1-mensaje.png`, `2-ficha.png`, `3-confirmacion.png`, `4-sheet.png`, `5-sitio.png`).

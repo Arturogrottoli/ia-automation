@@ -33,7 +33,7 @@ Al terminar, cada alumno puede:
 
 - [ ] **Respaldo:** video o capturas del History de Make (una ejecución abierta, con las burbujas de Input/Output) y de la ficha con los botones.
 - [ ] Estudiar las páginas 12 a 20 del PDF (ética y seguridad + consigna de la PE1).
-- [ ] Definir con la otra profesora si la PE1 acepta cualquier proceso o solo de atención al cliente (ver la nota en el brief).
+- [ ] Definir con Romina si la PE1 acepta cualquier proceso o solo de atención al cliente (ver la nota en el brief).
 
 **El día de la clase:**
 
@@ -42,7 +42,7 @@ Al terminar, cada alumno puede:
 - [ ] Tener la consigna de la PE1 lista para compartir: el link o la sección del PDF.
 - [ ] Tener para compartir `plantilla-pe1.drawio` y `ejemplo-resuelto-pe1.drawio`.
 
-> **A definir con la otra profesora:** sumar al cierre un bloque de **15 minutos de panorama del curso**
+> **A definir con Romina:** sumar al cierre un bloque de **15 minutos de panorama del curso**
 > (herramientas y en qué módulo aparecen, Make vs n8n, qué es gratis y qué no, qué cuentas crear y cuándo,
 > y el proyecto ejemplo). Saldría del tiempo del taller. Si se aprueba, hay que armar esas filminas en
 > `Clase02.html`. El contenido está más abajo, en "Bloque opcional".

@@ -191,6 +191,6 @@ Proyecto ejemplo/
 
 ## Decisiones pendientes
 
-- [ ] Nombre del negocio y destino (propuesta: "Cabañas del Lago", Bariloche; se acuerda con la otra profesora)
+- [ ] Nombre del negocio y destino (propuesta: "Cabañas del Lago", Bariloche; se acuerda con Romina)
 - [ ] Frecuencia de clases (el plan supone 2 por semana)
 - [ ] Si la PE1 admite cualquier proceso o solo de atención al cliente (el PDF es ambiguo; ver README de la Clase 2)
