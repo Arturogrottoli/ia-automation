@@ -1,7 +1,8 @@
 # Clase 10 — WhatsApp: regla de 24 h, plantillas, drips y chatbots + Orquestación multicanal + Pre-Entrega 5
 
 **Módulo 5 · Ecosistema de comunicación: Gmail, Slack y WhatsApp API** (segunda mitad)
-Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, segunda parte de la unidad 2, unidad 3 y consigna de la Pre-Entrega 5
+Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, segunda parte de la unidad 2, unidad 3 y consigna de la Pre-Entrega 5  
+**Presentación:** `Clase10.html` (23 filminas, en esta carpeta; se navega con ← → o los botones).
 
 ---
 

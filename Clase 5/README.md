@@ -1,7 +1,8 @@
 # Clase 5 — La interfaz de Make + Routers, filtros y transformación
 
 **Módulo 3 · Orquestación No-Code con Make** (primera mitad)
-Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, unidades 1 y 2 del Módulo 3
+Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, unidades 1 y 2 del Módulo 3  
+**Presentación:** `Clase05.html` (23 filminas, en esta carpeta; se navega con ← → o los botones).
 
 > Base de contenido: el PDF. Este módulo se evalúa en la **Pre-Entrega 3 (Primer Flujo Operativo en Make
 > para Leads)**, que se presenta en la clase 6. El caso guiado de esta clase (Router VIP / Estándar) es

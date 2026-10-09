@@ -1,7 +1,8 @@
 # Clase 6 — JSON y variables + Flujos profesionales: OpenAI y Error Handling + Pre-Entrega 3
 
 **Módulo 3 · Orquestación No-Code con Make** (segunda mitad)
-Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, unidades 3 y 4 del Módulo 3 y consigna de la Pre-Entrega 3
+Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, unidades 3 y 4 del Módulo 3 y consigna de la Pre-Entrega 3  
+**Presentación:** `Clase06.html` (23 filminas, en esta carpeta; se navega con ← → o los botones).
 
 ---
 

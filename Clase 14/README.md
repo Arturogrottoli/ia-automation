@@ -1,7 +1,8 @@
 # Clase 14 — Human-in-the-Loop + Cuadros de mando + Pre-Entrega 7
 
 **Módulo 7 · Diseño de agentes y automatización de la creatividad** (segunda mitad)
-Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, unidades 3 y 4 del Módulo 7 y consigna de la Pre-Entrega 7
+Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, unidades 3 y 4 del Módulo 7 y consigna de la Pre-Entrega 7  
+**Presentación:** `Clase14.html` (21 filminas, en esta carpeta; se navega con ← → o los botones).
 
 ---
 

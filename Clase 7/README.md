@@ -1,7 +1,8 @@
 # Clase 7 — Instalación de n8n + Nodos de IA y agentes
 
 **Módulo 4 · Automatización avanzada de agentes con n8n** (primera mitad)
-Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, unidades 1 y 2 del Módulo 4
+Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, unidades 1 y 2 del Módulo 4  
+**Presentación:** `Clase07.html` (20 filminas, en esta carpeta; se navega con ← → o los botones).
 
 > Base de contenido: el PDF. Este módulo se evalúa en la **Pre-Entrega 4 (Arquitectura de Agente Avanzado
 > en n8n)**, que se presenta en la clase 8. La PE4 es un **diagrama**: no hace falta construir el agente,

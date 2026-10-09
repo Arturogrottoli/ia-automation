@@ -1,7 +1,8 @@
 # Clase 3 — No-Code vs Low-Code + Costos y estructuras de datos (JSON)
 
 **Módulo 2 · Ecosistema No-Code y Low-Code** (primera mitad)
-Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, unidades 1 y 2 del Módulo 2
+Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, unidades 1 y 2 del Módulo 2  
+**Presentación:** `Clase03.html` (23 filminas, en esta carpeta; se navega con ← → o los botones).
 
 > Base de contenido: el PDF. Este módulo se evalúa en la **Pre-Entrega 2 (Estructura de Datos JSON y
 > Matriz Estratégica)**, que se presenta en la clase 4. El cuadro comparativo No-Code vs Low-Code y las

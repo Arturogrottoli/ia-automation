@@ -1,7 +1,8 @@
 # Clase 16 — Proyecto Integrador: taller de calidad de arquitecto + revisión de avance
 
 **Módulo 8 · Proyecto Integrador: tu ecosistema de IA autónomo** (segunda mitad)
-Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, consigna de la Entrega Final
+Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, consigna de la Entrega Final  
+**Presentación:** `Clase16.html` (14 filminas, en esta carpeta; se navega con ← → o los botones).
 
 > Clase de taller. Se repasan los criterios que más se pierden (seguridad, costos, dashboard), se hace el
 > test del camino infeliz y se revisa el avance de cada alumno.

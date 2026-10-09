@@ -1,7 +1,8 @@
 # Clase 8 — HTTP Request + Loops y sub-workflows + Pre-Entrega 4
 
 **Módulo 4 · Automatización avanzada de agentes con n8n** (segunda mitad)
-Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, unidades 3 y 4 del Módulo 4 y consigna de la Pre-Entrega 4
+Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, unidades 3 y 4 del Módulo 4 y consigna de la Pre-Entrega 4  
+**Presentación:** `Clase08.html` (23 filminas, en esta carpeta; se navega con ← → o los botones).
 
 ---
 

@@ -1,7 +1,8 @@
 # Clase 9 — Gmail con API + De la app a la API de WhatsApp
 
 **Módulo 5 · Ecosistema de comunicación: Gmail, Slack y WhatsApp API** (primera mitad)
-Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, unidad 1 y primera parte de la unidad 2 del Módulo 5
+Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, unidad 1 y primera parte de la unidad 2 del Módulo 5  
+**Presentación:** `Clase09.html` (20 filminas, en esta carpeta; se navega con ← → o los botones).
 
 > Base de contenido: el PDF. Este módulo se evalúa en la **Pre-Entrega 5 (estrategia multicanal +
 > pipeline en Make)**, que se presenta en la clase 10.

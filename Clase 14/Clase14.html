@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 14 - Human-in-the-Loop + Cuadros de Mando | Coderhouse</title>
+    <!-- Coder 4.0 Core Typography: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ==========================================================================
+           CODER 4.0 DESIGN SYSTEM & VARS
+           ========================================================================== */
+        :root {
+            --blanco-lienzo: #F8F2E8;
+            --negro-coder: #171717;
+            --naranja-oscuro: #260700;
+            --naranja-horizonte: #FF632B;
+            --amarillo-solar: #FE872D;
+            --rosa-energia: #FE64A3;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --transition-speed: 0.4s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #dcd6cd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: var(--font-main);
+            overflow: hidden;
+        }
+
+        /* Slide Viewer (Absolute 1280x720 No-Scale-Shift) */
+        .presentation-viewport {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            border-radius: 16px;
+            overflow: hidden;
+            background-color: var(--blanco-lienzo);
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            color: var(--negro-coder);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 50px 70px 40px 70px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity var(--transition-speed) ease-in-out, visibility var(--transition-speed) ease-in-out;
+            z-index: 1;
+        }
+
+        .slide-container.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        /* Abstract Brand Accents: Subtly warm gradients connecting to Coder 4.0 */
+        .slide-container::before {
+            content: '';
+            position: absolute;
+            top: -150px;
+            right: -150px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(255,99,43,0.06) 0%, rgba(248,242,232,0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .slide-container > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Typography & Hierarchy */
+        h1 {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+        }
+
+        .slide-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.2;
+            letter-spacing: -1px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .slide-title::after {
+            content: '';
+            flex-grow: 1;
+            height: 2px;
+            background-color: rgba(38, 7, 0, 0.1);
+            margin-left: 15px;
+        }
+
+        p, li {
+            font-size: 17px;
+            line-height: 1.5;
+            color: #3d3430;
+            font-weight: 400;
+        }
+
+        /* Content Area Layout Wrapper */
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* Grid & Column Definitions */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 45px;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Coder 4.0 Split Card layouts */
+        .two-column.tiled > div {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            padding: 35px;
+            height: 360px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+        }
+
+        .two-column.tiled h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--naranja-horizonte);
+            margin-bottom: 12px;
+        }
+
+        /* Warm Retro Photography Frame */
+        .image-wrapper {
+            border-radius: 16px;
+            height: 340px;
+            overflow: hidden;
+            width: 100%;
+            border: 4px solid #ffffff;
+            box-shadow: 0 10px 25px rgba(38, 7, 0, 0.08);
+        }
+
+        .image-wrapper img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        /* Custom 2D Filled Icons & Tiles */
+        .tiled-content {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        .tile {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+        }
+
+        .tile .icon-box {
+            background-color: rgba(255, 99, 43, 0.1);
+            color: var(--naranja-horizonte);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .tile h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--naranja-oscuro);
+            margin-bottom: 8px;
+        }
+
+        .tile p {
+            font-size: 14px;
+        }
+
+        /* Bullet List styling */
+        .bullet-list ul {
+            list-style: none;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+        }
+
+        .bullet-list li i {
+            position: absolute;
+            left: 0;
+            top: 3px;
+            color: var(--naranja-horizonte);
+            font-size: 16px;
+        }
+
+        /* Footer & Brand Branding Mark */
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(38, 7, 0, 0.06);
+            padding-top: 15px;
+            width: 100%;
+        }
+
+        .slide-footer .brand-logo {
+            font-weight: 800;
+            font-size: 16px;
+            color: var(--naranja-oscuro);
+            letter-spacing: -0.5px;
+        }
+
+        .slide-footer .brand-logo span {
+            color: var(--naranja-horizonte);
+        }
+
+        .slide-footer .slide-index {
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(38, 7, 0, 0.4);
+        }
+
+        /* Slide Type Banners ("Momentos de la Clase") */
+        .moment-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 30px;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            align-self: flex-start;
+        }
+
+        .moment-badge.live {
+            background-color: var(--naranja-horizonte);
+        }
+
+        .moment-badge.bug {
+            background-color: var(--rosa-energia);
+        }
+
+        .moment-badge.tip {
+            background-color: var(--amarillo-solar);
+            color: var(--naranja-oscuro);
+        }
+
+        /* Slido Interactive layout */
+        .slido-box {
+            background-color: #ffffff;
+            border: 2px dashed var(--naranja-horizonte);
+            border-radius: 20px;
+            padding: 35px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(255, 99, 43, 0.05);
+        }
+
+        .slido-box h3 {
+            font-size: 26px;
+            color: var(--naranja-oscuro);
+            margin-bottom: 10px;
+        }
+
+        .slido-code {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--naranja-horizonte);
+            margin: 15px 0;
+            letter-spacing: -1px;
+        }
+
+        /* Transition slide */
+        .transition-layout {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .transition-layout h2 {
+            font-size: 60px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.1;
+            margin-bottom: 15px;
+            letter-spacing: -2px;
+        }
+
+        .transition-layout hr {
+            width: 80px;
+            height: 5px;
+            background-color: var(--naranja-horizonte);
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        /* Clean retro table */
+        .table-layout {
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+            width: 100%;
+        }
+
+        .table-layout table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-layout th, .table-layout td {
+            padding: 12px 20px;
+            text-align: left;
+            border-bottom: 1px solid rgba(38, 7, 0, 0.06);
+            font-size: 14px;
+        }
+
+        .table-layout th {
+            background-color: rgba(38, 7, 0, 0.03);
+            color: var(--naranja-oscuro);
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .table-layout tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Break Slide Design */
+        .break-slide {
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+        }
+
+        .break-slide::before {
+            display: none;
+        }
+
+        .break-slide h2 {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--blanco-lienzo);
+            margin-bottom: 20px;
+            letter-spacing: -1.5px;
+        }
+
+        .break-slide p {
+            color: rgba(248, 242, 232, 0.75);
+            font-size: 22px;
+        }
+
+        .break-logo {
+            font-size: 80px;
+            color: var(--naranja-horizonte);
+            margin-bottom: 30px;
+        }
+
+        /* Q&A / Legal section */
+        .legal-notice {
+            font-size: 10px;
+            line-height: 1.4;
+            color: rgba(38, 7, 0, 0.4);
+            text-align: justify;
+            margin-top: 20px;
+        }
+
+        /* Presentation controls toolbar */
+        .controls-toolbar {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            align-items: center;
+        }
+
+        .control-btn {
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .control-btn:hover {
+            background-color: var(--naranja-horizonte);
+        }
+
+        .slide-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(38, 7, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .dot.active {
+            background-color: var(--naranja-horizonte);
+            width: 25px;
+            border-radius: 10px;
+        }
+
+        /* Code Block Container */
+        .code-block {
+            background-color: #ffffff;
+            border-left: 4px solid var(--naranja-horizonte);
+            padding: 15px 20px;
+            font-family: monospace;
+            font-size: 13px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            white-space: pre-wrap;
+            line-height: 1.4;
+        }
+
+        /* Small note under tables */
+        .note-text {
+            margin-top: 18px;
+            font-size: 14px;
+            font-style: italic;
+            color: rgba(38, 7, 0, 0.6);
+        }
+
+        /* ==========================================================================
+           FLOWCHART (Óvalo / Rectángulo / Rombo) — extensión para diagramas de flujo
+           ========================================================================== */
+        .flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            gap: 10px;
+        }
+
+        .flow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fnode {
+            background-color: #ffffff;
+            color: var(--naranja-oscuro);
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.3;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.04);
+        }
+
+        .fnode.oval {
+            border: 2px solid var(--naranja-horizonte);
+            border-radius: 999px;
+            width: 170px;
+            min-height: 70px;
+            padding: 10px 18px;
+        }
+
+        .fnode.rect {
+            border: 2px solid var(--naranja-oscuro);
+            border-radius: 6px;
+            width: 170px;
+            min-height: 64px;
+            padding: 10px 14px;
+        }
+
+        .fnode.diamond {
+            width: 180px;
+            height: 120px;
+            background-color: var(--amarillo-solar);
+            clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+            box-shadow: none;
+            position: relative;
+        }
+
+        .fnode.diamond span {
+            position: absolute;
+            inset: 2px 3px;
+            background-color: #FFF4EA;
+            clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 34px;
+        }
+
+        .ftag {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--naranja-horizonte);
+        }
+
+        .farrow {
+            color: rgba(38, 7, 0, 0.35);
+            font-size: 18px;
+        }
+
+        .fbranch {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .fbranch-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fchip {
+            font-size: 11px;
+            font-weight: 800;
+            padding: 3px 9px;
+            border-radius: 20px;
+            color: #ffffff;
+            background-color: var(--naranja-horizonte);
+            min-width: 34px;
+            text-align: center;
+        }
+
+        .fchip.no {
+            background-color: var(--rosa-energia);
+        }
+
+        .flow-legend {
+            margin-top: 28px;
+            font-size: 14px;
+            color: rgba(38, 7, 0, 0.6);
+            text-align: center;
+        }
+
+        .flow-legend strong {
+            color: var(--naranja-oscuro);
+        }
+
+        /* Tile with a shape preview instead of an icon */
+        .shape-preview {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .shape-preview .fnode {
+            font-size: 12px;
+            width: 130px;
+            min-height: 52px;
+        }
+
+        .shape-preview .fnode.diamond {
+            width: 130px;
+            height: 70px;
+        }
+
+        .shape-preview .fnode.diamond span {
+            padding: 0 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="presentation-viewport">
+
+    <div class="slide-container active">
+        <div></div>
+        <div class="transition-layout" style="margin-bottom: 30px;">
+            <span class="moment-badge">CODER 4.0 • MÓDULO 7 • CLASE 14</span>
+            <h1 style="font-size: 44px;">Human-in-the-Loop y Cuadros de Mando</h1>
+            <p style="font-size: 20px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">La IA hace el trabajo pesado y un humano aprueba antes de lo crítico. Y un tablero para saber, en 5 segundos, si todo funciona. Más la Pre-Entrega 7</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">01 / 21</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">¿Dónde Quedamos?</h2>
+        <div class="content-area">
+<span class="moment-badge live"><i class="fa-solid fa-video"></i> Esta clase queda grabada para que la veas después</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-book-open-reader"></i> RAG: la IA responde a libro abierto, con una base atómica y verificada.</li>
+<li><i class="fa-solid fa-industry"></i> La fábrica de contenido: captura → IA → formateo → distribución.</li>
+<li><i class="fa-solid fa-seedling"></i> El generador desde una idea semilla, con tono y audiencia como variables.</li>
+</ul></div><p class="note-text">Hoy le ponemos el freno de seguridad a la fábrica y un tablero de control.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">02 / 21</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Objetivos de la Clase</h2>
+        <div class="content-area">
+<div class="bullet-list"><ul>
+<li><i class="fa-solid fa-user-check"></i> Diseñar un flujo <strong>HITL</strong>: trigger → IA → pausa → acción humana → ejecución final.</li>
+<li><i class="fa-solid fa-traffic-light"></i> Elegir dónde poner la pausa sin crear un <strong>cuello de botella</strong>.</li>
+<li><i class="fa-solid fa-gauge-high"></i> Armar un <strong>dashboard</strong> con fuente de verdad, visualización y máximo 4 KPIs.</li>
+<li><i class="fa-solid fa-flag-checkered"></i> Salir con <strong>la pausa HITL</strong>, el <strong>dashboard</strong> y la consigna de la <strong>PE7</strong>.</li>
+</ul></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">03 / 21</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Tema 01</span>
+            <h2>Human-in-the-Loop: Aprobación Humana</h2>
+            <p style="font-size: 20px;">Un robot de cocina que hace 100 platos en minutos, pero no tiene sentido del gusto. La solución: el chef prueba una cucharada antes de que el plato salga.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">04 / 21</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">¿Qué es HITL y Por Qué Importa?</h2>
+        <div class="content-area">
+<div class="two-column"><div><span class="moment-badge tip"><i class="fa-solid fa-car"></i> La IA es el motor; el humano, el volante</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-robot"></i> La IA hace el trabajo pesado (~<strong>90 %</strong>); el humano valida, corrige o refina en los <strong>puntos críticos</strong>.</li>
+<li><i class="fa-solid fa-triangle-exclamation"></i> <strong>Alucinaciones:</strong> la aprobación las frena antes de llegar al cliente.</li>
+<li><i class="fa-solid fa-palette"></i> <strong>Sensibilidad de marca:</strong> correcto, pero con un tono que no es el tuyo.</li>
+</ul></div></div><div><div class="tile" style="height: 260px;"><div class="icon-box"><i class="fa-solid fa-sack-dollar"></i></div><h3>Casos de alto riesgo</h3><p>Mover dinero, publicar para miles de seguidores o escribirle a clientes VIP: el costo de un error es demasiado alto para dejarlo solo en manos de un algoritmo.</p></div></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">05 / 21</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">El Flujo HITL</h2>
+        <div class="content-area">
+<div class="flow"><div class="flow-step"><span class="ftag">Trigger</span><div class="fnode oval">Llega un lead o una idea</div></div><div class="farrow"><i class="fa-solid fa-arrow-right"></i></div><div class="flow-step"><span class="ftag">Acción (IA)</span><div class="fnode rect">La IA redacta la propuesta</div></div><div class="farrow"><i class="fa-solid fa-arrow-right"></i></div><div class="flow-step"><span class="ftag">Semáforo humano</span><div class="fnode diamond"><span>Pausa: ¿un humano aprueba?</span></div></div><div class="farrow"><i class="fa-solid fa-arrow-right"></i></div><div class="fbranch"><div class="fbranch-row"><span class="fchip">Aprobar</span><div class="fnode rect">Se ejecuta la acción final</div></div><div class="fbranch-row"><span class="fchip no">Rechazar</span><div class="fnode rect">No sale nada; se corrige el prompt</div></div></div><div class="farrow"><i class="fa-solid fa-arrow-right"></i></div><div class="flow-step"><span class="ftag">Fin / Output</span><div class="fnode oval">Resultado con control de calidad</div></div></div><p class="flow-legend">Ejemplo: una agencia genera hilos de X; el community manager revisa en Slack y recién al apretar "Publicar" sale al mundo.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">06 / 21</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Dónde Poner la Pausa</h2>
+        <div class="content-area">
+<div class="tiled-content"><div class="tile"><div class="icon-box"><i class="fa-brands fa-slack"></i></div><h3>Slack o Teams con botones</h3><p>La forma más elegante: el botón manda una señal de vuelta al flujo.</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-table"></i></div><h3>Airtable o Sheets por estado</h3><p>La IA escribe el borrador y el flujo se detiene. Sigue cuando cambiás "Pendiente" a "Aprobado".</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-file-pen"></i></div><h3>Formulario de espera</h3><p>Wait for Webhook: te llega un link, editás el texto y el flujo sigue con tus cambios.</p></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">07 / 21</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Errores y Mejores Prácticas</h2>
+        <div class="content-area">
+<div class="table-layout"><table><thead><tr><th>Error</th><th>Mejor práctica</th></tr></thead><tbody><tr><td><strong>El cuello de botella</strong></td><td>Aprobar cada una de 500 imágenes diarias destruye el beneficio. HITL en la <strong>última milla</strong>: antes de que sea público o vaya a un tercero.</td></tr><tr><td><strong>"Si hago clic, ¿para qué automatizo?"</strong></td><td>A mano son 30 minutos; con HITL, 1 minuto de lectura y un clic. Se automatizó el 95 % del esfuerzo mental.</td></tr><tr><td><strong>Ignorar el feedback</strong></td><td>Si rechazás, entendé por qué (¿prompt vago? ¿faltó contexto?) y ajustá el nodo de IA.</td></tr></tbody></table></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">08 / 21</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Demo: el Post de la Cabaña, Aprobado</h2>
+        <div class="content-area">
+<div class="two-column"><div><span class="moment-badge live"><i class="fa-solid fa-play"></i> Proyecto ejemplo · en vivo</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-hourglass-half"></i> El post de la clase 13 está en Airtable en estado <strong>"Para revisar"</strong>.</li>
+<li><i class="fa-solid fa-pen"></i> Lo leemos, corregimos una frase y marcamos <strong>Aprobado</strong>.</li>
+<li><i class="fa-solid fa-filter"></i> El segundo flujo, con el filtro <strong>Aprobado = true</strong>, lo manda a #publicaciones y lo marca "Publicado".</li>
+</ul></div></div><div><div class="tile" style="height: 260px;"><div class="icon-box"><i class="fa-solid fa-film"></i></div><h3>Otro ejemplo real</h3><p>Los botones ✅/❌ del bot de películas son una pausa HITL: la IA arma la ficha y no se guarda nada hasta que un humano aprueba.</p></div></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">09 / 21</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Práctica 3: Pausa HITL + Filtro Condicional</h2>
+        <div class="content-area">
+<span class="moment-badge live"><i class="fa-solid fa-flask-vial"></i> Paso 3 de la Pre-Entrega 7 · 12 minutos</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-square-check"></i> Que el resultado se escriba con un checkbox <strong>Aprobado</strong> (o que el borrador vaya a Slack o Email con un link de revisión).</li>
+<li><i class="fa-solid fa-filter"></i> Un <strong>filtro final</strong> que no deje avanzar a la distribución salvo que Aprobado = true.</li>
+<li><i class="fa-solid fa-vial"></i> Probar los dos caminos: aprobado y sin aprobar.</li>
+</ul></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">10 / 21</div>
+        </div>
+    </div>
+
+    <div class="slide-container break-slide">
+        <div></div>
+        <div class="transition-layout">
+            <div class="break-logo"><i class="fa-solid fa-mug-hot"></i></div>
+            <h2>Break</h2>
+            <p>Andá por un cafecito o un mate… ¡volvemos en un ratito!</p>
+        </div>
+        <div class="slide-footer" style="border-top-color: rgba(248, 242, 232, 0.15);">
+            <div class="brand-logo" style="color: var(--blanco-lienzo);">CODER<span>HOUSE</span></div>
+            <div class="slide-index" style="color: rgba(248, 242, 232, 0.5);">11 / 21</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Tema 02</span>
+            <h2>Cuadros de Mando para Monitorear tus Automatizaciones</h2>
+            <p style="font-size: 20px;">n8n capta leads, Claude escribe, Make manda WhatsApps. Al final del día: ¿funcionó todo? ¿cuántos errores hubo mientras dormías? Si tenés que entrar a cada herramienta, tenés un agujero negro.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">12 / 21</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Del Reporte al Dashboard</h2>
+        <div class="content-area">
+<div class="two-column tiled" style="grid-template-columns: 1fr 1fr;"><div><h3><i class="fa-solid fa-camera"></i> Reporte — el pasado</h3><p>Una foto de lo que pasó: el PDF del viernes.</p><p style="margin-top: 12px;">Útil para el archivo, pero llega tarde para decidir.</p></div><div><h3><i class="fa-solid fa-gauge-high"></i> Dashboard — el presente</h3><p>El tablero del auto mientras manejás: velocidad, nafta y la luz roja del motor.</p><p style="margin-top: 12px;">Visibilidad de la IA, errores al instante y cálculo de ROI.</p></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">13 / 21</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Los 3 Componentes de un Dashboard</h2>
+        <div class="content-area">
+<div class="tiled-content"><div class="tile"><div class="icon-box"><i class="fa-solid fa-database"></i></div><h3>Fuente de la verdad</h3><p>Airtable o Sheets. Cada flujo deja una <strong>huella</strong>: una fila con fecha, estado, plataforma y error.</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-chart-pie"></i></div><h3>Visualización</h3><p>Notion para dashboards ejecutivos; Sheets para gráficos simples. No hace falta Power BI.</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-bullseye"></i></div><h3>KPIs</h3><p>Tasa de aprobación (calidad de los prompts), volumen de salida y tasa de error de la IA.</p></div></div><p class="note-text">Ejemplo: Elena ve en Notion 70 % publicado, 20 % pendiente de aprobación, 10 % error. Encuentra un token vencido y lo arregla.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">14 / 21</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Errores Comunes y el Toque Maestro</h2>
+        <div class="content-area">
+<div class="table-layout"><table><thead><tr><th>Error / técnica</th><th>Qué hacer</th></tr></thead><tbody><tr><td><strong>Cementerio de datos</strong></td><td>50 gráficos que nadie mira. <strong>Máximo 4 KPIs.</strong></td></tr><tr><td><strong>Datos desvinculados</strong></td><td>Copiar y pegar a mano no es un dashboard: el último nodo de todo flujo es "Create record" o "Update row".</td></tr><tr><td><strong>Olvidar el timestamp</strong></td><td>Sin fecha y hora no podés filtrar por "hoy" o "esta semana".</td></tr><tr><td><strong>IA que analiza tu rendimiento</strong></td><td>Cada domingo, Claude lee la semana y avisa por Slack: "La aprobación bajó 15 % los miércoles; revisá el prompt de tono".</td></tr></tbody></table></div><p class="note-text">El flujo termina cuando el dato llega al dashboard, no cuando se manda el mensaje.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">15 / 21</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Demo: el Dashboard de la Inmobiliaria</h2>
+        <div class="content-area">
+<div class="tiled-content"><div class="tile"><div class="icon-box"><i class="fa-solid fa-signal"></i></div><h3>Consultas por prioridad</h3><p>Alta y baja, esta semana.</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-user-check"></i></div><h3>Tasa de aprobación</h3><p>De los posts que generó la IA.</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-boxes-stacked"></i></div><h3>Volumen de salida</h3><p>Consultas respondidas + posts publicados.</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-triangle-exclamation"></i></div><h3>Tasa de error</h3><p>De los flujos, desde la tabla de log.</p></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">16 / 21</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge live">✅ Entregable evaluado del Módulo</span>
+            <h2>Pre-Entrega 7: Sistema de Contenido Autónomo con Supervisión HITL</h2>
+            <p style="font-size: 20px;">Un pipeline de contenido conectado a una base de conocimiento, con una pausa obligatoria para validación humana antes de la distribución.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">17 / 21</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Pasos a Seguir</h2>
+        <div class="content-area">
+<div class="bullet-list"><ul>
+<li><i class="fa-solid fa-1"></i> Una <strong>base de control</strong> en Airtable o Notion: tu centro de comando.</li>
+<li><i class="fa-solid fa-2"></i> <strong>Trigger</strong> que reaccione solo cuando una fila pasa a "Generando" con una <strong>idea semilla</strong>.</li>
+<li><i class="fa-solid fa-3"></i> <strong>Nodo de IA</strong> (Claude o GPT) con <strong>contexto privado</strong> que redacte una pieza de marketing.</li>
+<li><i class="fa-solid fa-4"></i> <strong>Pausa HITL:</strong> checkbox "Aprobado" en Airtable, o borrador a Slack o Email con un link de revisión.</li>
+<li><i class="fa-solid fa-5"></i> <strong>Filtro final:</strong> no avanza a las plataformas externas salvo que el checkbox sea true.</li>
+</ul></div><p class="note-text">Formato: PDF explicativo que demuestre el nodo de interrupción humana, o link público al flujo activo.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">18 / 21</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">¿Cómo se Evalúa?</h2>
+        <div class="content-area">
+<div class="table-layout"><table><thead><tr><th>Criterio</th><th>Qué se evalúa</th><th>Peso</th></tr></thead><tbody><tr><td><strong>Mecanismo de pausa humana (HITL)</strong></td><td>Punto de pausa obligatorio: checkbox "Aprobado" o alerta restrictiva a Slack/Email.</td><td><strong>40 %</strong></td></tr><tr><td><strong>Lógica de distribución condicional</strong></td><td>La distribución solo se ejecuta si el humano valida.</td><td><strong>30 %</strong></td></tr><tr><td><strong>Estructura RAG y base de conocimiento</strong></td><td>Base en Notion/Airtable que alimenta al agente ante una idea semilla.</td><td><strong>30 %</strong></td></tr></tbody></table></div><p class="note-text">Total: 100 pts · Aprobación: 70 pts. El dashboard no está en la rúbrica de la PE7, pero es uno de los 5 entregables de la Entrega Final.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">19 / 21</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Práctica 4 y Cierre</h2>
+        <div class="content-area">
+<div class="two-column"><div><span class="moment-badge live"><i class="fa-solid fa-flask-vial"></i> Paso 4 de la Pre-Entrega 7</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-gauge-high"></i> Un dashboard con <strong>3 KPIs</strong> alimentado por una tabla de log con timestamp.</li>
+<li><i class="fa-solid fa-calendar-check"></i> <strong>PE7:</strong> se recomienda entregarla antes de la <strong>clase 16</strong>.</li>
+</ul></div></div><div><div class="tile" style="height: 260px;"><div class="icon-box"><i class="fa-solid fa-forward"></i></div><h3>Próximo: el Proyecto Integrador</h3><p>Traé a la clase 15 todas tus pre-entregas: son los ladrillos del proyecto final. Y creá tu cuenta de GitHub.</p></div></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">20 / 21</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div class="content-area" style="align-items: center; justify-content: center; text-align: center;">
+            <div style="display: flex; gap: 25px; align-items: flex-end; justify-content: center; margin-bottom: 20px;">
+                <i class="fa-solid fa-circle-question" style="font-size: 50px; color: var(--amarillo-solar);"></i>
+                <i class="fa-solid fa-circle-question" style="font-size: 90px; color: var(--naranja-horizonte);"></i>
+                <i class="fa-solid fa-circle-question" style="font-size: 60px; color: var(--rosa-energia);"></i>
+            </div>
+            <h1 style="font-size: 64px;">¿Dudas? ¿Consultas?</h1>
+            <p style="font-size: 22px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">¡Cerramos el Módulo 7!</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">21 / 21</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Presentation navigation controls toolbar -->
+<div class="controls-toolbar">
+    <button class="control-btn" id="prev-slide"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+    <div class="slide-dots" id="slide-dots"></div>
+    <button class="control-btn" id="next-slide">Siguiente <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<script>
+    // Slider Presentation Logic
+    const slides = document.querySelectorAll('.slide-container');
+    const prevBtn = document.getElementById('prev-slide');
+    const nextBtn = document.getElementById('next-slide');
+    const dotsContainer = document.getElementById('slide-dots');
+
+    let currentSlideIndex = 0;
+
+    // Create Navigation Indicators Dynamically
+    slides.forEach((slide, idx) => {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (idx === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => {
+            goToSlide(idx);
+        });
+        dotsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.dot');
+
+    function updateControls() {
+        dots.forEach((dot, idx) => {
+            if (idx === currentSlideIndex) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }
+
+    function goToSlide(index) {
+        if (index < 0 || index >= slides.length) return;
+
+        slides[currentSlideIndex].classList.remove('active');
+        currentSlideIndex = index;
+        slides[currentSlideIndex].classList.add('active');
+
+        updateControls();
+    }
+
+    // Keyboard Navigation Handlers
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') {
+            goToSlide(currentSlideIndex + 1);
+        } else if (e.key === 'ArrowLeft') {
+            goToSlide(currentSlideIndex - 1);
+        }
+    });
+
+    // Button Click Event Listeners
+    prevBtn.addEventListener('click', () => {
+        goToSlide(currentSlideIndex - 1);
+    });
+
+    nextBtn.addEventListener('click', () => {
+        goToSlide(currentSlideIndex + 1);
+    });
+</script>
+
+</body>
+</html>

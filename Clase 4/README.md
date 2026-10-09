@@ -1,7 +1,8 @@
 # Clase 4 — Conexiones y Omni AI + Tu ecosistema completo + Pre-Entrega 2
 
 **Módulo 2 · Ecosistema No-Code y Low-Code** (segunda mitad)
-Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, unidades 3 y 4 del Módulo 2 y consigna de la Pre-Entrega 2
+Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, unidades 3 y 4 del Módulo 2 y consigna de la Pre-Entrega 2  
+**Presentación:** `Clase04.html` (24 filminas, en esta carpeta; se navega con ← → o los botones).
 
 ---
 

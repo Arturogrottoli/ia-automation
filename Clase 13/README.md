@@ -1,7 +1,8 @@
 # Clase 13 — Agentes con memoria RAG en Notion + Generación de contenido
 
 **Módulo 7 · Diseño de agentes y automatización de la creatividad** (primera mitad)
-Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, unidades 1 y 2 del Módulo 7
+Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, unidades 1 y 2 del Módulo 7  
+**Presentación:** `Clase13.html` (19 filminas, en esta carpeta; se navega con ← → o los botones).
 
 > Base de contenido: el PDF. Este módulo se evalúa en la **Pre-Entrega 7 (Sistema de Contenido Autónomo con
 > Supervisión HITL)**, que se presenta en la clase 14. Es la última pre-entrega antes de la Entrega Final.

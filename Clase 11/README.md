@@ -1,7 +1,8 @@
 # Clase 11 — Ventajas de Claude + Message Batches API
 
 **Módulo 6 · Inteligencia de negocio con Anthropic Claude API** (primera mitad)
-Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, unidades 1 y 2 del Módulo 6
+Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, unidades 1 y 2 del Módulo 6  
+**Presentación:** `Clase11.html` (20 filminas, en esta carpeta; se navega con ← → o los botones).
 
 > Base de contenido: el PDF. Este módulo se evalúa en la **Pre-Entrega 6 (Diseño de Eficiencia e
 > Ingeniería de Prompts Recurrentes)**, que se presenta en la clase 12.

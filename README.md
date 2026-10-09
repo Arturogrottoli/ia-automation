@@ -1,4 +1,4 @@
-# IA Automation · Comisión 2026
+| ✅ `Clase16.html` || ✅ `Clase15.html` || ✅ `Clase14.html` || ✅ `Clase13.html` || ✅ `Clase12.html` || ✅ `Clase11.html` || ✅ `Clase10.html` || ✅ `Clase09.html` || ✅ `Clase08.html` || ✅ `Clase07.html` || ✅ `Clase06.html` || ✅ `Clase05.html` || ✅ `Clase04.html` || ✅ `Clase03.html` |# IA Automation · Comisión 2026
 
 Material del docente: guion de cada clase, presentaciones, diagramas y el proyecto ejemplo.
 
@@ -14,20 +14,20 @@ Material del docente: guion de cada clase, presentaciones, diagramas y el proyec
 |---|---|---|---|---|
 | [1](Clase%201/README.md) | M1 · Fundamentos | Automatización de procesos (BPA) + arquitectura de flujos | | ✅ `Clase01.html` |
 | [2](Clase%202/README.md) | M1 · Fundamentos | Ética y seguridad | **Brief PE1** | ✅ `Clase02.html` |
-| [3](Clase%203/README.md) | M2 · No-Code y Low-Code | No-Code vs Low-Code + costos y JSON | | pendiente |
-| [4](Clase%204/README.md) | M2 · No-Code y Low-Code | Airtable y Omni AI + tu ecosistema | **Brief PE2** | pendiente |
-| [5](Clase%205/README.md) | M3 · Make | La interfaz de Make + routers, filtros y transformación | | pendiente |
-| [6](Clase%206/README.md) | M3 · Make | JSON y variables + OpenAI y manejo de errores | **Brief PE3** | pendiente |
-| [7](Clase%207/README.md) | M4 · n8n | Instalación de n8n + nodos de IA y agentes | | pendiente |
-| [8](Clase%208/README.md) | M4 · n8n | HTTP Request + loops y sub-workflows | **Brief PE4** | pendiente |
-| [9](Clase%209/README.md) | M5 · Comunicación | Gmail con API + de la app a la API de WhatsApp | | pendiente |
-| [10](Clase%2010/README.md) | M5 · Comunicación | WhatsApp (24 h, plantillas, drips, chatbots) + orquestación multicanal | **Brief PE5** | pendiente |
-| [11](Clase%2011/README.md) | M6 · Claude | Ventajas de Claude + Message Batches | | pendiente |
-| [12](Clase%2012/README.md) | M6 · Claude | Prompt Caching + MCP | **Brief PE6** | pendiente |
-| [13](Clase%2013/README.md) | M7 · Agentes y creatividad | Agentes con memoria RAG en Notion + generación de contenido | | pendiente |
-| [14](Clase%2014/README.md) | M7 · Agentes y creatividad | Human-in-the-Loop + cuadros de mando | **Brief PE7** | pendiente |
-| [15](Clase%2015/README.md) | M8 · Proyecto Integrador | Kickoff: stack, requisitos, 5 entregables, hoja de ruta | **Brief Entrega Final** | pendiente |
-| [16](Clase%2016/README.md) | M8 · Proyecto Integrador | Taller de calidad + revisión de avance | | pendiente |
+| [3](Clase%203/README.md) | M2 · No-Code y Low-Code | No-Code vs Low-Code + costos y JSON | | ✅ `Clase03.html` |
+| [4](Clase%204/README.md) | M2 · No-Code y Low-Code | Airtable y Omni AI + tu ecosistema | **Brief PE2** | ✅ `Clase04.html` |
+| [5](Clase%205/README.md) | M3 · Make | La interfaz de Make + routers, filtros y transformación | | ✅ `Clase05.html` |
+| [6](Clase%206/README.md) | M3 · Make | JSON y variables + OpenAI y manejo de errores | **Brief PE3** | ✅ `Clase06.html` |
+| [7](Clase%207/README.md) | M4 · n8n | Instalación de n8n + nodos de IA y agentes | | ✅ `Clase07.html` |
+| [8](Clase%208/README.md) | M4 · n8n | HTTP Request + loops y sub-workflows | **Brief PE4** | ✅ `Clase08.html` |
+| [9](Clase%209/README.md) | M5 · Comunicación | Gmail con API + de la app a la API de WhatsApp | | ✅ `Clase09.html` |
+| [10](Clase%2010/README.md) | M5 · Comunicación | WhatsApp (24 h, plantillas, drips, chatbots) + orquestación multicanal | **Brief PE5** | ✅ `Clase10.html` |
+| [11](Clase%2011/README.md) | M6 · Claude | Ventajas de Claude + Message Batches | | ✅ `Clase11.html` |
+| [12](Clase%2012/README.md) | M6 · Claude | Prompt Caching + MCP | **Brief PE6** | ✅ `Clase12.html` |
+| [13](Clase%2013/README.md) | M7 · Agentes y creatividad | Agentes con memoria RAG en Notion + generación de contenido | | ✅ `Clase13.html` |
+| [14](Clase%2014/README.md) | M7 · Agentes y creatividad | Human-in-the-Loop + cuadros de mando | **Brief PE7** | ✅ `Clase14.html` |
+| [15](Clase%2015/README.md) | M8 · Proyecto Integrador | Kickoff: stack, requisitos, 5 entregables, hoja de ruta | **Brief Entrega Final** | ✅ `Clase15.html` |
+| [16](Clase%2016/README.md) | M8 · Proyecto Integrador | Taller de calidad + revisión de avance | | ✅ `Clase16.html` |
 
 ---
 
@@ -79,7 +79,7 @@ Todas sobre 100 pts; se aprueban con 70.
 - [ ] Filminas del panorama del curso en la clase 2 (si se aprueba).
 - [ ] Que las presentaciones se adapten al tamaño de la pantalla (no depende de nada; se puede hacer ya).
 - [ ] Semana 1 del proyecto ejemplo: datos ficticios (propiedades, consultas, reseñas, FAQ, guía del destino).
-- [ ] Presentaciones HTML de las clases 3 a 16.
+- [x] Presentaciones HTML de las clases 3 a 16 (hechas; el generador está en `herramientas/filminas/`).
 
 ## Puntos a definir o verificar
 

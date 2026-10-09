@@ -1,7 +1,8 @@
 # Clase 15 — Proyecto Integrador: kickoff (Cerebro, Corazón, HITL y Voz)
 
 **Módulo 8 · Proyecto Integrador: tu ecosistema de IA autónomo** (primera mitad)
-Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, consigna de la Entrega Final
+Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, consigna de la Entrega Final  
+**Presentación:** `Clase15.html` (18 filminas, en esta carpeta; se navega con ← → o los botones).
 
 > El Módulo 8 del PDF no tiene unidades de lectura: es la **consigna de la Entrega Final**. Esta clase la
 > presenta completa y arranca la construcción. La clase 16 es un taller de calidad y revisión de avance.

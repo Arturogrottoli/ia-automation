@@ -1,7 +1,8 @@
 # Clase 12 — Prompt Caching + Model Context Protocol (MCP) + Pre-Entrega 6
 
 **Módulo 6 · Inteligencia de negocio con Anthropic Claude API** (segunda mitad)
-Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, unidades 3 y 4 del Módulo 6 y consigna de la Pre-Entrega 6
+Duración: ~1 h 45 · Fuente: `IA Automation.pdf`, unidades 3 y 4 del Módulo 6 y consigna de la Pre-Entrega 6  
+**Presentación:** `Clase12.html` (22 filminas, en esta carpeta; se navega con ← → o los botones).
 
 > **Verificar antes de la clase:** precios, mínimo de tokens para cachear y duración del caché en la
 > documentación de Anthropic. El PDF da cifras de un modelo anterior (Claude 3.5 Sonnet); los conceptos se
