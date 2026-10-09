@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 08 - HTTP Request + Loops y Sub-Workflows | Coderhouse</title>
+    <!-- Coder 4.0 Core Typography: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ==========================================================================
+           CODER 4.0 DESIGN SYSTEM & VARS
+           ========================================================================== */
+        :root {
+            --blanco-lienzo: #F8F2E8;
+            --negro-coder: #171717;
+            --naranja-oscuro: #260700;
+            --naranja-horizonte: #FF632B;
+            --amarillo-solar: #FE872D;
+            --rosa-energia: #FE64A3;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --transition-speed: 0.4s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #dcd6cd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: var(--font-main);
+            overflow: hidden;
+        }
+
+        /* Slide Viewer (Absolute 1280x720 No-Scale-Shift) */
+        .presentation-viewport {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            border-radius: 16px;
+            overflow: hidden;
+            background-color: var(--blanco-lienzo);
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            color: var(--negro-coder);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 50px 70px 40px 70px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity var(--transition-speed) ease-in-out, visibility var(--transition-speed) ease-in-out;
+            z-index: 1;
+        }
+
+        .slide-container.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        /* Abstract Brand Accents: Subtly warm gradients connecting to Coder 4.0 */
+        .slide-container::before {
+            content: '';
+            position: absolute;
+            top: -150px;
+            right: -150px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(255,99,43,0.06) 0%, rgba(248,242,232,0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .slide-container > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Typography & Hierarchy */
+        h1 {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+        }
+
+        .slide-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.2;
+            letter-spacing: -1px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .slide-title::after {
+            content: '';
+            flex-grow: 1;
+            height: 2px;
+            background-color: rgba(38, 7, 0, 0.1);
+            margin-left: 15px;
+        }
+
+        p, li {
+            font-size: 17px;
+            line-height: 1.5;
+            color: #3d3430;
+            font-weight: 400;
+        }
+
+        /* Content Area Layout Wrapper */
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* Grid & Column Definitions */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 45px;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Coder 4.0 Split Card layouts */
+        .two-column.tiled > div {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            padding: 35px;
+            height: 360px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+        }
+
+        .two-column.tiled h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--naranja-horizonte);
+            margin-bottom: 12px;
+        }
+
+        /* Warm Retro Photography Frame */
+        .image-wrapper {
+            border-radius: 16px;
+            height: 340px;
+            overflow: hidden;
+            width: 100%;
+            border: 4px solid #ffffff;
+            box-shadow: 0 10px 25px rgba(38, 7, 0, 0.08);
+        }
+
+        .image-wrapper img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        /* Custom 2D Filled Icons & Tiles */
+        .tiled-content {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        .tile {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+        }
+
+        .tile .icon-box {
+            background-color: rgba(255, 99, 43, 0.1);
+            color: var(--naranja-horizonte);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .tile h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--naranja-oscuro);
+            margin-bottom: 8px;
+        }
+
+        .tile p {
+            font-size: 14px;
+        }
+
+        /* Bullet List styling */
+        .bullet-list ul {
+            list-style: none;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+        }
+
+        .bullet-list li i {
+            position: absolute;
+            left: 0;
+            top: 3px;
+            color: var(--naranja-horizonte);
+            font-size: 16px;
+        }
+
+        /* Footer & Brand Branding Mark */
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(38, 7, 0, 0.06);
+            padding-top: 15px;
+            width: 100%;
+        }
+
+        .slide-footer .brand-logo {
+            font-weight: 800;
+            font-size: 16px;
+            color: var(--naranja-oscuro);
+            letter-spacing: -0.5px;
+        }
+
+        .slide-footer .brand-logo span {
+            color: var(--naranja-horizonte);
+        }
+
+        .slide-footer .slide-index {
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(38, 7, 0, 0.4);
+        }
+
+        /* Slide Type Banners ("Momentos de la Clase") */
+        .moment-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 30px;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            align-self: flex-start;
+        }
+
+        .moment-badge.live {
+            background-color: var(--naranja-horizonte);
+        }
+
+        .moment-badge.bug {
+            background-color: var(--rosa-energia);
+        }
+
+        .moment-badge.tip {
+            background-color: var(--amarillo-solar);
+            color: var(--naranja-oscuro);
+        }
+
+        /* Slido Interactive layout */
+        .slido-box {
+            background-color: #ffffff;
+            border: 2px dashed var(--naranja-horizonte);
+            border-radius: 20px;
+            padding: 35px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(255, 99, 43, 0.05);
+        }
+
+        .slido-box h3 {
+            font-size: 26px;
+            color: var(--naranja-oscuro);
+            margin-bottom: 10px;
+        }
+
+        .slido-code {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--naranja-horizonte);
+            margin: 15px 0;
+            letter-spacing: -1px;
+        }
+
+        /* Transition slide */
+        .transition-layout {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .transition-layout h2 {
+            font-size: 60px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.1;
+            margin-bottom: 15px;
+            letter-spacing: -2px;
+        }
+
+        .transition-layout hr {
+            width: 80px;
+            height: 5px;
+            background-color: var(--naranja-horizonte);
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        /* Clean retro table */
+        .table-layout {
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+            width: 100%;
+        }
+
+        .table-layout table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-layout th, .table-layout td {
+            padding: 12px 20px;
+            text-align: left;
+            border-bottom: 1px solid rgba(38, 7, 0, 0.06);
+            font-size: 14px;
+        }
+
+        .table-layout th {
+            background-color: rgba(38, 7, 0, 0.03);
+            color: var(--naranja-oscuro);
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .table-layout tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Break Slide Design */
+        .break-slide {
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+        }
+
+        .break-slide::before {
+            display: none;
+        }
+
+        .break-slide h2 {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--blanco-lienzo);
+            margin-bottom: 20px;
+            letter-spacing: -1.5px;
+        }
+
+        .break-slide p {
+            color: rgba(248, 242, 232, 0.75);
+            font-size: 22px;
+        }
+
+        .break-logo {
+            font-size: 80px;
+            color: var(--naranja-horizonte);
+            margin-bottom: 30px;
+        }
+
+        /* Q&A / Legal section */
+        .legal-notice {
+            font-size: 10px;
+            line-height: 1.4;
+            color: rgba(38, 7, 0, 0.4);
+            text-align: justify;
+            margin-top: 20px;
+        }
+
+        /* Presentation controls toolbar */
+        .controls-toolbar {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            align-items: center;
+        }
+
+        .control-btn {
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .control-btn:hover {
+            background-color: var(--naranja-horizonte);
+        }
+
+        .slide-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(38, 7, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .dot.active {
+            background-color: var(--naranja-horizonte);
+            width: 25px;
+            border-radius: 10px;
+        }
+
+        /* Code Block Container */
+        .code-block {
+            background-color: #ffffff;
+            border-left: 4px solid var(--naranja-horizonte);
+            padding: 15px 20px;
+            font-family: monospace;
+            font-size: 13px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            white-space: pre-wrap;
+            line-height: 1.4;
+        }
+
+        /* Small note under tables */
+        .note-text {
+            margin-top: 18px;
+            font-size: 14px;
+            font-style: italic;
+            color: rgba(38, 7, 0, 0.6);
+        }
+
+        /* ==========================================================================
+           FLOWCHART (Óvalo / Rectángulo / Rombo) — extensión para diagramas de flujo
+           ========================================================================== */
+        .flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            gap: 10px;
+        }
+
+        .flow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fnode {
+            background-color: #ffffff;
+            color: var(--naranja-oscuro);
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.3;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.04);
+        }
+
+        .fnode.oval {
+            border: 2px solid var(--naranja-horizonte);
+            border-radius: 999px;
+            width: 170px;
+            min-height: 70px;
+            padding: 10px 18px;
+        }
+
+        .fnode.rect {
+            border: 2px solid var(--naranja-oscuro);
+            border-radius: 6px;
+            width: 170px;
+            min-height: 64px;
+            padding: 10px 14px;
+        }
+
+        .fnode.diamond {
+            width: 180px;
+            height: 120px;
+            background-color: var(--amarillo-solar);
+            clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+            box-shadow: none;
+            position: relative;
+        }
+
+        .fnode.diamond span {
+            position: absolute;
+            inset: 2px 3px;
+            background-color: #FFF4EA;
+            clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 34px;
+        }
+
+        .ftag {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--naranja-horizonte);
+        }
+
+        .farrow {
+            color: rgba(38, 7, 0, 0.35);
+            font-size: 18px;
+        }
+
+        .fbranch {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .fbranch-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fchip {
+            font-size: 11px;
+            font-weight: 800;
+            padding: 3px 9px;
+            border-radius: 20px;
+            color: #ffffff;
+            background-color: var(--naranja-horizonte);
+            min-width: 34px;
+            text-align: center;
+        }
+
+        .fchip.no {
+            background-color: var(--rosa-energia);
+        }
+
+        .flow-legend {
+            margin-top: 28px;
+            font-size: 14px;
+            color: rgba(38, 7, 0, 0.6);
+            text-align: center;
+        }
+
+        .flow-legend strong {
+            color: var(--naranja-oscuro);
+        }
+
+        /* Tile with a shape preview instead of an icon */
+        .shape-preview {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .shape-preview .fnode {
+            font-size: 12px;
+            width: 130px;
+            min-height: 52px;
+        }
+
+        .shape-preview .fnode.diamond {
+            width: 130px;
+            height: 70px;
+        }
+
+        .shape-preview .fnode.diamond span {
+            padding: 0 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="presentation-viewport">
+
+    <div class="slide-container active">
+        <div></div>
+        <div class="transition-layout" style="margin-bottom: 30px;">
+            <span class="moment-badge">CODER 4.0 • MÓDULO 4 • CLASE 08</span>
+            <h1 style="font-size: 44px;">HTTP Request, Loops y Sub-Workflows</h1>
+            <p style="font-size: 20px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">Conectar cualquier app aunque no tenga nodo, procesar miles de registros sin romper nada, y diseñar la arquitectura de tu agente: la Pre-Entrega 4</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">01 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">¿Dónde Quedamos?</h2>
+        <div class="content-area">
+<span class="moment-badge live"><i class="fa-solid fa-video"></i> Esta clase queda grabada para que la veas después</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-server"></i> n8n: Cloud o self-hosted; <strong>1 ejecución</strong> por flujo, no por nodo.</li>
+<li><i class="fa-solid fa-robot"></i> AI Agent = Modelo + Memoria + Tools, razonando con el ciclo <strong>ReAct</strong>.</li>
+<li><i class="fa-solid fa-shield-halved"></i> Sin la herramienta correcta, el agente inventa. System prompt claro y límite de iteraciones.</li>
+</ul></div><p class="note-text">Hoy: conectar lo que no tiene nodo y procesar volumen.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">02 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Objetivos de la Clase</h2>
+        <div class="content-area">
+<div class="bullet-list"><ul>
+<li><i class="fa-solid fa-plug"></i> Conectar una app sin nodo nativo con <strong>HTTP Request</strong>: URL, método, headers, autenticación y body.</li>
+<li><i class="fa-solid fa-bug"></i> Diagnosticar los errores <strong>400, 401, 403 y 404</strong>.</li>
+<li><i class="fa-solid fa-layer-group"></i> Procesar volumen con <strong>SplitInBatches</strong> y reutilizar lógica con <strong>sub-workflows</strong>.</li>
+<li><i class="fa-solid fa-flag-checkered"></i> Salir con <strong>el diagrama de la PE4</strong> avanzado y la consigna clara.</li>
+</ul></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">03 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Tema 01</span>
+            <h2>HTTP Request: Conectando Apps sin Integración Nativa</h2>
+            <p style="font-size: 20px;">Encontrás una herramienta increíble para gestionar reseñas, vas a n8n… y no tiene nodo. ¿No se puede automatizar? Sí se puede: el HTTP Request es la llave maestra.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">04 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">La Analogía del Camarero</h2>
+        <div class="content-area">
+<div class="two-column"><div><span class="moment-badge tip"><i class="fa-solid fa-utensils"></i> Vos sos el cliente; la app externa es la cocina</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-door-closed"></i> No podés entrar a la cocina. El <strong>camarero (la API)</strong> lleva tu pedido y te trae la comida.</li>
+<li><i class="fa-solid fa-bell-concierge"></i> El nodo <strong>HTTP Request</strong> es el camarero: le das una nota y te trae los datos.</li>
+</ul></div></div><div><div class="tile" style="height: 260px;"><div class="icon-box"><i class="fa-solid fa-star"></i></div><h3>Por qué usarlo si hay nodos</h3><p>Conecta apps nuevas o locales, accede a funciones ocultas (el nodo nativo solo crea; la API también borra o actualiza) y da control total.</p></div></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">05 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Los 5 Ingredientes de una Petición</h2>
+        <div class="content-area">
+<div class="table-layout"><table><thead><tr><th>Ingrediente</th><th>Qué es</th><th>Ejemplo</th></tr></thead><tbody><tr><td><strong>URL (endpoint)</strong></td><td>El destino</td><td>https://api.tu-app.com/v1/clientes</td></tr><tr><td><strong>Método</strong></td><td>La acción</td><td><strong>GET</strong> "dame información" · <strong>POST</strong> "guardá esto"</td></tr><tr><td><strong>Headers</strong></td><td>Instrucciones adicionales</td><td>Content-Type: application/json</td></tr><tr><td><strong>Autenticación</strong></td><td>La identificación</td><td>API key en Header Auth</td></tr><tr><td><strong>Body</strong></td><td>El contenido (solo en POST)</td><td>El JSON con los datos</td></tr></tbody></table></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">06 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">¿Por Qué mi Nodo Está en Rojo?</h2>
+        <div class="content-area">
+<div class="tiled-content"><div class="tile"><div class="icon-box"><i class="fa-solid fa-key"></i></div><h3>401 Unauthorized</h3><p>La API key está mal, venció o no está donde va.</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-map-location-dot"></i></div><h3>404 Not Found</h3><p>URL mal escrita. Revisá las barras del final.</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-file-circle-xmark"></i></div><h3>400 Bad Request</h3><p>Le mandaste algo que no entiende: JSON con un error.</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-ban"></i></div><h3>403 Forbidden</h3><p>La key funciona, pero no tenés permiso para esa acción.</p></div></div><p class="note-text">Tip: probá la URL en el navegador. Si ahí funciona, el problema es la configuración del nodo.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">07 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">El Molde de Cualquier Integración</h2>
+        <div class="content-area">
+<div class="code-block" style="font-size: 14px; margin-bottom: 16px;">[Webhook POST] → [Edit Fields: arma el body] → [HTTP Request POST, Header Auth] → [IF status = 200]
+                                                                                   ├─ sí → [Sheets: log OK]
+                                                                                   └─ no → [Slack: aviso de error]</div><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-lock"></i> La API key va en <strong>Credentials</strong> (Authorization: Bearer …), <strong>nunca</strong> en la URL ni en el body.</li>
+<li><i class="fa-solid fa-rotate-right"></i> En Settings del HTTP Request: <strong>Retry On Fail</strong> (2–3 reintentos).</li>
+<li><i class="fa-solid fa-vial"></i> Se prueba con el webhook en "Listen for test event" y un POST desde el formulario o Postman.</li>
+</ul></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">08 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Demo: la API de Airtable con HTTP Request</h2>
+        <div class="content-area">
+<div class="two-column"><div><span class="moment-badge live"><i class="fa-solid fa-play"></i> Proyecto ejemplo · en vivo en n8n</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-download"></i> <strong>GET</strong> a la API de Airtable para traer las propiedades (aunque tenga nodo nativo, sirve para ver los 5 ingredientes con una API real).</li>
+<li><i class="fa-solid fa-key"></i> Credencial en <strong>Header Auth</strong>.</li>
+<li><i class="fa-solid fa-bug"></i> Forzamos un <strong>401</strong> y lo leemos en Executions.</li>
+</ul></div></div><div><div class="tile" style="height: 260px;"><div class="icon-box"><i class="fa-solid fa-laptop"></i></div><h3>Si n8n corre en tu máquina</h3><p>Para recibir webhooks de afuera hace falta una dirección pública: un túnel como n8n --tunnel (solo pruebas) o ngrok.</p></div></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">09 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Práctica 3: API Externa + Switch</h2>
+        <div class="content-area">
+<span class="moment-badge live"><i class="fa-solid fa-flask-vial"></i> Paso 3 de la Pre-Entrega 4 · 12 minutos</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-plug"></i> ¿Qué <strong>API externa</strong> necesita tu escenario? (OpenAI, Google Drive, Jira, el CRM, Slack…) Anotala con su método.</li>
+<li><i class="fa-solid fa-code-branch"></i> <strong>Switch con 2 o más caminos:</strong> ¿qué decide la IA y qué pasa en cada caso? Ej.: reembolso / cupón / escalar.</li>
+</ul></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">10 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container break-slide">
+        <div></div>
+        <div class="transition-layout">
+            <div class="break-logo"><i class="fa-solid fa-mug-hot"></i></div>
+            <h2>Break</h2>
+            <p>Andá por un cafecito o un mate… ¡volvemos en un ratito!</p>
+        </div>
+        <div class="slide-footer" style="border-top-color: rgba(248, 242, 232, 0.15);">
+            <div class="brand-logo" style="color: var(--blanco-lienzo);">CODER<span>HOUSE</span></div>
+            <div class="slide-index" style="color: rgba(248, 242, 232, 0.5);">11 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Tema 02</span>
+            <h2>Loops y Sub-Workflows: Datos Masivos</h2>
+            <p style="font-size: 20px;">5.000 leads para que la IA los analice. Si los mandás de golpe: n8n se queda sin memoria, OpenAI te bloquea, o el flujo falla a mitad y no sabés cuáles se procesaron.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">12 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">SplitInBatches: la Lavadora de Datos</h2>
+        <div class="content-area">
+<div class="two-column"><div><span class="moment-badge tip"><i class="fa-solid fa-soap"></i> No metas toda la montaña de ropa de una vez</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-1"></i> Recibe, por ejemplo, 1.000 filas y entrega las primeras 50 (<strong>batch size</strong>).</li>
+<li><i class="fa-solid fa-2"></i> Pasan por los nodos de proceso (ej. la IA).</li>
+<li><i class="fa-solid fa-3"></i> El último nodo <strong>vuelve</strong> a la entrada del SplitInBatches.</li>
+<li><i class="fa-solid fa-4"></i> ¿Quedan registros? Sí → las próximas 50. No → sigue adelante.</li>
+</ul></div></div><div><div class="tile" style="height: 260px;"><div class="icon-box"><i class="fa-solid fa-memory"></i></div><h3>Por qué ahorra recursos</h3><p>En memoria hay solo 50 a la vez. Y si falla en el registro 400, sabés exactamente dónde quedó y no perdés los anteriores.</p></div></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">13 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Sub-Workflows: tu "Salsa Secreta" Reutilizable</h2>
+        <div class="content-area">
+<div class="two-column"><div><span class="moment-badge"><i class="fa-solid fa-recycle"></i> DRY: Don't Repeat Yourself</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-phone"></i> Un "Limpiador de teléfonos" que usan 3 flujos con <strong>Execute Workflow</strong>. Si cambia la lógica, se cambia en un solo lugar.</li>
+<li><i class="fa-solid fa-broom"></i> Orden visual, aislamiento de errores y reutilizar la IA (un "Análisis de sentimiento con Claude" para todo).</li>
+</ul></div></div><div><div class="tile" style="height: 260px;"><div class="icon-box"><i class="fa-solid fa-sitemap"></i></div><h3>La arquitectura maestra</h3><p>Flujo principal (fuente de datos + loop) → Execute Workflow dentro del loop → sub-workflow que procesa un registro y devuelve el resultado.</p></div></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">14 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Errores Comunes</h2>
+        <div class="content-area">
+<div class="table-layout"><table><thead><tr><th>Error</th><th>Qué pasa</th><th>Solución</th></tr></thead><tbody><tr><td><strong>Loop infinito</strong></td><td>El perro que persigue su cola: consume CPU hasta frenar el servicio</td><td>Verificar que el circuito vuelve al SplitInBatches</td></tr><tr><td><strong>Batch demasiado grande</strong></td><td>Error <strong>429 Too Many Requests</strong></td><td>Empezar con 5 a 10 y subir de a poco</td></tr><tr><td><strong>No pasar datos al sub-workflow</strong></td><td>El sub-flujo recibe vacío</td><td>Activar "Send all incoming items" o mapear los campos</td></tr></tbody></table></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">15 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Demo: las Reseñas de la Inmobiliaria</h2>
+        <div class="content-area">
+<div class="flow"><div class="flow-step"><span class="ftag">Trigger</span><div class="fnode oval" style="width: 165px;">Leer las reseñas sin analizar</div></div><div class="farrow"><i class="fa-solid fa-arrow-right"></i></div><div class="flow-step"><span class="ftag">Loop</span><div class="fnode rect" style="width: 165px;">SplitInBatches de 10</div></div><div class="farrow"><i class="fa-solid fa-arrow-right"></i></div><div class="flow-step"><span class="ftag">Sub-workflow</span><div class="fnode rect" style="width: 165px;">"Analizar reseña": sentimiento y tema</div></div><div class="farrow"><i class="fa-solid fa-arrow-right"></i></div><div class="flow-step"><span class="ftag">Acción</span><div class="fnode rect" style="width: 165px;">Guardar el resultado en Airtable</div></div><div class="farrow"><i class="fa-solid fa-arrow-right"></i></div><div class="flow-step"><span class="ftag">Fin</span><div class="fnode oval" style="width: 165px;">Todas analizadas</div></div></div><p class="flow-legend">Es el anticipo del <strong>procesamiento en lote con Claude</strong> del Módulo 6.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">16 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge live">✅ Entregable evaluado del Módulo</span>
+            <h2>Pre-Entrega 4: Arquitectura de Agente Avanzado en n8n</h2>
+            <p style="font-size: 20px;">Diseñar la arquitectura de un agente, sin necesidad de construirlo todavía. Se evalúa tu pensamiento arquitectónico.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">17 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Qué Tiene que Tener tu Diagrama</h2>
+        <div class="content-area">
+<div class="tiled-content"><div class="tile"><div class="icon-box"><i class="fa-solid fa-bolt"></i></div><h3>Trigger</h3><p>Qué evento inicia el flujo.</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-plug"></i></div><h3>Conexiones</h3><p>Qué herramientas externas consulta por API (OpenAI, Drive…).</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-code-branch"></i></div><h3>IF / Switch</h3><p>Al menos dos caminos distintos.</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-robot"></i></div><h3>Nodo de IA</h3><p>Dónde la IA decide o procesa texto.</p></div></div><p class="note-text">Más: el resultado final, una rama o recuadro de manejo de errores y qué parte se delega a un sub-workflow.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">18 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">El Molde del Programa</h2>
+        <div class="content-area">
+<div class="code-block" style="font-size: 13px; margin-bottom: 16px;">[Trigger: llega un email] → [IA: analiza el sentimiento (API de OpenAI)] → [Switch: ¿sentimiento?]
+                                                                            ├─ Negativo → [Procesar reembolso vía API]
+                                                                            └─ Positivo → [Enviar cupón de descuento]
+                                                                                  ↓
+                                                     [Resultado: respuesta enviada + registro en CRM]
+⚠ Error: si la API de OpenAI falla → reintento y aviso en Slack
+↳ Sub-workflow: "Procesar reembolso" se delega a un flujo aparte</div><p class="note-text">Formato: una sola imagen legible (PNG/JPG) o PDF. Si lo hiciste en Excalidraw o Lucidchart, exportalo; no mandes solo el link al tablero.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">19 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">¿Cómo se Evalúa?</h2>
+        <div class="content-area">
+<div class="table-layout"><table><thead><tr><th>Criterio</th><th>Qué se evalúa</th><th>Peso</th></tr></thead><tbody><tr><td><strong>Claridad y estructura</strong></td><td>Inicio (trigger) y fin lógicos, resultado final claro, fácil de seguir.</td><td><strong>25 %</strong></td></tr><tr><td><strong>Lógica de decisión</strong></td><td>IF / Switch con al menos 2 caminos bien diferenciados.</td><td><strong>25 %</strong></td></tr><tr><td><strong>Nodo de IA + integración vía API</strong></td><td>Dónde decide la IA + al menos una integración externa por API.</td><td><strong>30 %</strong></td></tr><tr><td><strong>Manejo de errores y sub-workflows</strong></td><td>Qué pasa si una conexión falla + qué se delega a un sub-workflow.</td><td><strong>20 %</strong></td></tr></tbody></table></div><p class="note-text">Total: 100 pts · Aprobación: 70 pts</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">20 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Práctica 4 y Cierre</h2>
+        <div class="content-area">
+<div class="two-column"><div><span class="moment-badge live"><i class="fa-solid fa-flask-vial"></i> Paso 4 de la Pre-Entrega 4</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-diagram-project"></i> Sumá a tu diagrama el <strong>sub-workflow</strong> y la <strong>rama de error</strong>.</li>
+<li><i class="fa-solid fa-calendar-check"></i> <strong>PE4:</strong> se recomienda entregarla antes de la <strong>clase 11</strong>.</li>
+</ul></div></div><div><div class="tile" style="height: 260px;"><div class="icon-box"><i class="fa-solid fa-forward"></i></div><h3>Próximo: Módulo 5 · Comunicación</h3><p>Gmail, Slack y WhatsApp. Antes de la clase 9: un Gmail de prueba, un workspace de Slack y una cuenta de Twilio para el sandbox de WhatsApp.</p></div></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">21 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Material para Profundizar</h2>
+        <div class="content-area">
+<div class="tiled-content"><div class="tile"><div class="icon-box"><i class="fa-solid fa-plug"></i></div><h3>n8n — HTTP Request</h3><p>URL, método, headers, body y autenticación.<br><span style="color: var(--naranja-horizonte); font-weight: 600; display: inline-block; margin-top: 10px;">docs.n8n.io</span></p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-repeat"></i></div><h3>n8n — Looping</h3><p>Procesar listas grandes por lotes.<br><span style="color: var(--naranja-horizonte); font-weight: 600; display: inline-block; margin-top: 10px;">docs.n8n.io/flow-logic/looping</span></p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-sitemap"></i></div><h3>n8n — Sub-workflows</h3><p>Reutilizar flujos con el principio DRY.<br><span style="color: var(--naranja-horizonte); font-weight: 600; display: inline-block; margin-top: 10px;">docs.n8n.io/flow-logic/subworkflows</span></p></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">22 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div class="content-area" style="align-items: center; justify-content: center; text-align: center;">
+            <div style="display: flex; gap: 25px; align-items: flex-end; justify-content: center; margin-bottom: 20px;">
+                <i class="fa-solid fa-circle-question" style="font-size: 50px; color: var(--amarillo-solar);"></i>
+                <i class="fa-solid fa-circle-question" style="font-size: 90px; color: var(--naranja-horizonte);"></i>
+                <i class="fa-solid fa-circle-question" style="font-size: 60px; color: var(--rosa-energia);"></i>
+            </div>
+            <h1 style="font-size: 64px;">¿Dudas? ¿Consultas?</h1>
+            <p style="font-size: 22px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">¡Cerramos el Módulo 4!</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">23 / 23</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Presentation navigation controls toolbar -->
+<div class="controls-toolbar">
+    <button class="control-btn" id="prev-slide"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+    <div class="slide-dots" id="slide-dots"></div>
+    <button class="control-btn" id="next-slide">Siguiente <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<script>
+    // Slider Presentation Logic
+    const slides = document.querySelectorAll('.slide-container');
+    const prevBtn = document.getElementById('prev-slide');
+    const nextBtn = document.getElementById('next-slide');
+    const dotsContainer = document.getElementById('slide-dots');
+
+    let currentSlideIndex = 0;
+
+    // Create Navigation Indicators Dynamically
+    slides.forEach((slide, idx) => {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (idx === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => {
+            goToSlide(idx);
+        });
+        dotsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.dot');
+
+    function updateControls() {
+        dots.forEach((dot, idx) => {
+            if (idx === currentSlideIndex) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }
+
+    function goToSlide(index) {
+        if (index < 0 || index >= slides.length) return;
+
+        slides[currentSlideIndex].classList.remove('active');
+        currentSlideIndex = index;
+        slides[currentSlideIndex].classList.add('active');
+
+        updateControls();
+    }
+
+    // Keyboard Navigation Handlers
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') {
+            goToSlide(currentSlideIndex + 1);
+        } else if (e.key === 'ArrowLeft') {
+            goToSlide(currentSlideIndex - 1);
+        }
+    });
+
+    // Button Click Event Listeners
+    prevBtn.addEventListener('click', () => {
+        goToSlide(currentSlideIndex - 1);
+    });
+
+    nextBtn.addEventListener('click', () => {
+        goToSlide(currentSlideIndex + 1);
+    });
+</script>
+
+</body>
+</html>

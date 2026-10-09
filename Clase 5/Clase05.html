@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 05 - La Interfaz de Make + Routers y Filtros | Coderhouse</title>
+    <!-- Coder 4.0 Core Typography: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ==========================================================================
+           CODER 4.0 DESIGN SYSTEM & VARS
+           ========================================================================== */
+        :root {
+            --blanco-lienzo: #F8F2E8;
+            --negro-coder: #171717;
+            --naranja-oscuro: #260700;
+            --naranja-horizonte: #FF632B;
+            --amarillo-solar: #FE872D;
+            --rosa-energia: #FE64A3;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --transition-speed: 0.4s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #dcd6cd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: var(--font-main);
+            overflow: hidden;
+        }
+
+        /* Slide Viewer (Absolute 1280x720 No-Scale-Shift) */
+        .presentation-viewport {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            border-radius: 16px;
+            overflow: hidden;
+            background-color: var(--blanco-lienzo);
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            color: var(--negro-coder);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 50px 70px 40px 70px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity var(--transition-speed) ease-in-out, visibility var(--transition-speed) ease-in-out;
+            z-index: 1;
+        }
+
+        .slide-container.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        /* Abstract Brand Accents: Subtly warm gradients connecting to Coder 4.0 */
+        .slide-container::before {
+            content: '';
+            position: absolute;
+            top: -150px;
+            right: -150px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(255,99,43,0.06) 0%, rgba(248,242,232,0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .slide-container > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Typography & Hierarchy */
+        h1 {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+        }
+
+        .slide-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.2;
+            letter-spacing: -1px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .slide-title::after {
+            content: '';
+            flex-grow: 1;
+            height: 2px;
+            background-color: rgba(38, 7, 0, 0.1);
+            margin-left: 15px;
+        }
+
+        p, li {
+            font-size: 17px;
+            line-height: 1.5;
+            color: #3d3430;
+            font-weight: 400;
+        }
+
+        /* Content Area Layout Wrapper */
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* Grid & Column Definitions */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 45px;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Coder 4.0 Split Card layouts */
+        .two-column.tiled > div {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            padding: 35px;
+            height: 360px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+        }
+
+        .two-column.tiled h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--naranja-horizonte);
+            margin-bottom: 12px;
+        }
+
+        /* Warm Retro Photography Frame */
+        .image-wrapper {
+            border-radius: 16px;
+            height: 340px;
+            overflow: hidden;
+            width: 100%;
+            border: 4px solid #ffffff;
+            box-shadow: 0 10px 25px rgba(38, 7, 0, 0.08);
+        }
+
+        .image-wrapper img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        /* Custom 2D Filled Icons & Tiles */
+        .tiled-content {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        .tile {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+        }
+
+        .tile .icon-box {
+            background-color: rgba(255, 99, 43, 0.1);
+            color: var(--naranja-horizonte);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .tile h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--naranja-oscuro);
+            margin-bottom: 8px;
+        }
+
+        .tile p {
+            font-size: 14px;
+        }
+
+        /* Bullet List styling */
+        .bullet-list ul {
+            list-style: none;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+        }
+
+        .bullet-list li i {
+            position: absolute;
+            left: 0;
+            top: 3px;
+            color: var(--naranja-horizonte);
+            font-size: 16px;
+        }
+
+        /* Footer & Brand Branding Mark */
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(38, 7, 0, 0.06);
+            padding-top: 15px;
+            width: 100%;
+        }
+
+        .slide-footer .brand-logo {
+            font-weight: 800;
+            font-size: 16px;
+            color: var(--naranja-oscuro);
+            letter-spacing: -0.5px;
+        }
+
+        .slide-footer .brand-logo span {
+            color: var(--naranja-horizonte);
+        }
+
+        .slide-footer .slide-index {
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(38, 7, 0, 0.4);
+        }
+
+        /* Slide Type Banners ("Momentos de la Clase") */
+        .moment-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 30px;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            align-self: flex-start;
+        }
+
+        .moment-badge.live {
+            background-color: var(--naranja-horizonte);
+        }
+
+        .moment-badge.bug {
+            background-color: var(--rosa-energia);
+        }
+
+        .moment-badge.tip {
+            background-color: var(--amarillo-solar);
+            color: var(--naranja-oscuro);
+        }
+
+        /* Slido Interactive layout */
+        .slido-box {
+            background-color: #ffffff;
+            border: 2px dashed var(--naranja-horizonte);
+            border-radius: 20px;
+            padding: 35px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(255, 99, 43, 0.05);
+        }
+
+        .slido-box h3 {
+            font-size: 26px;
+            color: var(--naranja-oscuro);
+            margin-bottom: 10px;
+        }
+
+        .slido-code {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--naranja-horizonte);
+            margin: 15px 0;
+            letter-spacing: -1px;
+        }
+
+        /* Transition slide */
+        .transition-layout {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .transition-layout h2 {
+            font-size: 60px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.1;
+            margin-bottom: 15px;
+            letter-spacing: -2px;
+        }
+
+        .transition-layout hr {
+            width: 80px;
+            height: 5px;
+            background-color: var(--naranja-horizonte);
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        /* Clean retro table */
+        .table-layout {
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+            width: 100%;
+        }
+
+        .table-layout table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-layout th, .table-layout td {
+            padding: 12px 20px;
+            text-align: left;
+            border-bottom: 1px solid rgba(38, 7, 0, 0.06);
+            font-size: 14px;
+        }
+
+        .table-layout th {
+            background-color: rgba(38, 7, 0, 0.03);
+            color: var(--naranja-oscuro);
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .table-layout tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Break Slide Design */
+        .break-slide {
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+        }
+
+        .break-slide::before {
+            display: none;
+        }
+
+        .break-slide h2 {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--blanco-lienzo);
+            margin-bottom: 20px;
+            letter-spacing: -1.5px;
+        }
+
+        .break-slide p {
+            color: rgba(248, 242, 232, 0.75);
+            font-size: 22px;
+        }
+
+        .break-logo {
+            font-size: 80px;
+            color: var(--naranja-horizonte);
+            margin-bottom: 30px;
+        }
+
+        /* Q&A / Legal section */
+        .legal-notice {
+            font-size: 10px;
+            line-height: 1.4;
+            color: rgba(38, 7, 0, 0.4);
+            text-align: justify;
+            margin-top: 20px;
+        }
+
+        /* Presentation controls toolbar */
+        .controls-toolbar {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            align-items: center;
+        }
+
+        .control-btn {
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .control-btn:hover {
+            background-color: var(--naranja-horizonte);
+        }
+
+        .slide-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(38, 7, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .dot.active {
+            background-color: var(--naranja-horizonte);
+            width: 25px;
+            border-radius: 10px;
+        }
+
+        /* Code Block Container */
+        .code-block {
+            background-color: #ffffff;
+            border-left: 4px solid var(--naranja-horizonte);
+            padding: 15px 20px;
+            font-family: monospace;
+            font-size: 13px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            white-space: pre-wrap;
+            line-height: 1.4;
+        }
+
+        /* Small note under tables */
+        .note-text {
+            margin-top: 18px;
+            font-size: 14px;
+            font-style: italic;
+            color: rgba(38, 7, 0, 0.6);
+        }
+
+        /* ==========================================================================
+           FLOWCHART (Óvalo / Rectángulo / Rombo) — extensión para diagramas de flujo
+           ========================================================================== */
+        .flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            gap: 10px;
+        }
+
+        .flow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fnode {
+            background-color: #ffffff;
+            color: var(--naranja-oscuro);
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.3;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.04);
+        }
+
+        .fnode.oval {
+            border: 2px solid var(--naranja-horizonte);
+            border-radius: 999px;
+            width: 170px;
+            min-height: 70px;
+            padding: 10px 18px;
+        }
+
+        .fnode.rect {
+            border: 2px solid var(--naranja-oscuro);
+            border-radius: 6px;
+            width: 170px;
+            min-height: 64px;
+            padding: 10px 14px;
+        }
+
+        .fnode.diamond {
+            width: 180px;
+            height: 120px;
+            background-color: var(--amarillo-solar);
+            clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+            box-shadow: none;
+            position: relative;
+        }
+
+        .fnode.diamond span {
+            position: absolute;
+            inset: 2px 3px;
+            background-color: #FFF4EA;
+            clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 34px;
+        }
+
+        .ftag {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--naranja-horizonte);
+        }
+
+        .farrow {
+            color: rgba(38, 7, 0, 0.35);
+            font-size: 18px;
+        }
+
+        .fbranch {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .fbranch-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fchip {
+            font-size: 11px;
+            font-weight: 800;
+            padding: 3px 9px;
+            border-radius: 20px;
+            color: #ffffff;
+            background-color: var(--naranja-horizonte);
+            min-width: 34px;
+            text-align: center;
+        }
+
+        .fchip.no {
+            background-color: var(--rosa-energia);
+        }
+
+        .flow-legend {
+            margin-top: 28px;
+            font-size: 14px;
+            color: rgba(38, 7, 0, 0.6);
+            text-align: center;
+        }
+
+        .flow-legend strong {
+            color: var(--naranja-oscuro);
+        }
+
+        /* Tile with a shape preview instead of an icon */
+        .shape-preview {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .shape-preview .fnode {
+            font-size: 12px;
+            width: 130px;
+            min-height: 52px;
+        }
+
+        .shape-preview .fnode.diamond {
+            width: 130px;
+            height: 70px;
+        }
+
+        .shape-preview .fnode.diamond span {
+            padding: 0 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="presentation-viewport">
+
+    <div class="slide-container active">
+        <div></div>
+        <div class="transition-layout" style="margin-bottom: 30px;">
+            <span class="moment-badge">CODER 4.0 • MÓDULO 3 • CLASE 05</span>
+            <h1 style="font-size: 44px;">La Interfaz de Make: Routers, Filtros y Transformación</h1>
+            <p style="font-size: 20px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">Tu primer escenario real: triggers, acciones, operaciones y un flujo que ya no es una línea recta, sino que toma decisiones</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">01 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">¿Dónde Quedamos?</h2>
+        <div class="content-area">
+<span class="moment-badge live"><i class="fa-solid fa-video"></i> Esta clase queda grabada para que la veas después</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-brain"></i> En el Módulo 2 construimos el <strong>Cerebro</strong> en Airtable y aprendimos JSON.</li>
+<li><i class="fa-solid fa-coins"></i> Cada paso de Make consume una <strong>operación</strong>: diseñar es hacer más con menos.</li>
+<li><i class="fa-solid fa-calendar-check"></i> La <strong>PE2</strong> se recomienda entregar antes de la clase 7.</li>
+</ul></div><p class="note-text">Hoy hacemos que los datos se muevan solos: llegó Make.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">02 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Objetivos de la Clase</h2>
+        <div class="content-area">
+<div class="bullet-list"><ul>
+<li><i class="fa-solid fa-display"></i> Navegar la interfaz de Make: <strong>escenarios, módulos, triggers, acciones y búsquedas</strong>.</li>
+<li><i class="fa-solid fa-tower-broadcast"></i> Explicar <strong>polling vs instant (webhooks)</strong>, operaciones, mapping y conexiones.</li>
+<li><i class="fa-solid fa-shuffle"></i> Usar un <strong>Router con filtros sin solapamiento</strong> y una función de transformación.</li>
+<li><i class="fa-solid fa-flag-checkered"></i> Salir con <strong>tu cuenta de Make</strong>, una conexión hecha y el <strong>escenario VIP / Estándar</strong> funcionando.</li>
+</ul></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">03 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Tema 01</span>
+            <h2>Descubriendo la Interfaz de Make</h2>
+            <p style="font-size: 20px;">Un asistente incansable que no duerme, no se olvida de copiar los datos de un mail a la hoja y manda la bienvenida en el segundo exacto en que alguien se registra. Ese asistente es Make.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">04 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">El Escenario: tu Lienzo de Creación</h2>
+        <div class="content-area">
+<div class="two-column"><div><span class="moment-badge tip"><i class="fa-solid fa-plug"></i> Más de 1.000 apps conectables sin código</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-file-lines"></i> En Make una automatización se llama <strong>Escenario</strong> (Scenario): una receta visual con ingredientes (datos), pasos (módulos) y un resultado.</li>
+<li><i class="fa-solid fa-eye"></i> Se <strong>ve</strong> el flujo: si el dato va de Gmail a Sheets, hay una línea literal entre los dos íconos.</li>
+</ul></div></div><div><div class="tile" style="height: 260px;"><div class="icon-box"><i class="fa-solid fa-circle-nodes"></i></div><h3>Los módulos</h3><p>Los círculos del lienzo. Cada uno es una pieza: un trigger, una acción o una búsqueda, conectados con líneas.</p></div></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">05 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Los Módulos: las Piezas del Puzzle</h2>
+        <div class="content-area">
+<div class="tiled-content"><div class="tile"><div class="icon-box"><i class="fa-solid fa-bolt"></i></div><h3>Triggers — el "cuándo"</h3><p>Siempre el primer módulo. <strong>Polling:</strong> Make pregunta cada X minutos "¿hay algo nuevo?". <strong>Instant / Webhook:</strong> la app avisa en el momento.</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-gears"></i></div><h3>Acciones — el "qué"</h3><p>Crean, mueven, borran o modifican datos. Ej.: mandar a Slack el contenido de un tweet.</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-magnifying-glass"></i></div><h3>Búsquedas — "encontrá esto"</h3><p>Traen un dato para usarlo después. Ej.: ¿este cliente ya tiene una suscripción activa en Airtable?</p></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">06 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Anatomía de una Conexión</h2>
+        <div class="content-area">
+<div class="tiled-content"><div class="tile"><div class="icon-box"><i class="fa-solid fa-coins"></i></div><h3>Operaciones</h3><p>Cada módulo que hace algo con éxito consume una. Trigger + acción, una vez = 2 operaciones. Los planes se cobran por operaciones.</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-arrows-left-right"></i></div><h3>Mapping</h3><p>Arrastrar la variable <strong>Nombre</strong> del formulario al cuerpo del mail. Nunca escribir "Juan" a mano.</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-key"></i></div><h3>Conexiones</h3><p>El permiso para entrar a Gmail o Notion vía <strong>OAuth</strong>. Guardan el permiso, no la contraseña, y se pueden revocar.</p></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">07 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Demo: Cuenta, Escenario y Primera Conexión</h2>
+        <div class="content-area">
+<span class="moment-badge live"><i class="fa-solid fa-play"></i> En vivo en make.com</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-1"></i> make.com → <strong>Sign up with Google</strong> → plan <strong>Free</strong>.</li>
+<li><i class="fa-solid fa-2"></i> Scenarios → <strong>Create a new scenario</strong>: se abre el lienzo en blanco.</li>
+<li><i class="fa-solid fa-3"></i> El "+" del centro → Google Sheets → elegir trigger o acción → <strong>Add</strong> conexión → elegir la cuenta → <strong>Permitir</strong>.</li>
+<li><i class="fa-solid fa-4"></i> <strong>Verificar:</strong> si el desplegable muestra tus hojas, la conexión funciona.</li>
+</ul></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">08 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Errores Comunes en Make</h2>
+        <div class="content-area">
+<div class="table-layout"><table><thead><tr><th>Error</th><th>Qué pasa</th></tr></thead><tbody><tr><td><strong>Empezar con una acción</strong></td><td>Sin trigger, "Run once" funciona para probar, pero el flujo nunca se activa solo.</td></tr><tr><td><strong>Confundir búsqueda con acción</strong></td><td>"Buscar contacto" no lo crea si no existe. Para crear hace falta un módulo "Create…".</td></tr><tr><td><strong>Olvidar el interruptor Scheduling</strong></td><td>Abajo a la izquierda. Si está en OFF, el asistente está durmiendo.</td></tr></tbody></table></div><p class="note-text">Caso real: de lead a notificación en tiempo real. Watch New Responses en Sheets → mensaje en Slack. El tiempo de respuesta baja de 4 horas a 30 segundos.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">09 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Idempotencia: un Concepto que Vas a Escuchar</h2>
+        <div class="content-area">
+<div class="two-column"><div><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-repeat"></i> Una operación es <strong>idempotente</strong> cuando ejecutarla varias veces da el mismo resultado que ejecutarla una.</li>
+<li><i class="fa-solid fa-clone"></i> Importa con los <strong>reintentos</strong>: si "crear contacto" no es idempotente, un reintento lo duplica.</li>
+<li><i class="fa-solid fa-magnifying-glass"></i> La solución: <strong>buscar antes de crear</strong>, o una clave única que la app rechace si se repite.</li>
+</ul></div></div><div><div class="tile" style="height: 260px;"><div class="icon-box"><i class="fa-solid fa-map"></i></div><h3>Mapa vivo ↔ material</h3><p>APIs y HTTP Request → Módulo 4 (n8n). Webhooks → acá y en el Módulo 4. Si algo del vivo todavía no está en el material, aparece más adelante.</p></div></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">10 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Práctica 1: tu Primer Escenario</h2>
+        <div class="content-area">
+<span class="moment-badge live"><i class="fa-solid fa-flask-vial"></i> Paso 1 de la Pre-Entrega 3 · 15 minutos</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-user-plus"></i> Crear la cuenta de Make (Free).</li>
+<li><i class="fa-solid fa-bolt"></i> Escenario nuevo con trigger <strong>Google Sheets → Watch New Rows</strong> (o Airtable → Watch Records) sobre tu base de la clase 4.</li>
+<li><i class="fa-solid fa-key"></i> Autorizar la conexión y verificar que aparezcan tus hojas o tablas.</li>
+<li><i class="fa-solid fa-tag"></i> Ponerle nombre al escenario.</li>
+</ul></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">11 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container break-slide">
+        <div></div>
+        <div class="transition-layout">
+            <div class="break-logo"><i class="fa-solid fa-mug-hot"></i></div>
+            <h2>Break</h2>
+            <p>Andá por un cafecito o un mate… ¡volvemos en un ratito!</p>
+        </div>
+        <div class="slide-footer" style="border-top-color: rgba(248, 242, 232, 0.15);">
+            <div class="brand-logo" style="color: var(--blanco-lienzo);">CODER<span>HOUSE</span></div>
+            <div class="slide-index" style="color: rgba(248, 242, 232, 0.5);">12 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Tema 02</span>
+            <h2>Lógica de Flujos: Routers, Filtros y Transformación</h2>
+            <p style="font-size: 20px;">En una cafetería no todos quieren lo mismo. Tratarlos igual es un caos. El mundo real no es una línea recta: es un mapa lleno de bifurcaciones.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">13 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Bundles y Routers</h2>
+        <div class="content-area">
+<div class="two-column"><div><span class="moment-badge tip"><i class="fa-solid fa-box"></i> Cada formulario crea una caja que recorre el escenario</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-box-open"></i> <strong>Bundle:</strong> la caja con sobres etiquetados (Nombre, Email, Presupuesto).</li>
+<li><i class="fa-solid fa-code-branch"></i> <strong>Router:</strong> divide el flujo en 2 o más caminos y <strong>duplica</strong> la caja: con 3 rutas viajan 3 copias a la vez.</li>
+</ul></div></div><div><div class="tile" style="height: 260px;"><div class="icon-box"><i class="fa-solid fa-envelope"></i></div><h3>El cartero que se teletransporta</h3><p>En vez de ir a Ventas, después a Soporte y después a Finanzas, deja una copia en cada puerta al mismo tiempo. Pero el Router solo no decide: copia a todos.</p></div></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">14 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Filtros: los Guardias de Seguridad</h2>
+        <div class="content-area">
+<div class="tiled-content"><div class="tile"><div class="icon-box"><i class="fa-solid fa-tag"></i></div><h3>Condición</h3><p>Qué etiqueta de la caja mirar. Ej.: Presupuesto.</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-not-equal"></i></div><h3>Operador</h3><p>Qué regla aplicar: mayor que, contiene, existe…</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-hashtag"></i></div><h3>Valor</h3><p>Con qué comparar. Ej.: 1000.</p></div></div><p class="note-text">Por qué importan: ahorran operaciones (frenan el spam al principio) y dan precisión (no mandar "Bienvenida VIP" a un suscriptor gratuito).</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">15 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Transformación: el Traductor Universal</h2>
+        <div class="content-area">
+<div class="table-layout"><table><thead><tr><th>Función</th><th>Para qué</th><th>Ejemplo</th></tr></thead><tbody><tr><td><strong>split</strong></td><td>Dividir un texto</td><td>De "Juan Pérez" sacar solo "Juan"</td></tr><tr><td><strong>formatDate</strong></td><td>Cambiar el formato de una fecha</td><td>2026-05-20 → 20 de mayo</td></tr><tr><td><strong>upper / lower</strong></td><td>Mayúsculas o minúsculas</td><td>"ana" → "ANA"</td></tr><tr><td><strong>parseNumber</strong></td><td>Convertir texto en número</td><td>"100 USD" → 100, para poder sumar o comparar</td></tr></tbody></table></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">16 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Caso Guiado: Calificá tus Leads con un Router</h2>
+        <div class="content-area">
+<span class="moment-badge live"><i class="fa-solid fa-flask-vial"></i> Práctica guiada · no evaluable · 20–30 min</span><div class="code-block" style="font-size: 14px; margin-bottom: 16px;">[Lead entrante] ──→ [¿VIP o Estándar?] ──┬─ (Lead VIP: presupuesto &gt; 1000) ──→ [Avisar lead VIP]  (Slack / Gmail)
+                                          └─ (Lead Estándar: ≤ 1000) ─────────→ [Registrar lead]   (Sheets / Airtable)</div><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-filter"></i> Filtros <strong>sin solapamiento</strong>: <strong>&gt; 1000</strong> y <strong>≤ 1000</strong>. Con "≥ 1000" en los dos, un lead de 1000 dispara las dos rutas.</li>
+<li><i class="fa-solid fa-font"></i> En el aviso VIP: <code>{{upper(nombre)}}</code> para que el nombre salga en mayúsculas.</li>
+</ul></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">17 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">El Caso Paso a Paso</h2>
+        <div class="content-area">
+<div class="bullet-list"><ul>
+<li><i class="fa-solid fa-1"></i> <strong>Trigger:</strong> Google Sheets → Watch New Rows (nombre, email, presupuesto).</li>
+<li><i class="fa-solid fa-2"></i> <strong>Router</strong> con dos ramas: arriba VIP, abajo Estándar.</li>
+<li><i class="fa-solid fa-3"></i> <strong>Filtros:</strong> label "Lead VIP" (Greater than 1000) y "Lead Estándar" (Less than or equal to 1000).</li>
+<li><i class="fa-solid fa-4"></i> <strong>Acciones:</strong> Slack o Gmail en la VIP; Sheets o Airtable Add a Row en la Estándar.</li>
+<li><i class="fa-solid fa-5"></i> <strong>Run once</strong> con dos filas (1500 y 800): cada lead tiene que encender una sola rama.</li>
+<li><i class="fa-solid fa-6"></i> <strong>Renombrar</strong> los módulos según lo que hacen: "Lead entrante", "Avisar lead VIP"…</li>
+</ul></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">18 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Demo: las Consultas de la Inmobiliaria</h2>
+        <div class="content-area">
+<div class="flow"><div class="flow-step"><span class="ftag">Trigger</span><div class="fnode oval">Nueva consulta en Airtable</div></div><div class="farrow"><i class="fa-solid fa-arrow-right"></i></div><div class="flow-step"><span class="ftag">Mapping</span><div class="fnode rect">Make lee el presupuesto total</div></div><div class="farrow"><i class="fa-solid fa-arrow-right"></i></div><div class="flow-step"><span class="ftag">Decisión</span><div class="fnode diamond"><span>¿Presupuesto alto?</span></div></div><div class="farrow"><i class="fa-solid fa-arrow-right"></i></div><div class="fbranch"><div class="fbranch-row"><span class="fchip">Sí</span><div class="fnode rect">Aviso a Slack con el nombre en MAYÚSCULAS</div></div><div class="fbranch-row"><span class="fchip no">No</span><div class="fnode rect">Registro silencioso en Airtable</div></div></div><div class="farrow"><i class="fa-solid fa-arrow-right"></i></div><div class="flow-step"><span class="ftag">Fin / Output</span><div class="fnode oval">Consulta derivada</div></div></div><p class="flow-legend">Cada consulta enciende <strong>una sola rama</strong>. Así se ve en el Run once.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">19 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Si Terminás Antes: Hacelo a Prueba de Fallos</h2>
+        <div class="content-area">
+<div class="two-column"><div><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-rotate-right"></i> Clic derecho en el módulo de Slack → <strong>Add error handler</strong> → <strong>Break</strong>, 3 intentos, 15 segundos.</li>
+<li><i class="fa-solid fa-table-list"></i> En la rama de error, una fila de <strong>log</strong> en Sheets: fecha, nombre del lead y mensaje de error.</li>
+<li><i class="fa-solid fa-clock-rotate-left"></i> Verificar en <strong>History</strong>: punto verde o rojo por ejecución.</li>
+</ul></div></div><div><div class="tile" style="height: 260px;"><div class="icon-box"><i class="fa-solid fa-list-check"></i></div><h3>Autoevaluación del caso</h3><p>Router 30 % · filtros 25 % · acciones finales 20 % · transformación 15 % · evidencias del Run once 10 %. No es evaluable: es entrenamiento para la PE3.</p></div></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">20 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Síntesis y Tarea</h2>
+        <div class="content-area">
+<div class="bullet-list"><ul>
+<li><i class="fa-solid fa-display"></i> <strong>Escenarios</strong> y <strong>módulos</strong>: triggers (el inicio), acciones (el trabajo) y búsquedas (la información).</li>
+<li><i class="fa-solid fa-arrows-left-right"></i> <strong>Mapping</strong> para pasar datos de un módulo a otro; <strong>operaciones</strong> como costo.</li>
+<li><i class="fa-solid fa-code-branch"></i> El <strong>Router</strong> duplica; el <strong>filtro</strong> decide; la <strong>transformación</strong> traduce.</li>
+<li><i class="fa-solid fa-house-laptop"></i> <strong>Tarea:</strong> terminar el caso guiado. En la clase 6 le sumamos OpenAI y el Error Handler, y queda la PE3.</li>
+</ul></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">21 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Material para Profundizar</h2>
+        <div class="content-area">
+<div class="tiled-content"><div class="tile"><div class="icon-box"><i class="fa-solid fa-circle-info"></i></div><h3>Make — Centro de ayuda</h3><p>Escenarios, módulos, routers y filtros.<br><span style="color: var(--naranja-horizonte); font-weight: 600; display: inline-block; margin-top: 10px;">help.make.com</span></p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-rocket"></i></div><h3>Make — Cómo empezar</h3><p>Triggers, acciones y búsquedas paso a paso.<br><span style="color: var(--naranja-horizonte); font-weight: 600; display: inline-block; margin-top: 10px;">make.com/en/help/get-started</span></p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-wand-magic-sparkles"></i></div><h3>Make — Functions</h3><p>Funciones para limpiar y transformar datos.<br><span style="color: var(--naranja-horizonte); font-weight: 600; display: inline-block; margin-top: 10px;">make.com/en/help/functions</span></p></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">22 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div class="content-area" style="align-items: center; justify-content: center; text-align: center;">
+            <div style="display: flex; gap: 25px; align-items: flex-end; justify-content: center; margin-bottom: 20px;">
+                <i class="fa-solid fa-circle-question" style="font-size: 50px; color: var(--amarillo-solar);"></i>
+                <i class="fa-solid fa-circle-question" style="font-size: 90px; color: var(--naranja-horizonte);"></i>
+                <i class="fa-solid fa-circle-question" style="font-size: 60px; color: var(--rosa-energia);"></i>
+            </div>
+            <h1 style="font-size: 64px;">¿Dudas? ¿Consultas?</h1>
+            <p style="font-size: 22px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">Este es el momento de preguntar todo lo que necesites</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">23 / 23</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Presentation navigation controls toolbar -->
+<div class="controls-toolbar">
+    <button class="control-btn" id="prev-slide"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+    <div class="slide-dots" id="slide-dots"></div>
+    <button class="control-btn" id="next-slide">Siguiente <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<script>
+    // Slider Presentation Logic
+    const slides = document.querySelectorAll('.slide-container');
+    const prevBtn = document.getElementById('prev-slide');
+    const nextBtn = document.getElementById('next-slide');
+    const dotsContainer = document.getElementById('slide-dots');
+
+    let currentSlideIndex = 0;
+
+    // Create Navigation Indicators Dynamically
+    slides.forEach((slide, idx) => {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (idx === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => {
+            goToSlide(idx);
+        });
+        dotsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.dot');
+
+    function updateControls() {
+        dots.forEach((dot, idx) => {
+            if (idx === currentSlideIndex) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }
+
+    function goToSlide(index) {
+        if (index < 0 || index >= slides.length) return;
+
+        slides[currentSlideIndex].classList.remove('active');
+        currentSlideIndex = index;
+        slides[currentSlideIndex].classList.add('active');
+
+        updateControls();
+    }
+
+    // Keyboard Navigation Handlers
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') {
+            goToSlide(currentSlideIndex + 1);
+        } else if (e.key === 'ArrowLeft') {
+            goToSlide(currentSlideIndex - 1);
+        }
+    });
+
+    // Button Click Event Listeners
+    prevBtn.addEventListener('click', () => {
+        goToSlide(currentSlideIndex - 1);
+    });
+
+    nextBtn.addEventListener('click', () => {
+        goToSlide(currentSlideIndex + 1);
+    });
+</script>
+
+</body>
+</html>

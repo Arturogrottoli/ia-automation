@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 06 - JSON y Variables + OpenAI y Error Handling | Coderhouse</title>
+    <!-- Coder 4.0 Core Typography: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ==========================================================================
+           CODER 4.0 DESIGN SYSTEM & VARS
+           ========================================================================== */
+        :root {
+            --blanco-lienzo: #F8F2E8;
+            --negro-coder: #171717;
+            --naranja-oscuro: #260700;
+            --naranja-horizonte: #FF632B;
+            --amarillo-solar: #FE872D;
+            --rosa-energia: #FE64A3;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --transition-speed: 0.4s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #dcd6cd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: var(--font-main);
+            overflow: hidden;
+        }
+
+        /* Slide Viewer (Absolute 1280x720 No-Scale-Shift) */
+        .presentation-viewport {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            border-radius: 16px;
+            overflow: hidden;
+            background-color: var(--blanco-lienzo);
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            color: var(--negro-coder);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 50px 70px 40px 70px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity var(--transition-speed) ease-in-out, visibility var(--transition-speed) ease-in-out;
+            z-index: 1;
+        }
+
+        .slide-container.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        /* Abstract Brand Accents: Subtly warm gradients connecting to Coder 4.0 */
+        .slide-container::before {
+            content: '';
+            position: absolute;
+            top: -150px;
+            right: -150px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(255,99,43,0.06) 0%, rgba(248,242,232,0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .slide-container > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Typography & Hierarchy */
+        h1 {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+        }
+
+        .slide-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.2;
+            letter-spacing: -1px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .slide-title::after {
+            content: '';
+            flex-grow: 1;
+            height: 2px;
+            background-color: rgba(38, 7, 0, 0.1);
+            margin-left: 15px;
+        }
+
+        p, li {
+            font-size: 17px;
+            line-height: 1.5;
+            color: #3d3430;
+            font-weight: 400;
+        }
+
+        /* Content Area Layout Wrapper */
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* Grid & Column Definitions */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 45px;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Coder 4.0 Split Card layouts */
+        .two-column.tiled > div {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            padding: 35px;
+            height: 360px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+        }
+
+        .two-column.tiled h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--naranja-horizonte);
+            margin-bottom: 12px;
+        }
+
+        /* Warm Retro Photography Frame */
+        .image-wrapper {
+            border-radius: 16px;
+            height: 340px;
+            overflow: hidden;
+            width: 100%;
+            border: 4px solid #ffffff;
+            box-shadow: 0 10px 25px rgba(38, 7, 0, 0.08);
+        }
+
+        .image-wrapper img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        /* Custom 2D Filled Icons & Tiles */
+        .tiled-content {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        .tile {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+        }
+
+        .tile .icon-box {
+            background-color: rgba(255, 99, 43, 0.1);
+            color: var(--naranja-horizonte);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .tile h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--naranja-oscuro);
+            margin-bottom: 8px;
+        }
+
+        .tile p {
+            font-size: 14px;
+        }
+
+        /* Bullet List styling */
+        .bullet-list ul {
+            list-style: none;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+        }
+
+        .bullet-list li i {
+            position: absolute;
+            left: 0;
+            top: 3px;
+            color: var(--naranja-horizonte);
+            font-size: 16px;
+        }
+
+        /* Footer & Brand Branding Mark */
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(38, 7, 0, 0.06);
+            padding-top: 15px;
+            width: 100%;
+        }
+
+        .slide-footer .brand-logo {
+            font-weight: 800;
+            font-size: 16px;
+            color: var(--naranja-oscuro);
+            letter-spacing: -0.5px;
+        }
+
+        .slide-footer .brand-logo span {
+            color: var(--naranja-horizonte);
+        }
+
+        .slide-footer .slide-index {
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(38, 7, 0, 0.4);
+        }
+
+        /* Slide Type Banners ("Momentos de la Clase") */
+        .moment-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 30px;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            align-self: flex-start;
+        }
+
+        .moment-badge.live {
+            background-color: var(--naranja-horizonte);
+        }
+
+        .moment-badge.bug {
+            background-color: var(--rosa-energia);
+        }
+
+        .moment-badge.tip {
+            background-color: var(--amarillo-solar);
+            color: var(--naranja-oscuro);
+        }
+
+        /* Slido Interactive layout */
+        .slido-box {
+            background-color: #ffffff;
+            border: 2px dashed var(--naranja-horizonte);
+            border-radius: 20px;
+            padding: 35px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(255, 99, 43, 0.05);
+        }
+
+        .slido-box h3 {
+            font-size: 26px;
+            color: var(--naranja-oscuro);
+            margin-bottom: 10px;
+        }
+
+        .slido-code {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--naranja-horizonte);
+            margin: 15px 0;
+            letter-spacing: -1px;
+        }
+
+        /* Transition slide */
+        .transition-layout {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .transition-layout h2 {
+            font-size: 60px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.1;
+            margin-bottom: 15px;
+            letter-spacing: -2px;
+        }
+
+        .transition-layout hr {
+            width: 80px;
+            height: 5px;
+            background-color: var(--naranja-horizonte);
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        /* Clean retro table */
+        .table-layout {
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+            width: 100%;
+        }
+
+        .table-layout table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-layout th, .table-layout td {
+            padding: 12px 20px;
+            text-align: left;
+            border-bottom: 1px solid rgba(38, 7, 0, 0.06);
+            font-size: 14px;
+        }
+
+        .table-layout th {
+            background-color: rgba(38, 7, 0, 0.03);
+            color: var(--naranja-oscuro);
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .table-layout tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Break Slide Design */
+        .break-slide {
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+        }
+
+        .break-slide::before {
+            display: none;
+        }
+
+        .break-slide h2 {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--blanco-lienzo);
+            margin-bottom: 20px;
+            letter-spacing: -1.5px;
+        }
+
+        .break-slide p {
+            color: rgba(248, 242, 232, 0.75);
+            font-size: 22px;
+        }
+
+        .break-logo {
+            font-size: 80px;
+            color: var(--naranja-horizonte);
+            margin-bottom: 30px;
+        }
+
+        /* Q&A / Legal section */
+        .legal-notice {
+            font-size: 10px;
+            line-height: 1.4;
+            color: rgba(38, 7, 0, 0.4);
+            text-align: justify;
+            margin-top: 20px;
+        }
+
+        /* Presentation controls toolbar */
+        .controls-toolbar {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            align-items: center;
+        }
+
+        .control-btn {
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .control-btn:hover {
+            background-color: var(--naranja-horizonte);
+        }
+
+        .slide-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(38, 7, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .dot.active {
+            background-color: var(--naranja-horizonte);
+            width: 25px;
+            border-radius: 10px;
+        }
+
+        /* Code Block Container */
+        .code-block {
+            background-color: #ffffff;
+            border-left: 4px solid var(--naranja-horizonte);
+            padding: 15px 20px;
+            font-family: monospace;
+            font-size: 13px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            white-space: pre-wrap;
+            line-height: 1.4;
+        }
+
+        /* Small note under tables */
+        .note-text {
+            margin-top: 18px;
+            font-size: 14px;
+            font-style: italic;
+            color: rgba(38, 7, 0, 0.6);
+        }
+
+        /* ==========================================================================
+           FLOWCHART (Óvalo / Rectángulo / Rombo) — extensión para diagramas de flujo
+           ========================================================================== */
+        .flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            gap: 10px;
+        }
+
+        .flow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fnode {
+            background-color: #ffffff;
+            color: var(--naranja-oscuro);
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.3;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.04);
+        }
+
+        .fnode.oval {
+            border: 2px solid var(--naranja-horizonte);
+            border-radius: 999px;
+            width: 170px;
+            min-height: 70px;
+            padding: 10px 18px;
+        }
+
+        .fnode.rect {
+            border: 2px solid var(--naranja-oscuro);
+            border-radius: 6px;
+            width: 170px;
+            min-height: 64px;
+            padding: 10px 14px;
+        }
+
+        .fnode.diamond {
+            width: 180px;
+            height: 120px;
+            background-color: var(--amarillo-solar);
+            clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+            box-shadow: none;
+            position: relative;
+        }
+
+        .fnode.diamond span {
+            position: absolute;
+            inset: 2px 3px;
+            background-color: #FFF4EA;
+            clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 34px;
+        }
+
+        .ftag {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--naranja-horizonte);
+        }
+
+        .farrow {
+            color: rgba(38, 7, 0, 0.35);
+            font-size: 18px;
+        }
+
+        .fbranch {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .fbranch-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fchip {
+            font-size: 11px;
+            font-weight: 800;
+            padding: 3px 9px;
+            border-radius: 20px;
+            color: #ffffff;
+            background-color: var(--naranja-horizonte);
+            min-width: 34px;
+            text-align: center;
+        }
+
+        .fchip.no {
+            background-color: var(--rosa-energia);
+        }
+
+        .flow-legend {
+            margin-top: 28px;
+            font-size: 14px;
+            color: rgba(38, 7, 0, 0.6);
+            text-align: center;
+        }
+
+        .flow-legend strong {
+            color: var(--naranja-oscuro);
+        }
+
+        /* Tile with a shape preview instead of an icon */
+        .shape-preview {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .shape-preview .fnode {
+            font-size: 12px;
+            width: 130px;
+            min-height: 52px;
+        }
+
+        .shape-preview .fnode.diamond {
+            width: 130px;
+            height: 70px;
+        }
+
+        .shape-preview .fnode.diamond span {
+            padding: 0 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="presentation-viewport">
+
+    <div class="slide-container active">
+        <div></div>
+        <div class="transition-layout" style="margin-bottom: 30px;">
+            <span class="moment-badge">CODER 4.0 • MÓDULO 3 • CLASE 06</span>
+            <h1 style="font-size: 44px;">JSON, Variables y Flujos Profesionales: OpenAI y Error Handling</h1>
+            <p style="font-size: 20px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">Del flujo que funciona al flujo que piensa y que no se rompe cuando algo falla. Y la Pre-Entrega 3</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">01 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">¿Dónde Quedamos?</h2>
+        <div class="content-area">
+<span class="moment-badge live"><i class="fa-solid fa-video"></i> Esta clase queda grabada para que la veas después</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-display"></i> Make: escenarios, módulos, operaciones, mapping y conexiones.</li>
+<li><i class="fa-solid fa-code-branch"></i> Router duplica, filtro decide: filtros <strong>sin solapamiento</strong>.</li>
+<li><i class="fa-solid fa-font"></i> Transformación con funciones como <code>upper()</code> y <code>parseNumber()</code>.</li>
+</ul></div><p class="note-text">Hoy le damos inteligencia al flujo y una red de seguridad.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">02 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Objetivos de la Clase</h2>
+        <div class="content-area">
+<div class="bullet-list"><ul>
+<li><i class="fa-solid fa-code"></i> Distinguir tipos de datos en JSON y usar <strong>variables dinámicas</strong> en Make.</li>
+<li><i class="fa-solid fa-robot"></i> Configurar <strong>OpenAI</strong> en Make con un prompt que devuelva una palabra exacta.</li>
+<li><i class="fa-solid fa-shield-halved"></i> Elegir el <strong>Error Handler</strong> correcto y configurar reintentos con backoff.</li>
+<li><i class="fa-solid fa-flag-checkered"></i> Salir con <strong>el escenario de la PE3 casi terminado</strong> y la consigna clara.</li>
+</ul></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">03 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Tema 01</span>
+            <h2>JSON y Variables: el Idioma de los Datos</h2>
+            <p style="font-size: 20px;">Una carta a Japón con la dirección en el formato equivocado nunca llega. Gmail, Airtable, WhatsApp y OpenAI hablan idiomas distintos y se entienden con JSON.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">04 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">El Problema que Resuelve JSON</h2>
+        <div class="content-area">
+<div class="two-column tiled" style="grid-template-columns: 1fr 1fr;"><div><h3><i class="fa-solid fa-shuffle"></i> Sin estructura</h3><p>Una app manda <em>"Juan Pérez, 30 años, Madrid"</em>.</p><p style="margin-top: 10px;">Otra espera <em>"Nombre: Juan | Ciudad: Madrid | Edad: 30"</em>.</p><p style="margin-top: 10px;">Resultado: no se entienden.</p></div><div><h3><i class="fa-solid fa-receipt"></i> Receta estructurada</h3><div class="code-block" style="font-size: 13px; margin-bottom: 16px;">{ "plato": "Bizcocho",
+  "ingredientes": ["harina", "huevos", "sal"],
+  "temperatura": 180,
+  "tiempo_minutos": 45 }</div><p>Si Make necesita el tiempo, busca la etiqueta <code>tiempo_minutos</code>.</p></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">05 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Tipos de Valores</h2>
+        <div class="content-area">
+<div class="table-layout"><table><thead><tr><th>Tipo</th><th>Ejemplo</th><th>Nota</th></tr></thead><tbody><tr><td><strong>Texto (string)</strong></td><td>"Asistente Virtual"</td><td>Siempre entre comillas</td></tr><tr><td><strong>Número</strong></td><td>1500</td><td>Sin comillas</td></tr><tr><td><strong>Booleano</strong></td><td>true / false</td><td>Interruptores: ¿está pagada la factura?</td></tr><tr><td><strong>Lista (array)</strong></td><td>["Marketing", "Ventas"]</td><td>Entre corchetes</td></tr></tbody></table></div><p class="note-text">Clave entre comillas dobles, dos puntos entre clave y valor, coma entre pares (nunca después del último).</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">06 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Variables y Mapeo</h2>
+        <div class="content-area">
+<div class="two-column"><div><span class="moment-badge bug"><i class="fa-solid fa-triangle-exclamation"></i> No escribas datos fijos si cambian en cada ejecución</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-box"></i> Una variable es una <strong>caja etiquetada</strong>: hoy dice "Ana", mañana "Carlos". En Make son las burbujas de colores.</li>
+<li><i class="fa-solid fa-arrows-left-right"></i> En vez de "Hola Juan", usás <code>{{1.Nombre}}</code>: un solo flujo sirve para miles de casos.</li>
+<li><i class="fa-solid fa-database"></i> <strong>Mapeo:</strong> llega <code>{"email": "cliente@ventas.com"}</code> → elegís la burbuja <code>email</code> en el campo de Airtable.</li>
+</ul></div></div><div><div class="tile" style="height: 260px;"><div class="icon-box"><i class="fa-solid fa-life-ring"></i></div><h3>Guía de supervivencia</h3><p>Comillas perdidas: {nombre: "Luis"}. Coma final: {"id": 1,}. Texto vs número: "10" + "10" puede dar 1010; usá parseNumber().</p></div></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">07 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Práctica 3: Mapeá tus Variables</h2>
+        <div class="content-area">
+<span class="moment-badge live"><i class="fa-solid fa-flask-vial"></i> Paso 3 de la Pre-Entrega 3 · 10 minutos</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-magnifying-glass"></i> En tu escenario de la clase 5, revisá que <strong>todas</strong> las acciones usen variables mapeadas.</li>
+<li><i class="fa-solid fa-ban"></i> Nada escrito a mano que cambie en cada ejecución.</li>
+<li><i class="fa-solid fa-tags"></i> Nombres descriptivos: <code>nombre</code>, <code>email</code>, <code>presupuesto</code>; no "Value 1".</li>
+</ul></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">08 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container break-slide">
+        <div></div>
+        <div class="transition-layout">
+            <div class="break-logo"><i class="fa-solid fa-mug-hot"></i></div>
+            <h2>Break</h2>
+            <p>Andá por un cafecito o un mate… ¡volvemos en un ratito!</p>
+        </div>
+        <div class="slide-footer" style="border-top-color: rgba(248, 242, 232, 0.15);">
+            <div class="brand-logo" style="color: var(--blanco-lienzo);">CODER<span>HOUSE</span></div>
+            <div class="slide-index" style="color: rgba(248, 242, 232, 0.5);">09 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Tema 02</span>
+            <h2>Flujos Profesionales: OpenAI y Error Handling</h2>
+            <p style="font-size: 20px;">Ese nudo en el estómago después de activar un flujo: ¿y si falla mientras no miro? El servidor de correos se cae 2 segundos y el cliente nunca recibe su confirmación.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">10 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Tu API Key de OpenAI, Paso a Paso</h2>
+        <div class="content-area">
+<div class="two-column"><div><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-1"></i> <strong>platform.openai.com</strong> (no es la web de ChatGPT) → perfil → <strong>API keys</strong> → Create new secret key.</li>
+<li><i class="fa-solid fa-2"></i> La clave (<code>sk-...</code>) <strong>se muestra una sola vez</strong>: copiala y guardala.</li>
+<li><i class="fa-solid fa-3"></i> <strong>Billing:</strong> cargar saldo mínimo y definir un <strong>límite de gasto</strong>. Se paga aparte de ChatGPT Plus.</li>
+<li><i class="fa-solid fa-4"></i> En Make: <strong>Create a Chat Completion</strong> → Connection → Add → pegar la key.</li>
+</ul></div></div><div><div class="tile" style="height: 260px;"><div class="icon-box"><i class="fa-solid fa-lock"></i></div><h3>Tratala como una contraseña</h3><p>No la pegues en chats ni archivos compartidos. Error 401 = clave mal copiada o cuenta sin saldo. Si se filtra, revocala y generá otra.</p></div></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">11 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">El Prompt Tiene que Devolver una Palabra Exacta</h2>
+        <div class="content-area">
+<div class="two-column tiled" style="grid-template-columns: 1fr 1fr;"><div><h3><i class="fa-solid fa-gear"></i> System</h3><p><em>"Eres un clasificador de leads. Analizas el mensaje del cliente y respondes ÚNICAMENTE con una de estas dos palabras, sin explicaciones ni puntuación: Alta o Baja."</em></p></div><div><h3><i class="fa-solid fa-user"></i> User</h3><p><em>"Clasifica la prioridad de este lead según su intención de compra: "</em> + la variable del mensaje.</p><p style="margin-top: 12px;">Filtros: <strong>Respuesta = Alta</strong> y <strong>Respuesta = Baja</strong>.</p></div></div><p class="note-text">Si la IA responde "Creo que este lead es importante", el filtro no encuentra coincidencia y el flujo se rompe. Max Tokens: 100–200 para clasificar.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">12 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Los 4 Error Handlers de Make</h2>
+        <div class="content-area">
+<div class="table-layout"><table><thead><tr><th>Handler</th><th>Qué hace</th><th>Cuándo usarlo</th></tr></thead><tbody><tr><td><strong>Rollback</strong></td><td>Frena y deshace todo (es el de defecto)</td><td>La opción conservadora</td></tr><tr><td><strong>Ignore</strong></td><td>Ignora el error y sigue</td><td>Solo si el paso no es crítico</td></tr><tr><td><strong>Break</strong></td><td>Reintenta después de un tiempo</td><td>La joya de la corona. <strong>La PE3 lo exige</strong></td></tr><tr><td><strong>Resume</strong></td><td>Sigue con un valor sustituto</td><td>Para que los módulos siguientes no fallen</td></tr></tbody></table></div><p class="note-text">Clic derecho sobre el módulo → Add error handler → aparece una rama gris que solo se activa si ese módulo falla.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">13 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Reintentos: el Repartidor de Pizzas</h2>
+        <div class="content-area">
+<div class="tiled-content"><div class="tile"><div class="icon-box"><i class="fa-solid fa-trash"></i></div><h3>Sin manejo de errores</h3><p>Nadie abre a la primera, tira la pizza y se va. Perdés la pizza y la plata.</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-rotate-right"></i></div><h3>Con Break</h3><p>Espera y vuelve a tocar el timbre. Lo intenta 3 veces antes de rendirse.</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-building"></i></div><h3>Con plan B</h3><p>Si nadie abre, deja la pizza en recepción (ruta alternativa) y te avisa.</p></div></div><p class="note-text">Backoff exponencial: 1 minuto, 5, 15. Veinte reintentos por segundo solo gastan operaciones.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">14 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">No Todos los Errores Merecen un Reintento</h2>
+        <div class="content-area">
+<div class="two-column tiled" style="grid-template-columns: 1fr 1fr;"><div><h3><i class="fa-solid fa-key"></i> Error 401 — No autorizado</h3><p>La API key está mal. Reintentar 100 veces no lo arregla.</p><p style="margin-top: 12px;"><strong>Alerta inmediata</strong> a Slack o mail.</p></div><div><h3><i class="fa-solid fa-server"></i> Error 500 — Error del servidor</h3><p>Un problema temporal del otro lado.</p><p style="margin-top: 12px;">Acá los <strong>reintentos son obligatorios</strong>.</p></div></div><p class="note-text">Toda rama de error termina con una notificación para vos: mejor un aviso a tiempo que un cliente ignorado una semana.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">15 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Demo: el Escenario Completo de la Inmobiliaria</h2>
+        <div class="content-area">
+<span class="moment-badge live"><i class="fa-solid fa-play"></i> Proyecto ejemplo · en vivo en Make</span><div class="code-block" style="font-size: 14px; margin-bottom: 16px;">[Nueva consulta] → [OpenAI: califica Alta/Baja] → [Router] ┬─ Alta → [Aviso a Slack: "Consulta prioritaria"]
+                        │                                   └─ Baja → [Registrar en Airtable]
+                        └── ⚠ Error Handler Break (3 reintentos)</div><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-play"></i> Run once con una consulta urgente y otra exploratoria: ¿qué rama se enciende en cada una?</li>
+<li><i class="fa-solid fa-plug-circle-xmark"></i> Desconectamos la key y miramos los reintentos en <strong>History</strong>.</li>
+</ul></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">16 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge live">✅ Entregable evaluado del Módulo</span>
+            <h2>Pre-Entrega 3: Primer Flujo Operativo en Make para Leads</h2>
+            <p style="font-size: 20px;">Un escenario que captura un lead, usa OpenAI para calificarlo y bifurca el camino de forma automática y a prueba de fallos.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">17 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Pasos a Seguir</h2>
+        <div class="content-area">
+<div class="bullet-list"><ul>
+<li><i class="fa-solid fa-1"></i> Escenario nuevo con un <strong>Trigger real</strong> (Google Sheets, Forms o Gmail).</li>
+<li><i class="fa-solid fa-2"></i> <strong>OpenAI (Create a Chat Completion)</strong> con prompt <strong>mapeado a variables</strong> del paso anterior.</li>
+<li><i class="fa-solid fa-3"></i> <strong>Router</strong> con dos rutas: Prioridad Alta y Prioridad Baja.</li>
+<li><i class="fa-solid fa-4"></i> <strong>Filtro</strong> en cada rama que valide la palabra exacta que devuelve la IA.</li>
+<li><i class="fa-solid fa-5"></i> <strong>Obligatorio:</strong> clic derecho sobre OpenAI → Add error handler → <strong>Break con 3 reintentos</strong>.</li>
+</ul></div><p class="note-text">Si hiciste el caso guiado de la clase 5, solo le sumás OpenAI y el Error Handler.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">18 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Formato de Entrega y Checklist</h2>
+        <div class="content-area">
+<div class="two-column tiled" style="grid-template-columns: 1fr 1fr;"><div><h3><i class="fa-solid fa-link"></i> Un solo link público</h3><p>Un Google Doc o página de Notion con el <strong>JSON del blueprint pegado como texto</strong> + la <strong>captura del Run once</strong> con las dos rutas.</p><p style="margin-top: 12px;">Permisos públicos; probalo en una ventana de incógnito.</p></div><div><h3><i class="fa-solid fa-list-check"></i> Checklist</h3><p>✓ Trigger conectado · ✓ OpenAI con variables · ✓ Router con 2 rutas · ✓ Filtros sin solapamiento · ✓ Break con 3 reintentos · ✓ Link + captura</p><p style="margin-top: 12px;">Evitá subir el .json suelto sin permisos.</p></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">19 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">¿Cómo se Evalúa?</h2>
+        <div class="content-area">
+<div class="table-layout"><table><thead><tr><th>Criterio</th><th>Qué se evalúa</th><th>Peso</th></tr></thead><tbody><tr><td><strong>Orquestación y filtros</strong></td><td>Trigger externo, Router obligatorio y 2+ caminos condicionados por filtros (Alta vs Baja).</td><td><strong>40 %</strong></td></tr><tr><td><strong>Resiliencia y manejo de errores</strong></td><td>Error Handler visible, en modo Break con reintentos automáticos.</td><td><strong>40 %</strong></td></tr><tr><td><strong>Procesamiento dinámico de IA</strong></td><td>OpenAI con variables dinámicas para calificar al prospecto.</td><td><strong>20 %</strong></td></tr></tbody></table></div><p class="note-text">Total: 100 pts · Aprobación: 70 pts. Sumá cuántas operaciones consume cada ejecución: es parte de los objetivos.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">20 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Práctica 4 y Cierre</h2>
+        <div class="content-area">
+<div class="two-column"><div><span class="moment-badge live"><i class="fa-solid fa-flask-vial"></i> Paso 4 de la Pre-Entrega 3</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-robot"></i> Sumá OpenAI y el Error Handler a tu escenario y hacé el primer Run once.</li>
+<li><i class="fa-solid fa-calendar-check"></i> <strong>PE3:</strong> se recomienda entregarla antes de la <strong>clase 9</strong>.</li>
+</ul></div></div><div><div class="tile" style="height: 260px;"><div class="icon-box"><i class="fa-solid fa-forward"></i></div><h3>Próximo: Módulo 4 · n8n</h3><p>El paso de No-Code a Low-Code, con agentes de IA. Para la clase 7: decidir si van a usar n8n Cloud (prueba gratuita) o instalado en su máquina.</p></div></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">21 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Material para Profundizar</h2>
+        <div class="content-area">
+<div class="tiled-content"><div class="tile"><div class="icon-box"><i class="fa-solid fa-arrows-left-right"></i></div><h3>Make — Mapping</h3><p>Cómo pasar datos de un módulo a otro.<br><span style="color: var(--naranja-horizonte); font-weight: 600; display: inline-block; margin-top: 10px;">make.com/en/help/mapping</span></p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-code"></i></div><h3>MDN — JSON</h3><p>Sintaxis, tipos y errores comunes.<br><span style="color: var(--naranja-horizonte); font-weight: 600; display: inline-block; margin-top: 10px;">developer.mozilla.org</span></p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-robot"></i></div><h3>OpenAI — API</h3><p>Cómo funciona el módulo que conectás en Make.<br><span style="color: var(--naranja-horizonte); font-weight: 600; display: inline-block; margin-top: 10px;">platform.openai.com/docs</span></p></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">22 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div class="content-area" style="align-items: center; justify-content: center; text-align: center;">
+            <div style="display: flex; gap: 25px; align-items: flex-end; justify-content: center; margin-bottom: 20px;">
+                <i class="fa-solid fa-circle-question" style="font-size: 50px; color: var(--amarillo-solar);"></i>
+                <i class="fa-solid fa-circle-question" style="font-size: 90px; color: var(--naranja-horizonte);"></i>
+                <i class="fa-solid fa-circle-question" style="font-size: 60px; color: var(--rosa-energia);"></i>
+            </div>
+            <h1 style="font-size: 64px;">¿Dudas? ¿Consultas?</h1>
+            <p style="font-size: 22px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">¡Cerramos el Módulo 3!</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">23 / 23</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Presentation navigation controls toolbar -->
+<div class="controls-toolbar">
+    <button class="control-btn" id="prev-slide"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+    <div class="slide-dots" id="slide-dots"></div>
+    <button class="control-btn" id="next-slide">Siguiente <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<script>
+    // Slider Presentation Logic
+    const slides = document.querySelectorAll('.slide-container');
+    const prevBtn = document.getElementById('prev-slide');
+    const nextBtn = document.getElementById('next-slide');
+    const dotsContainer = document.getElementById('slide-dots');
+
+    let currentSlideIndex = 0;
+
+    // Create Navigation Indicators Dynamically
+    slides.forEach((slide, idx) => {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (idx === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => {
+            goToSlide(idx);
+        });
+        dotsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.dot');
+
+    function updateControls() {
+        dots.forEach((dot, idx) => {
+            if (idx === currentSlideIndex) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }
+
+    function goToSlide(index) {
+        if (index < 0 || index >= slides.length) return;
+
+        slides[currentSlideIndex].classList.remove('active');
+        currentSlideIndex = index;
+        slides[currentSlideIndex].classList.add('active');
+
+        updateControls();
+    }
+
+    // Keyboard Navigation Handlers
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') {
+            goToSlide(currentSlideIndex + 1);
+        } else if (e.key === 'ArrowLeft') {
+            goToSlide(currentSlideIndex - 1);
+        }
+    });
+
+    // Button Click Event Listeners
+    prevBtn.addEventListener('click', () => {
+        goToSlide(currentSlideIndex - 1);
+    });
+
+    nextBtn.addEventListener('click', () => {
+        goToSlide(currentSlideIndex + 1);
+    });
+</script>
+
+</body>
+</html>

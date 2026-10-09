@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 09 - Gmail con API + de la App a la API de WhatsApp | Coderhouse</title>
+    <!-- Coder 4.0 Core Typography: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ==========================================================================
+           CODER 4.0 DESIGN SYSTEM & VARS
+           ========================================================================== */
+        :root {
+            --blanco-lienzo: #F8F2E8;
+            --negro-coder: #171717;
+            --naranja-oscuro: #260700;
+            --naranja-horizonte: #FF632B;
+            --amarillo-solar: #FE872D;
+            --rosa-energia: #FE64A3;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --transition-speed: 0.4s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #dcd6cd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: var(--font-main);
+            overflow: hidden;
+        }
+
+        /* Slide Viewer (Absolute 1280x720 No-Scale-Shift) */
+        .presentation-viewport {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            border-radius: 16px;
+            overflow: hidden;
+            background-color: var(--blanco-lienzo);
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            color: var(--negro-coder);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 50px 70px 40px 70px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity var(--transition-speed) ease-in-out, visibility var(--transition-speed) ease-in-out;
+            z-index: 1;
+        }
+
+        .slide-container.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        /* Abstract Brand Accents: Subtly warm gradients connecting to Coder 4.0 */
+        .slide-container::before {
+            content: '';
+            position: absolute;
+            top: -150px;
+            right: -150px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(255,99,43,0.06) 0%, rgba(248,242,232,0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .slide-container > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Typography & Hierarchy */
+        h1 {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+        }
+
+        .slide-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.2;
+            letter-spacing: -1px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .slide-title::after {
+            content: '';
+            flex-grow: 1;
+            height: 2px;
+            background-color: rgba(38, 7, 0, 0.1);
+            margin-left: 15px;
+        }
+
+        p, li {
+            font-size: 17px;
+            line-height: 1.5;
+            color: #3d3430;
+            font-weight: 400;
+        }
+
+        /* Content Area Layout Wrapper */
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* Grid & Column Definitions */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 45px;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Coder 4.0 Split Card layouts */
+        .two-column.tiled > div {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            padding: 35px;
+            height: 360px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+        }
+
+        .two-column.tiled h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--naranja-horizonte);
+            margin-bottom: 12px;
+        }
+
+        /* Warm Retro Photography Frame */
+        .image-wrapper {
+            border-radius: 16px;
+            height: 340px;
+            overflow: hidden;
+            width: 100%;
+            border: 4px solid #ffffff;
+            box-shadow: 0 10px 25px rgba(38, 7, 0, 0.08);
+        }
+
+        .image-wrapper img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        /* Custom 2D Filled Icons & Tiles */
+        .tiled-content {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        .tile {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+        }
+
+        .tile .icon-box {
+            background-color: rgba(255, 99, 43, 0.1);
+            color: var(--naranja-horizonte);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .tile h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--naranja-oscuro);
+            margin-bottom: 8px;
+        }
+
+        .tile p {
+            font-size: 14px;
+        }
+
+        /* Bullet List styling */
+        .bullet-list ul {
+            list-style: none;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+        }
+
+        .bullet-list li i {
+            position: absolute;
+            left: 0;
+            top: 3px;
+            color: var(--naranja-horizonte);
+            font-size: 16px;
+        }
+
+        /* Footer & Brand Branding Mark */
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(38, 7, 0, 0.06);
+            padding-top: 15px;
+            width: 100%;
+        }
+
+        .slide-footer .brand-logo {
+            font-weight: 800;
+            font-size: 16px;
+            color: var(--naranja-oscuro);
+            letter-spacing: -0.5px;
+        }
+
+        .slide-footer .brand-logo span {
+            color: var(--naranja-horizonte);
+        }
+
+        .slide-footer .slide-index {
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(38, 7, 0, 0.4);
+        }
+
+        /* Slide Type Banners ("Momentos de la Clase") */
+        .moment-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 30px;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            align-self: flex-start;
+        }
+
+        .moment-badge.live {
+            background-color: var(--naranja-horizonte);
+        }
+
+        .moment-badge.bug {
+            background-color: var(--rosa-energia);
+        }
+
+        .moment-badge.tip {
+            background-color: var(--amarillo-solar);
+            color: var(--naranja-oscuro);
+        }
+
+        /* Slido Interactive layout */
+        .slido-box {
+            background-color: #ffffff;
+            border: 2px dashed var(--naranja-horizonte);
+            border-radius: 20px;
+            padding: 35px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(255, 99, 43, 0.05);
+        }
+
+        .slido-box h3 {
+            font-size: 26px;
+            color: var(--naranja-oscuro);
+            margin-bottom: 10px;
+        }
+
+        .slido-code {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--naranja-horizonte);
+            margin: 15px 0;
+            letter-spacing: -1px;
+        }
+
+        /* Transition slide */
+        .transition-layout {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .transition-layout h2 {
+            font-size: 60px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.1;
+            margin-bottom: 15px;
+            letter-spacing: -2px;
+        }
+
+        .transition-layout hr {
+            width: 80px;
+            height: 5px;
+            background-color: var(--naranja-horizonte);
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        /* Clean retro table */
+        .table-layout {
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+            width: 100%;
+        }
+
+        .table-layout table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-layout th, .table-layout td {
+            padding: 12px 20px;
+            text-align: left;
+            border-bottom: 1px solid rgba(38, 7, 0, 0.06);
+            font-size: 14px;
+        }
+
+        .table-layout th {
+            background-color: rgba(38, 7, 0, 0.03);
+            color: var(--naranja-oscuro);
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .table-layout tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Break Slide Design */
+        .break-slide {
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+        }
+
+        .break-slide::before {
+            display: none;
+        }
+
+        .break-slide h2 {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--blanco-lienzo);
+            margin-bottom: 20px;
+            letter-spacing: -1.5px;
+        }
+
+        .break-slide p {
+            color: rgba(248, 242, 232, 0.75);
+            font-size: 22px;
+        }
+
+        .break-logo {
+            font-size: 80px;
+            color: var(--naranja-horizonte);
+            margin-bottom: 30px;
+        }
+
+        /* Q&A / Legal section */
+        .legal-notice {
+            font-size: 10px;
+            line-height: 1.4;
+            color: rgba(38, 7, 0, 0.4);
+            text-align: justify;
+            margin-top: 20px;
+        }
+
+        /* Presentation controls toolbar */
+        .controls-toolbar {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            align-items: center;
+        }
+
+        .control-btn {
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .control-btn:hover {
+            background-color: var(--naranja-horizonte);
+        }
+
+        .slide-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(38, 7, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .dot.active {
+            background-color: var(--naranja-horizonte);
+            width: 25px;
+            border-radius: 10px;
+        }
+
+        /* Code Block Container */
+        .code-block {
+            background-color: #ffffff;
+            border-left: 4px solid var(--naranja-horizonte);
+            padding: 15px 20px;
+            font-family: monospace;
+            font-size: 13px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            white-space: pre-wrap;
+            line-height: 1.4;
+        }
+
+        /* Small note under tables */
+        .note-text {
+            margin-top: 18px;
+            font-size: 14px;
+            font-style: italic;
+            color: rgba(38, 7, 0, 0.6);
+        }
+
+        /* ==========================================================================
+           FLOWCHART (Óvalo / Rectángulo / Rombo) — extensión para diagramas de flujo
+           ========================================================================== */
+        .flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            gap: 10px;
+        }
+
+        .flow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fnode {
+            background-color: #ffffff;
+            color: var(--naranja-oscuro);
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.3;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.04);
+        }
+
+        .fnode.oval {
+            border: 2px solid var(--naranja-horizonte);
+            border-radius: 999px;
+            width: 170px;
+            min-height: 70px;
+            padding: 10px 18px;
+        }
+
+        .fnode.rect {
+            border: 2px solid var(--naranja-oscuro);
+            border-radius: 6px;
+            width: 170px;
+            min-height: 64px;
+            padding: 10px 14px;
+        }
+
+        .fnode.diamond {
+            width: 180px;
+            height: 120px;
+            background-color: var(--amarillo-solar);
+            clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+            box-shadow: none;
+            position: relative;
+        }
+
+        .fnode.diamond span {
+            position: absolute;
+            inset: 2px 3px;
+            background-color: #FFF4EA;
+            clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 34px;
+        }
+
+        .ftag {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--naranja-horizonte);
+        }
+
+        .farrow {
+            color: rgba(38, 7, 0, 0.35);
+            font-size: 18px;
+        }
+
+        .fbranch {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .fbranch-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fchip {
+            font-size: 11px;
+            font-weight: 800;
+            padding: 3px 9px;
+            border-radius: 20px;
+            color: #ffffff;
+            background-color: var(--naranja-horizonte);
+            min-width: 34px;
+            text-align: center;
+        }
+
+        .fchip.no {
+            background-color: var(--rosa-energia);
+        }
+
+        .flow-legend {
+            margin-top: 28px;
+            font-size: 14px;
+            color: rgba(38, 7, 0, 0.6);
+            text-align: center;
+        }
+
+        .flow-legend strong {
+            color: var(--naranja-oscuro);
+        }
+
+        /* Tile with a shape preview instead of an icon */
+        .shape-preview {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .shape-preview .fnode {
+            font-size: 12px;
+            width: 130px;
+            min-height: 52px;
+        }
+
+        .shape-preview .fnode.diamond {
+            width: 130px;
+            height: 70px;
+        }
+
+        .shape-preview .fnode.diamond span {
+            padding: 0 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="presentation-viewport">
+
+    <div class="slide-container active">
+        <div></div>
+        <div class="transition-layout" style="margin-bottom: 30px;">
+            <span class="moment-badge">CODER 4.0 • MÓDULO 5 • CLASE 09</span>
+            <h1 style="font-size: 44px;">Gmail con API y la API de WhatsApp</h1>
+            <p style="font-size: 20px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">Del bot que responde "en 24 horas" al asistente que entiende el contexto. Y por qué WhatsApp automatizado necesita una API</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">01 / 20</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">¿Dónde Quedamos?</h2>
+        <div class="content-area">
+<span class="moment-badge live"><i class="fa-solid fa-video"></i> Esta clase queda grabada para que la veas después</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-plug"></i> HTTP Request: los 5 ingredientes y los errores 400, 401, 403 y 404.</li>
+<li><i class="fa-solid fa-layer-group"></i> SplitInBatches para volumen y sub-workflows para no repetirse.</li>
+<li><i class="fa-solid fa-calendar-check"></i> La <strong>PE4</strong> se recomienda entregar antes de la clase 11.</li>
+</ul></div><p class="note-text">Hoy: los canales por donde realmente hablan tus clientes.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">02 / 20</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Objetivos de la Clase</h2>
+        <div class="content-area">
+<div class="bullet-list"><ul>
+<li><i class="fa-solid fa-envelope-open-text"></i> Explicar por qué la <strong>Gmail API</strong> supera a los filtros de Gmail.</li>
+<li><i class="fa-solid fa-user-tie"></i> Diferenciar una respuesta "robot" de una respuesta <strong>con contexto</strong>.</li>
+<li><i class="fa-solid fa-pen-to-square"></i> Armar el flujo Watch Emails → IA → <strong>borrador</strong> y evitar los 3 errores clásicos.</li>
+<li><i class="fa-brands fa-whatsapp"></i> Explicar por qué WhatsApp necesita la API y un proveedor, y tener el <strong>sandbox</strong> listo.</li>
+</ul></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">03 / 20</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Tema 01</span>
+            <h2>Automatización de Gmail: Respuestas Contextuales</h2>
+            <p style="font-size: 20px;">El lunes abrís Gmail y, en vez de 50 mails repetitivos, hay una carpeta "IA: Borradores generados". La IA leyó cada uno y redactó una respuesta personalizada esperando tu aprobación.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">04 / 20</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">La Gmail API: la Puerta Trasera Segura</h2>
+        <div class="content-area">
+<div class="two-column"><div><span class="moment-badge tip"><i class="fa-solid fa-door-open"></i> Gmail es una oficina; vos entrás por la puerta principal</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-key"></i> La API es una <strong>puerta trasera ultra-segura</strong> para que Make o n8n retiren información y actúen en tu nombre.</li>
+<li><i class="fa-solid fa-filter"></i> Los filtros de Gmail son un guardia que solo deja pasar a quien dice una palabra clave.</li>
+</ul></div></div><div><div class="tile" style="height: 260px;"><div class="icon-box"><i class="fa-solid fa-bolt"></i></div><h3>Los 3 superpoderes de la API</h3><p><strong>Sentimiento:</strong> ¿enojado, feliz, confundido? · <strong>Memoria contextual:</strong> correos anteriores · <strong>Lógica multicapa:</strong> queja → Slack; venta → Airtable + link de calendario.</p></div></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">05 / 20</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Contexto: la Diferencia entre un Robot y un Asistente</h2>
+        <div class="content-area">
+<div class="two-column tiled" style="grid-template-columns: 1fr 1fr;"><div><h3><i class="fa-solid fa-robot"></i> Robot básico</h3><p><strong>Cliente:</strong> "Hola, ¿cuándo terminás?"</p><p style="margin-top: 10px;"><strong>Respuesta:</strong> "Gracias por contactar. Respondemos en 24 horas."</p><p style="margin-top: 10px;">El cliente se siente ignorado.</p></div><div><h3><i class="fa-solid fa-user-tie"></i> Asistente con contexto</h3><p>La IA lee el hilo, ve que prometiste el logo para el viernes y que hoy es jueves.</p><p style="margin-top: 10px;"><strong>Respuesta:</strong> "Según lo acordado el lunes, tu logo estará listo mañana viernes a primera hora."</p></div></div><p class="note-text">Contexto = el hilo de correos + el tono + los datos que ya tenés en tu base.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">06 / 20</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">La Arquitectura del Flujo</h2>
+        <div class="content-area">
+<div class="flow"><div class="flow-step"><span class="ftag">Trigger</span><div class="fnode oval">Gmail: Watch Emails</div></div><div class="farrow"><i class="fa-solid fa-arrow-right"></i></div><div class="flow-step"><span class="ftag">Acción (IA)</span><div class="fnode rect">OpenAI redacta con los hechos del negocio</div></div><div class="farrow"><i class="fa-solid fa-arrow-right"></i></div><div class="flow-step"><span class="ftag">Etapa</span><div class="fnode diamond"><span>¿Confío ya en el prompt?</span></div></div><div class="farrow"><i class="fa-solid fa-arrow-right"></i></div><div class="fbranch"><div class="fbranch-row"><span class="fchip">Más adelante</span><div class="fnode rect">Send an Email (automático)</div></div><div class="fbranch-row"><span class="fchip no">Al empezar</span><div class="fnode rect">Create a Draft (lo reviso yo)</div></div></div><div class="farrow"><i class="fa-solid fa-arrow-right"></i></div><div class="flow-step"><span class="ftag">Fin / Output</span><div class="fnode oval">Respuesta en el mismo hilo</div></div></div><p class="flow-legend"><strong>Empezá con borradores:</strong> revisás, ajustás y enviás. Es aprobación humana, que vemos a fondo en el Módulo 7.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">07 / 20</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Casos Reales</h2>
+        <div class="content-area">
+<div class="tiled-content"><div class="tile"><div class="icon-box"><i class="fa-solid fa-user-tie"></i></div><h3>Freelancer</h3><p>Detecta "costo" o "presupuesto" y responde con el link a su brochure de precios en Drive.</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-cart-shopping"></i></div><h3>E-commerce</h3><p>Extrae el número de pedido, busca el estado en Airtable: "Tu pedido #1234 llega el miércoles".</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-users"></i></div><h3>Asistente con 5 clientes</h3><p>Adapta el tono según la marca: formal para un abogado, relajado para un coach.</p></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">08 / 20</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Los 3 Errores Clásicos</h2>
+        <div class="content-area">
+<div class="table-layout"><table><thead><tr><th>Error</th><th>Qué pasa</th><th>Solución</th></tr></thead><tbody><tr><td><strong>Loop infinito de correos</strong></td><td>Tu respuesta automática choca con un "fuera de la oficina" y se responden sin fin</td><td>Filtro: remitente sin "noreply" y asunto sin "Autoreply"</td></tr><tr><td><strong>Prompt vago</strong></td><td>"Respondé este correo" → la IA inventa que cobrás 500</td><td>Una sección de <strong>hechos innegables</strong>: precios, horarios y servicios reales</td></tr><tr><td><strong>No manejar hilos</strong></td><td>Cada respuesta crea un mail nuevo</td><td>Mapear el <strong>Thread ID</strong> del correo original</td></tr></tbody></table></div><p class="note-text">Privacidad: los datos viajan encriptados, pero vos sos responsable de qué le indicás a la IA sobre tus clientes.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">09 / 20</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Demo: Gmail de la Inmobiliaria</h2>
+        <div class="content-area">
+<div class="two-column"><div><span class="moment-badge live"><i class="fa-solid fa-play"></i> Proyecto ejemplo · en vivo en Make</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-envelope"></i> Mail de prueba: "Somos 4 y queremos ir del 10 al 17 de enero, ¿tienen algo con parrilla?"</li>
+<li><i class="fa-solid fa-list-check"></i> El prompt con los <strong>hechos innegables</strong>: propiedades, precios por noche, check-in, políticas.</li>
+<li><i class="fa-solid fa-pen-to-square"></i> El <strong>borrador</strong> aparece en Gmail, en el mismo hilo.</li>
+</ul></div></div><div><div class="tile" style="height: 260px;"><div class="icon-box"><i class="fa-solid fa-filter"></i></div><h3>Antes de OpenAI</h3><p>El filtro anti-loop: si el remitente es noreply o el asunto dice Autoreply, el flujo se frena y no gasta nada.</p></div></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">10 / 20</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Práctica 1: Gmail + IA que Resume y Prioriza</h2>
+        <div class="content-area">
+<span class="moment-badge live"><i class="fa-solid fa-flask-vial"></i> Paso 1 de la Pre-Entrega 5 · 13 minutos</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-envelope"></i> Escenario nuevo: <strong>Gmail → Watch Emails</strong> (Inbox) con tu Gmail de prueba.</li>
+<li><i class="fa-solid fa-robot"></i> <strong>OpenAI → Create a Chat Completion</strong> con el prompt de triaje (abajo).</li>
+<li><i class="fa-solid fa-play"></i> Run once: un mail urgente y uno tranquilo. Revisá que el JSON llegue bien.</li>
+</ul></div><div class="code-block" style="font-family: var(--font-main); font-size: 15px; white-space: normal; font-style: italic;">"Actuá como un triaje de ventas. Analizá este correo y respondé en formato JSON con dos campos: 1. 'resumen': un resumen de 10 palabras. 2. 'prioridad': un número del 1 al 5 (donde 5 es venta urgente hoy mismo)."</div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">11 / 20</div>
+        </div>
+    </div>
+
+    <div class="slide-container break-slide">
+        <div></div>
+        <div class="transition-layout">
+            <div class="break-logo"><i class="fa-solid fa-mug-hot"></i></div>
+            <h2>Break</h2>
+            <p>Andá por un cafecito o un mate… ¡volvemos en un ratito!</p>
+        </div>
+        <div class="slide-footer" style="border-top-color: rgba(248, 242, 232, 0.15);">
+            <div class="brand-logo" style="color: var(--blanco-lienzo);">CODER<span>HOUSE</span></div>
+            <div class="slide-index" style="color: rgba(248, 242, 232, 0.5);">12 / 20</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Tema 02</span>
+            <h2>De la App a la API de WhatsApp</h2>
+            <p style="font-size: 20px;">Un prospecto llena tu formulario a las 11 de la noche. Le llega un WhatsApp de bienvenida, un recurso gratis y, tres días después, una pregunta. Tus clientes no siempre leen el mail: están en WhatsApp.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">13 / 20</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Los Límites de la App WhatsApp Business</h2>
+        <div class="content-area">
+<div class="two-column"><div><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-users-slash"></i> No permite varios agentes respondiendo de forma organizada.</li>
+<li><i class="fa-solid fa-robot"></i> Sus automatizaciones son básicas: ausencia y bienvenida.</li>
+<li><i class="fa-solid fa-ban"></i> <strong>No se conecta oficialmente con Make o n8n</strong> sin riesgo de que bloqueen el número.</li>
+</ul></div></div><div><div class="tile" style="height: 260px;"><div class="icon-box"><i class="fa-solid fa-door-open"></i></div><h3>La WhatsApp Business API</h3><p>Una "puerta de servicio" que abre Meta para que otros softwares hablen con WhatsApp. Para cruzarla hace falta un <strong>BSP</strong> (Business Solution Provider).</p></div></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">14 / 20</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Twilio vs Wati: Lego Suelto o Set Armado</h2>
+        <div class="content-area">
+<div class="table-layout"><table><thead><tr><th></th><th>Wati</th><th>Twilio</th></tr></thead><tbody><tr><td><strong>Qué es</strong></td><td>Plataforma "todo en uno" para WhatsApp</td><td>Infraestructura</td></tr><tr><td><strong>Trae</strong></td><td>Bandeja de entrada para el equipo + constructor visual de chatbots</td><td>Nada visible: "no tiene cara"</td></tr><tr><td><strong>Costo por mensaje</strong></td><td>Mayor</td><td>Mucho más económico</td></tr><tr><td><strong>Ideal para</strong></td><td>Simplicidad y rapidez</td><td>Conectarlo a Make o n8n y mandar los mensajes adonde quieras</td></tr></tbody></table></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">15 / 20</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Sandbox y Webhooks</h2>
+        <div class="content-area">
+<div class="two-column tiled" style="grid-template-columns: 1fr 1fr;"><div><h3><i class="fa-solid fa-flask"></i> Sandbox — la caja de arena</h3><p>Twilio y Wati permiten <strong>probar sin pagar</strong> y sin un número de empresa verificado.</p><p style="margin-top: 12px;">Es el simulador de vuelo antes de pilotar el avión.</p></div><div><h3><i class="fa-solid fa-tower-broadcast"></i> Webhook — cómo salta el mensaje</h3><p>Alguien te escribe → WhatsApp avisa al proveedor → el proveedor lanza el mensaje a una <strong>URL especial</strong> que creás en Make o n8n.</p></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">16 / 20</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Demo: el Sandbox de WhatsApp</h2>
+        <div class="content-area">
+<span class="moment-badge live"><i class="fa-solid fa-play"></i> En vivo en la consola de Twilio</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-1"></i> Consola de Twilio → <strong>WhatsApp Sandbox</strong>: el número del sandbox y el código para unirse.</li>
+<li><i class="fa-solid fa-2"></i> Desde tu celular, mandás el código por WhatsApp a ese número.</li>
+<li><i class="fa-solid fa-3"></i> En Make: <strong>Twilio → Send a Message</strong> a tu celular, en <strong>formato internacional</strong> (whatsapp:+549…).</li>
+<li><i class="fa-solid fa-4"></i> Dónde se configura la URL del webhook para los mensajes que entran.</li>
+</ul></div><p class="note-text">Los pasos exactos de la consola pueden cambiar: seguí los que muestra Twilio en pantalla.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">17 / 20</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Práctica 2 y Tarea</h2>
+        <div class="content-area">
+<span class="moment-badge live"><i class="fa-solid fa-flask-vial"></i> Paso 2 de la Pre-Entrega 5 · 12 minutos</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-user-plus"></i> Crear la cuenta de Twilio y unirse al <strong>WhatsApp Sandbox</strong> desde tu celular.</li>
+<li><i class="fa-solid fa-paper-plane"></i> Mandarte un mensaje desde Make con el número en formato internacional.</li>
+<li><i class="fa-solid fa-house-laptop"></i> <strong>Tarea para la clase 10:</strong> traer funcionando Gmail → OpenAI (resumen + prioridad) y el sandbox.</li>
+</ul></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">18 / 20</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Síntesis de la Clase</h2>
+        <div class="content-area">
+<div class="bullet-list"><ul>
+<li><i class="fa-solid fa-key"></i> La <strong>Gmail API</strong> es el puente que permite leer y escribir por vos de forma segura.</li>
+<li><i class="fa-solid fa-crown"></i> El <strong>contexto es el rey</strong>: sin contexto es spam; con contexto es atención de calidad.</li>
+<li><i class="fa-solid fa-pen-to-square"></i> Empezá siempre con <strong>borradores</strong> antes de pasar al envío automático.</li>
+<li><i class="fa-brands fa-whatsapp"></i> WhatsApp automatizado necesita la <strong>API</strong> y un <strong>BSP</strong>; para practicar, el sandbox.</li>
+</ul></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">19 / 20</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div class="content-area" style="align-items: center; justify-content: center; text-align: center;">
+            <div style="display: flex; gap: 25px; align-items: flex-end; justify-content: center; margin-bottom: 20px;">
+                <i class="fa-solid fa-circle-question" style="font-size: 50px; color: var(--amarillo-solar);"></i>
+                <i class="fa-solid fa-circle-question" style="font-size: 90px; color: var(--naranja-horizonte);"></i>
+                <i class="fa-solid fa-circle-question" style="font-size: 60px; color: var(--rosa-energia);"></i>
+            </div>
+            <h1 style="font-size: 64px;">¿Dudas? ¿Consultas?</h1>
+            <p style="font-size: 22px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">Este es el momento de preguntar todo lo que necesites</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">20 / 20</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Presentation navigation controls toolbar -->
+<div class="controls-toolbar">
+    <button class="control-btn" id="prev-slide"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+    <div class="slide-dots" id="slide-dots"></div>
+    <button class="control-btn" id="next-slide">Siguiente <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<script>
+    // Slider Presentation Logic
+    const slides = document.querySelectorAll('.slide-container');
+    const prevBtn = document.getElementById('prev-slide');
+    const nextBtn = document.getElementById('next-slide');
+    const dotsContainer = document.getElementById('slide-dots');
+
+    let currentSlideIndex = 0;
+
+    // Create Navigation Indicators Dynamically
+    slides.forEach((slide, idx) => {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (idx === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => {
+            goToSlide(idx);
+        });
+        dotsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.dot');
+
+    function updateControls() {
+        dots.forEach((dot, idx) => {
+            if (idx === currentSlideIndex) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }
+
+    function goToSlide(index) {
+        if (index < 0 || index >= slides.length) return;
+
+        slides[currentSlideIndex].classList.remove('active');
+        currentSlideIndex = index;
+        slides[currentSlideIndex].classList.add('active');
+
+        updateControls();
+    }
+
+    // Keyboard Navigation Handlers
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') {
+            goToSlide(currentSlideIndex + 1);
+        } else if (e.key === 'ArrowLeft') {
+            goToSlide(currentSlideIndex - 1);
+        }
+    });
+
+    // Button Click Event Listeners
+    prevBtn.addEventListener('click', () => {
+        goToSlide(currentSlideIndex - 1);
+    });
+
+    nextBtn.addEventListener('click', () => {
+        goToSlide(currentSlideIndex + 1);
+    });
+</script>
+
+</body>
+</html>

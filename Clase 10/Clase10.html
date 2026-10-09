@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 10 - WhatsApp, Orquestación Multicanal y PE5 | Coderhouse</title>
+    <!-- Coder 4.0 Core Typography: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ==========================================================================
+           CODER 4.0 DESIGN SYSTEM & VARS
+           ========================================================================== */
+        :root {
+            --blanco-lienzo: #F8F2E8;
+            --negro-coder: #171717;
+            --naranja-oscuro: #260700;
+            --naranja-horizonte: #FF632B;
+            --amarillo-solar: #FE872D;
+            --rosa-energia: #FE64A3;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --transition-speed: 0.4s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #dcd6cd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: var(--font-main);
+            overflow: hidden;
+        }
+
+        /* Slide Viewer (Absolute 1280x720 No-Scale-Shift) */
+        .presentation-viewport {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            border-radius: 16px;
+            overflow: hidden;
+            background-color: var(--blanco-lienzo);
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            color: var(--negro-coder);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 50px 70px 40px 70px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity var(--transition-speed) ease-in-out, visibility var(--transition-speed) ease-in-out;
+            z-index: 1;
+        }
+
+        .slide-container.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        /* Abstract Brand Accents: Subtly warm gradients connecting to Coder 4.0 */
+        .slide-container::before {
+            content: '';
+            position: absolute;
+            top: -150px;
+            right: -150px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(255,99,43,0.06) 0%, rgba(248,242,232,0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .slide-container > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Typography & Hierarchy */
+        h1 {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+        }
+
+        .slide-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.2;
+            letter-spacing: -1px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .slide-title::after {
+            content: '';
+            flex-grow: 1;
+            height: 2px;
+            background-color: rgba(38, 7, 0, 0.1);
+            margin-left: 15px;
+        }
+
+        p, li {
+            font-size: 17px;
+            line-height: 1.5;
+            color: #3d3430;
+            font-weight: 400;
+        }
+
+        /* Content Area Layout Wrapper */
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* Grid & Column Definitions */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 45px;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Coder 4.0 Split Card layouts */
+        .two-column.tiled > div {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            padding: 35px;
+            height: 360px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+        }
+
+        .two-column.tiled h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--naranja-horizonte);
+            margin-bottom: 12px;
+        }
+
+        /* Warm Retro Photography Frame */
+        .image-wrapper {
+            border-radius: 16px;
+            height: 340px;
+            overflow: hidden;
+            width: 100%;
+            border: 4px solid #ffffff;
+            box-shadow: 0 10px 25px rgba(38, 7, 0, 0.08);
+        }
+
+        .image-wrapper img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        /* Custom 2D Filled Icons & Tiles */
+        .tiled-content {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        .tile {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+        }
+
+        .tile .icon-box {
+            background-color: rgba(255, 99, 43, 0.1);
+            color: var(--naranja-horizonte);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .tile h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--naranja-oscuro);
+            margin-bottom: 8px;
+        }
+
+        .tile p {
+            font-size: 14px;
+        }
+
+        /* Bullet List styling */
+        .bullet-list ul {
+            list-style: none;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+        }
+
+        .bullet-list li i {
+            position: absolute;
+            left: 0;
+            top: 3px;
+            color: var(--naranja-horizonte);
+            font-size: 16px;
+        }
+
+        /* Footer & Brand Branding Mark */
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(38, 7, 0, 0.06);
+            padding-top: 15px;
+            width: 100%;
+        }
+
+        .slide-footer .brand-logo {
+            font-weight: 800;
+            font-size: 16px;
+            color: var(--naranja-oscuro);
+            letter-spacing: -0.5px;
+        }
+
+        .slide-footer .brand-logo span {
+            color: var(--naranja-horizonte);
+        }
+
+        .slide-footer .slide-index {
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(38, 7, 0, 0.4);
+        }
+
+        /* Slide Type Banners ("Momentos de la Clase") */
+        .moment-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 30px;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            align-self: flex-start;
+        }
+
+        .moment-badge.live {
+            background-color: var(--naranja-horizonte);
+        }
+
+        .moment-badge.bug {
+            background-color: var(--rosa-energia);
+        }
+
+        .moment-badge.tip {
+            background-color: var(--amarillo-solar);
+            color: var(--naranja-oscuro);
+        }
+
+        /* Slido Interactive layout */
+        .slido-box {
+            background-color: #ffffff;
+            border: 2px dashed var(--naranja-horizonte);
+            border-radius: 20px;
+            padding: 35px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(255, 99, 43, 0.05);
+        }
+
+        .slido-box h3 {
+            font-size: 26px;
+            color: var(--naranja-oscuro);
+            margin-bottom: 10px;
+        }
+
+        .slido-code {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--naranja-horizonte);
+            margin: 15px 0;
+            letter-spacing: -1px;
+        }
+
+        /* Transition slide */
+        .transition-layout {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .transition-layout h2 {
+            font-size: 60px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.1;
+            margin-bottom: 15px;
+            letter-spacing: -2px;
+        }
+
+        .transition-layout hr {
+            width: 80px;
+            height: 5px;
+            background-color: var(--naranja-horizonte);
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        /* Clean retro table */
+        .table-layout {
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+            width: 100%;
+        }
+
+        .table-layout table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-layout th, .table-layout td {
+            padding: 12px 20px;
+            text-align: left;
+            border-bottom: 1px solid rgba(38, 7, 0, 0.06);
+            font-size: 14px;
+        }
+
+        .table-layout th {
+            background-color: rgba(38, 7, 0, 0.03);
+            color: var(--naranja-oscuro);
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .table-layout tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Break Slide Design */
+        .break-slide {
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+        }
+
+        .break-slide::before {
+            display: none;
+        }
+
+        .break-slide h2 {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--blanco-lienzo);
+            margin-bottom: 20px;
+            letter-spacing: -1.5px;
+        }
+
+        .break-slide p {
+            color: rgba(248, 242, 232, 0.75);
+            font-size: 22px;
+        }
+
+        .break-logo {
+            font-size: 80px;
+            color: var(--naranja-horizonte);
+            margin-bottom: 30px;
+        }
+
+        /* Q&A / Legal section */
+        .legal-notice {
+            font-size: 10px;
+            line-height: 1.4;
+            color: rgba(38, 7, 0, 0.4);
+            text-align: justify;
+            margin-top: 20px;
+        }
+
+        /* Presentation controls toolbar */
+        .controls-toolbar {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            align-items: center;
+        }
+
+        .control-btn {
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .control-btn:hover {
+            background-color: var(--naranja-horizonte);
+        }
+
+        .slide-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(38, 7, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .dot.active {
+            background-color: var(--naranja-horizonte);
+            width: 25px;
+            border-radius: 10px;
+        }
+
+        /* Code Block Container */
+        .code-block {
+            background-color: #ffffff;
+            border-left: 4px solid var(--naranja-horizonte);
+            padding: 15px 20px;
+            font-family: monospace;
+            font-size: 13px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            white-space: pre-wrap;
+            line-height: 1.4;
+        }
+
+        /* Small note under tables */
+        .note-text {
+            margin-top: 18px;
+            font-size: 14px;
+            font-style: italic;
+            color: rgba(38, 7, 0, 0.6);
+        }
+
+        /* ==========================================================================
+           FLOWCHART (Óvalo / Rectángulo / Rombo) — extensión para diagramas de flujo
+           ========================================================================== */
+        .flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            gap: 10px;
+        }
+
+        .flow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fnode {
+            background-color: #ffffff;
+            color: var(--naranja-oscuro);
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.3;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.04);
+        }
+
+        .fnode.oval {
+            border: 2px solid var(--naranja-horizonte);
+            border-radius: 999px;
+            width: 170px;
+            min-height: 70px;
+            padding: 10px 18px;
+        }
+
+        .fnode.rect {
+            border: 2px solid var(--naranja-oscuro);
+            border-radius: 6px;
+            width: 170px;
+            min-height: 64px;
+            padding: 10px 14px;
+        }
+
+        .fnode.diamond {
+            width: 180px;
+            height: 120px;
+            background-color: var(--amarillo-solar);
+            clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+            box-shadow: none;
+            position: relative;
+        }
+
+        .fnode.diamond span {
+            position: absolute;
+            inset: 2px 3px;
+            background-color: #FFF4EA;
+            clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 34px;
+        }
+
+        .ftag {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--naranja-horizonte);
+        }
+
+        .farrow {
+            color: rgba(38, 7, 0, 0.35);
+            font-size: 18px;
+        }
+
+        .fbranch {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .fbranch-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fchip {
+            font-size: 11px;
+            font-weight: 800;
+            padding: 3px 9px;
+            border-radius: 20px;
+            color: #ffffff;
+            background-color: var(--naranja-horizonte);
+            min-width: 34px;
+            text-align: center;
+        }
+
+        .fchip.no {
+            background-color: var(--rosa-energia);
+        }
+
+        .flow-legend {
+            margin-top: 28px;
+            font-size: 14px;
+            color: rgba(38, 7, 0, 0.6);
+            text-align: center;
+        }
+
+        .flow-legend strong {
+            color: var(--naranja-oscuro);
+        }
+
+        /* Tile with a shape preview instead of an icon */
+        .shape-preview {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .shape-preview .fnode {
+            font-size: 12px;
+            width: 130px;
+            min-height: 52px;
+        }
+
+        .shape-preview .fnode.diamond {
+            width: 130px;
+            height: 70px;
+        }
+
+        .shape-preview .fnode.diamond span {
+            padding: 0 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="presentation-viewport">
+
+    <div class="slide-container active">
+        <div></div>
+        <div class="transition-layout" style="margin-bottom: 30px;">
+            <span class="moment-badge">CODER 4.0 • MÓDULO 5 • CLASE 10</span>
+            <h1 style="font-size: 44px;">WhatsApp y Orquestación Multicanal</h1>
+            <p style="font-size: 20px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">La regla de las 24 horas, drips y chatbots, y el arte de usar el canal correcto en el momento justo. Y la Pre-Entrega 5</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">01 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">¿Dónde Quedamos?</h2>
+        <div class="content-area">
+<span class="moment-badge live"><i class="fa-solid fa-video"></i> Esta clase queda grabada para que la veas después</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-envelope-open-text"></i> Gmail con API: contexto, borradores, filtro anti-loop y Thread ID.</li>
+<li><i class="fa-brands fa-whatsapp"></i> WhatsApp necesita la API y un proveedor (Twilio o Wati).</li>
+<li><i class="fa-solid fa-flask"></i> Tarea: Gmail → OpenAI (resumen + prioridad) y el sandbox funcionando.</li>
+</ul></div><p class="note-text">Hoy coordinamos los tres canales como un solo equipo.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">02 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Objetivos de la Clase</h2>
+        <div class="content-area">
+<div class="bullet-list"><ul>
+<li><i class="fa-solid fa-clock"></i> Explicar la <strong>ventana de 24 horas</strong> y cuándo hace falta una <strong>plantilla</strong> aprobada.</li>
+<li><i class="fa-solid fa-droplet"></i> Diseñar un <strong>drip</strong> y un <strong>chatbot de reglas</strong> con salida a humano.</li>
+<li><i class="fa-solid fa-diagram-project"></i> Distinguir multicanalidad de <strong>orquestación</strong> y elegir el canal según la urgencia.</li>
+<li><i class="fa-solid fa-flag-checkered"></i> Salir con <strong>el pipeline Gmail → IA → Slack / WhatsApp</strong> y la consigna de la <strong>PE5</strong>.</li>
+</ul></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">03 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Tema 01</span>
+            <h2>WhatsApp: 24 Horas, Plantillas, Drips y Chatbots</h2>
+            <p style="font-size: 20px;">El poder de WhatsApp no está en mandar muchos mensajes, sino el mensaje correcto, a la persona correcta, en el momento exacto.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">04 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">La Regla de las 24 Horas y las Plantillas</h2>
+        <div class="content-area">
+<div class="two-column"><div><span class="moment-badge bug"><i class="fa-solid fa-shield-halved"></i> WhatsApp protege a sus usuarios del spam</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-clock"></i> No podés mandar <strong>texto libre</strong> salvo que el cliente te haya escrito en las <strong>últimas 24 horas</strong>.</li>
+<li><i class="fa-solid fa-file-signature"></i> Para <strong>iniciar</strong> la conversación (un drip, un seguimiento) hace falta una <strong>plantilla pre-aprobada por Meta</strong>.</li>
+<li><i class="fa-solid fa-triangle-exclamation"></i> Si respondés con texto libre después de dos días, Make da error. Tené una plantilla de seguimiento lista.</li>
+</ul></div></div><div><div class="tile" style="height: 260px;"><div class="icon-box"><i class="fa-solid fa-check"></i></div><h3>Plantilla que se aprueba</h3><p>❌ "Hola, ¿por qué no compraste?"<br>✅ "Hola {{1}}, gracias por tu interés en {{2}}. Acá tenés el catálogo que pediste."</p></div></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">05 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Drips: la Ciencia de la Gotera Constante</h2>
+        <div class="content-area">
+<div class="flow"><div class="flow-step"><span class="ftag">Día 0</span><div class="fnode oval" style="width: 250px;">"¡Gracias por registrarte! Acá tenés el acceso."</div></div><div class="farrow"><i class="fa-solid fa-arrow-right"></i></div><div class="flow-step"><span class="ftag">Día 1 (+24 h)</span><div class="fnode rect" style="width: 250px;">"¿Pudiste ver el material? Respondé si tenés dudas."</div></div><div class="farrow"><i class="fa-solid fa-arrow-right"></i></div><div class="flow-step"><span class="ftag">Día 3 (+72 h)</span><div class="fnode rect" style="width: 250px;">"Tenemos una oferta que vence mañana. ¿Te interesa?"</div></div></div><p class="flow-legend">En WhatsApp la apertura ronda el <strong>90 %</strong>. La ventaja es la consistencia: a una persona se le olvida el día 3; a la automatización, nunca.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">06 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Chatbots de Reglas y Errores Comunes</h2>
+        <div class="content-area">
+<div class="two-column tiled" style="grid-template-columns: 1fr 1fr;"><div><h3><i class="fa-solid fa-sitemap"></i> Un árbol de decisiones</h3><p>No todo chatbot necesita IA. "Precios" → lista de precios; "Soporte" → pasa a un humano.</p><p style="margin-top: 12px;"><strong>En Make:</strong> webhook del mensaje → Router que analiza el texto → respuesta por WhatsApp.</p></div><div><h3><i class="fa-solid fa-triangle-exclamation"></i> Lo que no hay que hacer</h3><p><strong>Mensajes masivos sin consentimiento:</strong> si te marcan como spam, Meta suspende el número para siempre.</p><p style="margin-top: 12px;"><strong>Sin salida humana:</strong> siempre "Hablar con una persona" o una rama <em>fallback</em> que avise por Slack.</p></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">07 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Proyecto Ejemplo: el Drip de una Estadía</h2>
+        <div class="content-area">
+<div class="tiled-content"><div class="tile"><div class="icon-box"><i class="fa-solid fa-calendar-check"></i></div><h3>Al reservar</h3><p>Confirmación con los datos de la propiedad. El huésped acaba de escribir: texto libre.</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-key"></i></div><h3>Un día antes del check-in</h3><p>Recordatorio con horario y ubicación. Pasaron más de 24 h: <strong>plantilla</strong>.</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-star"></i></div><h3>Después del check-out</h3><p>Pedido de reseña. También <strong>plantilla</strong>.</p></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">08 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Práctica 3: Plantilla + Filtro de 24 h</h2>
+        <div class="content-area">
+<span class="moment-badge live"><i class="fa-solid fa-flask-vial"></i> Paso 3 de la Pre-Entrega 5 · 10 minutos</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-file-signature"></i> Redactá una <strong>plantilla</strong> de seguimiento para tu proceso con variables {{1}}, {{2}}.</li>
+<li><i class="fa-solid fa-filter"></i> Pensá el <strong>filtro</strong>: último mensaje del cliente hace menos de 24 h → texto libre; si no → plantilla.</li>
+</ul></div><p class="note-text">En el sandbox de Twilio hay plantillas de prueba; las propias requieren aprobación de Meta en una cuenta real.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">09 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container break-slide">
+        <div></div>
+        <div class="transition-layout">
+            <div class="break-logo"><i class="fa-solid fa-mug-hot"></i></div>
+            <h2>Break</h2>
+            <p>Andá por un cafecito o un mate… ¡volvemos en un ratito!</p>
+        </div>
+        <div class="slide-footer" style="border-top-color: rgba(248, 242, 232, 0.15);">
+            <div class="brand-logo" style="color: var(--blanco-lienzo);">CODER<span>HOUSE</span></div>
+            <div class="slide-index" style="color: rgba(248, 242, 232, 0.5);">10 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Tema 02</span>
+            <h2>Orquestación Multicanal: Email a Slack y WhatsApp</h2>
+            <p style="font-size: 20px;">Mandás un mail urgente, pasan 3 horas, escribís por WhatsApp… y el que te atiende no sabe nada del mail. Tenés que explicar todo de nuevo.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">11 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Multicanalidad no es Orquestación</h2>
+        <div class="content-area">
+<div class="tiled-content"><div class="tile"><div class="icon-box"><i class="fa-solid fa-phone-volume"></i></div><h3>Multicanalidad básica</h3><p>Muchos teléfonos en el escritorio. Si suenan todos a la vez, caos.</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-music"></i></div><h3>Orquestación</h3><p>Un director que decide cuándo entra el violín (email) y, si el público no aplaude, la trompeta (WhatsApp).</p></div></div><div style="margin-top: 20px;"><span class="moment-badge tip"><i class="fa-solid fa-star"></i> Los 3 pilares de la orquestación</span></div><div class="tiled-content"><div class="tile"><div class="icon-box"><i class="fa-solid fa-bullseye"></i></div><h3>Centralización</h3><p>Una fuente de verdad: Slack.</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-gears"></i></div><h3>Automatización</h3><p>Make u n8n + la IA deciden.</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-comments"></i></div><h3>Contexto</h3><p>El cliente nunca se repite.</p></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">12 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">La Arquitectura: Email → Slack → WhatsApp</h2>
+        <div class="content-area">
+<div class="flow"><div class="flow-step"><span class="ftag">Trigger</span><div class="fnode oval">Gmail: llega un correo</div></div><div class="farrow"><i class="fa-solid fa-arrow-right"></i></div><div class="flow-step"><span class="ftag">Acción (IA)</span><div class="fnode rect">OpenAI: JSON con resumen + prioridad 1–5</div></div><div class="farrow"><i class="fa-solid fa-arrow-right"></i></div><div class="flow-step"><span class="ftag">Decisión</span><div class="fnode diamond"><span>¿Prioridad = 5?</span></div></div><div class="farrow"><i class="fa-solid fa-arrow-right"></i></div><div class="fbranch"><div class="fbranch-row"><span class="fchip">Sí</span><div class="fnode rect">WhatsApp al cliente (formato internacional)</div></div><div class="fbranch-row"><span class="fchip no">No</span><div class="fnode rect">Solo el aviso en Slack</div></div></div><div class="farrow"><i class="fa-solid fa-arrow-right"></i></div><div class="flow-step"><span class="ftag">Fin / Output</span><div class="fnode oval">Equipo avisado y cliente atendido</div></div></div><p class="flow-legend">La rama de <strong>Slack corre siempre</strong> (resumen + link al correo); WhatsApp solo si es urgente. Email para el detalle, Slack de comando, WhatsApp para el cierre.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">13 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">¿Qué Canal Uso?</h2>
+        <div class="content-area">
+<div class="table-layout"><table><thead><tr><th>Canal</th><th>Urgencia</th><th>Uso ideal</th><th>Lo que siente el cliente</th></tr></thead><tbody><tr><td><strong>Email</strong></td><td>Baja / media</td><td>Documentación, propuestas largas, confirmaciones</td><td>"Es profesional y está documentado"</td></tr><tr><td><strong>Slack</strong></td><td>Interna</td><td>Coordinación del equipo, alertas de leads</td><td>"Estamos todos alineados"</td></tr><tr><td><strong>WhatsApp</strong></td><td>Alta</td><td>Recordatorios de citas, ventas calientes, soporte inmediato</td><td>"Me están dando prioridad personal"</td></tr></tbody></table></div><p class="note-text">Para reflexionar: si fueras tu propio cliente, ¿cuándo un WhatsApp automático te ayuda y cuándo te invade? Esa es la regla del filtro.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">14 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Errores y Mejores Prácticas</h2>
+        <div class="content-area">
+<div class="table-layout"><table><thead><tr><th>Error</th><th>Mejor práctica</th></tr></thead><tbody><tr><td><strong>Efecto metralleta</strong></td><td>Mail + Slack + WhatsApp por cada correo. WhatsApp solo con urgencia, o tras una espera si no abrió el mail.</td></tr><tr><td><strong>Perder el hilo</strong></td><td>Que las respuestas de WhatsApp también lleguen a Slack: Email → Slack → WhatsApp → Slack.</td></tr><tr><td><strong>No manejar el consentimiento</strong></td><td>Que en el formulario el cliente acepte ser contactado por medios electrónicos o móvil.</td></tr></tbody></table></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">15 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Demo: la Inmobiliaria en Tres Canales</h2>
+        <div class="content-area">
+<div class="two-column"><div><span class="moment-badge live"><i class="fa-solid fa-play"></i> Proyecto ejemplo · Run once en vivo</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-envelope"></i> <strong>Mail tranquilo:</strong> "¿Tienen cabañas para el verano que viene?" → prioridad 2 → <strong>solo Slack</strong>.</li>
+<li><i class="fa-solid fa-envelope-circle-check"></i> <strong>Mail urgente:</strong> "Llegamos mañana y no encontramos la llave" → prioridad 5 → <strong>Slack + WhatsApp</strong>.</li>
+</ul></div></div><div><div class="tile" style="height: 260px;"><div class="icon-box"><i class="fa-solid fa-lightbulb"></i></div><h3>Qué mirar</h3><p>En el Run once, qué ramas se encienden en cada caso. Es exactamente la evidencia que pide la PE5.</p></div></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">16 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Práctica 4: el Router Multicanal</h2>
+        <div class="content-area">
+<span class="moment-badge live"><i class="fa-solid fa-flask-vial"></i> Paso 4 de la Pre-Entrega 5 · 10 minutos</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-code-branch"></i> Agregá el <strong>Router</strong> después de OpenAI en tu escenario de la clase 9.</li>
+<li><i class="fa-brands fa-slack"></i> <strong>Rama Slack</strong> (sin filtro): resumen al canal del equipo.</li>
+<li><i class="fa-brands fa-whatsapp"></i> <strong>Rama WhatsApp</strong> (filtro prioridad = 5): mensaje dinámico en formato internacional.</li>
+<li><i class="fa-solid fa-play"></i> Run once con un mail urgente y uno tranquilo.</li>
+</ul></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">17 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge live">✅ Entregable evaluado del Módulo</span>
+            <h2>Pre-Entrega 5: Estrategia Multicanal + Pipeline</h2>
+            <p style="font-size: 20px;">Una clínica con problemas de comunicación: los pacientes no leen los mails, los médicos no se enteran de los cambios y la recepción está saturada.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">18 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Parte 1: ¿Qué Canal para Cada Escenario?</h2>
+        <div class="content-area">
+<div class="table-layout"><table><thead><tr><th></th><th>Escenario de la clínica</th></tr></thead><tbody><tr><td><strong>A</strong></td><td>Un paciente nuevo necesita sus credenciales y el reglamento de privacidad (PDF de 5 páginas).</td></tr><tr><td><strong>B</strong></td><td>Fuga de agua en el consultorio 4: mantenimiento avisa a recepción que no asigne pacientes por 2 horas.</td></tr><tr><td><strong>C</strong></td><td>Cirugía mañana 8:00: el paciente tiene que confirmar 8 h de ayuno; si no responde, se cancela.</td></tr><tr><td><strong>D</strong></td><td>Balance mensual de facturación para los socios.</td></tr><tr><td><strong>E</strong></td><td>La IA detecta 3 mensajes con "urgencia" por WhatsApp sin respuesta: ¿dónde se avisa al equipo?</td></tr></tbody></table></div><p class="note-text">Un renglón por escenario, al menos 3 conceptos técnicos (asíncrono, tasa de apertura, canal compartido, trazabilidad) y por qué se descartan los otros dos canales.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">19 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Parte 2: el Blueprint y el Formato</h2>
+        <div class="content-area">
+<div class="two-column tiled" style="grid-template-columns: 1fr 1fr;"><div><h3><i class="fa-solid fa-diagram-project"></i> El blueprint de Make</h3><p>✓ Trigger en <strong>Gmail</strong> conectado a una <strong>IA que clasifica la prioridad</strong>.</p><p>✓ <strong>Router</strong> que deriva al canal inmediato si la prioridad es máxima.</p><p>✓ Salida a <strong>Slack</strong> (resumen) y a <strong>WhatsApp API</strong> (mensaje dinámico, formato internacional).</p></div><div><h3><i class="fa-solid fa-link"></i> Un solo link público</h3><p>Google Doc o Notion con la <strong>tabla</strong> + el <strong>JSON del blueprint</strong> pegado como texto + la <strong>captura del Run once</strong> exitoso.</p><p style="margin-top: 12px;">El PDF del escenario A es parte del enunciado: no se entrega.</p></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">20 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">¿Cómo se Evalúa?</h2>
+        <div class="content-area">
+<div class="table-layout"><table><thead><tr><th>Criterio</th><th>Qué se evalúa</th><th>Peso</th></tr></thead><tbody><tr><td><strong>Estrategia de comunicación</strong></td><td>Tabla de 5 escenarios: canal correcto, ≥3 conceptos técnicos, descarte fundamentado.</td><td><strong>20 %</strong></td></tr><tr><td><strong>Orquestación multicanal integrada</strong></td><td>Trigger en Gmail + IA que analiza el texto y clasifica la prioridad.</td><td><strong>35 %</strong></td></tr><tr><td><strong>Lógica de distribución crítica</strong></td><td>Router que desvía al canal inmediato si la prioridad es máxima.</td><td><strong>25 %</strong></td></tr><tr><td><strong>Formato de salida y alertas</strong></td><td>Resumen en Slack + WhatsApp dinámico en formato internacional.</td><td><strong>20 %</strong></td></tr></tbody></table></div><p class="note-text">Total: 100 pts · Aprobación: 70 pts</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">21 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Cerramos el Módulo 5</h2>
+        <div class="content-area">
+<div class="two-column"><div><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-brain"></i> La IA <strong>entiende</strong> el mensaje, Slack <strong>informa</strong> al equipo y WhatsApp <strong>actúa</strong> en los momentos críticos.</li>
+<li><i class="fa-solid fa-calendar-check"></i> <strong>PE5:</strong> se recomienda entregarla antes de la <strong>clase 13</strong>.</li>
+</ul></div></div><div><div class="tile" style="height: 260px;"><div class="icon-box"><i class="fa-solid fa-forward"></i></div><h3>Próximo: Módulo 6 · Claude</h3><p>Razonamiento, documentos y cómo procesar volumen gastando menos. Antes de la clase 11: cuenta en la consola de Anthropic con un saldo mínimo y límite de gasto.</p></div></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">22 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div class="content-area" style="align-items: center; justify-content: center; text-align: center;">
+            <div style="display: flex; gap: 25px; align-items: flex-end; justify-content: center; margin-bottom: 20px;">
+                <i class="fa-solid fa-circle-question" style="font-size: 50px; color: var(--amarillo-solar);"></i>
+                <i class="fa-solid fa-circle-question" style="font-size: 90px; color: var(--naranja-horizonte);"></i>
+                <i class="fa-solid fa-circle-question" style="font-size: 60px; color: var(--rosa-energia);"></i>
+            </div>
+            <h1 style="font-size: 64px;">¿Dudas? ¿Consultas?</h1>
+            <p style="font-size: 22px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">¡Cerramos el Módulo 5!</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">23 / 23</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Presentation navigation controls toolbar -->
+<div class="controls-toolbar">
+    <button class="control-btn" id="prev-slide"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+    <div class="slide-dots" id="slide-dots"></div>
+    <button class="control-btn" id="next-slide">Siguiente <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<script>
+    // Slider Presentation Logic
+    const slides = document.querySelectorAll('.slide-container');
+    const prevBtn = document.getElementById('prev-slide');
+    const nextBtn = document.getElementById('next-slide');
+    const dotsContainer = document.getElementById('slide-dots');
+
+    let currentSlideIndex = 0;
+
+    // Create Navigation Indicators Dynamically
+    slides.forEach((slide, idx) => {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (idx === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => {
+            goToSlide(idx);
+        });
+        dotsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.dot');
+
+    function updateControls() {
+        dots.forEach((dot, idx) => {
+            if (idx === currentSlideIndex) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }
+
+    function goToSlide(index) {
+        if (index < 0 || index >= slides.length) return;
+
+        slides[currentSlideIndex].classList.remove('active');
+        currentSlideIndex = index;
+        slides[currentSlideIndex].classList.add('active');
+
+        updateControls();
+    }
+
+    // Keyboard Navigation Handlers
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') {
+            goToSlide(currentSlideIndex + 1);
+        } else if (e.key === 'ArrowLeft') {
+            goToSlide(currentSlideIndex - 1);
+        }
+    });
+
+    // Button Click Event Listeners
+    prevBtn.addEventListener('click', () => {
+        goToSlide(currentSlideIndex - 1);
+    });
+
+    nextBtn.addEventListener('click', () => {
+        goToSlide(currentSlideIndex + 1);
+    });
+</script>
+
+</body>
+</html>

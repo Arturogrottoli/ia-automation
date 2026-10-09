@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 03 - No-Code vs Low-Code, Costos y JSON | Coderhouse</title>
+    <!-- Coder 4.0 Core Typography: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ==========================================================================
+           CODER 4.0 DESIGN SYSTEM & VARS
+           ========================================================================== */
+        :root {
+            --blanco-lienzo: #F8F2E8;
+            --negro-coder: #171717;
+            --naranja-oscuro: #260700;
+            --naranja-horizonte: #FF632B;
+            --amarillo-solar: #FE872D;
+            --rosa-energia: #FE64A3;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --transition-speed: 0.4s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #dcd6cd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: var(--font-main);
+            overflow: hidden;
+        }
+
+        /* Slide Viewer (Absolute 1280x720 No-Scale-Shift) */
+        .presentation-viewport {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            border-radius: 16px;
+            overflow: hidden;
+            background-color: var(--blanco-lienzo);
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            color: var(--negro-coder);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 50px 70px 40px 70px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity var(--transition-speed) ease-in-out, visibility var(--transition-speed) ease-in-out;
+            z-index: 1;
+        }
+
+        .slide-container.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        /* Abstract Brand Accents: Subtly warm gradients connecting to Coder 4.0 */
+        .slide-container::before {
+            content: '';
+            position: absolute;
+            top: -150px;
+            right: -150px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(255,99,43,0.06) 0%, rgba(248,242,232,0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .slide-container > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Typography & Hierarchy */
+        h1 {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+        }
+
+        .slide-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.2;
+            letter-spacing: -1px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .slide-title::after {
+            content: '';
+            flex-grow: 1;
+            height: 2px;
+            background-color: rgba(38, 7, 0, 0.1);
+            margin-left: 15px;
+        }
+
+        p, li {
+            font-size: 17px;
+            line-height: 1.5;
+            color: #3d3430;
+            font-weight: 400;
+        }
+
+        /* Content Area Layout Wrapper */
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* Grid & Column Definitions */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 45px;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Coder 4.0 Split Card layouts */
+        .two-column.tiled > div {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            padding: 35px;
+            height: 360px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+        }
+
+        .two-column.tiled h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--naranja-horizonte);
+            margin-bottom: 12px;
+        }
+
+        /* Warm Retro Photography Frame */
+        .image-wrapper {
+            border-radius: 16px;
+            height: 340px;
+            overflow: hidden;
+            width: 100%;
+            border: 4px solid #ffffff;
+            box-shadow: 0 10px 25px rgba(38, 7, 0, 0.08);
+        }
+
+        .image-wrapper img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        /* Custom 2D Filled Icons & Tiles */
+        .tiled-content {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        .tile {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+        }
+
+        .tile .icon-box {
+            background-color: rgba(255, 99, 43, 0.1);
+            color: var(--naranja-horizonte);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .tile h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--naranja-oscuro);
+            margin-bottom: 8px;
+        }
+
+        .tile p {
+            font-size: 14px;
+        }
+
+        /* Bullet List styling */
+        .bullet-list ul {
+            list-style: none;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+        }
+
+        .bullet-list li i {
+            position: absolute;
+            left: 0;
+            top: 3px;
+            color: var(--naranja-horizonte);
+            font-size: 16px;
+        }
+
+        /* Footer & Brand Branding Mark */
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(38, 7, 0, 0.06);
+            padding-top: 15px;
+            width: 100%;
+        }
+
+        .slide-footer .brand-logo {
+            font-weight: 800;
+            font-size: 16px;
+            color: var(--naranja-oscuro);
+            letter-spacing: -0.5px;
+        }
+
+        .slide-footer .brand-logo span {
+            color: var(--naranja-horizonte);
+        }
+
+        .slide-footer .slide-index {
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(38, 7, 0, 0.4);
+        }
+
+        /* Slide Type Banners ("Momentos de la Clase") */
+        .moment-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 30px;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            align-self: flex-start;
+        }
+
+        .moment-badge.live {
+            background-color: var(--naranja-horizonte);
+        }
+
+        .moment-badge.bug {
+            background-color: var(--rosa-energia);
+        }
+
+        .moment-badge.tip {
+            background-color: var(--amarillo-solar);
+            color: var(--naranja-oscuro);
+        }
+
+        /* Slido Interactive layout */
+        .slido-box {
+            background-color: #ffffff;
+            border: 2px dashed var(--naranja-horizonte);
+            border-radius: 20px;
+            padding: 35px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(255, 99, 43, 0.05);
+        }
+
+        .slido-box h3 {
+            font-size: 26px;
+            color: var(--naranja-oscuro);
+            margin-bottom: 10px;
+        }
+
+        .slido-code {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--naranja-horizonte);
+            margin: 15px 0;
+            letter-spacing: -1px;
+        }
+
+        /* Transition slide */
+        .transition-layout {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .transition-layout h2 {
+            font-size: 60px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.1;
+            margin-bottom: 15px;
+            letter-spacing: -2px;
+        }
+
+        .transition-layout hr {
+            width: 80px;
+            height: 5px;
+            background-color: var(--naranja-horizonte);
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        /* Clean retro table */
+        .table-layout {
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+            width: 100%;
+        }
+
+        .table-layout table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-layout th, .table-layout td {
+            padding: 12px 20px;
+            text-align: left;
+            border-bottom: 1px solid rgba(38, 7, 0, 0.06);
+            font-size: 14px;
+        }
+
+        .table-layout th {
+            background-color: rgba(38, 7, 0, 0.03);
+            color: var(--naranja-oscuro);
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .table-layout tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Break Slide Design */
+        .break-slide {
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+        }
+
+        .break-slide::before {
+            display: none;
+        }
+
+        .break-slide h2 {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--blanco-lienzo);
+            margin-bottom: 20px;
+            letter-spacing: -1.5px;
+        }
+
+        .break-slide p {
+            color: rgba(248, 242, 232, 0.75);
+            font-size: 22px;
+        }
+
+        .break-logo {
+            font-size: 80px;
+            color: var(--naranja-horizonte);
+            margin-bottom: 30px;
+        }
+
+        /* Q&A / Legal section */
+        .legal-notice {
+            font-size: 10px;
+            line-height: 1.4;
+            color: rgba(38, 7, 0, 0.4);
+            text-align: justify;
+            margin-top: 20px;
+        }
+
+        /* Presentation controls toolbar */
+        .controls-toolbar {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            align-items: center;
+        }
+
+        .control-btn {
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .control-btn:hover {
+            background-color: var(--naranja-horizonte);
+        }
+
+        .slide-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(38, 7, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .dot.active {
+            background-color: var(--naranja-horizonte);
+            width: 25px;
+            border-radius: 10px;
+        }
+
+        /* Code Block Container */
+        .code-block {
+            background-color: #ffffff;
+            border-left: 4px solid var(--naranja-horizonte);
+            padding: 15px 20px;
+            font-family: monospace;
+            font-size: 13px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            white-space: pre-wrap;
+            line-height: 1.4;
+        }
+
+        /* Small note under tables */
+        .note-text {
+            margin-top: 18px;
+            font-size: 14px;
+            font-style: italic;
+            color: rgba(38, 7, 0, 0.6);
+        }
+
+        /* ==========================================================================
+           FLOWCHART (Óvalo / Rectángulo / Rombo) — extensión para diagramas de flujo
+           ========================================================================== */
+        .flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            gap: 10px;
+        }
+
+        .flow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fnode {
+            background-color: #ffffff;
+            color: var(--naranja-oscuro);
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.3;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.04);
+        }
+
+        .fnode.oval {
+            border: 2px solid var(--naranja-horizonte);
+            border-radius: 999px;
+            width: 170px;
+            min-height: 70px;
+            padding: 10px 18px;
+        }
+
+        .fnode.rect {
+            border: 2px solid var(--naranja-oscuro);
+            border-radius: 6px;
+            width: 170px;
+            min-height: 64px;
+            padding: 10px 14px;
+        }
+
+        .fnode.diamond {
+            width: 180px;
+            height: 120px;
+            background-color: var(--amarillo-solar);
+            clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+            box-shadow: none;
+            position: relative;
+        }
+
+        .fnode.diamond span {
+            position: absolute;
+            inset: 2px 3px;
+            background-color: #FFF4EA;
+            clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 34px;
+        }
+
+        .ftag {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--naranja-horizonte);
+        }
+
+        .farrow {
+            color: rgba(38, 7, 0, 0.35);
+            font-size: 18px;
+        }
+
+        .fbranch {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .fbranch-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fchip {
+            font-size: 11px;
+            font-weight: 800;
+            padding: 3px 9px;
+            border-radius: 20px;
+            color: #ffffff;
+            background-color: var(--naranja-horizonte);
+            min-width: 34px;
+            text-align: center;
+        }
+
+        .fchip.no {
+            background-color: var(--rosa-energia);
+        }
+
+        .flow-legend {
+            margin-top: 28px;
+            font-size: 14px;
+            color: rgba(38, 7, 0, 0.6);
+            text-align: center;
+        }
+
+        .flow-legend strong {
+            color: var(--naranja-oscuro);
+        }
+
+        /* Tile with a shape preview instead of an icon */
+        .shape-preview {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .shape-preview .fnode {
+            font-size: 12px;
+            width: 130px;
+            min-height: 52px;
+        }
+
+        .shape-preview .fnode.diamond {
+            width: 130px;
+            height: 70px;
+        }
+
+        .shape-preview .fnode.diamond span {
+            padding: 0 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="presentation-viewport">
+
+    <div class="slide-container active">
+        <div></div>
+        <div class="transition-layout" style="margin-bottom: 30px;">
+            <span class="moment-badge">CODER 4.0 • MÓDULO 2 • CLASE 03</span>
+            <h1 style="font-size: 44px;">No-Code vs Low-Code: Costos y Estructuras de Datos</h1>
+            <p style="font-size: 20px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">Elegir la herramienta correcta, entender cuánto cuesta realmente automatizar y hablar el idioma universal de los datos: JSON</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">01 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">¿Dónde Quedamos?</h2>
+        <div class="content-area">
+<span class="moment-badge live"><i class="fa-solid fa-video"></i> Esta clase queda grabada para que la veas después</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-sitemap"></i> En el Módulo 1 dibujamos el <strong>mapa</strong>: Trigger → Inputs → Acciones/Decisión → Output, con óvalo, rectángulo y rombo.</li>
+<li><i class="fa-solid fa-shield-halved"></i> Le sumamos la <strong>capa de gobernanza</strong>: minimización, trazabilidad, revisión humana y nivel de riesgo.</li>
+<li><i class="fa-solid fa-calendar-check"></i> La <strong>Pre-Entrega 1</strong> se recomienda entregar antes de la clase 5. ¿Dudas?</li>
+</ul></div><p class="note-text">Hoy empezamos a elegir las herramientas y a empaquetar los datos.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">02 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Objetivos de la Clase</h2>
+        <div class="content-area">
+<div class="bullet-list"><ul>
+<li><i class="fa-solid fa-scale-balanced"></i> Explicar la diferencia entre <strong>No-Code y Low-Code</strong> y cuándo conviene cada uno.</li>
+<li><i class="fa-solid fa-coins"></i> Leer el modelo de costos: <strong>Tasks</strong> (Zapier), <strong>Operations</strong> (Make) y <strong>Tokens</strong> (OpenAI).</li>
+<li><i class="fa-solid fa-code"></i> Reconocer <strong>Objetos { }</strong> y <strong>Arrays [ ]</strong> y escribir un JSON válido.</li>
+<li><i class="fa-solid fa-flag-checkered"></i> Salir con el <strong>stack elegido</strong>, una <strong>estimación de costos</strong> y la <strong>lista de variables</strong> de tu proceso.</li>
+</ul></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">03 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Tema 01</span>
+            <h2>Diferencias Clave entre No-Code y Low-Code</h2>
+            <p style="font-size: 20px;">Comprar una cocina modular que encaja perfecto, o una semi-industrial donde podés soldar piezas a medida. Las dos sirven; depende de qué querés cocinar.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">04 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">No-Code: la Democratización de la Creación</h2>
+        <div class="content-area">
+<div class="two-column"><div><span class="moment-badge tip"><i class="fa-solid fa-wand-magic-sparkles"></i> Si sabés usar PowerPoint o Canva, podés usar No-Code</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-hand-pointer"></i> Crear apps y automatizaciones <strong>sin escribir código</strong>: interfaz visual, <em>drag and drop</em>.</li>
+<li><i class="fa-solid fa-user-gear"></i> Quien conoce el problema es quien construye la solución. Antes hacía falta un programador y un script.</li>
+</ul></div></div><div><div class="tile" style="height: 260px;"><div class="icon-box"><i class="fa-solid fa-building"></i></div><h3>Ejemplo: una inmobiliaria</h3><p>50 solicitudes por día. Con Zapier, en 10 minutos: el dato va a Google Sheets → se envía un mail de bienvenida → se crea un recordatorio para llamar en 24 horas.</p></div></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">05 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Low-Code: Potencia con un Toque de Personalización</h2>
+        <div class="content-area">
+<div class="two-column"><div><span class="moment-badge"><i class="fa-solid fa-puzzle-piece"></i> Aparece cuando los bloques se quedan cortos</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-code"></i> Visual y con bloques, pero permite (o exige) <strong>pequeños fragmentos de código</strong>.</li>
+<li><i class="fa-solid fa-users-gear"></i> Para quien tiene base técnica mínima o necesita integraciones profundas o seguridad empresarial.</li>
+</ul></div></div><div><div class="tile" style="height: 260px;"><div class="icon-box"><i class="fa-solid fa-calculator"></i></div><h3>Cuándo aparece</h3><p>El mail de bienvenida tiene que incluir un cálculo con el presupuesto del cliente y datos de mercado de una fuente sin conector. Ahí escribís una pequeña función.</p></div></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">06 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">¿Cuál Elegir Según tu Rol?</h2>
+        <div class="content-area">
+<div class="two-column tiled" style="grid-template-columns: 1fr 1fr;"><div><h3><i class="fa-solid fa-user-tie"></i> Freelancer o dueño de negocio → No-Code</h3><p>Automatizar la facturación: Stripe + software contable + correo. Hay conectores estándar para todo.</p><p style="margin-top: 12px;"><strong>Decisión:</strong> No-Code (Make, Zapier).</p></div><div><h3><i class="fa-solid fa-rocket"></i> Marketer en una startup que crece → Low-Code</h3><p>Los leads vienen de una base antigua sin conector. Hace falta escribir la conexión.</p><p style="margin-top: 12px;"><strong>Decisión:</strong> Low-Code (n8n, Retool) y algo de JavaScript.</p></div></div><p class="note-text">La pregunta clave: ¿qué es lo más complejo que mi proceso tendrá que hacer en 6 meses?</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">07 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Así se Justifica una Elección (es el texto de la PE2)</h2>
+        <div class="content-area">
+<span class="moment-badge tip"><i class="fa-solid fa-pen"></i> Ejemplo del programa · mínimo 100 palabras</span><div class="code-block" style="font-family: var(--font-main); font-size: 16px; line-height: 1.6; padding: 24px 30px; font-style: italic; white-space: normal;">"Para automatizar mi facturación elijo una solución No-Code como Make o Zapier. En cuanto a <strong>velocidad</strong>, puedo conectar Stripe, mi software de contabilidad y el correo en una sola tarde usando conectores estándar. En <strong>flexibilidad</strong>, no necesito nada a medida: el proceso es estable y se repite igual todos los meses. Y en <strong>límites técnicos</strong>, mi volumen es bajo, muy por debajo de los topes del plan básico. Pasar a Low-Code solo agregaría complejidad y costo sin ningún beneficio real."</div><p class="note-text">Fijate: argumenta con velocidad, flexibilidad y límites técnicos. Eso es lo que evalúa la rúbrica.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">08 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Errores y Trampas Conceptuales</h2>
+        <div class="content-area">
+<div class="table-layout"><table><thead><tr><th>Error</th><th>Realidad</th></tr></thead><tbody><tr><td><strong>"No-Code significa cero límites"</strong></td><td>El negocio crece y la plataforma "no te deja". Preguntate qué tendrá que hacer tu proceso en 6 meses.</td></tr><tr><td><strong>"Low-Code es igual de fácil"</strong></td><td>Aparecen API, JSON, Webhooks, variables de entorno. Hay que entender cómo fluye la información.</td></tr><tr><td><strong>"El código no existe"</strong></td><td>Está oculto bajo la interfaz. Si la plataforma falla, dependés del proveedor: <strong>vendor lock-in</strong>.</td></tr></tbody></table></div><p class="note-text">No son enemigos, son escalones: No-Code para la agilidad, Low-Code para la escalabilidad.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">09 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Práctica 1: Elegí el Stack de tu Proceso</h2>
+        <div class="content-area">
+<span class="moment-badge live"><i class="fa-solid fa-flask-vial"></i> Paso 1 de la Pre-Entrega 2 · 13 minutos</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-list-ol"></i> Desglosá los pasos de tu proceso del Módulo 1 (los rectángulos de tu diagrama).</li>
+<li><i class="fa-solid fa-plug"></i> Para cada paso: ¿alcanza con un conector estándar o hace falta algo a medida?</li>
+<li><i class="fa-solid fa-scale-balanced"></i> Decidí: <strong>No-Code (Zapier/Make) o Low-Code (n8n)</strong>.</li>
+<li><i class="fa-solid fa-pen"></i> Anotá 2 o 3 razones usando <strong>flexibilidad, velocidad y límites técnicos</strong>.</li>
+</ul></div><p class="note-text">Es el borrador del párrafo de justificación de la PE2.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">10 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container break-slide">
+        <div></div>
+        <div class="transition-layout">
+            <div class="break-logo"><i class="fa-solid fa-mug-hot"></i></div>
+            <h2>Break</h2>
+            <p>Andá por un cafecito o un mate… ¡volvemos en un ratito!</p>
+        </div>
+        <div class="slide-footer" style="border-top-color: rgba(248, 242, 232, 0.15);">
+            <div class="brand-logo" style="color: var(--blanco-lienzo);">CODER<span>HOUSE</span></div>
+            <div class="slide-index" style="color: rgba(248, 242, 232, 0.5);">11 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Tema 02</span>
+            <h2>Costos, Límites de Ejecución y Estructuras de Datos</h2>
+            <p style="font-size: 20px;">Un flujo espectacular… y a fin de mes llega una factura de 200 USD porque nadie calculó el pago por uso. O se frena porque la IA no entendió la lista que le mandaste.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">12 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Modelos de Costos: Tasks, Operations y Tokens</h2>
+        <div class="content-area">
+<div class="table-layout"><table><thead><tr><th>Herramienta</th><th>Unidad</th><th>Cómo cuenta</th></tr></thead><tbody><tr><td><strong>Zapier</strong></td><td>Task</td><td>Cada acción exitosa. El trigger normalmente no suma. Email → Excel = 1 task.</td></tr><tr><td><strong>Make</strong></td><td>Operation</td><td>Cada paso. Email (1) + Excel (1) = 2 operations. Por eso sus paquetes son más grandes.</td></tr><tr><td><strong>OpenAI</strong></td><td>Token</td><td>"Pedazos de palabras": 1.000 tokens ≈ 750 palabras. Pagás lo que enviás (input) y lo que responde (output).</td></tr></tbody></table></div><p class="note-text">Automático no significa gratuito.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">13 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">La Analogía del Uber</h2>
+        <div class="content-area">
+<div class="tiled-content"><div class="tile"><div class="icon-box"><i class="fa-solid fa-mobile-screen"></i></div><h3>La suscripción</h3><p>Es tener la app instalada: a veces hay un cargo base mensual.</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-car"></i></div><h3>La ejecución (run)</h3><p>Es el viaje que pedís cada vez que el flujo corre.</p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-road"></i></div><h3>Los kilómetros</h3><p>Tokens o tasks: lo que define el costo. Un resumen de 2 líneas es corto; un PDF de 50 páginas, largo.</p></div></div><p class="note-text">Rate limits, los semáforos: un plan gratuito puede permitir 3 pedidos por minuto. Si mandás 100 de golpe, te frena.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">14 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">JSON: Objetos y Arrays</h2>
+        <div class="content-area">
+<div class="two-column tiled" style="grid-template-columns: 1fr 1fr;"><div><h3><i class="fa-solid fa-id-card"></i> Objeto { } — la "ficha personal"</h3><p>Información de una sola cosa, en pares <strong>clave: valor</strong>.</p><div class="code-block" style="font-size: 13px; margin-bottom: 16px;">{ "nombre": "Laura Pérez",
+  "email": "laura@email.com",
+  "es_cliente_vip": true,
+  "puntos_acumulados": 150 }</div></div><div><h3><i class="fa-solid fa-list"></i> Array [ ] — la "lista de compras"</h3><p>Varias cosas del mismo tipo.</p><div class="code-block" style="font-size: 13px; margin-bottom: 16px;">["Diseño Logo", "Redacción SEO", "Gestión Ads"]</div><p style="margin-top: 10px;">Clave entre comillas dobles; texto entre comillas; números y true/false sin comillas.</p></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">15 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Anidamiento: Fichas Dentro de Carpetas</h2>
+        <div class="content-area">
+<div class="two-column" style="grid-template-columns: 1.1fr 0.9fr;"><div><div class="code-block" style="font-size: 14px; margin-bottom: 16px;">{
+  "fecha": "2026-05-10",
+  "vendedor": "Carlos Ruiz",
+  "ventas_realizadas": [
+    {"producto": "Suscripción Mensual", "monto": 29.99},
+    {"producto": "Pack Iconos", "monto": 15.00},
+    {"producto": "Asesoría 1h", "monto": 50.00}
+  ],
+  "total_dia": 94.99
+}</div></div><div><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-folder-open"></i> Un <strong>objeto</strong> principal (el reporte)…</li>
+<li><i class="fa-solid fa-layer-group"></i> …que contiene un <strong>array</strong> de otros objetos (cada venta).</li>
+<li><i class="fa-solid fa-filter"></i> Entender esto es lo que después permite armar filtros avanzados en Make.</li>
+</ul></div></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">16 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Casos Reales y Errores Comunes</h2>
+        <div class="content-area">
+<div class="table-layout"><table><thead><tr><th>Caso / error</th><th>Qué pasa y qué hacer</th></tr></thead><tbody><tr><td><strong>Marketer freelance</strong></td><td>Usaba el modelo más caro para ideas de posts. Pasó al modelo chico: ~90 % más barato, mismo resultado.</td></tr><tr><td><strong>Administrativo de PYME</strong></td><td>El CRM no tiene integración: con un Webhook y un JSON básico (nombre + teléfono) se conecta igual.</td></tr><tr><td><strong>Bucle infinito</strong></td><td>Flujo "mail → fila" y otro "fila → mail": consumen todas las operaciones en minutos.</td></tr><tr><td><strong>JSON sin comillas dobles</strong></td><td>❌ {nombre: "Juan"}  ✅ {"nombre": "Juan"}</td></tr><tr><td><strong>Confundir { } con [ ]</strong></td><td>Llaves para describir una cosa; corchetes para una lista.</td></tr></tbody></table></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">17 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Micro-Práctica: Validá un JSON Roto</h2>
+        <div class="content-area">
+<span class="moment-badge live"><i class="fa-solid fa-bug"></i> 5 minutos · jsonlint.com</span><div class="code-block" style="font-size: 14px; margin-bottom: 16px;">{ 'fecha': '2026-05-10', "vendedor": "Carlos Ruiz", "ventas_realizadas": [ {"producto": "Suscripción Mensual", "monto": 29.99}, {"producto": "Pack Iconos", "monto": 15.00}, ], "total_dia": 44.99 }</div><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-paste"></i> Pegalo en <strong>jsonlint.com</strong> → Validate JSON. Lo que importa del error es el <strong>número de línea</strong>.</li>
+<li><i class="fa-solid fa-magnifying-glass"></i> Tiene <strong>dos errores</strong>: comillas simples y una coma huérfana al final del array.</li>
+<li><i class="fa-solid fa-triangle-exclamation"></i> Ojo: jsonlint valida la <strong>sintaxis</strong>, no la lógica. El total está mal y dice "Valid JSON" igual.</li>
+</ul></div><p class="note-text">Esto es el 40 % de la PE2: "El archivo JSON es 100 % válido en jsonlint.com".</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">18 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Demo: ¿Cuánto Cuesta el Proyecto Ejemplo?</h2>
+        <div class="content-area">
+<div class="two-column"><div><span class="moment-badge live"><i class="fa-solid fa-calculator"></i> Inmobiliaria de alquileres temporarios</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-diagram-project"></i> El escenario del Módulo 3: formulario → OpenAI → router → Airtable → Slack = <strong>~5 operaciones</strong> por consulta.</li>
+<li><i class="fa-solid fa-calendar"></i> 300 consultas por mes × 5 = <strong>~1.500 operaciones</strong>.</li>
+<li><i class="fa-solid fa-circle-exclamation"></i> El plan gratuito de Make trae <strong>1.000</strong> por mes. No alcanza.</li>
+</ul></div></div><div><div class="tile" style="height: 260px;"><div class="icon-box"><i class="fa-solid fa-lightbulb"></i></div><h3>¿Cómo lo resolverían?</h3><p>Filtrar antes de llamar a la IA, agrupar consultas, pasar a un plan pago… o usar n8n self-hosted, que no cobra por operación.</p></div></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">19 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Práctica 2: Costos y Variables de tu Proceso</h2>
+        <div class="content-area">
+<span class="moment-badge live"><i class="fa-solid fa-flask-vial"></i> Paso 2 de la Pre-Entrega 2 · 12 minutos</span><div class="bullet-list"><ul>
+<li><i class="fa-solid fa-repeat"></i> <strong>Estimá el costo:</strong> ¿cuántas veces por mes corre? ¿cuántos pasos tiene? Multiplicá y compará con el plan gratuito.</li>
+<li><i class="fa-solid fa-tags"></i> <strong>Listá las variables:</strong> qué datos viajan por el flujo (ej. nombre, email, presupuesto, fechas).</li>
+<li><i class="fa-solid fa-list"></i> Marcá cuáles son <strong>listas</strong>: van a ser arrays en tu JSON.</li>
+</ul></div><p class="note-text">Tarea para la clase 4: traer la lista de variables. Ahí armamos la base y el JSON.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">20 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Síntesis de la Clase</h2>
+        <div class="content-area">
+<div class="bullet-list"><ul>
+<li><i class="fa-solid fa-stairs"></i> No-Code y Low-Code son <strong>escalones</strong>: agilidad hoy, escalabilidad mañana.</li>
+<li><i class="fa-solid fa-gas-pump"></i> Los costos (tasks, operations, tokens) son la <strong>gasolina</strong>: calculá cuánto rinde el tanque antes de salir.</li>
+<li><i class="fa-solid fa-box"></i> Las estructuras de datos (objetos, arrays, JSON) son los <strong>contenedores de carga</strong>: si no tienen la forma correcta, el destino no los abre.</li>
+<li><i class="fa-solid fa-language"></i> La IA puede ayudarte a cruzar el puente: "escribime un código simple para extraer el nombre de este texto".</li>
+</ul></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">21 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <h2 class="slide-title">Material para Profundizar</h2>
+        <div class="content-area">
+<div class="tiled-content"><div class="tile"><div class="icon-box"><i class="fa-solid fa-check-double"></i></div><h3>jsonlint.com</h3><p>Validar la sintaxis de cualquier JSON antes de entregar.<br><span style="color: var(--naranja-horizonte); font-weight: 600; display: inline-block; margin-top: 10px;">jsonlint.com</span></p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-coins"></i></div><h3>Precios de Make</h3><p>Cuántas operaciones trae cada plan.<br><span style="color: var(--naranja-horizonte); font-weight: 600; display: inline-block; margin-top: 10px;">make.com/en/pricing</span></p></div><div class="tile"><div class="icon-box"><i class="fa-solid fa-coins"></i></div><h3>Precios de Zapier</h3><p>Para comparar tasks con operations.<br><span style="color: var(--naranja-horizonte); font-weight: 600; display: inline-block; margin-top: 10px;">zapier.com/pricing</span></p></div></div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">22 / 23</div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div class="content-area" style="align-items: center; justify-content: center; text-align: center;">
+            <div style="display: flex; gap: 25px; align-items: flex-end; justify-content: center; margin-bottom: 20px;">
+                <i class="fa-solid fa-circle-question" style="font-size: 50px; color: var(--amarillo-solar);"></i>
+                <i class="fa-solid fa-circle-question" style="font-size: 90px; color: var(--naranja-horizonte);"></i>
+                <i class="fa-solid fa-circle-question" style="font-size: 60px; color: var(--rosa-energia);"></i>
+            </div>
+            <h1 style="font-size: 64px;">¿Dudas? ¿Consultas?</h1>
+            <p style="font-size: 22px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">Este es el momento de preguntar todo lo que necesites</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">23 / 23</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Presentation navigation controls toolbar -->
+<div class="controls-toolbar">
+    <button class="control-btn" id="prev-slide"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+    <div class="slide-dots" id="slide-dots"></div>
+    <button class="control-btn" id="next-slide">Siguiente <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<script>
+    // Slider Presentation Logic
+    const slides = document.querySelectorAll('.slide-container');
+    const prevBtn = document.getElementById('prev-slide');
+    const nextBtn = document.getElementById('next-slide');
+    const dotsContainer = document.getElementById('slide-dots');
+
+    let currentSlideIndex = 0;
+
+    // Create Navigation Indicators Dynamically
+    slides.forEach((slide, idx) => {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (idx === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => {
+            goToSlide(idx);
+        });
+        dotsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.dot');
+
+    function updateControls() {
+        dots.forEach((dot, idx) => {
+            if (idx === currentSlideIndex) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }
+
+    function goToSlide(index) {
+        if (index < 0 || index >= slides.length) return;
+
+        slides[currentSlideIndex].classList.remove('active');
+        currentSlideIndex = index;
+        slides[currentSlideIndex].classList.add('active');
+
+        updateControls();
+    }
+
+    // Keyboard Navigation Handlers
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') {
+            goToSlide(currentSlideIndex + 1);
+        } else if (e.key === 'ArrowLeft') {
+            goToSlide(currentSlideIndex - 1);
+        }
+    });
+
+    // Button Click Event Listeners
+    prevBtn.addEventListener('click', () => {
+        goToSlide(currentSlideIndex - 1);
+    });
+
+    nextBtn.addEventListener('click', () => {
+        goToSlide(currentSlideIndex + 1);
+    });
+</script>
+
+</body>
+</html>
