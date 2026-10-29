@@ -1,89 +1,43 @@
-| ✅ `Clase16.html` || ✅ `Clase15.html` || ✅ `Clase14.html` || ✅ `Clase13.html` || ✅ `Clase12.html` || ✅ `Clase11.html` || ✅ `Clase10.html` || ✅ `Clase09.html` || ✅ `Clase08.html` || ✅ `Clase07.html` || ✅ `Clase06.html` || ✅ `Clase05.html` || ✅ `Clase04.html` || ✅ `Clase03.html` |# IA Automation · Comisión 2026
+# AI Automation · Comisión 2026
 
-Material del docente: guion de cada clase, presentaciones, diagramas y el proyecto ejemplo.
+Material de los docentes (Arturo Grottoli y Romina Diaz): filminas, guiones y ejercicios de cada semana.
 
-- **Fuente oficial del programa:** `IA Automation.pdf`. Ante cualquier diferencia con las filminas viejas o con `guia-curso.md`, manda el PDF.
-- **Formato:** 16 encuentros de ~1 h 45 (dos por módulo). Cada carpeta `Clase N/` tiene su `README.md` con el guion minuto a minuto.
-- **Proyecto ejemplo:** una inmobiliaria de alquileres temporarios que se construye en vivo a lo largo del curso. Plan en [Proyecto ejemplo/README.md](Proyecto%20ejemplo/README.md).
+- **Fuente oficial del programa:** `program-summary.pdf`. Reemplaza al programa anterior (`IA Automation.pdf`).
+- **Formato:** **9 semanas**, una por módulo, con **dos clases de 2 horas** por semana.
+- **Cada carpeta `Semana N/`** tiene su `README.md`; cuando la semana está armada, también las filminas, el material de lectura, el guion de las dos clases y los ejercicios.
+- **El hilo del curso:** se arranca por la IA y el prompt engineering, se pasa a n8n, APIs y AI Agents, y se termina en un **asistente autónomo de WhatsApp desplegado** (la Entrega Final).
 
 ---
 
-## Las 16 clases
+## Las 9 semanas
 
-| Clase | Módulo | Contenido | Pre-entrega | Presentación |
+| Semana | Módulo | Contenido | Evaluación | Estado |
 |---|---|---|---|---|
-| [1](Clase%201/README.md) | M1 · Fundamentos | Automatización de procesos (BPA) + arquitectura de flujos | | ✅ `Clase01.html` |
-| [2](Clase%202/README.md) | M1 · Fundamentos | Ética y seguridad | **Brief PE1** | ✅ `Clase02.html` |
-| [3](Clase%203/README.md) | M2 · No-Code y Low-Code | No-Code vs Low-Code + costos y JSON | | ✅ `Clase03.html` |
-| [4](Clase%204/README.md) | M2 · No-Code y Low-Code | Airtable y Omni AI + tu ecosistema | **Brief PE2** | ✅ `Clase04.html` |
-| [5](Clase%205/README.md) | M3 · Make | La interfaz de Make + routers, filtros y transformación | | ✅ `Clase05.html` |
-| [6](Clase%206/README.md) | M3 · Make | JSON y variables + OpenAI y manejo de errores | **Brief PE3** | ✅ `Clase06.html` |
-| [7](Clase%207/README.md) | M4 · n8n | Instalación de n8n + nodos de IA y agentes | | ✅ `Clase07.html` |
-| [8](Clase%208/README.md) | M4 · n8n | HTTP Request + loops y sub-workflows | **Brief PE4** | ✅ `Clase08.html` |
-| [9](Clase%209/README.md) | M5 · Comunicación | Gmail con API + de la app a la API de WhatsApp | | ✅ `Clase09.html` |
-| [10](Clase%2010/README.md) | M5 · Comunicación | WhatsApp (24 h, plantillas, drips, chatbots) + orquestación multicanal | **Brief PE5** | ✅ `Clase10.html` |
-| [11](Clase%2011/README.md) | M6 · Claude | Ventajas de Claude + Message Batches | | ✅ `Clase11.html` |
-| [12](Clase%2012/README.md) | M6 · Claude | Prompt Caching + MCP | **Brief PE6** | ✅ `Clase12.html` |
-| [13](Clase%2013/README.md) | M7 · Agentes y creatividad | Agentes con memoria RAG en Notion + generación de contenido | | ✅ `Clase13.html` |
-| [14](Clase%2014/README.md) | M7 · Agentes y creatividad | Human-in-the-Loop + cuadros de mando | **Brief PE7** | ✅ `Clase14.html` |
-| [15](Clase%2015/README.md) | M8 · Proyecto Integrador | Kickoff: stack, requisitos, 5 entregables, hoja de ruta | **Brief Entrega Final** | ✅ `Clase15.html` |
-| [16](Clase%2016/README.md) | M8 · Proyecto Integrador | Taller de calidad + revisión de avance | | ✅ `Clase16.html` |
+| [1](Semana%201/README.md) | 1 | Introducción a la IA, el Prompt Engineering y las automatizaciones | — | ✅ Filminas, lectura, guiones y ejercicios |
+| [2](Semana%202/README.md) | 2 | Introducción a las automatizaciones y n8n | **Pre-Entrega 1:** De la idea al prompt | Pendiente |
+| [3](Semana%203/README.md) | 3 | Conceptos básicos: anatomía de un workflow y nodos de n8n | — | Pendiente |
+| [4](Semana%204/README.md) | 4 | Conceptos técnicos: APIs, HTTP, credenciales | **Pre-Entrega 2:** Infraestructura de integración técnica | Pendiente |
+| [5](Semana%205/README.md) | 5 | Workflows con aplicaciones y servicios externos (Google) | — | Pendiente |
+| [6](Semana%206/README.md) | 6 | Implementación del AI Agent | **Pre-Entrega 3:** Planificá y construí tu primer AI Agent | Pendiente |
+| [7](Semana%207/README.md) | 7 | IA local con Ollama | — | Pendiente |
+| [8](Semana%208/README.md) | 8 | WhatsApp Business | **Pre-Entrega 4:** Ensamblaje del asistente de WhatsApp e IA | Pendiente |
+| [9](Semana%209/README.md) | 9 | Proyecto Final: despliegue de agente autónomo cognitivo | **Entrega Final:** asistente autónomo de WhatsApp desplegado | Pendiente |
 
----
-
-## Calendario de pre-entregas
-
-Todas sobre 100 pts; se aprueban con 70.
-
-| Se presenta en | Entrega | Se recomienda cerrar antes de |
-|---|---|---|
-| Clase 2 | PE1 — Diagrama de arquitectura lógica | Clase 5 |
-| Clase 4 | PE2 — Estructura de datos JSON y matriz estratégica | Clase 7 |
-| Clase 6 | PE3 — Primer flujo operativo en Make para leads | Clase 9 |
-| Clase 8 | PE4 — Arquitectura de agente avanzado en n8n | Clase 11 |
-| Clase 10 | PE5 — Estrategia multicanal + pipeline | Clase 13 |
-| Clase 12 | PE6 — Diseño de eficiencia e ingeniería de prompts | Clase 15 |
-| Clase 14 | PE7 — Sistema de contenido autónomo con HITL | Clase 16 |
-| Clase 15 | Entrega Final — Ecosistema autónomo (repo de GitHub) | Cierre de la comisión |
+Todas las entregas son sobre 100 pts y se aprueban con 70 (según `program-summary.pdf`).
 
 ---
 
 ## Estado y próximos pasos
 
-### Decisiones tomadas
+- [x] Estructura de 9 semanas creada. Las 16 clases del programa anterior se borraron (quedan en el historial de git).
+- [x] **Semana 1** completa: filminas y lectura (provistas), guion de las dos clases y ejercicios.
+- [ ] **Semanas 2 a 9:** armar guion y ejercicios a medida que lleguen las filminas y el material de lectura de cada semana.
 
-- **Equipo:** dos profesores, Arturo Grottoli y Romina Diaz. No hay coordinador ni tutor.
-- **Proyecto ejemplo:** inmobiliaria de alquileres temporarios (ver [Proyecto ejemplo/README.md](Proyecto%20ejemplo/README.md)).
-- **Orquestador principal: n8n**, porque el PDF lo prefiere para la Entrega Final. Make solo en los módulos 3 y 5, porque esas pre-entregas piden un blueprint de Make.
-- **Costos:** todo con planes gratuitos y n8n instalado en la máquina del docente. Lo único pago: una recarga mínima de créditos en OpenAI y en Anthropic (~USD 5 cada una, prepago, sin suscripción).
-- **Demo de la clase 1:** el bot de películas como intro de "algo que se puede hacer", con video o capturas de respaldo.
+## Material del programa anterior (a revisar)
 
-### Para acordar con Romina
+Quedó en la carpeta y no corresponde al programa nuevo. Conviene decidir si se borra o se archiva:
 
-- [ ] Nombre y destino del negocio del proyecto ejemplo (propuesta: "Cabañas del Lago", Bariloche).
-- [ ] Si el proyecto ejemplo se presenta en la clase 1 (después de la demo del bot) o en la clase 2.
-- [ ] Si se suma a la clase 2 el bloque de 15 min de panorama del curso (contenido en el README de la clase 2).
-- [ ] Alcance de la PE1: cualquier proceso o solo de atención al cliente.
-- [ ] Cómo se reparten las clases y las demos.
-
-### Próximos pasos
-
-**De Arturo:**
-- [ ] Mandar el mail a Romina con los puntos de arriba.
-- [ ] Grabar el video de respaldo de la demo del bot (`Clase 1/demo-bot.mp4`).
-- [ ] Terminar los pendientes del bot para la clase 2: rama ❌, `answerCallbackQuery`, borrar el módulo #21.
-- [ ] Completar la filmina 2 de la clase 1 cuando estén la descripción de Romina y el N° de comisión.
-
-**De Claude (cuando estén las definiciones):**
-- [ ] Filmina "El proyecto que vamos a construir" + diagrama de la inmobiliaria en draw.io.
-- [ ] Filminas del panorama del curso en la clase 2 (si se aprueba).
-- [ ] Que las presentaciones se adapten al tamaño de la pantalla (no depende de nada; se puede hacer ya).
-- [ ] Semana 1 del proyecto ejemplo: datos ficticios (propiedades, consultas, reseñas, FAQ, guía del destino).
-- [x] Presentaciones HTML de las clases 3 a 16 (hechas; el generador está en `herramientas/filminas/`).
-
-## Puntos a definir o verificar
-
-- **PE1:** el PDF dice "un proceso cotidiano de tu negocio" en los pasos, pero "un proceso de soporte al cliente" en la ficha del entregable (ver Clase 2).
-- **PE4:** el PDF pide elegir uno de tres escenarios, pero la ficha habla de "un proceso de tu elección". El escenario de RR. HH. es alto riesgo según la IA Act (ver Clase 7).
-- **Módulo 6:** el PDF nombra modelos y precios que pueden estar desactualizados. Verificar en la documentación de Anthropic antes de las clases 11 y 12.
-- **Herramientas:** verificar antes de cada módulo los límites vigentes de los planes gratuitos (Make, n8n Cloud, Airtable, Omni AI, agentes de Notion).
+- `IA Automation.pdf`, `guia-curso.md`, `Filminas viejas/` y `Proyecto Final.pptx`: el programa anterior (16 clases, Make, Airtable, Claude).
+- `Proyecto ejemplo/`: el plan de la inmobiliaria de alquileres temporarios, pensado para el programa anterior. El programa nuevo termina en un asistente de WhatsApp en n8n; habría que ver si el caso se mantiene.
+- `herramientas/filminas/`: el generador de las presentaciones HTML de las clases viejas. Ya no sirve (y si se corre, vuelve a crear las carpetas `Clase N`).
+- `ai-automation-*.zip` (tres archivos): sin revisar todavía.
