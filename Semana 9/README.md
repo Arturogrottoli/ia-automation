@@ -3,7 +3,7 @@
 Fuente: `program-summary.pdf` (Módulo 9).
 
 > **Pendiente de armar.** Cuando estén las filminas y el material de lectura de esta semana, se suman
-> acá el guion de las dos clases (2 h cada una) y los ejercicios, igual que en la Semana 1.
+> acá el guion de la clase (2 horas) y los ejercicios, igual que en la Semana 1.
 
 ## Unidades del módulo
 
