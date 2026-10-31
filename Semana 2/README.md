@@ -41,9 +41,6 @@ Fuente: `program-summary.pdf` (Módulo 2). **Una clase de 2 horas.**
 
 ## Guion de la clase
 
-> <span style="color:#1a7f37">🟢 **En verde:** lo que podés leer tal cual si te quedás en blanco en una filmina.</span>
-> Se ve en color con la vista previa de Markdown de VS Code (`Ctrl+Shift+V`).
->
 > **Cómo leer este guion:** para cada filmina, cada frase que aparece en pantalla está desarrollada en
 > **"Para explicar"**, con más contexto y ejemplos. La filmina es el resumen; esto es lo que se dice en
 > voz alta.
@@ -89,11 +86,11 @@ vivo (se muestra solo la biblioteca) y los pasos 3 a 5 de la pre-entrega (se lee
 
 **Filmina 1 · Portada** (1 min) — Módulo 2.
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Bienvenidos al Módulo 2. Hoy conocemos n8n, la herramienta con la que vamos a automatizar durante todo el curso.”</p>
+<p style="color:#1a7f37">Bienvenidos al Módulo 2. Hoy conocemos n8n, la herramienta con la que vamos a automatizar durante todo el curso.</p>
 
 **Filmina 2 · Objetivos** (2 min)
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Hoy van a aprender qué es una automatización, cómo saber si vale la pena, y sobre todo qué es n8n, para qué sirve y cómo se usa.”</p>
+<p style="color:#1a7f37">Hoy van a aprender qué es una automatización, cómo saber si vale la pena, y sobre todo qué es n8n, para qué sirve y cómo se usa.</p>
 
 Para explicar cada objetivo:
 - **Distinguir una automatización lineal de una cognitiva y explicar qué es orquestar sistemas.** Es la base para saber cuándo hace falta IA en un flujo y cuándo no.
@@ -104,15 +101,15 @@ Para explicar cada objetivo:
 
 **Filmina 3 · Agenda** (1 min) — teoría hasta el break; después, n8n con las manos.
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Primero teoría: automatizaciones, ROI y qué es n8n. Después del break, n8n en vivo y la pre-entrega.”</p>
+<p style="color:#1a7f37">Primero teoría: automatizaciones, ROI y qué es n8n. Después del break, n8n en vivo y la pre-entrega.</p>
 
 **Filmina 4 · La clase queda grabada** — pasarla.
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “La clase queda grabada.”</p>
+<p style="color:#1a7f37">La clase queda grabada.</p>
 
 **Filmina 5 · ¿Dónde quedamos? Del prompt suelto al flujo que corre solo** (4 min)
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “La semana pasada armaron un prompt que devuelve JSON. El problema es que lo siguen pegando a mano. Hoy conocemos la herramienta que hace eso sola.”</p>
+<p style="color:#1a7f37">La semana pasada armaron un prompt que devuelve JSON. El problema es que lo siguen pegando a mano. Hoy conocemos la herramienta que hace eso sola.</p>
 
 Para explicar:
 - **"En el módulo 1: armaste una plantilla de prompt que toma un texto desordenado y devuelve JSON válido."** Recordá el ejemplo de la agencia de viajes: un mail desordenado entra, un JSON con nombre, destino y fechas sale.
@@ -128,11 +125,11 @@ Que uno o dos cuenten su desafío del Módulo 1 en una línea.
 
 **Filmina 6 · Separador "01"** — pasarla.
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Empecemos por lo básico: qué es automatizar.”</p>
+<p style="color:#1a7f37">Empecemos por lo básico: qué es automatizar.</p>
 
 #### Filmina 7 · ¿Qué es automatizar? Un asistente digital que no duerme (3 min)
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Automatizar es que la tecnología haga sola las tareas repetitivas, moviendo datos de un lado a otro según reglas. La ventaja: si el volumen se multiplica, el trabajo no se multiplica con él.”</p>
+<p style="color:#1a7f37">Automatizar es que la tecnología haga sola las tareas repetitivas, moviendo datos de un lado a otro según reglas. La ventaja: si el volumen se multiplica, el trabajo no se multiplica con él.</p>
 
 Para explicar:
 - **"La definición: usar tecnología para realizar tareas repetitivas sin intervención humana, moviendo datos de un lugar a otro según reglas predefinidas."** La mayor parte del trabajo administrativo es mover datos: del mail a la planilla, de la planilla a la factura, de la factura al mail del cliente. Automatizar es que eso pase solo, siguiendo reglas que definimos una vez. Como un asistente que trabaja 24/7 y no se olvida ni se cansa.
@@ -142,7 +139,7 @@ Para explicar:
 
 #### Filmina 8 · Orquestación: automatizar no es solo ahorrar tiempo (2 min)
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Automatizar no es solo ahorrar tiempo: es orquestar. Gmail, WhatsApp, una planilla y un medio de pago son los músicos; n8n es el director que los hace sonar juntos.”</p>
+<p style="color:#1a7f37">Automatizar no es solo ahorrar tiempo: es orquestar. Gmail, WhatsApp, una planilla y un medio de pago son los músicos; n8n es el director que los hace sonar juntos.</p>
 
 Para explicar:
 - **"La metáfora: en una orquesta cada músico es excelente por su cuenta. Si cada uno toca una partitura distinta, el resultado es ruido."**
@@ -152,7 +149,7 @@ Para explicar:
 
 #### Filmina 9 · Lineales y cognitivas: dos formas de armar un flujo (4 min)
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Hay dos tipos: las lineales siguen reglas fijas, 'si pasa A, hacé B'. Las cognitivas tienen un paso donde decide una IA, como el prompt que hicieron la semana pasada.”</p>
+<p style="color:#1a7f37">Hay dos tipos: las lineales siguen reglas fijas, 'si pasa A, hacé B'. Las cognitivas tienen un paso donde decide una IA, como el prompt que hicieron la semana pasada.</p>
 
 Para explicar:
 - **"Lineales: cada paso se ejecuta en un orden fijo y predecible. 'Si pasa A, hacé B y después C', sin ambigüedad ni interpretación."** Ejemplo: cada vez que alguien completa un formulario, se agrega una fila a la planilla y se le manda un mail de confirmación. Son **deterministas**: con la misma entrada, siempre hacen lo mismo. Son baratas y confiables, pero no pueden "leer" un texto libre.
@@ -162,7 +159,7 @@ Para explicar:
 
 #### Filmina 10 · Actividad: una tarea que te aburre (2 min)
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Piensen en una tarea que hacen todas las semanas: ¿qué parte es mecánica y qué parte necesita leer o decidir? Esa segunda parte es la que pide IA.”</p>
+<p style="color:#1a7f37">Piensen en una tarea que hacen todas las semanas: ¿qué parte es mecánica y qué parte necesita leer o decidir? Esa segunda parte es la que pide IA.</p>
 
 Para explicar: **"Pensá en una tarea que hacés todas las semanas y te aburre. ¿Qué pasos son puro 'si pasa A,
 hacé B'? ¿Y en cuál necesitás leer, interpretar o decidir? Ese segundo grupo es el que pide IA."** Que la
@@ -176,11 +173,11 @@ escriban en el chat. Es el primer paso para elegir el proceso de la pre-entrega.
 
 **Filmina 11 · Separador "02"** — pasarla.
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Ahora, la pregunta clave: ¿vale la pena automatizarlo?”</p>
+<p style="color:#1a7f37">Ahora, la pregunta clave: ¿vale la pena automatizarlo?</p>
 
 #### Filmina 12 · ¿Qué es el ROI? La métrica que decide qué automatizás (2 min)
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “El ROI mide cuánto vuelve por lo que invertimos: beneficio neto sobre costo, por cien. El costo es armarlo y mantenerlo; el beneficio, las horas ahorradas, más ventas y menos errores.”</p>
+<p style="color:#1a7f37">El ROI mide cuánto vuelve por lo que invertimos: beneficio neto sobre costo, por cien. El costo es armarlo y mantenerlo; el beneficio, las horas ahorradas, más ventas y menos errores.</p>
 
 Para explicar:
 - **"La definición: evalúa la rentabilidad de una inversión en relación con su costo. En automatización no se mide solo en plata, también en tiempo recuperado."** ROI es *Return on Investment*, retorno de la inversión. Responde: por cada peso (o cada hora) que pongo, ¿cuánto me vuelve?
@@ -193,7 +190,7 @@ primer mes da −20 %, a principios del segundo se recupera la inversión y al t
 
 #### Filmina 13 · Umbrales: cuándo es rentable (2 min)
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Tres ideas: el break-even es cuando el ahorro alcanza lo que costó; conviene automatizar lo frecuente y que no requiere criterio humano; y siempre preguntarse qué haría esa persona con el tiempo libre.”</p>
+<p style="color:#1a7f37">Tres ideas: el break-even es cuando el ahorro alcanza lo que costó; conviene automatizar lo frecuente y que no requiere criterio humano; y siempre preguntarse qué haría esa persona con el tiempo libre.</p>
 
 Para explicar:
 - **"Break-even: el punto de equilibrio. El momento exacto en que el ahorro acumulado iguala el costo de implementación."** Antes de ese punto, la automatización todavía "debe" plata; después, todo es ganancia. En el ejercicio, cae a principios del segundo mes.
@@ -202,7 +199,7 @@ Para explicar:
 
 #### Filmina 14 · El ROI oculto: cuando empatar igual conviene (1 min)
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “A veces un flujo no deja plata directa, pero libera al dueño para vender más. Y lo que pasa una vez al año casi nunca conviene automatizarlo.”</p>
+<p style="color:#1a7f37">A veces un flujo no deja plata directa, pero libera al dueño para vender más. Y lo que pasa una vez al año casi nunca conviene automatizarlo.</p>
 
 Para explicar:
 - **"El caso: un workflow que apenas empata en términos monetarios. Lo que sí genera: libera al dueño del negocio para dedicarse a cerrar ventas o a mejorar la calidad del producto."** En un negocio chico, el tiempo del dueño es lo más caro que hay, aunque no figure en ninguna planilla.
@@ -214,7 +211,7 @@ humano y costo de oportunidad.
 
 #### Filminas 15 y 16 · Para recordar y Coder Tips (1 min)
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “El ROI no es solo lo que ahorrás: también es lo que dejás de ganar por hacer tareas manuales. Antes de abrir n8n, tres preguntas: cuánto tarda hoy, cuántas veces pasa por semana y qué harías con ese tiempo.”</p>
+<p style="color:#1a7f37">El ROI no es solo lo que ahorrás: también es lo que dejás de ganar por hacer tareas manuales. Antes de abrir n8n, tres preguntas: cuánto tarda hoy, cuántas veces pasa por semana y qué harías con ese tiempo.</p>
 
 Para explicar:
 - **"El ROI no es solo lo que ahorrás. Es también lo que dejás de ganar por hacer tareas manuales."**
@@ -226,11 +223,11 @@ Para explicar:
 
 **Filmina 17 · Separador "03"** — pasarla.
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Ahora sí: n8n.”</p>
+<p style="color:#1a7f37">Ahora sí: n8n.</p>
 
 #### Filmina 18 · ¿Qué es n8n? Low-code, open source y basado en nodos (3 min)
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “n8n conecta aplicaciones para que trabajen juntas solas, sin programar. Cada nodo es un bloque ya hecho que configurás; y si hace falta, se puede escribir código.”</p>
+<p style="color:#1a7f37">n8n conecta aplicaciones para que trabajen juntas solas, sin programar. Cada nodo es un bloque ya hecho que configurás; y si hace falta, se puede escribir código.</p>
 
 Para explicar:
 - **"Qué hace: conecta aplicaciones y servicios entre sí para automatizar tareas sin necesidad de escribir código."** Tiene cientos de integraciones listas: Gmail, Google Sheets, Slack, WhatsApp, Telegram, bases de datos y modelos de IA. Ejemplos de para qué sirve: cada mail de consulta se carga en una planilla; cada pedido nuevo avisa por WhatsApp; cada lunes a las 9 llega un reporte; cada mensaje de un cliente lo responde un asistente con IA. El nombre viene de *nodemation* (automatización con nodos).
@@ -241,7 +238,7 @@ Para explicar:
 
 #### Filmina 19 · Tu instancia: dónde corre n8n (3 min)
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Una instancia es tu n8n funcionando en algún lado: en la nube de n8n, desde el navegador, o instalado en tu máquina o tu servidor, gratis pero a tu cargo.”</p>
+<p style="color:#1a7f37">Una instancia es tu n8n funcionando en algún lado: en la nube de n8n, desde el navegador, o instalado en tu máquina o tu servidor, gratis pero a tu cargo.</p>
 
 Para explicar:
 - **"Qué es una instancia: una copia de n8n en ejecución corriendo en algún lado. Es el despliegue de la herramienta."** n8n es un programa: para usarlo, tiene que estar corriendo en una computadora. "Tu instancia" es tu copia de ese programa, con tus workflows y tus credenciales.
@@ -251,7 +248,7 @@ Para explicar:
 
 #### Filmina 20 · JSON: el idioma de los datos dentro de n8n (3 min)
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Los nodos se pasan los datos en JSON: llave y valor. Por eso la semana pasada el prompt devolvía JSON: es el idioma de n8n.”</p>
+<p style="color:#1a7f37">Los nodos se pasan los datos en JSON: llave y valor. Por eso la semana pasada el prompt devolvía JSON: es el idioma de n8n.</p>
 
 Para explicar:
 - **"Qué es: un formato estándar para enviar información entre sistemas."** Es texto, se puede leer a ojo, y casi todas las aplicaciones lo entienden.
@@ -261,7 +258,7 @@ Para explicar:
 
 #### Filmina 21 · El workflow: el mapa completo de una automatización (2 min)
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Un workflow es el mapa completo de la automatización: cuándo arranca, qué hace y en qué orden. Se guarda como un archivo JSON, así que se puede compartir.”</p>
+<p style="color:#1a7f37">Un workflow es el mapa completo de la automatización: cuándo arranca, qué hace y en qué orden. Se guarda como un archivo JSON, así que se puede compartir.</p>
 
 Para explicar:
 - **"Qué es: una secuencia organizada de pasos que se ejecutan automáticamente para cumplir un objetivo."**
@@ -271,7 +268,7 @@ Para explicar:
 
 #### Filmina 22 · Templates: no reinventes la lógica cada vez (2 min)
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “No hace falta arrancar de cero: hay miles de templates armados por otros. Se importan, se les conectan tus cuentas y se adaptan.”</p>
+<p style="color:#1a7f37">No hace falta arrancar de cero: hay miles de templates armados por otros. Se importan, se les conectan tus cuentas y se adaptan.</p>
 
 Para explicar:
 - **"Qué es: un workflow completo, con nodos, conexiones y configuración, que alguien armó para un caso de uso concreto."** Ejemplos: mandar un mail cuando entra un lead, resumir noticias con IA, publicar en redes.
@@ -282,7 +279,7 @@ Para explicar:
 
 #### Filmina 23 · Para recordar: un nodo en rojo (1 min)
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Un nodo en rojo no es que n8n se rompió: es n8n diciéndote qué dato falta. Leer el error es parte del trabajo.”</p>
+<p style="color:#1a7f37">Un nodo en rojo no es que n8n se rompió: es n8n diciéndote qué dato falta. Leer el error es parte del trabajo.</p>
 
 Para explicar: **"Un nodo en rojo no significa que n8n esté roto. El error es información: te está diciendo
 qué dato falta o qué campo no encontró. Leerlo es parte del trabajo."** Los errores más comunes al empezar:
@@ -295,7 +292,7 @@ dice cuál de los tres es.
 
 **Filmina 24 · Break**
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Diez minutos de break. Cuando volvemos, abrimos n8n.”</p>
+<p style="color:#1a7f37">Diez minutos de break. Cuando volvemos, abrimos n8n.</p>
 
 ---
 
@@ -303,12 +300,12 @@ dice cuál de los tres es.
 
 **Filmina 25 · Separador "04"** — pasarla y quedate con la **filmina 26** de fondo mientras compartís tu
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Ahora n8n en vivo: les muestro cómo se usa.”</p>
+<p style="color:#1a7f37">Ahora n8n en vivo: les muestro cómo se usa.</p>
 instancia.
 
 **Filmina 26 · Ejemplo en vivo.** Dice: *"Desafío de priorización. El profe pone tres casos en pantalla y el
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Vamos a recorrer la interfaz, mirar un template real, armar un flujo desde cero y romperlo a propósito para leer el error. Después lo hacen ustedes.”</p>
+<p style="color:#1a7f37">Vamos a recorrer la interfaz, mirar un template real, armar un flujo desde cero y romperlo a propósito para leer el error. Después lo hacen ustedes.</p>
 grupo vota (ya lo hicimos en la sección de ROI). Después construimos juntos un flujo mínimo en n8n y lo
 rompemos a propósito para leer el error."* Este bloque lo amplía con un recorrido por la interfaz y un
 template real.
@@ -362,7 +359,7 @@ alumnos lo hacen en casa con su propio proceso.
 
 #### Filmina 27 · Paso 1: el proceso (1,5 min)
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Paso 1 de la pre-entrega: elijan una tarea repetitiva, que pase seguido y no requiera criterio. Descarten lo que pasa una vez al año.”</p>
+<p style="color:#1a7f37">Paso 1 de la pre-entrega: elijan una tarea repetitiva, que pase seguido y no requiera criterio. Descarten lo que pasa una vez al año.</p>
 
 Para explicar:
 - **"Listar tres tareas manuales y repetitivas de tu trabajo, tu estudio o tu vida diaria."** Tres, para poder comparar y elegir.
@@ -372,7 +369,7 @@ Para explicar:
 
 #### Filmina 28 · Paso 2: el ROI (1,5 min)
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Paso 2: el ROI. Cuánto tarda, cada cuánto pasa, qué harían con ese tiempo y si escala. Y una razón para no automatizarlo.”</p>
+<p style="color:#1a7f37">Paso 2: el ROI. Cuánto tarda, cada cuánto pasa, qué harían con ese tiempo y si escala. Y una razón para no automatizarlo.</p>
 
 Para explicar:
 - **"Estimar cuánto tiempo te lleva hoy hacerlo a mano y con qué frecuencia se repite."** En el ejemplo: 40 consultas por semana × 5 minutos = unas 13 horas por mes.
@@ -382,7 +379,7 @@ Para explicar:
 
 #### Filmina 29 · Paso 3: el boceto (2 min)
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Paso 3: el boceto. Qué lo dispara, los pasos del medio, dónde entra la IA y dónde termina el dato.”</p>
+<p style="color:#1a7f37">Paso 3: el boceto. Qué lo dispara, los pasos del medio, dónde entra la IA y dónde termina el dato.</p>
 
 Para explicar:
 - **"Definir el disparador: ¿arranca por un evento o por horario?"** Evento: llega un mail, se completa un formulario. Horario: todos los lunes a las 9.
@@ -392,7 +389,7 @@ Para explicar:
 
 #### Filmina 30 · Paso 4: el prompt (1,5 min)
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Paso 4: el prompt del nodo de IA, con la anatomía de la semana pasada y las llaves del JSON.”</p>
+<p style="color:#1a7f37">Paso 4: el prompt del nodo de IA, con la anatomía de la semana pasada y las llaves del JSON.</p>
 
 Para explicar:
 - **"Aplicar la anatomía del módulo 1: persona, contexto, tarea y formato."**
@@ -402,7 +399,7 @@ Para explicar:
 
 #### Filmina 31 · Paso 5: los riesgos (1,5 min)
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Paso 5: un riesgo, como una alucinación o un dato ambiguo, y cómo lo evitan desde el prompt o desde el flujo.”</p>
+<p style="color:#1a7f37">Paso 5: un riesgo, como una alucinación o un dato ambiguo, y cómo lo evitan desde el prompt o desde el flujo.</p>
 
 Para explicar:
 - **"Elegir un riesgo del módulo 1: alucinación, límite de contexto o ambigüedad."** Ambigüedad: el mensaje se puede entender de dos formas (por ejemplo, "el 12" sin decir de qué mes).
@@ -415,11 +412,11 @@ Para explicar:
 
 **Filmina 32 · Separador "05"** — pasarla.
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Esto que acabamos de ver es la pre-entrega.”</p>
+<p style="color:#1a7f37">Esto que acabamos de ver es la pre-entrega.</p>
 
 #### Filmina 33 · ¿De qué se trata? Diseñar, todavía no construir (1 min)
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “La pre-entrega es diseñar, no construir: una automatización con un paso de IA, por qué vale la pena y el prompt que la hace funcionar.”</p>
+<p style="color:#1a7f37">La pre-entrega es diseñar, no construir: una automatización con un paso de IA, por qué vale la pena y el prompt que la hace funcionar.</p>
 
 Para explicar: **"El objetivo: diseñar una automatización simple que use un paso de IA. No hace falta que
 funcione todavía. Lo que sí hace falta: justificar por qué vale la pena y cómo sería el prompt."** Las cinco
@@ -427,7 +424,7 @@ partes (proceso, ROI, boceto, prompt y reflexión) **son exactamente los cinco p
 
 #### Filmina 34 · Tu misión (1 min)
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Les lleva entre 60 y 90 minutos. Un documento corto: no importa el diseño, importa que el proceso, el ROI y el prompt cuenten la misma historia.”</p>
+<p style="color:#1a7f37">Les lleva entre 60 y 90 minutos. Un documento corto: no importa el diseño, importa que el proceso, el ROI y el prompt cuenten la misma historia.</p>
 
 Para explicar: **"Duración estimada: entre 60 y 90 minutos. Un documento corto con las cinco partes. No se
 evalúa la prolijidad del diseño. Sí la coherencia entre el proceso que elegiste, el ROI que argumentás y el
@@ -436,11 +433,11 @@ reseñas", el prompt tiene que clasificar reseñas y el ROI tiene que hablar de 
 
 #### Filmina 35 · Los pasos (1 min) — las cinco partes de la entrega, en orden.
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Son cinco partes: proceso, ROI, boceto, prompt y riesgos. Los mismos cinco pasos de recién.”</p>
+<p style="color:#1a7f37">Son cinco partes: proceso, ROI, boceto, prompt y riesgos. Los mismos cinco pasos de recién.</p>
 
 #### Filmina 36 · ¿Cómo se evalúa? (2 min)
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Se evalúa la coherencia, el ROI con tiempo y frecuencia, un boceto claro, un prompt completo y un riesgo bien pensado. El boceto es lo que más pesa.”</p>
+<p style="color:#1a7f37">Se evalúa la coherencia, el ROI con tiempo y frecuencia, un boceto claro, un prompt completo y un riesgo bien pensado. El boceto es lo que más pesa.</p>
 
 Para explicar cada criterio:
 - **Coherencia:** proceso, ROI y prompt cuentan la misma historia.
@@ -454,7 +451,7 @@ Mostrá también los pesos de la rúbrica del programa (en `ejercicios-alumnos.m
 
 #### Filmina 37 · ¿Cómo sigue? Del boceto al flujo que corre (2 min)
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “La semana que viene vemos los nodos que deciden caminos y juntan datos. Lo que hoy escribieron como lista se va a convertir en nodos reales.”</p>
+<p style="color:#1a7f37">La semana que viene vemos los nodos que deciden caminos y juntan datos. Lo que hoy escribieron como lista se va a convertir en nodos reales.</p>
 
 Para explicar:
 - **"Lo que ya tenés: una automatización diseñada, con su justificación y el prompt del nodo de IA escrito."**
@@ -468,12 +465,12 @@ Para explicar:
 
 **Filmina 38 · ¿Preguntas?** (3 min) — las tres de la filmina: el mapeo de datos entre un nodo y el siguiente,
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “¿Dudas con n8n, con el ROI o con algún error rojo? Micrófono o chat.”</p>
+<p style="color:#1a7f37">¿Dudas con n8n, con el ROI o con algún error rojo? Micrófono o chat.</p>
 si su proceso pasa el filtro de alta frecuencia y bajo juicio humano, y algún error rojo que no sepan leer.
 
 **Filmina 39 · ¡Gracias!** (1 min)
 
-<p style="color:#1a7f37">🟢 <b>Si no te acordás, decí:</b> “Gracias. Para la semana que viene: la pre-entrega, los ejercicios para casa y el material de lectura.”</p>
+<p style="color:#1a7f37">Gracias. Para la semana que viene: la pre-entrega, los ejercicios para casa y el material de lectura.</p>
 - **Para la Semana 3:**
   1. La **pre-entrega** (un solo PDF).
   2. Los **ejercicios para casa** (5 a 8).
