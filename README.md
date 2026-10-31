@@ -4,7 +4,7 @@ Material de los docentes (Arturo Grottoli y Romina Diaz): filminas, guiones y ej
 
 - **Fuente oficial del programa:** `program-summary.pdf`. Reemplaza al programa anterior (`IA Automation.pdf`).
 - **Formato:** **9 semanas**, una por módulo, con **una clase de 2 horas** por semana.
-- **Cada carpeta `Semana N/`** tiene su `README.md`; cuando la semana está armada, también las filminas, el material de lectura, el guion de la clase y los ejercicios.
+- **Cada carpeta `Semana N/`** tiene un `README.md` que es la ficha de la semana **y el guion completo de la clase**, más las filminas, el material de lectura y los ejercicios.
 - **El hilo del curso:** se arranca por la IA y el prompt engineering, se pasa a n8n, APIs y AI Agents, y se termina en un **asistente autónomo de WhatsApp desplegado** (la Entrega Final).
 
 ---
