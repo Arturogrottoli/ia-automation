@@ -8,7 +8,7 @@ Fuente: `program-summary.pdf` (Módulo 1). **Una clase de 2 horas.**
 |---|---|
 | `Modulo_1_AI_Automation.pptx` | Las filminas del módulo (39). |
 | `Semana 1.docx` | El material de lectura del módulo, para los alumnos. |
-| [guion.md](guion.md) | Guion de la clase minuto a minuto, filmina por filmina, con qué recortar si el tiempo se aprieta. |
+| [guion.md](guion.md) | Guion de la clase minuto a minuto. En cada filmina, **cada frase está desarrollada** ("Para explicar") con más contexto y ejemplos que lo que se ve en pantalla. Incluye qué recortar si el tiempo se aprieta. |
 | [ejercicios-alumnos.md](ejercicios-alumnos.md) | Ejercicios en clase, ejercicios para casa y el desafío del módulo. Se comparte con los alumnos. |
 | [ejercicios-docente.md](ejercicios-docente.md) | Respuestas esperadas y el material de la práctica en vivo (agencia de viajes y pastelería, prompts por paso y JSON esperado). **No se comparte.** |
 

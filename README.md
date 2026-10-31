@@ -14,7 +14,7 @@ Material de los docentes (Arturo Grottoli y Romina Diaz): filminas, guiones y ej
 | Semana | Módulo | Contenido | Evaluación | Estado |
 |---|---|---|---|---|
 | [1](Semana%201/README.md) | 1 | Introducción a la IA, el Prompt Engineering y las automatizaciones | — | ✅ Filminas, lectura, guion y ejercicios |
-| [2](Semana%202/README.md) | 2 | Introducción a las automatizaciones y n8n | **Pre-Entrega 1:** De la idea al prompt | Pendiente |
+| [2](Semana%202/README.md) | 2 | Introducción a las automatizaciones y n8n | **Pre-Entrega 1:** De la idea al prompt | ✅ Filminas, lectura, guion y ejercicios |
 | [3](Semana%203/README.md) | 3 | Conceptos básicos: anatomía de un workflow y nodos de n8n | — | Pendiente |
 | [4](Semana%204/README.md) | 4 | Conceptos técnicos: APIs, HTTP, credenciales | **Pre-Entrega 2:** Infraestructura de integración técnica | Pendiente |
 | [5](Semana%205/README.md) | 5 | Workflows con aplicaciones y servicios externos (Google) | — | Pendiente |
@@ -30,8 +30,8 @@ Todas las entregas son sobre 100 pts y se aprueban con 70 (según `program-summa
 ## Estado y próximos pasos
 
 - [x] Estructura de 9 semanas creada. Las 16 clases del programa anterior se borraron (quedan en el historial de git).
-- [x] **Semana 1** completa: filminas y lectura (provistas), guion de la clase y ejercicios.
-- [ ] **Semanas 2 a 9:** armar guion y ejercicios a medida que lleguen las filminas y el material de lectura de cada semana.
+- [x] **Semanas 1 y 2** completas: filminas y lectura (provistas), guion de la clase y ejercicios.
+- [ ] **Semanas 3 a 9:** armar guion y ejercicios a medida que lleguen las filminas y el material de lectura de cada semana.
 
 ## Material del programa anterior (a revisar)
 
