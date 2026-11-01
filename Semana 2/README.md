@@ -55,8 +55,8 @@ Fuente: `program-summary.pdf` (Módulo 2). **Una clase de 2 horas.**
 
 | Min | Tramo | Filminas | En clase |
 |---|---|---|---|
-| 0–8 | Apertura y repaso del Módulo 1 | 1–5 | |
-| 8–22 | **01 · Qué es una automatización** | 6–10 | Ej. 1 (2 min) |
+| 0–10 | Apertura y repaso de la Semana 1 | 1–5 | |
+| 10–22 | **01 · Qué es una automatización** | 6–10 | Ej. 1 (2 min) |
 | 22–35 | **02 · ROI: cuándo vale la pena** | 11–16 | Ej. 2 y Ej. 3 (3 min c/u) |
 | 35–50 | **03 · n8n: qué es** (instancia, JSON, workflow, templates) | 17–23 | |
 | 50–60 | Break | 24 | |
@@ -82,7 +82,7 @@ vivo (se muestra solo la biblioteca) y los pasos 3 a 5 de la pre-entrega (se lee
 
 ---
 
-### 0–8 · Apertura
+### 0–10 · Apertura y repaso de la Semana 1
 
 **Filmina 1 · Portada** (1 min) — Módulo 2.
 
@@ -107,7 +107,28 @@ Para explicar cada objetivo:
 
 <p style="color:#1a7f37">La clase queda grabada.</p>
 
-**Filmina 5 · ¿Dónde quedamos? Del prompt suelto al flujo que corre solo** (4 min)
+**Repaso de la Semana 1** (3 min, sin filmina) — antes de pasar a la filmina 5.
+
+<p style="color:#1a7f37">Antes de arrancar, repasemos rápido lo que vimos la semana pasada, porque hoy lo vamos a usar.</p>
+
+<p style="color:#1a7f37">Primero: la IA no piensa, predice. Un LLM, como ChatGPT o Claude, fue entrenado con muchísimo texto y lo único que hace es calcular cuál es el pedacito de texto más probable que sigue. Por eso suena seguro aunque esté equivocado.</p>
+
+<p style="color:#1a7f37">Segundo: el modelo lee en tokens, que son pedacitos de palabras. Se paga por token y tiene una ventana de contexto, un límite de cuánto texto puede tener en mente a la vez. Lo que queda afuera, no lo ve.</p>
+
+<p style="color:#1a7f37">Tercero: cuando le falta información, el modelo alucina, inventa con total seguridad. En una automatización eso es grave, porque nadie revisa y el dato falso llega a destino.</p>
+
+<p style="color:#1a7f37">Cuarto: para evitarlo, prompt engineering. Un buen prompt tiene cuatro partes: quién es la IA, el contexto, la tarea y el formato de salida. Separamos el texto a procesar con delimitadores como ###, le damos ejemplos con few-shot, le pedimos que revise paso a paso y que si falta un dato ponga "no_disponible".</p>
+
+<p style="color:#1a7f37">Y quinto: lo armamos en cinco pasos hasta llegar a la plantilla maestra, un prompt que toma un mail desordenado y devuelve un JSON limpio, con llaves fijas y sin texto alrededor. Ese JSON es justamente el idioma de n8n, la herramienta que vemos hoy.</p>
+
+Para explicar:
+- **La IA predice, no piensa.** Si alguien pregunta "¿entonces no sirve?": sirve muchísimo, pero hay que darle buen contexto y no confiar a ciegas en lo que devuelve.
+- **Tokens y ventana de contexto.** Lo vamos a sentir en n8n: cada llamada al nodo de IA consume tokens, y mandarle textos enormes es más caro y más lento.
+- **Alucinaciones.** La defensa está en el prompt ("usá solo lo que dice el texto", "no_disponible") y, desde hoy, también en el flujo: validar el JSON antes de guardarlo.
+- **Las cuatro partes del prompt y las técnicas.** Rol, contexto, tarea y formato; zero-shot, few-shot y chain of thought. Si alguien no se acuerda, que mire su desafío del Módulo 1.
+- **La plantilla maestra en JSON.** Es la pieza que hoy pasa de "copiar y pegar a mano" a "un nodo dentro de un flujo que corre solo". Ese es el puente con la filmina 5.
+
+**Filmina 5 · ¿Dónde quedamos? Del prompt suelto al flujo que corre solo** (3 min)
 
 <p style="color:#1a7f37">La semana pasada armaron un prompt que devuelve JSON. El problema es que lo siguen pegando a mano. Hoy conocemos la herramienta que hace eso sola.</p>
 
@@ -121,7 +142,7 @@ Que uno o dos cuenten su desafío del Módulo 1 en una línea.
 
 ---
 
-### 8–22 · Sección 01 · Qué es una automatización
+### 10–22 · Sección 01 · Qué es una automatización
 
 **Filmina 6 · Separador "01"** — pasarla.
 
