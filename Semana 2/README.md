@@ -168,6 +168,27 @@ Para explicar:
 - **"La diferencia clave: el sistema deja de seguir solo instrucciones deterministas. En algún punto entiende el contenido y decide con cierto criterio."** Eso le da flexibilidad, pero trae lo que vimos la semana pasada: la IA puede equivocarse o inventar. Por eso los flujos cognitivos casi siempre son pasos lineales alrededor de un paso de IA bien controlado. La regla práctica: usar reglas fijas para todo lo que se pueda resolver con reglas, y dejar la IA solo para el paso que de verdad necesita interpretar. Así el flujo es más barato, más rápido y más fácil de controlar.
 - **"Hacia dónde vamos: el proyecto final del curso es un agente autónomo. Cognitivo de punta a punta."** Un asistente de WhatsApp que entiende, decide y responde. La diferencia con un flujo cognitivo común es que el agente no sigue un camino fijo con un paso de IA: la IA decide qué hacer en cada momento (consultar un dato, responder, pedir más información). Lo vamos a construir de a poco, a partir de las piezas que vemos hoy.
 
+**Ejemplo: el mismo negocio, un flujo lineal y uno cognitivo**
+
+Lineal (sin IA): los datos ya llegan ordenados, alcanza con reglas fijas.
+
+```text
+Se completa el formulario de inscripción (nombre, email, curso)
+  → se agrega una fila en Google Sheets
+  → se manda un mail de confirmación con el nombre del curso
+```
+
+Cognitivo (con un paso de IA): el dato llega como texto libre y alguien tiene que interpretarlo.
+
+```text
+Llega un mail: "Hola, quería saber si todavía hay lugar en el de los sábados y cuánto sale"
+  → la IA lo lee y devuelve {"tipo": "consulta", "curso": "sábados", "pregunta": "cupo y precio"}
+  → si es consulta: se responde con el precio y el cupo
+  → si es reclamo: se avisa al responsable
+```
+
+Notá que en el cognitivo todo es lineal salvo un paso: el que lee el mail.
+
 #### Filmina 10 · Actividad: una tarea que te aburre (2 min)
 
 <p style="color:#1a7f37">Piensen en una tarea que hacen todas las semanas: ¿qué parte es mecánica y qué parte necesita leer o decidir? Esa segunda parte es la que pide IA.</p>
@@ -202,6 +223,17 @@ Para explicar:
 
 **Ejercicio 2 · Calculá el ROI** (3 min) — resolvelo en voz alta con los números de `ejercicios-alumnos.md`: el
 primer mes da −20 %, a principios del segundo se recupera la inversión y al tercero rinde 140 %.
+
+**Ejemplo de cuenta (distinto del Ejercicio 2)**
+
+```text
+Tarea:       cargar a mano las consultas que llegan por mail
+Ahorro:      40 consultas por semana × 5 minutos ≈ 13 horas por mes
+Costo:       20 horas para armar el flujo + 1 hora por mes de mantenimiento
+Mes 1:       ahorro 13 h − costo 21 h = −8 h  → todavía no se pagó
+Mes 2:       ahorro 26 h − costo 22 h = +4 h  → ya se pagó
+Break-even:  a los 1,7 meses, más o menos (13 × meses = 20 + 1 × meses)
+```
 
 #### Filmina 13 · Umbrales: cuándo es rentable (2 min)
 
@@ -270,6 +302,34 @@ Para explicar:
 - **"Cómo se arma: entre llaves, con pares de 'Llave': 'Valor'. La llave dice qué es, el valor dice cuál."** Mostrá el ejemplo del material: `{"nombre": "Juan", "apellido": "Perez", "id_cliente": 10}`. Los valores pueden ser texto (entre comillas), números o verdadero/falso (`true`/`false`). Los pares se separan con comas, y las llaves siempre van entre comillas. Un valor también puede ser una lista (entre corchetes) u otro JSON adentro, por ejemplo una dirección con calle, número y ciudad. Una coma de más o una comilla que falta y el JSON deja de ser válido, como vieron en el formatter.
 - **"La analogía: un pedido a domicilio. Para: Fulano. Contenido: pizzas."** El repartidor no necesita entender la pizza: necesita saber dónde está cada dato. Lo mismo un nodo de n8n: no necesita entender el mail del cliente, necesita encontrar el nombre en la llave `nombre` y el destino en la llave `destino`. Mientras las etiquetas estén siempre en el mismo lugar, el paquete llega.
 - **"Por qué importa acá: cada nodo recibe y envía datos en JSON. Es el medio de comunicación entre nodos."** Un detalle útil: en n8n los datos viajan como una lista de "items"; si un nodo recibe cinco mails, recibe cinco items y procesa cada uno. Conectá con la Semana 1: por eso el prompt devolvía JSON, es lo que n8n le puede pasar al nodo siguiente. Si la IA devuelve un párrafo, el nodo siguiente no sabe dónde buscar cada dato; si devuelve JSON con llaves fijas, lo usa directo. Cuando abramos n8n en vivo, van a ver ese JSON en la salida de cada nodo.
+
+**Ejemplo: JSON válido e inválido**
+
+❌ Inválido: llaves sin comillas, comillas simples y una coma de más al final.
+
+```text
+{nombre: 'Juan', "edad": 30,}
+```
+
+✅ Válido:
+
+```json
+{"nombre": "Juan", "edad": 30, "cliente_activo": true}
+```
+
+✅ Un poco más completo, con un JSON adentro de otro y una lista:
+
+```json
+{
+  "nombre": "Lucía Fernández",
+  "destino": "Cancún",
+  "pasajeros": 2,
+  "contacto": {"email": "lucia@mail.com", "telefono": "no_disponible"},
+  "intereses": ["playa", "all inclusive"]
+}
+```
+
+Así se ve en la salida de un nodo de n8n, en la vista JSON.
 
 #### Filmina 21 · El workflow: el mapa completo de una automatización (2 min)
 
@@ -388,6 +448,15 @@ Para explicar:
 - **"Quedarnos con la de alta frecuencia y bajo juicio humano."** Ejemplo: cargar las consultas que llegan por mail. Pasa todos los días y no requiere decidir nada delicado: hay que leer el mail y pasar los datos. Y tiene un paso donde la IA aporta: entender un mail escrito de cualquier forma.
 - **"Resultado esperado: un proceso elegido y descrito en dos o tres líneas."** Qué es la tarea, quién la hace hoy y cómo. Por ejemplo: "Todos los días llegan consultas por mail; una persona las lee y carga nombre, destino y fechas en una planilla". Si no se puede describir en dos o tres líneas, probablemente es demasiado grande para un primer flujo.
 
+**Ejemplo: proceso mal elegido y bien elegido**
+
+❌ Mal: *"Organizar la fiesta de fin de año de la empresa."* Pasa una vez al año y requiere muchas decisiones
+humanas (lugar, presupuesto, menú).
+
+✅ Bien: *"Todos los días llegan entre 5 y 10 consultas por mail. Una persona las lee y carga nombre, destino,
+fechas y cantidad de pasajeros en una planilla."* Pasa todos los días, se describe en dos líneas y tiene un
+paso donde la IA ayuda: entender el mail.
+
 #### Filmina 28 · Paso 2: el ROI (1,5 min)
 
 <p style="color:#1a7f37">Paso 2: el ROI. Cuánto tarda, cada cuánto pasa, qué harían con ese tiempo y si escala. Y una razón para no automatizarlo.</p>
@@ -397,6 +466,15 @@ Para explicar:
 - **"Preguntarte qué harías con ese tiempo: ese es el costo de oportunidad."** En el ejemplo de la agencia: con 13 horas por mes, el vendedor puede responder antes las consultas y cerrar más ventas. Es la parte del ROI que no sale en la cuenta, pero que convence.
 - **"Chequear si sigue teniendo sentido cuando el volumen se multiplique por diez."** Si con diez veces más trabajo sin automatizar haría falta otra persona, la automatización escala. Con 400 consultas por semana, cargarlas a mano serían más de 130 horas por mes, casi un sueldo entero; el flujo, en cambio, las procesa igual.
 - **"Resultado esperado: dos o tres líneas que argumentan por qué automatizarlo, y por qué no."** El "por qué no" es importante: muestra que se pensó. Por ejemplo: "si las consultas son muy pocas, o si cada una necesita una respuesta muy personalizada, quizás no convenga". No hay que convencer a nadie de que todo es perfecto: hay que mostrar que se evaluaron los dos lados.
+
+**Ejemplo: ROI mal y bien argumentado**
+
+❌ Mal: *"Ahorra mucho tiempo y es más eficiente."* No tiene números ni dice qué se hace con el tiempo.
+
+✅ Bien: *"Hoy lleva 5 minutos por consulta y llegan 40 por semana: unas 13 horas por mes. Con ese tiempo, el
+vendedor puede responder antes y cerrar más ventas. Si las consultas se multiplican por diez, a mano haría
+falta otra persona; el flujo las procesa igual. Por qué no: si cada consulta necesitara una respuesta muy
+personalizada, la IA ayudaría poco."*
 
 #### Filmina 29 · Paso 3: el boceto (2 min)
 
@@ -408,6 +486,25 @@ Para explicar:
 - **"Definir el output final: dónde termina el dato y en qué formato."** Una planilla, un mensaje de WhatsApp, un mail, una base de datos. Si termina en una planilla, conviene anotar qué columnas tiene: van a coincidir con las llaves del JSON que devuelve la IA.
 - En el ejemplo: Gmail Trigger → nodo de IA → Google Sheets. *"Eso es un workflow como el del template que acabamos de ver."* El boceto se puede hacer en papel, en una diapositiva o con flechas en un documento: no hace falta armarlo en n8n todavía. Lo que importa es que se entienda el camino del dato de punta a punta.
 
+**Ejemplo: boceto vago y boceto claro**
+
+❌ Mal:
+
+```text
+Llega un mail y la IA lo procesa y lo guarda.
+```
+
+No dice qué mail, qué hace la IA ni dónde se guarda.
+
+✅ Bien:
+
+```text
+1. Disparador: Gmail Trigger, cada vez que llega un mail a consultas@agencia.com
+2. Nodo de IA: extrae nombre, email, destino, fechas y pasajeros → devuelve JSON
+3. Google Sheets: agrega una fila en la planilla "Consultas" (una columna por llave del JSON)
+4. Si algún dato vino como "no_disponible", la fila se marca "a revisar"
+```
+
 #### Filmina 30 · Paso 4: el prompt (1,5 min)
 
 <p style="color:#1a7f37">Paso 4: el prompt del nodo de IA, con la anatomía de la semana pasada y las llaves del JSON.</p>
@@ -418,6 +515,30 @@ Para explicar:
 - **"Descartar cualquier versión vaga tipo 'resumime esto': eso no alcanza."** Un prompt así devuelve cada vez algo distinto y ningún nodo lo puede usar. Si el prompt de la pre-entrega no tiene rol, contexto, tarea concreta y formato, no está listo para ir dentro de un flujo.
 - En el ejemplo: la plantilla de la Semana 1, tal cual. Es la prueba de que lo que hicieron la semana pasada no era un ejercicio suelto: es la pieza que va adentro del nodo de IA.
 
+**Ejemplo: el prompt del nodo de IA**
+
+❌ Mal:
+
+```text
+Resumime este mail.
+```
+
+Cada vez devuelve un párrafo distinto y el nodo de Google Sheets no sabe qué poner en cada columna.
+
+✅ Bien: la plantilla de la Semana 1, con las llaves que coinciden con las columnas de la planilla.
+
+```text
+Sos un asistente de ventas de una agencia de viajes que carga consultas en una planilla.
+Tu tarea es extraer los datos del mail del cliente que está entre ###.
+Usá solo la información del mail. Si un dato no aparece, escribí "no_disponible". No inventes.
+Devolvé únicamente un JSON con estas llaves, sin ningún texto antes ni después:
+{"nombre": "", "email": "", "destino": "", "fecha_salida": "", "fecha_regreso": "", "pasajeros": ""}
+
+###
+{{ el texto del mail, que n8n completa solo }}
+###
+```
+
 #### Filmina 31 · Paso 5: los riesgos (1,5 min)
 
 <p style="color:#1a7f37">Paso 5: un riesgo, como una alucinación o un dato ambiguo, y cómo lo evitan desde el prompt o desde el flujo.</p>
@@ -426,6 +547,16 @@ Para explicar:
 - **"Elegir un riesgo del módulo 1: alucinación, límite de contexto o ambigüedad."** Ambigüedad: el mensaje se puede entender de dos formas (por ejemplo, "el 12" sin decir de qué mes). Alucinación: que la IA complete un dato que no estaba, como un teléfono o un año. Límite de contexto: que el texto a procesar sea tan largo (un hilo de mails entero, un documento) que no entre completo o que la IA pierda partes.
 - **"Escribir cómo lo mitigás desde el prompt o desde el diseño del flujo."** Desde el prompt: prohibir inventar, `no_disponible`. Desde el flujo: si un dato clave falta, la fila se marca "a revisar" para que la vea una persona. Lo mejor es combinar las dos cosas: el prompt reduce el error y el flujo lo atrapa si igual pasa. Mitigar no quiere decir eliminar el riesgo, sino tener un plan para cuando aparezca.
 - **"Juntar las cinco partes en un solo documento."** Proceso, ROI, boceto, prompt y riesgo, en ese orden, en un solo PDF. Ese orden cuenta una historia: qué problema hay, por qué conviene resolverlo, cómo sería el flujo, qué hace la IA adentro y qué puede salir mal.
+
+**Ejemplo: riesgo genérico y riesgo concreto**
+
+❌ Mal: *"La IA se puede equivocar, así que hay que tener cuidado."* Es cierto para cualquier flujo y no dice
+qué hacer.
+
+✅ Bien: *"Riesgo: ambigüedad. Si el cliente escribe 'salgo el 12', la IA no sabe de qué mes y puede
+inventarlo. Mitigación en el prompt: solo usar fechas que estén completas en el mail, si no, no_disponible.
+Mitigación en el flujo: si fecha_salida es no_disponible, la fila se marca 'a revisar' y el vendedor le
+pregunta al cliente."*
 
 ---
 
