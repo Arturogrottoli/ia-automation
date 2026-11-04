@@ -95,7 +95,22 @@ Ejemplo:
 
 ### Ejercicio 8 · Si no llegaste en clase: tu instancia y tu primer flujo (20 min)
 
-1. Creá tu instancia: **n8n Cloud** (tiene prueba gratuita) o **local** (por ejemplo con `npx n8n`, si tenés Node instalado; se abre en `http://localhost:5678`).
+1. Creá tu instancia. Tenés dos opciones:
+   - **n8n Cloud:** te registrás en n8n.io y entrás desde el navegador. Tiene prueba gratuita; después se paga por mes.
+   - **Gratis, en tu computadora, con Docker:**
+     1. Instalá **Docker Desktop** desde docker.com (en Windows puede pedirte activar WSL 2 y reiniciar).
+     2. Abrí Docker Desktop y esperá a que diga *Engine running*.
+     3. Abrí una terminal (PowerShell en Windows, Terminal en Mac) y corré estos dos comandos:
+
+        ```bash
+        docker volume create n8n_data
+        docker run -it --rm --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n
+        ```
+
+     4. Entrá a `http://localhost:5678` y creá tu cuenta de dueño de la instancia.
+     5. Para apagarlo, `Ctrl + C` en la terminal. Para prenderlo de nuevo, abrí Docker Desktop y corré el segundo comando otra vez: tus workflows siguen ahí.
+
+     Ojo: con Docker, n8n funciona solo mientras tu computadora está prendida y la terminal abierta.
 2. Hacé el **Ejercicio 4** completo y sacá una captura del flujo funcionando.
 
 **Además:** leé `Semana 2.docx` y hacé el cuestionario del módulo en la plataforma.

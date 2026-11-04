@@ -319,6 +319,81 @@ Para explicar:
 - **"El riesgo en automatización: nadie está mirando la pantalla. El dato inventado sigue viaje hasta tu base de datos."** En un chat, una alucinación la ves vos y la descartás. En un flujo que procesa cien mails por día, el teléfono inventado se guarda en la planilla y alguien llama a un número equivocado. Por eso en este curso el prompt siempre tiene que prever qué hacer cuando falta un dato. Y el error no queda ahí: si el flujo sigue, el dato falso puede terminar en una factura, en un mensaje al cliente o en un reporte. Cuanto más automatizado el proceso, más lejos viaja un error.
   - *Ejemplo:* El flujo carga consultas en la planilla. Un mail no trae teléfono y la IA pone "11 4567-8901". El vendedor llama a ese número para cerrar la venta, y atiende un desconocido.
 
+**Ejemplo: un prompt que invita a alucinar y uno que lo frena**
+
+❌ Mal: da por hecho que el dato existe y no le deja otra salida que responder.
+
+```text
+Este es el mensaje de un cliente:
+"Hola, quiero reservar una mesa para 4 el sábado. Soy Laura."
+Extraé el nombre, el teléfono y el email del cliente.
+```
+
+Respuesta posible:
+
+```text
+Nombre: Laura
+Teléfono: 11 5432-1098
+Email: laura@gmail.com
+```
+
+El teléfono y el email son inventados: tienen la forma correcta y por eso parecen reales.
+
+✅ Bien: le permite decir que no está y le prohíbe completar.
+
+```text
+Este es el mensaje de un cliente, entre ###.
+Extraé el nombre, el teléfono y el email.
+Usá solo la información que aparece en el mensaje. No supongas ni completes datos.
+Si un dato no aparece, escribí exactamente: no_disponible
+
+###
+Hola, quiero reservar una mesa para 4 el sábado. Soy Laura.
+###
+```
+
+Respuesta:
+
+```text
+Nombre: Laura
+Teléfono: no_disponible
+Email: no_disponible
+```
+
+**Tipos de alucinación, con un ejemplo de cada uno**
+
+| Tipo | Qué pasa | Ejemplo |
+|---|---|---|
+| **Dato inventado** | Completa un dato que no le dimos. | El teléfono de Laura, o el año de una fecha que el cliente no dijo. |
+| **Fuente inventada** | Cita libros, leyes, estudios o links que no existen. | "Según un estudio de la Universidad de Harvard de 2019, el 73 % de los clientes…" |
+| **Cálculo equivocado** | Hace una cuenta mal y la presenta como correcta. | "3 remeras de $12.000 con 10 % de descuento: $33.400" (es $32.400). |
+| **Mezcla de datos** | Junta datos de dos fuentes o de dos clientes. | En un mail con dos pedidos, le pone al primer cliente la dirección del segundo. |
+| **Supuesto como hecho** | Convierte algo vago en algo exacto. | "En las vacaciones de invierno" se transforma en "15/07/2025". |
+| **Respuesta a una pregunta trampa** | Acepta una premisa falsa y la desarrolla. | "¿Por qué la pastelería cerró en 2020?" (nunca cerró) → explica los motivos del cierre. |
+
+**Cómo se reducen, con un ejemplo de cada técnica**
+
+| Técnica | Qué se escribe en el prompt |
+|---|---|
+| Darle el dato | "Horario del local: martes a domingo de 10 a 20". Si el dato está, no tiene que inventarlo. |
+| Permitirle no saber | "Si la respuesta no está en el texto, respondé: no tengo ese dato". |
+| Prohibir completar | "Usá solo la información del mensaje. No supongas ni completes datos". |
+| Valor fijo para lo que falta | "Si un dato no aparece, escribí no_disponible". |
+| Razonar paso a paso | "Antes de responder, revisá uno por uno si cada dato aparece en el texto". |
+| Pedir la cita textual | "Para cada dato, copiá entre comillas la parte del mensaje de donde lo sacaste". Si no puede citarla, es que no está. |
+| Controlar desde el flujo | En n8n: si un campo vino como no_disponible, la fila se marca "a revisar" (Semana 2). |
+
+**Señales para sospechar de una respuesta**
+
+- Datos muy precisos que nadie le dio: un teléfono completo, un porcentaje con decimales, una fecha exacta.
+- Nombres de leyes, estudios o autores que no conocés y que no vienen en el texto.
+- Un link: antes de usarlo, hay que abrirlo.
+- Una respuesta que contesta exactamente lo que preguntaste aunque la pregunta tuviera una premisa falsa.
+
+**Ejemplo para hacer en vivo (si sobra tiempo):** preguntale al chat *"¿Cuál es el libro más famoso de
+[nombre y apellido de alguien del grupo que se ofrezca]?"*. Lo más probable es que invente un título y una sinopsis. Después repetí con
+*"Si no sabés quién es, decí que no lo sabés"* y compará.
+
 **Demo de una alucinación** (2 min) — *"Este es el mensaje de un cliente: 'Hola, quiero reservar una mesa para 4
 el sábado. Soy Laura.' ¿Cuál es el teléfono de Laura?"*. Después repetilo agregando *"Si no está, respondé
 no_disponible. No inventes."*. Es el anticipo del paso 4 de la práctica.
