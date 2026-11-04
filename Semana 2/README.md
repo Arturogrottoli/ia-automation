@@ -9,6 +9,7 @@ Fuente: `program-summary.pdf` (Módulo 2). **Una clase de 2 horas.**
 | `Modulo_2_AI_Automation.pptx` | Las filminas del módulo (39). |
 | `Semana 2.docx` | El material de lectura del módulo, con el cuestionario de 6 preguntas. |
 | [ejercicios-alumnos.md](ejercicios-alumnos.md) | Ejercicios en clase, para casa y la consigna completa de la pre-entrega con su rúbrica. Se comparte con los alumnos. |
+| [n8n/](n8n/) | Tres workflows listos para importar en n8n (el flujo mínimo, el flujo roto y el de la agencia con IA). |
 | [ejercicios-docente.md](ejercicios-docente.md) | Respuestas, el paso a paso de las demos de n8n en vivo y la pre-entrega resuelta con el caso de la agencia de viajes. **No se comparte.** |
 
 ## Los ejercicios
@@ -64,6 +65,15 @@ y los pasos 3 a 5 de la pre-entrega (se lee la consigna y listo).
 ### Preparación (antes de la clase)
 
 - [ ] **Tu instancia de n8n abierta** (Cloud o local) y ya logueada. Probá antes todo lo de la sección 04.
+- [ ] **Los workflows listos para importar** (carpeta [n8n/](n8n/)), probados en n8n 2.46. Se abren con el menú
+  **…** del lienzo → **Import from File**:
+  - `01-mi-primer-flujo.json`: el flujo mínimo del Paso D, terminado. Es el plan B si algo no sale en vivo.
+  - `02-mi-primer-flujo-roto.json`: los dos errores del Paso E, el silencioso y el rojo, uno abajo del otro.
+  - `03-agencia-consultas-con-ia.json`: el flujo de la agencia con la plantilla de la Semana 1 adentro de un nodo
+    de IA. Simula la llegada de dos mails (Martín y Lucía) y arma la fila de la planilla, con la columna *estado*
+    en "a revisar" si falta un dato. No necesita Gmail ni Google Sheets, solo una clave de API de Gemini
+    (gratis en aistudio.google.com → *Get API key*). Sirve para mostrar en vivo cómo queda la pre-entrega
+    construida, o en lugar del template si no encontrás uno que te convenza.
 - [ ] **Un template elegido** en n8n.io/workflows para importar en vivo: uno chico (4 a 6 nodos) que use IA. Importalo una vez antes, para saber qué credenciales pide.
 - [ ] **Una cuenta de Gmail de prueba** (no la personal) para crear la credencial en vivo, y una clave de API de un modelo de IA cargada como credencial, para mostrar el nodo de IA.
 - [ ] `ejercicios-alumnos.md` listo para compartir: tiene el paso a paso del flujo mínimo que replican los alumnos.
@@ -77,23 +87,38 @@ y los pasos 3 a 5 de la pre-entrega (se lee la consigna y listo).
 
 **Filmina 1 · Portada** (1 min) — Módulo 2.
 
-<p style="color:#1a7f37">Bienvenidos al Módulo 2. Hoy conocemos n8n, la herramienta con la que vamos a automatizar durante todo el curso.</p>
+<p style="color:#1a7f37">Bienvenidos al Módulo 2. Hoy conocemos n8n, la herramienta con la que vamos a automatizar durante todo el curso. n8n es un programa que conecta las aplicaciones que ya usamos todos los días, como Gmail, WhatsApp o una planilla de Google, para que hagan solas las tareas que hoy hacemos a mano.</p>
+
+Para explicar:
+- **Qué es n8n.** Es un programa que funciona desde el navegador, como Gmail o Google Drive. Adentro se arman "recetas" del tipo "cada vez que pase esto, hacé aquello": cada vez que llega un mail, copiá los datos en la planilla; todos los lunes a las 9, mandame el resumen de ventas. Una vez armada, la receta se repite sola, sin que nadie tenga que estar mirando. No hace falta saber programar: se arma con bloques que se unen con flechas, como un dibujo.
+  - *Ejemplo:* Una pastelería recibe pedidos por mail. Con n8n, cada pedido que llega se anota solo en la planilla de pedidos y la dueña recibe un aviso en el celular. Ella no copia nada.
+- **De dónde viene el nombre.** Se pronuncia "ene-ocho-ene". Es una abreviatura de *nodemation*, una palabra inventada que junta *node* (nodo, cada bloque del dibujo) y *automation* (automatización): "automatización con bloques". Se escribe n8n porque es la n del principio, la n del final y, en el medio, el número de letras que se saltean: ocho. Es como cuando en un mensaje escribimos "xq" en vez de "porque": una forma corta de escribir una palabra larga.
+  - *Ejemplo:* n·odematio·n → n + 8 letras + n → n8n.
+- **Por qué esta herramienta.** Es gratis si se instala en la propia computadora, tiene bloques listos para cientos de aplicaciones y permite meter inteligencia artificial en el medio de un proceso. Es la que vamos a usar en todas las clases que quedan.
+  - *Ejemplo:* Gmail, WhatsApp, Google Sheets, Google Calendar, Telegram, ChatGPT: todas tienen su bloque en n8n.
 
 **Filmina 2 · Objetivos** (2 min)
 
 <p style="color:#1a7f37">Hoy van a aprender qué es una automatización, cómo saber si vale la pena, y sobre todo qué es n8n, para qué sirve y cómo se usa.</p>
 
 Para explicar cada objetivo:
-- **Distinguir una automatización lineal de una cognitiva y explicar qué es orquestar sistemas.** Es la base para saber cuándo hace falta IA en un flujo y cuándo no. Poner IA donde no hace falta encarece el flujo y lo vuelve menos predecible; no ponerla donde hace falta deja a una persona leyendo mensajes a mano. Saber distinguir los dos tipos es lo que permite diseñar bien desde el principio.
+- **Distinguir una automatización lineal de una cognitiva y explicar qué es orquestar sistemas.** Tres palabras nuevas. Una **automatización** es una tarea que la computadora hace sola, siempre de la misma forma, sin que nadie la toque. Es **lineal** cuando sigue reglas fijas, como una receta ("si llega un formulario, copialo en la planilla"); es **cognitiva** cuando en algún paso tiene que leer y entender algo, y para eso usa IA ("leé este mail y decime si es un reclamo"). **Orquestar** es hacer que varias aplicaciones trabajen coordinadas, como los músicos de una orquesta. Es la base para saber cuándo hace falta IA en un flujo y cuándo no. Poner IA donde no hace falta encarece el flujo y lo vuelve menos predecible; no ponerla donde hace falta deja a una persona leyendo mensajes a mano. Saber distinguir los dos tipos es lo que permite diseñar bien desde el principio.
   - *Ejemplo:* Lineal: cada inscripción del formulario se copia en una planilla. Cognitiva: cada mail se lee, se entiende si es reclamo o consulta, y se deriva. Orquestar: que el pago en Mercado Pago, la planilla y el WhatsApp al cliente se actualicen juntos.
-- **Evaluar si un proceso vale la pena automatizar usando ROI, frecuencia y costo de oportunidad.** No todo lo que se puede automatizar conviene automatizarlo: armar y mantener un flujo cuesta. Hoy vamos a aprender a hacer esa cuenta antes de abrir n8n, con tres preguntas simples. Es lo que separa a quien automatiza "porque se puede" de quien automatiza lo que le cambia el día a un negocio.
+- **Evaluar si un proceso vale la pena automatizar usando ROI, frecuencia y costo de oportunidad.** No todo lo que se puede automatizar conviene automatizarlo: armar y mantener un flujo cuesta. Hoy vamos a aprender a hacer esa cuenta antes de abrir n8n, con tres preguntas simples. Es lo que separa a quien automatiza "porque se puede" de quien automatiza lo que le cambia el día a un negocio. Las tres palabras, en criollo:
+  - **ROI** son las siglas en inglés de *Return on Investment*, "retorno de la inversión". Responde una pregunta muy simple: por lo que pongo (plata o tiempo), ¿cuánto me vuelve? Si pongo 10 horas en armar algo y me ahorra 40, me conviene. Lo vemos en detalle en la Sección 02.
+  - **Frecuencia** es cada cuánto pasa la tarea: todos los días, una vez por semana, una vez por año. Cuanto más seguido pasa, más conviene automatizarla.
+  - **Costo de oportunidad** es lo que dejás de hacer mientras hacés la tarea a mano. Si la dueña de una pastelería pasa una hora por día anotando pedidos, el costo no es solo esa hora: son las tortas que no hizo en ese rato.
   - *Ejemplo:* Automatizar el pedido semanal a un proveedor (una vez por semana, 10 minutos) probablemente no conviene. Automatizar la carga de 50 pedidos diarios, sí.
-- **Reconocer las piezas de n8n: instancia, workflow, nodos y el JSON que viaja entre ellos.** El vocabulario que vamos a usar el resto del curso. Son cuatro palabras que van a aparecer en todas las clases que siguen: dónde corre n8n, cómo se arma un flujo, qué hace cada bloque y en qué formato se pasan los datos. Si hoy quedan claras, el resto del curso se entiende mucho mejor.
-  - *Ejemplo:* Instancia: tu n8n en n8n Cloud. Workflow: "Consultas mail → planilla". Nodos: Gmail Trigger, nodo de IA y Google Sheets. JSON: `{"nombre": "Martín", "destino": "Bariloche"}`, viajando del nodo de IA a Sheets.
-- **Traducir un proceso manual a un boceto de flujo con un paso de IA.** Es la pre-entrega de esta semana. Antes de construir, se diseña: qué dispara el flujo, qué pasos tiene, dónde entra la IA y dónde termina el dato. Un buen boceto ahorra horas de prueba y error en n8n.
+- **Reconocer las piezas de n8n: instancia, workflow, nodos y el JSON que viaja entre ellos.** El vocabulario que vamos a usar el resto del curso. Son cuatro palabras que van a aparecer en todas las clases que siguen. Si hoy quedan claras, el resto del curso se entiende mucho mejor:
+  - **Instancia:** tu n8n, el tuyo, funcionando en algún lado (en internet o en tu computadora). Como tu cuenta de Gmail: el programa es el mismo para todos, pero lo que hay adentro es tuyo.
+  - **Workflow:** en inglés, "flujo de trabajo". Es una automatización completa, de punta a punta: "cada vez que llega un mail, copiá los datos en la planilla". En clase vamos a decir "workflow" o "flujo", es lo mismo.
+  - **Nodo:** cada bloque del flujo. Cada nodo hace una sola cosa: uno recibe el mail, otro lo lee con IA, otro escribe en la planilla. Se unen con flechas.
+  - **JSON:** la forma en que los nodos se pasan los datos. Es la "ficha con casilleros" de la semana pasada: un casillero "nombre" con Martín, un casillero "destino" con Bariloche.
+  - *Ejemplo:* Instancia: tu n8n, en internet. Workflow: "Consultas por mail a planilla". Nodos: el que recibe el mail (Gmail), el que lo lee con IA y el que escribe en la planilla (Google Sheets). JSON: `{"nombre": "Martín", "destino": "Bariloche"}`, la ficha que viaja del nodo de IA al de la planilla.
+- **Traducir un proceso manual a un boceto de flujo con un paso de IA.** Un **boceto** es un borrador, un dibujo simple del flujo antes de armarlo: una lista de pasos o unas cajitas con flechas en un papel. Es la pre-entrega de esta semana. Antes de construir, se diseña: qué hace arrancar el flujo, qué pasos tiene, en cuál entra la IA y dónde termina el dato. Un buen boceto ahorra horas de prueba y error en n8n.
   - *Ejemplo:* Proceso manual: "leo cada reseña de Google y la anoto como positiva o negativa". Boceto: "llega una reseña nueva → la IA la clasifica → se agrega a la planilla → si es negativa, aviso por mail".
-- **Importar y adaptar un template en lugar de construir desde cero.** En la práctica real, casi nadie arranca de una hoja en blanco. Hay miles de flujos armados por la comunidad para casos muy comunes. Saber encontrarlos, leerlos y adaptarlos es una habilidad tan importante como saber armar uno desde cero.
-  - *Ejemplo:* En vez de armar de cero "resumir mails con IA y mandarlos a Slack", se busca ese template, se importa y se cambian la cuenta de Gmail y el canal de Slack. Diez minutos en lugar de dos horas.
+- **Importar y adaptar un template en lugar de construir desde cero.** **Template** quiere decir plantilla: un flujo que ya armó otra persona y que se puede copiar. **Importar** es traerlo a tu n8n, como cuando descargás un modelo de currículum y le cambiás los datos. En la práctica real, casi nadie arranca de una hoja en blanco. Hay miles de flujos armados por la comunidad para casos muy comunes. Saber encontrarlos, leerlos y adaptarlos es una habilidad tan importante como saber armar uno desde cero.
+  - *Ejemplo:* En vez de armar de cero "resumir mails con IA y mandarlos a Slack" (Slack es un chat para equipos de trabajo, parecido a WhatsApp), se busca ese template, se importa y se cambian la cuenta de Gmail y el canal de Slack. Diez minutos en lugar de dos horas.
 
 **Filmina 3 · Agenda** (1 min) — teoría hasta el break; después, n8n con las manos.
 
@@ -107,26 +132,26 @@ Para explicar cada objetivo:
 
 <p style="color:#1a7f37">Antes de arrancar, repasemos rápido lo que vimos la semana pasada, porque hoy lo vamos a usar.</p>
 
-<p style="color:#1a7f37">Primero: la IA no piensa, predice. Un LLM, como ChatGPT o Claude, fue entrenado con muchísimo texto y lo único que hace es calcular cuál es el pedacito de texto más probable que sigue. Por eso suena seguro aunque esté equivocado.</p>
+<p style="color:#1a7f37">Primero: la IA no piensa, predice. Un LLM, que quiere decir "modelo de lenguaje grande" y es el tipo de IA que hay detrás de ChatGPT, Claude o Gemini, fue entrenado con muchísimo texto y lo único que hace es calcular cuál es el pedacito de texto más probable que sigue. Por eso suena seguro aunque esté equivocado.</p>
 
 <p style="color:#1a7f37">Segundo: el modelo lee en tokens, que son pedacitos de palabras. Se paga por token y tiene una ventana de contexto, un límite de cuánto texto puede tener en mente a la vez. Lo que queda afuera, no lo ve.</p>
 
 <p style="color:#1a7f37">Tercero: cuando le falta información, el modelo alucina, inventa con total seguridad. En una automatización eso es grave, porque nadie revisa y el dato falso llega a destino.</p>
 
-<p style="color:#1a7f37">Cuarto: para evitarlo, prompt engineering. Un buen prompt tiene cuatro partes: quién es la IA, el contexto, la tarea y el formato de salida. Separamos el texto a procesar con delimitadores como ###, le damos ejemplos con few-shot, le pedimos que revise paso a paso y que si falta un dato ponga "no_disponible".</p>
+<p style="color:#1a7f37">Cuarto: para evitarlo, aprendimos a escribir buenos prompts, es decir, buenas instrucciones para la IA. Un buen prompt tiene cuatro partes: quién es la IA, el contexto, la tarea y el formato en que tiene que responder. Encerramos el texto a procesar entre marcas como ###, para que la IA sepa dónde empieza y dónde termina; le damos ejemplos de cómo queremos la respuesta; le pedimos que revise paso a paso y que, si falta un dato, ponga "no_disponible" en vez de inventarlo.</p>
 
-<p style="color:#1a7f37">Y quinto: lo armamos en cinco pasos hasta llegar a la plantilla maestra, un prompt que toma un mail desordenado y devuelve un JSON limpio, con llaves fijas y sin texto alrededor. Ese JSON es justamente el idioma de n8n, la herramienta que vemos hoy.</p>
+<p style="color:#1a7f37">Y quinto: lo armamos en cinco pasos hasta llegar a la plantilla maestra, un prompt que toma un mail desordenado y devuelve un JSON limpio: la ficha con casilleros, siempre con los mismos nombres de casilleros y sin texto alrededor. Ese JSON es justamente el idioma de n8n, la herramienta que vemos hoy.</p>
 
 Para explicar:
 - **La IA predice, no piensa.** Si alguien pregunta "¿entonces no sirve?": sirve muchísimo, pero hay que darle buen contexto y no confiar a ciegas en lo que devuelve. Es como un empleado nuevo muy rápido y muy capaz: hace un trabajo excelente si le explicás bien, y conviene revisar lo que entrega, sobre todo al principio.
   - *Ejemplo:* "¿Cuál es el horario del local?", sin decírselo: responde "de 9 a 18", lo más común. Con el horario en el prompt, acierta.
-- **Tokens y ventana de contexto.** Lo vamos a sentir en n8n: cada llamada al nodo de IA consume tokens, y mandarle textos enormes es más caro y más lento. Y cada llamada empieza de cero: el modelo no se acuerda de la corrida anterior del flujo. Todo lo que necesite saber tiene que ir en esa llamada.
+- **Tokens y ventana de contexto.** Un **token** es un pedacito de palabra (más o menos, tres o cuatro letras): es la unidad con la que la IA lee y con la que se cobra. Lo vamos a sentir en n8n: cada vez que el flujo le pide algo a la IA (a eso se le dice "una llamada") se consumen tokens, y mandarle textos enormes es más caro y más lento. Y cada llamada empieza de cero: el modelo no se acuerda de la corrida anterior del flujo. Todo lo que necesite saber tiene que ir en esa llamada.
   - *Ejemplo:* Un flujo que le manda a la IA cada mail con todo el hilo anterior (unos 3.000 tokens) gasta diez veces más que uno que manda solo el último mensaje (unos 300).
-- **Alucinaciones.** La defensa está en el prompt ("usá solo lo que dice el texto", "no_disponible") y, desde hoy, también en el flujo: validar el JSON antes de guardarlo. Con n8n podemos agregar controles alrededor de la IA: por ejemplo, si un dato viene como `no_disponible`, mandar la fila a revisión en vez de guardarla como si estuviera completa.
+- **Alucinaciones.** Alucinar es cuando la IA inventa un dato y lo dice con total seguridad, como si fuera cierto. La defensa está en el prompt ("usá solo lo que dice el texto", "no_disponible") y, desde hoy, también en el flujo: revisar el JSON antes de guardarlo. Con n8n podemos agregar controles alrededor de la IA: por ejemplo, si un dato viene como `no_disponible`, mandar la fila a revisión en vez de guardarla como si estuviera completa.
   - *Ejemplo:* Un mail sin teléfono → la IA devuelve `"telefono": "no_disponible"` → el flujo ve ese valor y marca la fila "a revisar" en lugar de guardarla como completa.
-- **Las cuatro partes del prompt y las técnicas.** Rol, contexto, tarea y formato; zero-shot, few-shot y chain of thought. Si alguien no se acuerda, que mire su desafío del Módulo 1. Hoy no vamos a escribir prompts nuevos desde cero: vamos a usar el que ya tienen y ver dónde se ubica dentro de un flujo.
+- **Las cuatro partes del prompt y las técnicas.** Rol, contexto, tarea y formato. Y las tres técnicas, con sus nombres en inglés: *zero-shot* ("cero ejemplos": se pide directo), *few-shot* ("pocos ejemplos": se le muestran dos o tres respuestas modelo) y *chain of thought* ("cadena de pensamiento": se le pide que razone paso a paso antes de responder). Si alguien no se acuerda, que mire su desafío del Módulo 1. Hoy no vamos a escribir prompts nuevos desde cero: vamos a usar el que ya tienen y ver dónde se ubica dentro de un flujo.
   - *Ejemplo:* Zero-shot: "Clasificá este mail". Few-shot: el mismo pedido con dos mails de ejemplo ya clasificados. Chain of thought: "antes de clasificar, decí qué pide el cliente y cuántos días pasaron desde la compra".
-- **La plantilla maestra en JSON.** Es la pieza que hoy pasa de "copiar y pegar a mano" a "un nodo dentro de un flujo que corre solo". Ese es el puente con la filmina 5. El JSON que la semana pasada validaban en el formatter es exactamente lo que un nodo de n8n le pasa al siguiente.
+- **La plantilla maestra en JSON.** Es la pieza que hoy pasa de "copiar y pegar a mano" a "un nodo dentro de un flujo que corre solo". Ese es el puente con la filmina 5. El JSON que la semana pasada revisaban en jsonlint.com (la página que dice si un JSON está bien escrito) es exactamente lo que un nodo de n8n le pasa al siguiente.
   - *Ejemplo:* La semana pasada: copiar el mail, pegarlo en el chat con la plantilla, copiar el JSON, pegarlo en la planilla. Hoy: el mismo prompt va dentro de un nodo y los tres "copiar y pegar" desaparecen.
 
 **Filmina 5 · ¿Dónde quedamos? Del prompt suelto al flujo que corre solo** (3 min)
@@ -136,7 +161,7 @@ Para explicar:
 Para explicar:
 - **"En el módulo 1: armaste una plantilla de prompt que toma un texto desordenado y devuelve JSON válido."** Recordá el ejemplo de la agencia de viajes: un mail desordenado entra, un JSON con nombre, destino y fechas sale. Ese prompt ya hace la parte "inteligente" del trabajo: leer, entender y ordenar. Lo que falta es todo lo que pasa alrededor.
   - *Ejemplo:* Entrada: "hola, somos 4, queremos ir a bariloche del 15 al 22 de julio, Martín". Salida: `{"nombre": "Martín", "destino": "Bariloche", "pasajeros": 4, ...}`.
-- **"El problema que quedó: vos seguís copiando y pegando el texto a mano cada vez."** Con diez mails por día, eso no escala: la IA hace su parte, pero una persona sigue siendo el "cable" que lleva el dato de un lado al otro. Abrir el mail, copiar, pegar en el chat, copiar el JSON, pegarlo en la planilla: cinco pasos manuales por cada mensaje. Si un día llegan cien, alguien pasa la tarde haciendo eso, y además puede equivocarse al copiar.
+- **"El problema que quedó: vos seguís copiando y pegando el texto a mano cada vez."** Con diez mails por día, eso no escala (que algo "escale" quiere decir que sigue funcionando igual de bien cuando el volumen crece mucho): la IA hace su parte, pero una persona sigue siendo el "cable" que lleva el dato de un lado al otro. Abrir el mail, copiar, pegar en el chat, copiar el JSON, pegarlo en la planilla: cinco pasos manuales por cada mensaje. Si un día llegan cien, alguien pasa la tarde haciendo eso, y además puede equivocarse al copiar.
   - *Ejemplo:* 10 mails por día × 2 minutos de copiar y pegar = 20 minutos diarios: unas 7 horas por mes solo haciendo de "cable".
 - **"Hoy: conocemos la herramienta que hace ese trabajo sola y aprendemos a decidir qué vale la pena automatizar."** La herramienta es n8n: va a buscar el mail, se lo pasa a la IA con nuestro prompt y guarda el resultado, sin que nadie toque nada. Y antes de armar nada, vamos a ver cómo decidir si un proceso vale el esfuerzo de automatizarlo.
   - *Ejemplo:* El mismo trabajo en n8n: Gmail Trigger → nodo de IA con la plantilla → Google Sheets. Nadie toca nada.
@@ -162,9 +187,9 @@ Para explicar:
   - *Ejemplo:* Cada vez que alguien compra en la tienda online, se genera la factura, se descuenta el stock en la planilla y se le manda al cliente el mail con el número de seguimiento. Sin que nadie toque nada, aunque sea domingo a las 3 de la mañana.
 - **"El dilema que resuelve: en un negocio tradicional, si los pedidos se duplican, la carga administrativa se duplica y hay que contratar más gente."** Si cargar un pedido lleva 5 minutos, 100 pedidos llevan más de 8 horas: una persona entera. Con 200, dos personas. Es lo que se llama crecimiento lineal: el trabajo crece al mismo ritmo que las ventas. Muchos negocios chicos se traban justo ahí: venden más, pero el tiempo que les come la administración no los deja crecer.
   - *Ejemplo:* Un local de ropa: 30 pedidos por día × 5 minutos = 2,5 horas diarias. Si pasa a 120 pedidos, son 10 horas: hace falta otra persona solo para cargar pedidos.
-- **"Cómo rompe esa linealidad: un servidor procesando 100 webhooks por minuto cuesta y tarda lo mismo que procesando 10.000."** Un **webhook** es un aviso automático que una aplicación le manda a otra cuando pasa algo: "entró un pedido", "llegó un pago". Para una computadora, procesar uno o mil de esos avisos es prácticamente lo mismo. El costo crece muchísimo menos que el volumen. Es como la diferencia entre escribir cada invitación a mano y mandar un mail a una lista: escribir el mail lleva el mismo tiempo para diez personas que para mil.
+- **"Cómo rompe esa linealidad: un servidor procesando 100 webhooks por minuto cuesta y tarda lo mismo que procesando 10.000."** Un **servidor** es una computadora que está prendida todo el tiempo y conectada a internet, para que los programas que tiene adentro funcionen las 24 horas (las páginas web, las apps y n8n viven en servidores). Un **webhook** es un aviso automático que una aplicación le manda a otra cuando pasa algo: "entró un pedido", "llegó un pago". Para una computadora, procesar uno o mil de esos avisos es prácticamente lo mismo. El costo crece muchísimo menos que el volumen. Es como la diferencia entre escribir cada invitación a mano y mandar un mail a una lista: escribir el mail lleva el mismo tiempo para diez personas que para mil.
   - *Ejemplo:* Black Friday: la tienda pasa de 50 a 2.000 pedidos en un día. El flujo que carga cada pedido en la planilla tarda lo mismo por pedido y no se cansa; a mano sería imposible.
-- **"El resultado: el trabajo operativo se vuelve un costo fijo. Escalás las ventas sin colapsar la logística."** Matiz para el grupo: no es fijo del todo (si cada paso usa una IA paga, cada llamada cuesta centavos), pero crece mucho más despacio que contratar gente. Y libera a las personas para lo que una máquina no hace bien: atender un caso delicado, negociar, pensar cómo mejorar el negocio.
+- **"El resultado: el trabajo operativo se vuelve un costo fijo. Escalás las ventas sin colapsar la logística."** El **trabajo operativo** es el del día a día: cargar, copiar, avisar, ordenar. Un **costo fijo** es el que se paga igual, vendas poco o mucho, como el alquiler del local. Y la **logística** es todo lo que hay que hacer para que el pedido llegue: anotarlo, prepararlo, enviarlo. Matiz para el grupo: no es fijo del todo (si cada paso usa una IA paga, cada llamada cuesta centavos), pero crece mucho más despacio que contratar gente. Y libera a las personas para lo que una máquina no hace bien: atender un caso delicado, negociar, pensar cómo mejorar el negocio.
   - *Ejemplo:* Con el flujo, pasar de 100 a 1.000 pedidos por mes casi no cambia el costo: el plan de n8n es el mismo y la IA suma unos centavos por pedido. A mano, ese salto es pasar de unas horas a un sueldo entero.
 
 #### Filmina 8 · Orquestación: automatizar no es solo ahorrar tiempo (2 min)
@@ -191,13 +216,13 @@ Para explicar:
 <p style="color:#1a7f37">Hay dos tipos: las lineales siguen reglas fijas, 'si pasa A, hacé B'. Las cognitivas tienen un paso donde decide una IA, como el prompt que hicieron la semana pasada.</p>
 
 Para explicar:
-- **"Lineales: cada paso se ejecuta en un orden fijo y predecible. 'Si pasa A, hacé B y después C', sin ambigüedad ni interpretación."** Ejemplo: cada vez que alguien completa un formulario, se agrega una fila a la planilla y se le manda un mail de confirmación. Son **deterministas**: con la misma entrada, siempre hacen lo mismo. Son baratas y confiables, pero no pueden "leer" un texto libre. Funcionan perfecto cuando los datos ya llegan ordenados (un formulario con campos fijos, una venta con monto y producto). Cuando el dato llega como texto libre, escrito por una persona, se traban.
+- **"Lineales: cada paso se ejecuta en un orden fijo y predecible. 'Si pasa A, hacé B y después C', sin ambigüedad ni interpretación."** "Se ejecuta" quiere decir "se hace", "corre". Ejemplo: cada vez que alguien completa un formulario, se agrega una fila a la planilla y se le manda un mail de confirmación. Son **deterministas**: con la misma entrada, siempre hacen lo mismo. Son baratas y confiables, pero no pueden "leer" un texto libre. Funcionan perfecto cuando los datos ya llegan ordenados (un formulario con campos fijos, una venta con monto y producto). Cuando el dato llega como texto libre, escrito por una persona, se traban.
   - *Ejemplo:* Regla de Gmail: "si el remitente es facturas@proveedor.com, mover a la carpeta Facturas". Siempre hace lo mismo y nunca se equivoca; pero si el proveedor cambia de dirección, deja de funcionar.
-- **"Cognitivas: en uno o varios pasos se delega la interpretación, el razonamiento o la generación a un modelo de IA."** Ejemplo: llega un mail, la IA decide si es una consulta, un reclamo o spam, y según eso el flujo hace cosas distintas. El prompt que armaron en la Semana 1 es exactamente ese paso. Tres cosas que puede hacer la IA en un flujo: interpretar (entender qué quiere el cliente), razonar (decidir qué categoría corresponde) y generar (escribir una respuesta o un resumen).
+- **"Cognitivas: en uno o varios pasos se delega la interpretación, el razonamiento o la generación a un modelo de IA."** Ejemplo: llega un mail, la IA decide si es una consulta, un reclamo o spam, y según eso el flujo hace cosas distintas. El prompt que armaron en la Semana 1 es exactamente ese paso. "Delegar" es pasarle la tarea a otro: en este caso, a la IA. Tres cosas que puede hacer la IA en un flujo: interpretar (entender qué quiere el cliente), razonar (decidir qué categoría corresponde) y generar (escribir una respuesta o un resumen).
   - *Ejemplo:* Mail: "el pedido llegó pero la torta estaba aplastada". La IA devuelve `{"tipo": "reclamo", "motivo": "producto dañado"}` y el flujo le avisa a la dueña.
 - **"La diferencia clave: el sistema deja de seguir solo instrucciones deterministas. En algún punto entiende el contenido y decide con cierto criterio."** Eso le da flexibilidad, pero trae lo que vimos la semana pasada: la IA puede equivocarse o inventar. Por eso los flujos cognitivos casi siempre son pasos lineales alrededor de un paso de IA bien controlado. La regla práctica: usar reglas fijas para todo lo que se pueda resolver con reglas, y dejar la IA solo para el paso que de verdad necesita interpretar. Así el flujo es más barato, más rápido y más fácil de controlar.
   - *Ejemplo:* Un paso lineal controla a la IA: si devolvió una de las categorías permitidas (consulta, reclamo, otro), sigue; si devolvió cualquier otra cosa, el mail va a revisión manual.
-- **"Hacia dónde vamos: el proyecto final del curso es un agente autónomo. Cognitivo de punta a punta."** Un asistente de WhatsApp que entiende, decide y responde. La diferencia con un flujo cognitivo común es que el agente no sigue un camino fijo con un paso de IA: la IA decide qué hacer en cada momento (consultar un dato, responder, pedir más información). Lo vamos a construir de a poco, a partir de las piezas que vemos hoy.
+- **"Hacia dónde vamos: el proyecto final del curso es un agente autónomo. Cognitivo de punta a punta."** Un **agente** es una IA que no solo responde, sino que también hace cosas (busca un dato, anota un pedido, manda un mensaje); "autónomo" quiere decir que decide sola qué hacer. Un asistente de WhatsApp que entiende, decide y responde. La diferencia con un flujo cognitivo común es que el agente no sigue un camino fijo con un paso de IA: la IA decide qué hacer en cada momento (consultar un dato, responder, pedir más información). Lo vamos a construir de a poco, a partir de las piezas que vemos hoy.
   - *Ejemplo:* Cliente: "¿tienen torta sin TACC para el viernes?". El agente busca en la planilla de productos, ve que no hay y responde: "Sin TACC no hacemos, pero tenemos una opción sin lactosa. ¿Te interesa?".
 
 **Ejemplo: el mismo negocio, un flujo lineal y uno cognitivo**
@@ -247,7 +272,7 @@ se repite, y lo que se repite es lo que conviene automatizar.
 
 #### Filmina 12 · ¿Qué es el ROI? La métrica que decide qué automatizás (2 min)
 
-<p style="color:#1a7f37">El ROI mide cuánto vuelve por lo que invertimos: beneficio neto sobre costo, por cien. El costo es armarlo y mantenerlo; el beneficio, las horas ahorradas, más ventas y menos errores.</p>
+<p style="color:#1a7f37">ROI quiere decir retorno de la inversión: mide cuánto nos vuelve por lo que pusimos. La cuenta es beneficio neto sobre costo, por cien. El costo es armarlo y mantenerlo; el beneficio, las horas ahorradas, más ventas y menos errores.</p>
 
 Para explicar:
 - **"La definición: evalúa la rentabilidad de una inversión en relación con su costo. En automatización no se mide solo en plata, también en tiempo recuperado."** ROI es *Return on Investment*, retorno de la inversión. Responde: por cada peso (o cada hora) que pongo, ¿cuánto me vuelve? En automatización muchas veces conviene hacer la cuenta en horas: cuántas horas me lleva armar el flujo contra cuántas horas me ahorra por mes. Después, si hace falta, esas horas se pasan a plata con lo que cuesta la hora de la persona que hacía la tarea.
@@ -259,9 +284,9 @@ Para explicar:
     Beneficio neto:            250.000 − 100.000 = $150.000
     ROI:                       150.000 / 100.000 × 100 = 150 %
     ```
-- **"Costo de inversión: horas de desarrollo del flujo, licencias de software, hosting, mantenimiento."** Lo que más se olvida es el mantenimiento: las aplicaciones cambian, las credenciales vencen, los prompts hay que ajustarlos. Un flujo no se arma y se olvida. También entran en el costo las llamadas a la IA (que se pagan por token) y el tiempo de probar el flujo antes de dejarlo andando solo.
-  - *Ejemplo:* Armado: 10 horas. n8n: el plan mensual (o el servidor, si es self-hosted). IA: unos centavos por mail. Mantenimiento: una hora por mes, cuando Google cambia algo o hay que ajustar el prompt.
-- **"Beneficio neto: ahorro de horas manuales, más ventas por responder rápido, menos costos por errores evitados."** Un cliente que recibe respuesta en un minuto en vez de en un día compra más; un pedido cargado sin errores de tipeo no se envía a la dirección equivocada. El ahorro de horas es el más fácil de medir; los otros dos son más difíciles de calcular, pero muchas veces son los que más pesan.
+- **"Costo de inversión: horas de desarrollo del flujo, licencias de software, hosting, mantenimiento."** Las palabras, una por una: **desarrollo** es el tiempo de armar el flujo; una **licencia de software** es lo que se paga por usar un programa (como el abono mensual de Netflix, pero de una herramienta de trabajo); **hosting** es el alquiler de la computadora en internet donde corre el programa (el servidor); **mantenimiento** es el tiempo de arreglarlo y ajustarlo después. Lo que más se olvida es el mantenimiento: las aplicaciones cambian, los permisos para entrar a las cuentas vencen, los prompts hay que ajustarlos. Un flujo no se arma y se olvida. También entran en el costo las llamadas a la IA (que se pagan por token) y el tiempo de probar el flujo antes de dejarlo andando solo.
+  - *Ejemplo:* Armado: 10 horas. n8n: el plan mensual (o, si lo instalás vos, la computadora donde corre). IA: unos centavos por mail. Mantenimiento: una hora por mes, cuando Google cambia algo o hay que ajustar el prompt.
+- **"Beneficio neto: ahorro de horas manuales, más ventas por responder rápido, menos costos por errores evitados."** "Neto" quiere decir lo que queda después de restar lo que se gastó. Un cliente que recibe respuesta en un minuto en vez de en un día compra más; un pedido cargado sin errores de tipeo no se envía a la dirección equivocada. El ahorro de horas es el más fácil de medir; los otros dos son más difíciles de calcular, pero muchas veces son los que más pesan.
   - *Ejemplo:* Una inmobiliaria que responde una consulta en 1 minuto en lugar de 4 horas consigue más visitas: el cliente todavía no le escribió a la competencia.
 
 **Ejercicio 2 · Calculá el ROI** (3 min) — resolvelo en voz alta con los números de `ejercicios-alumnos.md`: el
@@ -278,14 +303,16 @@ Mes 2:       ahorro 26 h − costo 22 h = +4 h  → ya se pagó
 Break-even:  a los 1,7 meses, más o menos (13 × meses = 20 + 1 × meses)
 ```
 
+*Break-even* es el momento en que lo ahorrado alcanza lo que se invirtió: desde ahí, todo es ganancia. Lo vemos en la filmina que sigue.
+
 #### Filmina 13 · Umbrales: cuándo es rentable (2 min)
 
-<p style="color:#1a7f37">Tres ideas: el break-even es cuando el ahorro alcanza lo que costó; conviene automatizar lo frecuente y que no requiere criterio humano; y siempre preguntarse qué haría esa persona con el tiempo libre.</p>
+<p style="color:#1a7f37">Tres ideas: el break-even, que en castellano es el punto de equilibrio, es cuando el ahorro alcanza lo que costó; conviene automatizar lo frecuente y que no requiere criterio humano; y siempre preguntarse qué haría esa persona con el tiempo libre.</p>
 
 Para explicar:
 - **"Break-even: el punto de equilibrio. El momento exacto en que el ahorro acumulado iguala el costo de implementación."** Antes de ese punto, la automatización todavía "debe" plata; después, todo es ganancia. En el ejercicio, cae a principios del segundo mes. Es un número muy útil para convencer a alguien (un jefe, un cliente, el dueño del negocio): "en cinco semanas se paga sola" se entiende mejor que cualquier porcentaje.
   - *Ejemplo:* Costo: 20 horas. Ahorro: 10 horas por mes. Break-even a los 2 meses; desde el tercero, cada mes son 10 horas de ganancia.
-- **"Regla 80/20: el 80 % de los resultados sale del 20 % de los flujos. Automatizá alta frecuencia y bajo juicio humano."** Unos pocos flujos bien elegidos dan casi todo el beneficio. Alta frecuencia: pasa muchas veces (cada día, cada hora). Bajo juicio humano: no necesita que una persona decida algo delicado. Copiar pedidos a una planilla cumple las dos; negociar con un proveedor, ninguna. La regla sirve para no dispersarse: antes de automatizar diez cosas chicas, conviene encontrar las dos o tres que se comen la mayor parte del tiempo.
+- **"Regla 80/20: el 80 % de los resultados sale del 20 % de los flujos. Automatizá alta frecuencia y bajo juicio humano."** "Juicio humano" es cuando hace falta que una persona piense y decida, con su criterio. Unos pocos flujos bien elegidos dan casi todo el beneficio. Alta frecuencia: pasa muchas veces (cada día, cada hora). Bajo juicio humano: no necesita que una persona decida algo delicado. Copiar pedidos a una planilla cumple las dos; negociar con un proveedor, ninguna. La regla sirve para no dispersarse: antes de automatizar diez cosas chicas, conviene encontrar las dos o tres que se comen la mayor parte del tiempo.
   - *Ejemplo:* Una tienda tiene 10 tareas repetitivas. Dos (cargar pedidos y responder "¿cuándo llega mi pedido?") se llevan el 80 % del tiempo. Se automatizan esas dos primero.
 - **"Costo de oportunidad: ¿qué estaría haciendo esa persona si no estuviera copiando datos en Excel?"** Si es un vendedor que pasa dos horas por día copiando datos, la empresa pierde las ventas que podría haber cerrado en ese tiempo. El costo de una tarea manual no es solo el sueldo de las horas que lleva: es todo lo que esa persona no hizo mientras tanto. Por eso dos tareas que llevan el mismo tiempo pueden tener ROI muy distintos según quién las haga.
   - *Ejemplo:* La dueña de una pastelería pasa una hora por día anotando pedidos. En esa hora podría hacer dos tortas más: el costo de oportunidad son esas dos tortas por día.
@@ -332,26 +359,30 @@ Para explicar:
 <p style="color:#1a7f37">n8n conecta aplicaciones para que trabajen juntas solas, sin programar. Cada nodo es un bloque ya hecho que configurás; y si hace falta, se puede escribir código.</p>
 
 Para explicar:
-- **"Qué hace: conecta aplicaciones y servicios entre sí para automatizar tareas sin necesidad de escribir código."** Tiene cientos de integraciones listas: Gmail, Google Sheets, Slack, WhatsApp, Telegram, bases de datos y modelos de IA. Ejemplos de para qué sirve: cada mail de consulta se carga en una planilla; cada pedido nuevo avisa por WhatsApp; cada lunes a las 9 llega un reporte; cada mensaje de un cliente lo responde un asistente con IA. El nombre viene de *nodemation* (automatización con nodos). Se trabaja en una pantalla tipo pizarrón (el lienzo o *canvas*): se ponen bloques y se unen con flechas, y el dato va pasando de un bloque al siguiente en el orden de las flechas.
+- **Las tres palabras del título.** Antes de entrar en cada frase, traducí el título de la filmina. **Código** son las instrucciones escritas que forman un programa; programar es escribir esas instrucciones. **Low-code** quiere decir "poco código": casi todo se hace con clics y solo de vez en cuando se escribe alguna línea. **Open source** quiere decir "código abierto": las instrucciones del programa están publicadas en internet y cualquiera las puede ver, revisar y usar. **Basado en nodos** quiere decir que todo se arma con bloques que se unen con flechas.
+  - *Ejemplo:* Una receta de cocina publicada en internet es "open source": cualquiera la ve y la puede hacer en su casa. La receta secreta de una marca de gaseosa es lo contrario: nadie sabe qué tiene adentro.
+- **"Qué hace: conecta aplicaciones y servicios entre sí para automatizar tareas sin necesidad de escribir código."** Una **integración** es un bloque listo para hablar con una aplicación en particular: la integración de Gmail sabe leer y mandar mails; la de Google Sheets sabe escribir en planillas. Tiene cientos de integraciones listas: Gmail, Google Sheets, Slack, WhatsApp, Telegram, bases de datos (programas que guardan mucha información ordenada, como una planilla gigante) y modelos de IA. Ejemplos de para qué sirve: cada mail de consulta se carga en una planilla; cada pedido nuevo avisa por WhatsApp; cada lunes a las 9 llega un reporte; cada mensaje de un cliente lo responde un asistente con IA. Se trabaja en una pantalla tipo pizarrón (el lienzo o *canvas*): se ponen bloques y se unen con flechas, y el dato va pasando de un bloque al siguiente en el orden de las flechas.
   - *Ejemplo:* Cada respuesta de un formulario → una fila en Sheets y un mail de bienvenida. Cada lunes a las 9 → el resumen de ventas al WhatsApp del dueño.
-- **"No-code: todo se resuelve con configuraciones visuales sobre bloques prearmados. Si el bloque no llega a lo que necesitás, quedás trabado."** Herramientas como Zapier o Make son muy fáciles, pero si necesitás algo que el bloque no trae, no hay salida. No-code es ideal para empezar rápido y para casos comunes. El problema aparece con los casos particulares, que en un negocio real siempre aparecen: un formato de fecha raro, un cálculo propio, un sistema que no tiene bloque.
+- **"No-code: todo se resuelve con configuraciones visuales sobre bloques prearmados. Si el bloque no llega a lo que necesitás, quedás trabado."** **No-code** quiere decir "sin código": todo con clics, nunca se escribe nada. Zapier y Make son otras dos herramientas que hacen lo mismo que n8n (conectar aplicaciones); son muy fáciles, pero si necesitás algo que el bloque no trae, no hay salida. No-code es ideal para empezar rápido y para casos comunes. El problema aparece con los casos particulares, que en un negocio real siempre aparecen: un formato de fecha raro, un cálculo propio, un sistema que no tiene bloque.
   - *Ejemplo:* En una herramienta no-code, si el bloque para formatear fechas no tiene "día de la semana en español", no hay forma de agregarlo.
-- **"Low-code: la misma interfaz visual, pero podés escribir código cuando hace falta. Eso elimina la barrera."** n8n tiene un nodo de código (JavaScript o Python) para esos casos. En el curso casi no lo vamos a usar, pero está. La idea es que el 90 % se resuelva con bloques y configuraciones, y que el código quede como salida para ese 10 % que los bloques no cubren. Además, hoy una IA puede ayudarnos a escribir esas pocas líneas de código si algún día hacen falta.
-  - *Ejemplo:* Un nodo Code de tres líneas que le suma el IVA a cada precio:
+- **"Low-code: la misma interfaz visual, pero podés escribir código cuando hace falta. Eso elimina la barrera."** n8n tiene un nodo de código para esos casos, donde se escribe en JavaScript o en Python (son dos lenguajes de programación, dos "idiomas" en los que se le dan órdenes a una computadora). En el curso casi no lo vamos a usar, pero está. La idea es que el 90 % se resuelva con bloques y configuraciones, y que el código quede como salida para ese 10 % que los bloques no cubren. Además, hoy una IA puede ayudarnos a escribir esas pocas líneas de código si algún día hacen falta.
+  - *Ejemplo:* Un nodo Code de tres líneas que le suma el IVA a cada precio (no hace falta entenderlo: es para que vean que son pocas líneas):
 
     ```js
     return $input.all().map(item => ({
       json: { ...item.json, total: item.json.precio * 1.21 }
     }));
     ```
-- **"La idea central: cada nodo es código ya escrito y empaquetado. Vos configurás parámetros, y programás solo si el caso lo pide."** El nodo "Gmail" ya sabe cómo hablar con Gmail; nosotros le decimos qué mail mandar y a quién. Alguien ya resolvió la parte difícil (cómo conectarse, cómo pedir permiso, cómo mandar los datos) y la dejó lista en un bloque. Configurar un nodo se parece más a completar un formulario que a programar.
-  - *Ejemplo:* El nodo Google Sheets, en la acción "Append row", pide qué planilla, qué hoja y qué dato va en cada columna. Completás tres campos y listo: no escribís cómo conectarse con Google.
-- Un matiz sobre "open source": n8n se define como *fair-code*. El código es público y se puede instalar gratis en una máquina propia, con algunas restricciones comerciales (por ejemplo, revenderlo como servicio). Para lo que vamos a hacer en el curso, e incluso para usarlo dentro de una empresa, esas restricciones no afectan. Que el código sea público también hace que haya una comunidad grande que comparte flujos, nodos y soluciones a problemas comunes.
+- **"La idea central: cada nodo es código ya escrito y empaquetado. Vos configurás parámetros, y programás solo si el caso lo pide."** Los **parámetros** son los datos que le completás a un nodo para decirle qué hacer, como los campos de un formulario: a quién, qué, dónde. "Configurar" es justamente completar esos datos. El nodo "Gmail" ya sabe cómo hablar con Gmail; nosotros le decimos qué mail mandar y a quién. Alguien ya resolvió la parte difícil (cómo conectarse, cómo pedir permiso, cómo mandar los datos) y la dejó lista en un bloque. Configurar un nodo se parece más a completar un formulario que a programar.
+  - *Ejemplo:* El nodo Google Sheets, en la acción "Append row" ("agregar fila"), pide qué planilla, qué hoja y qué dato va en cada columna. Completás tres campos y listo: no escribís cómo conectarse con Google.
+- Un matiz sobre "open source": n8n se define como *fair-code* ("código justo"). El código es público y se puede instalar gratis en una máquina propia, con algunas restricciones comerciales (por ejemplo, revenderlo como servicio). Para lo que vamos a hacer en el curso, e incluso para usarlo dentro de una empresa, esas restricciones no afectan. Que el código sea público también hace que haya una comunidad grande que comparte flujos, nodos y soluciones a problemas comunes.
   - *Ejemplo:* Podés instalar n8n gratis en el servidor de tu empresa y usarlo para todos tus flujos. Lo que no podés es armar "MiAutomatizador.com" y vender n8n como si fuera tuyo.
 
 **Ejemplos: para qué sirve n8n, nodo por nodo**
 
 <p style="color:#1a7f37">Para que se vea para qué sirve, cuatro flujos reales. Fíjense que todos tienen la misma forma: algo los dispara, pasan cosas en el medio y el dato termina en algún lado.</p>
+
+Antes de leerlos, dos palabras que se repiten. **Trigger** quiere decir "disparador": es el primer nodo, el que hace arrancar el flujo cuando pasa algo (llega un mail, es lunes a las 9). Y los nombres de los nodos están en inglés porque n8n está en inglés: *Schedule* es "horario", *Edit Fields* es "editar campos", *AI Agent* es "agente de IA". Un **webhook**, como vimos en la filmina 7, es un aviso automático que una aplicación le manda a otra.
 
 1. **Consultas por mail a una planilla** (el caso de la agencia de viajes).
 
@@ -401,9 +432,9 @@ Para explicar:
 | Tipo | No-code | No-code visual | Low-code visual |
 | Facilidad para empezar | La más fácil | Fácil | Fácil, con algo más de curva |
 | Si el bloque no alcanza | Muy limitado | Algunas funciones avanzadas | Nodo de código (JavaScript o Python) |
-| Instalarlo en tu máquina | No | No | Sí, gratis (self-hosted) |
-| Cómo cobra la versión en la nube | Por cada tarea que hace cada paso | Por operaciones o créditos | Por ejecución del workflow entero |
-| IA y agentes | Sí | Sí | Sí, con nodos de AI Agent muy completos |
+| Instalarlo en tu máquina | No | No | Sí, gratis (a eso se le dice *self-hosted*, "alojado por vos") |
+| Cómo cobra la versión en internet | Por cada tarea que hace cada paso | Por cada paso que corre (lo llama "operaciones" o "créditos") | Por cada vez que corre el workflow entero (una "ejecución") |
+| IA y agentes | Sí | Sí | Sí, con nodos de agente de IA (*AI Agent*) muy completos |
 
 Para explicar: las tres sirven para automatizar y la lógica es la misma (trigger, pasos, dato que termina en
 algún lado). Elegimos n8n porque se puede instalar gratis, porque cuando un caso se complica se puede escribir
@@ -414,16 +445,16 @@ como diez. Lo que aprendan acá les sirve para cualquiera de las otras.
 
 #### Filmina 19 · Tu instancia: dónde corre n8n (3 min)
 
-<p style="color:#1a7f37">Una instancia es tu n8n funcionando en algún lado: en la nube de n8n, desde el navegador, o instalado en tu máquina o tu servidor, gratis pero a tu cargo.</p>
+<p style="color:#1a7f37">Una instancia es tu n8n funcionando en algún lado. Puede estar en la nube de n8n, es decir, en las computadoras de la empresa n8n, y lo usás desde el navegador; o instalado en tu computadora, gratis pero a tu cargo.</p>
 
 Para explicar:
-- **"Qué es una instancia: una copia de n8n en ejecución corriendo en algún lado. Es el despliegue de la herramienta."** n8n es un programa: para usarlo, tiene que estar corriendo en una computadora. "Tu instancia" es tu copia de ese programa, con tus workflows y tus credenciales. Cada alumno va a tener la suya, separada de la de los demás. Es como tener tu propia cuenta de Gmail: el programa es el mismo para todos, pero lo que hay adentro es tuyo.
+- **"Qué es una instancia: una copia de n8n en ejecución corriendo en algún lado. Es el despliegue de la herramienta."** "En ejecución" quiere decir prendido, funcionando. "Despliegue" es la palabra técnica para "dejar un programa instalado y andando". n8n es un programa: para usarlo, tiene que estar corriendo en una computadora. "Tu instancia" es tu copia de ese programa, con tus workflows y tus credenciales (los permisos para entrar a tus cuentas, que vemos más adelante). Cada alumno va a tener la suya, separada de la de los demás. Es como tener tu propia cuenta de Gmail: el programa es el mismo para todos, pero lo que hay adentro es tuyo.
   - *Ejemplo:* Arturo tiene su instancia y Romina la suya. Si Arturo crea un workflow, no aparece en la de Romina, salvo que lo exporte y ella lo importe.
-- **"n8n Cloud: la versión hospedada y gestionada por el equipo de n8n. Es SaaS: entrás desde el navegador y no administrás infraestructura."** SaaS (*Software as a Service*) es como Gmail: no instalás nada, entrás con usuario y contraseña. Es lo más fácil para empezar; es pago después de la prueba gratuita y tiene límites de ejecuciones según el plan. La ventaja grande es que está siempre prendida y accesible desde internet, así que los flujos corren aunque tu computadora esté apagada, y las actualizaciones las hace n8n.
+- **"n8n Cloud: la versión hospedada y gestionada por el equipo de n8n. Es SaaS: entrás desde el navegador y no administrás infraestructura."** **La nube** son computadoras de otra empresa, conectadas a internet, que usás a distancia: tus fotos de Google Fotos están "en la nube". "Hospedada y gestionada por n8n" quiere decir que n8n corre en las computadoras de ellos y ellos se ocupan de que ande. **Infraestructura** son las computadoras, los cables y los programas de base que hacen falta para que algo funcione. SaaS (*Software as a Service*, "programa como servicio") es como Gmail: no instalás nada, entrás con usuario y contraseña. Es lo más fácil para empezar; es pago después de la prueba gratuita y tiene límites de ejecuciones según el plan. La ventaja grande es que está siempre prendida y accesible desde internet, así que los flujos corren aunque tu computadora esté apagada, y las actualizaciones las hace n8n.
   - *Ejemplo:* Te registrás en n8n.io con tu mail y en un minuto tenés una dirección del tipo `tunombre.app.n8n.cloud` con n8n funcionando.
-- **"Self-hosted: la infraestructura es tuya, y la responsabilidad también. Pide saber de redes, bases de datos y Docker."** Lo instalás en tu computadora o en un servidor. Es gratis y sin límite de ejecuciones, y los datos no salen de tu máquina; a cambio, si se cae o hay que actualizarlo, es tu problema. Para que lo usen otras personas o reciba avisos desde internet, tiene que estar en un servidor accesible. Si está instalado en tu notebook, los flujos solo corren mientras la notebook está prendida y con n8n abierto. Para practicar alcanza; para un negocio real, se usa un servidor.
+- **"Self-hosted: la infraestructura es tuya, y la responsabilidad también. Pide saber de redes, bases de datos y Docker."** *Self-hosted* quiere decir "alojado por vos": n8n corre en una computadora tuya. **Redes** es cómo se conectan las computadoras entre sí y con internet; Docker lo explicamos en un rato. Lo instalás en tu computadora o en un servidor. Es gratis y sin límite de ejecuciones, y los datos no salen de tu máquina; a cambio, si se cae o hay que actualizarlo, es tu problema. Para que lo usen otras personas o reciba avisos desde internet, tiene que estar en un servidor accesible. Si está instalado en tu notebook, los flujos solo corren mientras la notebook está prendida y con n8n abierto. Para practicar alcanza; para un negocio real, se usa un servidor.
   - *Ejemplo:* Una clínica que no quiere que los datos de los pacientes salgan de su servidor instala n8n ahí. Si el servidor se apaga, los flujos se frenan hasta que alguien lo vuelva a levantar.
-- **"Cómo se instala: en el caso self-hosted, con Node o con Docker."** Node es el entorno que ejecuta JavaScript; con Node instalado, `npx n8n` lo levanta en la computadora. Docker es una herramienta que empaqueta programas con todo lo que necesitan para correr. Contá cuál usan ustedes en el curso. Con Docker, n8n viene en una especie de "caja" que trae todo lo necesario y funciona igual en cualquier computadora; por eso es la forma más usada en servidores. La elección no cambia cómo se usa n8n: la pantalla y los nodos son los mismos en todas las versiones.
+- **"Cómo se instala: en el caso self-hosted, con Node o con Docker."** Node es un programa que hace funcionar a otros programas escritos en JavaScript, y n8n es uno de ellos; con Node instalado, escribiendo la orden `npx n8n` se prende n8n en la computadora ("levantar" un programa es prenderlo). Docker es una herramienta que empaqueta programas con todo lo que necesitan para correr. Contá cuál usan ustedes en el curso. Con Docker, n8n viene en una especie de "caja" que trae todo lo necesario y funciona igual en cualquier computadora; por eso es la forma más usada en servidores. La elección no cambia cómo se usa n8n: la pantalla y los nodos son los mismos en todas las versiones.
   - *Ejemplo:* ```bash
     # Con Node instalado:
     npx n8n
@@ -431,11 +462,11 @@ Para explicar:
     docker run -it --rm --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n
     ```
 
-    En los dos casos, n8n queda abierto en el navegador en `http://localhost:5678`.
+    En los dos casos, n8n queda abierto en el navegador en `http://localhost:5678`. *Localhost* quiere decir "esta misma computadora": es una dirección que no sale a internet, apunta a tu propia máquina.
 
 **Docker: cómo usar n8n gratis, sin pagar el plan de n8n Cloud**
 
-<p style="color:#1a7f37">n8n Cloud es lo más cómodo, pero después de la prueba gratuita se paga por mes. La alternativa es instalar n8n en nuestra propia computadora, gratis y sin límite de ejecuciones. Para eso usamos Docker, una herramienta que nos baja n8n listo para usar, con todo lo que necesita para funcionar, y lo levanta con un solo comando.</p>
+<p style="color:#1a7f37">n8n Cloud es lo más cómodo, pero después de la prueba gratuita se paga por mes. La alternativa es instalar n8n en nuestra propia computadora, gratis y sin límite de ejecuciones. Para eso usamos Docker, una herramienta que nos baja n8n listo para usar, con todo lo que necesita para funcionar, y lo prende con un solo comando, es decir, con una sola orden escrita.</p>
 
 **Qué es Docker, explicado desde cero**
 
@@ -503,8 +534,8 @@ oficial con n8n adentro; nosotros solo la bajamos y la abrimos con un comando.
 | Ejecuciones | Limitadas según el plan | Sin límite |
 | Instalación | Ninguna: te registrás y entrás | Instalar Docker y correr un comando |
 | Cuándo corren los flujos | Siempre, aunque tu computadora esté apagada | Solo mientras tu computadora está prendida y Docker corriendo |
-| Recibir avisos desde internet (webhooks, WhatsApp) | Sí, ya tiene una dirección pública | Hace falta una dirección pública (un túnel o un servidor); lo vemos cuando lo necesitemos |
-| Actualizaciones y backups | Las hace n8n | Las hacés vos |
+| Recibir avisos desde internet (webhooks, WhatsApp) | Sí, ya tiene una dirección pública (una dirección de internet a la que cualquiera puede llegar) | Hace falta una dirección pública: un servidor, o un "túnel", un servicio que le da a tu computadora una dirección de internet. Lo vemos cuando lo necesitemos |
+| Actualizaciones y copias de seguridad (*backups*) | Las hace n8n | Las hacés vos |
 
 Para explicar: para aprender y practicar, Docker en la computadora alcanza y no cuesta nada. Para un negocio
 real, donde el flujo tiene que estar prendido las 24 horas, se usa n8n Cloud o el mismo Docker instalado en un
@@ -516,8 +547,10 @@ sirve para la otra.
 1. **Instalar Docker Desktop** desde docker.com. En Windows, el instalador puede pedir activar *WSL 2* (un
    componente de Windows que Docker necesita) y reiniciar la computadora. Docker Desktop es gratis para uso
    personal, educativo y para empresas chicas.
-2. **Abrir Docker Desktop** y esperar a que diga que está funcionando (*Engine running*).
-3. **Abrir una terminal** (en Windows, PowerShell; en Mac, Terminal) y crear el volumen donde se van a guardar
+2. **Abrir Docker Desktop** y esperar a que diga que está funcionando (*Engine running*, "motor funcionando").
+3. **Abrir una terminal** (en Windows, PowerShell; en Mac, Terminal). La **terminal** es una ventana donde, en vez
+   de hacer clic, se le escriben órdenes a la computadora; cada orden se llama **comando** y se ejecuta al apretar
+   Enter. Se copia el comando tal cual, se pega y se aprieta Enter. Primero, crear el volumen donde se van a guardar
    los datos:
 
    ```bash
@@ -543,7 +576,7 @@ sirve para la otra.
 | `-it` | Muestra lo que pasa en la terminal, para ver si arrancó bien. |
 | `--rm` | Cuando se apaga, borra el contenedor (los datos no se pierden: están en el volumen). |
 | `--name n8n` | Le pone nombre al contenedor, para poder referirse a él. |
-| `-p 5678:5678` | Conecta el puerto 5678 de tu computadora con el del contenedor: por eso se entra por `localhost:5678`. |
+| `-p 5678:5678` | Conecta el puerto 5678 de tu computadora con el del contenedor: por eso se entra por `localhost:5678`. Un **puerto** es como el número de departamento en un edificio: la computadora es el edificio, y cada programa atiende en su número. n8n atiende en el 5678. |
 | `-v n8n_data:/home/node/.n8n` | Guarda los datos de n8n en el volumen `n8n_data`. Sin esto, al apagar se pierde todo. |
 | `docker.n8n.io/n8nio/n8n` | La imagen oficial de n8n. |
 
@@ -557,9 +590,9 @@ sirve para la otra.
 
 **Errores comunes**
 
-- *Ejemplo:* `docker: command not found` o "no se reconoce el comando". Docker no está instalado o Docker Desktop
+- *Ejemplo:* `docker: command not found` ("no se encontró el comando") o "no se reconoce el comando". Docker no está instalado o Docker Desktop
   no está abierto.
-- *Ejemplo:* "port is already allocated". Ya hay algo usando el puerto 5678, casi siempre otro n8n que quedó
+- *Ejemplo:* "port is already allocated" ("el puerto ya está ocupado"). Ya hay algo usando el puerto 5678, casi siempre otro n8n que quedó
   prendido. Se cierra la otra terminal o se apaga el contenedor desde Docker Desktop.
 - *Ejemplo:* "Se me borraron los workflows". Seguramente se corrió el comando sin `-v n8n_data:/home/node/.n8n`.
   Siempre usar el comando completo.
@@ -576,11 +609,11 @@ template si es lo que más necesita el grupo.
 Para explicar:
 - **"Qué es: un formato estándar para enviar información entre sistemas."** Es texto, se puede leer a ojo, y casi todas las aplicaciones lo entienden. JSON quiere decir *JavaScript Object Notation*, pero no hace falta saber JavaScript para usarlo: es solo una forma ordenada de escribir datos. Cuando una aplicación le manda información a otra por internet, casi siempre lo hace en JSON.
   - *Ejemplo:* Lo que devuelve un servicio del clima cuando se le pregunta por una ciudad: `{"ciudad": "Rosario", "temperatura": 18, "lluvia": false}`.
-- **"Cómo se arma: entre llaves, con pares de 'Llave': 'Valor'. La llave dice qué es, el valor dice cuál."** Mostrá el ejemplo del material: `{"nombre": "Juan", "apellido": "Perez", "id_cliente": 10}`. Los valores pueden ser texto (entre comillas), números o verdadero/falso (`true`/`false`). Los pares se separan con comas, y las llaves siempre van entre comillas. Un valor también puede ser una lista (entre corchetes) u otro JSON adentro, por ejemplo una dirección con calle, número y ciudad. Una coma de más o una comilla que falta y el JSON deja de ser válido, como vieron en el formatter.
+- **"Cómo se arma: entre llaves, con pares de 'Llave': 'Valor'. La llave dice qué es, el valor dice cuál."** Mostrá el ejemplo del material: `{"nombre": "Juan", "apellido": "Perez", "id_cliente": 10}`. Los valores pueden ser texto (entre comillas), números o verdadero/falso (`true`/`false`). Los pares se separan con comas, y las llaves siempre van entre comillas. Un valor también puede ser una lista (entre corchetes) u otro JSON adentro, por ejemplo una dirección con calle, número y ciudad. Una coma de más o una comilla que falta y el JSON deja de ser válido (es decir, está mal escrito y los programas no lo pueden leer), como vieron la semana pasada en jsonlint.com.
   - *Ejemplo:* `{"producto": "Torta de chocolate", "precio": 24000, "sin_tacc": false, "sabores": ["chocolate", "dulce de leche"]}`: un texto, un número, un verdadero/falso y una lista.
 - **"La analogía: un pedido a domicilio. Para: Fulano. Contenido: pizzas."** El repartidor no necesita entender la pizza: necesita saber dónde está cada dato. Lo mismo un nodo de n8n: no necesita entender el mail del cliente, necesita encontrar el nombre en la llave `nombre` y el destino en la llave `destino`. Mientras las etiquetas estén siempre en el mismo lugar, el paquete llega.
   - *Ejemplo:* `{"para": "Fulano", "direccion": "Av. Siempreviva 742", "contenido": "2 pizzas"}`. El repartidor (el nodo) busca `direccion` y no necesita leer el resto.
-- **"Por qué importa acá: cada nodo recibe y envía datos en JSON. Es el medio de comunicación entre nodos."** Un detalle útil: en n8n los datos viajan como una lista de "items"; si un nodo recibe cinco mails, recibe cinco items y procesa cada uno. Conectá con la Semana 1: por eso el prompt devolvía JSON, es lo que n8n le puede pasar al nodo siguiente. Si la IA devuelve un párrafo, el nodo siguiente no sabe dónde buscar cada dato; si devuelve JSON con llaves fijas, lo usa directo. Cuando abramos n8n en vivo, van a ver ese JSON en la salida de cada nodo.
+- **"Por qué importa acá: cada nodo recibe y envía datos en JSON. Es el medio de comunicación entre nodos."** Un detalle útil: en n8n los datos viajan como una lista de "items". Un **item** es cada dato suelto que pasa por el flujo, una ficha: un mail, un pedido, una fila de la planilla. Si un nodo recibe cinco mails, recibe cinco items y procesa cada uno. Conectá con la Semana 1: por eso el prompt devolvía JSON, es lo que n8n le puede pasar al nodo siguiente. Si la IA devuelve un párrafo, el nodo siguiente no sabe dónde buscar cada dato; si devuelve JSON con llaves fijas, lo usa directo. Cuando abramos n8n en vivo, van a ver ese JSON en la salida de cada nodo.
   - *Ejemplo:* Dos items que salen de un nodo:
 
     ```json
@@ -628,10 +661,10 @@ Para explicar:
 - **"Qué es: una secuencia organizada de pasos que se ejecutan automáticamente para cumplir un objetivo."** "Workflow" quiere decir flujo de trabajo. En n8n es lo que se ve en el lienzo: los nodos y las flechas que los unen. Cada workflow tiene un objetivo concreto, por ejemplo "cargar cada consulta nueva en la planilla". Conviene que cada uno haga una sola cosa bien, y no armar un flujo gigante que haga todo.
   - *Ejemplo:* "Responder consultas de turnos" es un workflow; "mandar el recordatorio el día anterior" es otro. Separados, cada uno es más fácil de probar y de arreglar.
 - **"Define cuándo: comienza el proceso y qué lo dispara."** Ese primer nodo es el **trigger**: puede ser un horario, un mail que llega, un formulario que se completa o un mensaje de WhatsApp. "Trigger" quiere decir disparador. Sin trigger, el flujo solo corre si alguien lo ejecuta a mano. Con trigger, corre solo cada vez que pasa el evento. Es la diferencia entre una herramienta que hay que usar y una automatización de verdad.
-  - *Ejemplo:* Gmail Trigger (llega un mail), Schedule Trigger (todos los días a las 8), Form Trigger (alguien completa un formulario de n8n), Webhook (la tienda online avisa una venta).
+  - *Ejemplo:* Gmail Trigger (llega un mail), Schedule Trigger (*schedule* es "horario": todos los días a las 8), Form Trigger (*form* es "formulario": alguien completa un formulario de n8n), Webhook (la tienda online avisa una venta).
 - **"Define qué: acciones hay que realizar, cómo se conectan entre sí y qué decisiones se toman durante la ejecución."** Las acciones son los nodos que hacen cosas; las conexiones son las flechas; las decisiones son nodos que eligen un camino u otro (los vemos en el Módulo 3). Por ejemplo: si la IA dice que el mail es un reclamo, se avisa al responsable; si es una consulta, se carga en la planilla. Con esas tres cosas (acciones, conexiones y decisiones) se arma cualquier automatización.
   - *Ejemplo:* Acción: "agregar una fila en Sheets". Conexión: la flecha que va del nodo de IA a Sheets. Decisión: "si el tipo es reclamo, mandar al WhatsApp del encargado; si no, a la planilla".
-- **"Cómo se guarda: en un archivo JSON estandarizado con la definición completa del flujo. Por eso se puede exportar y compartir."** Un workflow entero es un archivo de texto: se manda por mail, se sube a un repositorio o se importa en otra instancia. Lo que no viaja en ese archivo son las contraseñas y las credenciales: quien lo importa tiene que conectar sus propias cuentas. Por eso se puede compartir un flujo sin compartir el acceso a tus aplicaciones.
+- **"Cómo se guarda: en un archivo JSON estandarizado con la definición completa del flujo. Por eso se puede exportar y compartir."** Un workflow entero es un archivo de texto: se manda por mail, se guarda en una carpeta compartida o se abre en el n8n de otra persona. **Exportar** es sacar el flujo de tu n8n como archivo; **importar** es abrir ese archivo en otro n8n. Lo que no viaja en ese archivo son las contraseñas y las **credenciales**: los permisos que le diste a n8n para entrar a tus cuentas (tu Gmail, tu planilla). Quien lo importa tiene que conectar sus propias cuentas. Por eso se puede compartir un flujo sin compartir el acceso a tus aplicaciones.
   - *Ejemplo:* Exportás "Consultas mail → planilla" como `consultas.json` y se lo mandás a un compañero. Lo importa y le aparece el mismo flujo; solo tiene que conectar su Gmail y su planilla.
 
 **Qué es un nodo y qué tipos hay**
@@ -640,12 +673,12 @@ Para explicar:
 
 | Tipo | Qué hace | Ejemplos |
 |---|---|---|
-| **Trigger** (disparador) | Arranca el flujo cuando pasa algo. Siempre es el primero. | Gmail Trigger, Schedule Trigger (horario), Webhook, Form Trigger, Manual Trigger (botón para probar) |
-| **Acción** | Hace algo en una aplicación: leer, escribir, mandar. | Gmail (mandar mail), Google Sheets (agregar fila), WhatsApp, Telegram, HTTP Request |
-| **Transformación** | Cambia o arma los datos sin salir de n8n. | Edit Fields (Set), Filter, Sort, Aggregate |
-| **Lógica** | Elige un camino o junta caminos. Se ven en el Módulo 3. | IF, Switch, Merge, Wait |
-| **IA** | Le pasa el dato a un modelo de lenguaje con un prompt. | Basic LLM Chain, AI Agent, Information Extractor, Text Classifier |
-| **Código** | Para lo que ningún nodo resuelve. | Code (JavaScript o Python) |
+| **Trigger** (disparador) | Arranca el flujo cuando pasa algo. Siempre es el primero. | Gmail Trigger (llega un mail), Schedule Trigger (a un horario), Webhook (avisa otra aplicación), Form Trigger (se completa un formulario), Manual Trigger (un botón, para probar) |
+| **Acción** | Hace algo en una aplicación: leer, escribir, mandar. | Gmail (mandar mail), Google Sheets (agregar fila), WhatsApp, Telegram, HTTP Request (pedirle o mandarle datos a cualquier página o servicio de internet) |
+| **Transformación** | Cambia o arma los datos sin salir de n8n. | Edit Fields (editar campos), Filter (filtrar), Sort (ordenar), Aggregate (juntar varios en uno) |
+| **Lógica** | Elige un camino o junta caminos. Se ven en el Módulo 3. | IF ("si": si pasa esto, por acá; si no, por allá), Switch (varios caminos según el caso), Merge (juntar dos caminos), Wait (esperar) |
+| **IA** | Le pasa el dato a un modelo de IA (un LLM, como el de ChatGPT) con un prompt. | Basic LLM Chain (el más simple: un prompt y una respuesta), AI Agent (agente de IA), Information Extractor (extractor de datos), Text Classifier (clasificador de textos) |
+| **Código** | Para lo que ningún nodo resuelve. | Code (se escribe en JavaScript o Python) |
 
 Para explicar: un nodo es como una estación de una línea de montaje. Recibe el dato (en JSON), hace su parte
 y lo pasa al siguiente. Cada nodo tiene una **entrada** (lo que le llega del nodo anterior), sus
@@ -660,13 +693,18 @@ elegir qué estaciones hacen falta y en qué orden.
 
 Un nodo de IA en n8n tiene tres partes:
 
-1. **El modelo** que usa: se conecta como un "sub-nodo" abajo del nodo de IA (OpenAI, Anthropic, Google
-   Gemini o un modelo local con Ollama, que vemos en el Módulo 7). Pide una credencial con la clave de API.
+1. **El modelo** que usa, es decir, qué IA: se conecta como un "sub-nodo", un nodo chiquito que se engancha abajo
+   del nodo de IA. Puede ser OpenAI (la empresa de ChatGPT), Anthropic (la de Claude), Google Gemini o un modelo
+   que corre en tu propia computadora con un programa llamado Ollama, que vemos en el Módulo 7. Pide una
+   credencial con la **clave de API**. Una **API** es la puerta por la que un programa le habla a otro: n8n no
+   abre ChatGPT como lo abrimos nosotros, le manda el pedido directo por esa puerta. La **clave de API** es la
+   contraseña de esa puerta: te la da la empresa de IA cuando te registrás, y con ella te cobra lo que uses.
 2. **El prompt**: acá va la plantilla maestra. Donde la semana pasada pegaban el mail a mano, ahora va una
-   **expresión** que trae el texto del nodo anterior.
+   **expresión**: un pedacito entre llaves dobles, `{{ }}`, que le dice a n8n "acá poné el dato que llega del
+   nodo anterior".
 3. **El formato de salida**: se puede activar que la respuesta tenga una estructura fija (*Require Specific
-   Output Format* con un *Structured Output Parser*). Así n8n controla que el JSON tenga las llaves que
-   pedimos, además de pedirlo en el prompt.
+   Output Format*, "exigir un formato de salida", con un *Structured Output Parser*, "lector de salida
+   ordenada"). Así n8n controla que el JSON tenga las llaves que pedimos, además de pedirlo en el prompt.
 
 Ejemplo, con la plantilla de la agencia adentro de un nodo **Basic LLM Chain**:
 
@@ -721,14 +759,14 @@ aparte, en la instancia.
 <p style="color:#1a7f37">No hace falta arrancar de cero: hay miles de templates armados por otros. Se importan, se les conectan tus cuentas y se adaptan.</p>
 
 Para explicar:
-- **"Qué es: un workflow completo, con nodos, conexiones y configuración, que alguien armó para un caso de uso concreto."** Ejemplos: mandar un mail cuando entra un lead, resumir noticias con IA, publicar en redes. "Template" quiere decir plantilla. Es como usar el modelo de un documento en vez de arrancar con la hoja en blanco: la estructura ya está, se cambian los datos. Muchos los arma el propio equipo de n8n y otros, la comunidad.
+- **"Qué es: un workflow completo, con nodos, conexiones y configuración, que alguien armó para un caso de uso concreto."** Ejemplos: mandar un mail cuando entra un lead (un posible cliente que dejó sus datos, por ejemplo en un formulario), resumir noticias con IA, publicar en redes. Un "caso de uso" es simplemente para qué se usa: "responder consultas", "cargar facturas". "Template" quiere decir plantilla. Es como usar el modelo de un documento en vez de arrancar con la hoja en blanco: la estructura ya está, se cambian los datos. Muchos los arma el propio equipo de n8n y otros, la comunidad.
   - *Ejemplo:* El template "resumir mails nuevos con IA y mandarlos a Telegram" ya trae conectados el Gmail Trigger, un nodo de IA con su prompt y el nodo de Telegram.
-- **"Dónde están: en la biblioteca pública de n8n, desde la app o en n8n.io/workflows."** Se busca por caso de uso o por integración. Por ejemplo, buscar "Gmail" muestra todos los templates que usan Gmail, y buscar "lead" o "customer support" muestra los que resuelven ese problema. Cada template tiene una descripción, una imagen del flujo y la lista de aplicaciones que usa.
-  - *Ejemplo:* En n8n.io/workflows, buscar "Google Sheets" junto con "OpenAI" muestra los templates que usan las dos; buscar "invoice" muestra los que procesan facturas.
-- **"Cómo se importa: con un clic desde la sección Templates, o cargando un archivo .json con Import from File o Import from URL."** Como vimos en la filmina anterior, un workflow es un archivo JSON. Importarlo es abrir ese archivo en tu instancia: aparecen los mismos nodos y flechas, listos para adaptar. Así también se comparten flujos entre compañeros o se usan los que vamos a pasar en el curso.
+- **"Dónde están: en la biblioteca pública de n8n, desde la app o en n8n.io/workflows."** Se busca por caso de uso o por integración. Por ejemplo, buscar "Gmail" muestra todos los templates que usan Gmail, y buscar "lead" o "customer support" ("atención al cliente") muestra los que resuelven ese problema. La biblioteca está en inglés, así que conviene buscar con palabras en inglés. Cada template tiene una descripción, una imagen del flujo y la lista de aplicaciones que usa.
+  - *Ejemplo:* En n8n.io/workflows, buscar "Google Sheets" junto con "OpenAI" muestra los templates que usan las dos; buscar "invoice" ("factura") muestra los que procesan facturas.
+- **"Cómo se importa: con un clic desde la sección Templates, o cargando un archivo .json con Import from File o Import from URL."** *Import from File* es "importar desde un archivo" de tu computadora; *Import from URL* es "importar desde una dirección de internet" (URL es la dirección de una página, lo que se escribe arriba en el navegador). Como vimos en la filmina anterior, un workflow es un archivo JSON. Importarlo es abrir ese archivo en tu instancia: aparecen los mismos nodos y flechas, listos para adaptar. Así también se comparten flujos entre compañeros o se usan los que vamos a pasar en el curso.
   - *Ejemplo:* Desde el lienzo: menú ⋯ → *Import from File* → elegís `consultas.json`. O *Import from URL* con el link del template.
 - **"Reutilizar es: conectar tus propias credenciales, ajustar condiciones y campos, y guardarlo como plantilla interna."** Un cuidado: los templates de la comunidad los arma cualquiera; antes de conectarles tus cuentas, mirá qué hace cada nodo y adónde manda los datos. Un template casi nunca funciona tal cual: hay que conectar tus cuentas, cambiar el nombre de la planilla, ajustar los campos a tu caso y, si tiene IA, adaptar el prompt. Lo bueno es que la lógica ya está pensada y probada.
-  - *Ejemplo:* El template usa la planilla "Leads" con la columna "Name"; vos tenés "Consultas" con la columna "nombre". Se cambia la planilla y se mapea "nombre" en lugar de "Name".
+  - *Ejemplo:* El template usa la planilla "Leads" con la columna "Name"; vos tenés "Consultas" con la columna "nombre". Se cambia la planilla y se mapea "nombre" en lugar de "Name" (**mapear** es decirle a un nodo de qué casillero tiene que sacar cada dato; lo hacemos en vivo después del break).
 - *Lo vemos en vivo después del break.*
 
 #### Filmina 23 · Para recordar: un nodo en rojo (1 min)
@@ -743,7 +781,7 @@ leyendo errores y corrigiendo. La buena noticia es que n8n muestra en qué nodo 
 llegaron y qué esperaba. Un truco: si el mensaje está en inglés y no se entiende, se puede copiar y pegar
 en un chat de IA para que lo explique.
 
-*Ejemplo:* El nodo de Google Sheets queda en rojo con un mensaje del tipo "no se encontró el recurso". Traducido: no encuentra la planilla. Causa típica: le cambiaron el nombre a la planilla, o la credencial es de otra cuenta de Google.
+*Ejemplo:* El nodo de Google Sheets queda en rojo con un mensaje del tipo "no se encontró el recurso" (en inglés, *resource not found*; "recurso" es la cosa que buscaba: una planilla, un archivo, un mail). Traducido: no encuentra la planilla. Causa típica: le cambiaron el nombre a la planilla, o la credencial es de otra cuenta de Google.
 
 ---
 
@@ -802,26 +840,29 @@ ejemplo, *Execute step* en las nuevas y *Test step* en las anteriores); cuando p
 
 <p style="color:#1a7f37">Esto es el buscador de nodos. Fíjense que Gmail aparece de dos formas. Los triggers son los que arrancan el flujo: "cuando llega un mail". Las acciones son las que hacen algo: "mandá un mail". Todo flujo que corre solo arranca con un trigger.</p>
 
-13. Elegís **On message received** (Gmail Trigger). Se abre el nodo. Mostrás:
-    - arriba, *Credential to connect with*;
-    - el resto, los **parámetros** del nodo.
+13. Elegís **On message received** ("cuando llega un mensaje", el Gmail Trigger). Se abre el nodo. Mostrás:
+    - arriba, *Credential to connect with* ("credencial para conectarse": con qué cuenta entra);
+    - el resto, los **parámetros** del nodo (los campos que se completan para decirle qué hacer).
+
+<p style="color:#1a7f37">Casi todo en n8n está en inglés, pero no se asusten: son siempre las mismas pocas palabras y las vamos traduciendo a medida que aparecen. Acá arriba dice "credencial para conectarse", o sea, con qué cuenta de Gmail entra. Y abajo están los parámetros, que son los campos que le completamos al nodo para decirle qué hacer, como un formulario.</p>
 
 14. **La credencial de Gmail en vivo:** en *Credential to connect with*, elegís **Create new credential**. En n8n Cloud
-    aparece **Sign in with Google**: lo apretás, elegís la cuenta de prueba y aceptás los permisos. Queda guardada.
-    (En la instancia de Docker este botón necesita configurar antes una app en Google Cloud; si usás Docker, mostrá
-    solo hasta esta pantalla y decí que se ve en el Módulo 4.) Decís:
+    aparece **Sign in with Google** ("iniciar sesión con Google"): lo apretás, elegís la cuenta de prueba y aceptás
+    los permisos. Queda guardada. (En la instancia de Docker este botón necesita configurar antes un permiso
+    especial en Google Cloud, la consola de Google para desarrolladores; si usás Docker, mostrá solo hasta esta
+    pantalla y decí que se ve en el Módulo 4.) Decís:
 
-<p style="color:#1a7f37">Acabo de darle permiso a n8n para leer los mails de esta cuenta. Lo hice una vez; de ahora en adelante, cualquier nodo de Gmail usa esta credencial sin volver a pedirla. Si un día cambio la contraseña, el nodo se pone en rojo con un error de autorización. No es que el flujo esté mal: hay que volver a conectar la credencial.</p>
+<p style="color:#1a7f37">Acabo de darle permiso a n8n para leer los mails de esta cuenta. Lo hice una vez; de ahora en adelante, cualquier nodo de Gmail usa esta credencial sin volver a pedirla. Si un día cambio la contraseña, el nodo se pone en rojo con un error de autorización, que quiere decir "no tengo permiso para entrar". No es que el flujo esté mal: hay que volver a conectar la credencial.</p>
 
 15. Cerrás el nodo y mostrás la sección **Credentials**: ahí aparece la credencial nueva.
 16. Mostrás, arriba del lienzo, el botón **Save** y el interruptor **Active** (en las versiones más nuevas puede
     decir **Publish**). Y abajo del lienzo, el botón **Execute workflow** (o **Test workflow**). Decís:
 
-<p style="color:#1a7f37">Dos formas de correr un flujo. Mientras lo armamos, lo probamos a mano con este botón de abajo: corre una vez y vemos qué pasó en cada nodo. Cuando funciona, lo activamos con este interruptor de arriba, y desde ahí corre solo cada vez que pasa lo del trigger, aunque yo cierre la computadora (en Cloud).</p>
+<p style="color:#1a7f37">Tres botones para traducir: Save es guardar, Execute workflow es "ejecutar el flujo", o sea, hacerlo correr, y Active es activarlo. Dos formas de correr un flujo. Mientras lo armamos, lo probamos a mano con este botón de abajo: corre una vez y vemos qué pasó en cada nodo. Cuando funciona, lo activamos con este interruptor de arriba, y desde ahí corre solo cada vez que pasa lo del trigger, aunque yo cierre la computadora (en Cloud).</p>
 
 17. Mostrás arriba, en el centro, la pestaña **Executions** (al lado de *Editor*). Decís:
 
-<p style="color:#1a7f37">Executions es el historial: cada vez que el flujo corrió, si terminó bien o con error, y en qué nodo se cortó. Cuando algo falla, esto es lo primero que se mira.</p>
+<p style="color:#1a7f37">Executions quiere decir "ejecuciones", y es el historial: cada vez que el flujo corrió, si terminó bien o con error, y en qué nodo se cortó. Cuando algo falla, esto es lo primero que se mira.</p>
 
 18. Explicás los **items** con este ejemplo, sin hacer nada en pantalla:
 
@@ -834,11 +875,12 @@ ejemplo, *Execute step* en las nuevas y *Test step* en las anteriores); cuando p
 20. Abrís otra pestaña en **n8n.io/workflows**. Mostrás el buscador: escribís un caso de uso (por ejemplo `email
     summary` o `gmail ai`). Decís:
 
-<p style="color:#1a7f37">Esta es la biblioteca de templates: miles de flujos que armó la comunidad. Antes de armar algo desde cero, conviene buscar acá: muchas veces alguien ya resolvió algo parecido.</p>
+<p style="color:#1a7f37">Esta es la biblioteca de templates, o sea, de plantillas: miles de flujos que armaron otras personas que usan n8n. Antes de armar algo desde cero, conviene buscar acá: muchas veces alguien ya resolvió algo parecido.</p>
 
 21. Abrís el template que elegiste antes de la clase y lo importás. Hay dos formas, usá la que te funcione en tu
     versión:
-    - el botón **Use for free** y después **Copy template to clipboard**; vas a tu n8n, abrís un workflow nuevo y
+    - el botón **Use for free** ("usar gratis") y después **Copy template to clipboard** ("copiar el template");
+      vas a tu n8n, abrís un workflow nuevo y
       pegás con **Ctrl + V** en el lienzo;
     - o, desde tu n8n, el menú **…** de arriba a la derecha → **Import from URL** y pegás la dirección del template.
 22. Aparece el flujo en tu lienzo. Lo leés **en voz alta, nodo por nodo, de izquierda a derecha**, respondiendo
@@ -865,21 +907,26 @@ ejemplo, *Execute step* en las nuevas y *Test step* en las anteriores); cuando p
 <p style="color:#1a7f37">Vamos a armar un flujo de tres nodos. El primero lo arranca con un botón. El segundo inventa un dato, como si hubiera llegado un mail de Martín, el de la clase pasada. Y el tercero usa ese dato para armar un saludo. Lo que quiero que vean es cómo un nodo le pasa el dato al siguiente.</p>
 
 27. Workflow nuevo: **Create Workflow**. Le ponés nombre arriba a la izquierda: `Mi primer flujo`.
-28. **Add first step** → escribís `manual` → elegís **Trigger manually** (también aparece como *Manual Trigger* o
+28. **Add first step** ("agregar el primer paso") → escribís `manual` → elegís **Trigger manually** ("arrancar a mano") (también aparece como *Manual Trigger* o
     *When clicking 'Execute workflow'*). Decís:
 
 <p style="color:#1a7f37">Este trigger arranca el flujo cuando aprieto un botón. Es para probar: en un flujo real, en su lugar iría "cuando llega un mail" o "cuando se completa un formulario".</p>
 
-29. Hacés clic en el **+** que aparece a la derecha del trigger → escribís `edit` → elegís **Edit Fields (Set)**.
-30. Dentro del nodo, en *Fields to Set*, hacés clic en **Add Field** dos veces y completás:
+29. Hacés clic en el **+** que aparece a la derecha del trigger → escribís `edit` → elegís **Edit Fields (Set)**
+    ("editar campos").
+30. Dentro del nodo, en *Fields to Set* ("campos a completar"), hacés clic en **Add Field** ("agregar campo") dos
+    veces y completás:
 
 ```text
 Campo 1 →  name: nombre    type: String    value: Martín Gómez
 Campo 2 →  name: destino   type: String    value: Bariloche
 ```
 
-31. Apretás **Execute step** (o **Test step**), arriba a la derecha del nodo. A la derecha aparece la salida.
-    Mostrás las dos vistas: **Table** (una fila con dos columnas) y **JSON**:
+<p style="color:#1a7f37">Cada campo tiene tres cosas: name es el nombre del casillero, value es lo que va adentro, y type es el tipo de dato. String, en el idioma de la programación, quiere decir texto. Si fuera un número, elegiríamos Number.</p>
+
+31. Apretás **Execute step** (o **Test step**: "ejecutar este paso", hacer correr solo este nodo), arriba a la
+    derecha del nodo. A la derecha aparece la salida (*Output*, lo que el nodo devuelve). Mostrás las dos vistas:
+    **Table** (tabla: una fila con dos columnas) y **JSON**:
 
 ```json
 [
@@ -895,14 +942,16 @@ Campo 2 →  name: destino   type: String    value: Bariloche
 <p style="color:#1a7f37">Esto que sale es un JSON, la ficha con casilleros de la semana pasada: el casillero "nombre" con Martín Gómez y el casillero "destino" con Bariloche. En un flujo real, este JSON lo devolvería la IA después de leer el mail. Así es como se pasan los datos todos los nodos de n8n.</p>
 
 33. Cerrás el nodo. En el lienzo, **+** a la derecha del Edit Fields → otro **Edit Fields (Set)**.
-34. Al abrirlo, a la izquierda vas a ver el panel **Input** con los datos que llegan del nodo anterior (`nombre` y
-    `destino`). Si no aparecen, apretá **Execute previous nodes** en ese panel. Decís:
+34. Al abrirlo, a la izquierda vas a ver el panel **Input** ("entrada") con los datos que llegan del nodo anterior
+    (`nombre` y `destino`). Si no aparecen, apretá **Execute previous nodes** ("ejecutar los nodos anteriores") en
+    ese panel. Decís:
 
 <p style="color:#1a7f37">A la izquierda está lo que le llega a este nodo: los datos del nodo anterior. Para que aparezcan, el nodo anterior tiene que haberse ejecutado al menos una vez.</p>
 
 35. **Add Field** → name: `saludo`, type: String. En *value* escribís `Hola ` (con un espacio al final).
 36. **Arrastrás** el campo `nombre` desde el panel Input de la izquierda hasta el cuadro *value*, después de
-    "Hola ". El cuadro cambia a modo expresión y queda así:
+    "Hola ". El cuadro cambia a modo expresión (pasa de *Fixed*, "texto fijo", a *Expression*, "expresión": un
+    texto que trae datos de otro nodo) y queda así:
 
 ```text
 Hola {{ $json.nombre }}
@@ -910,7 +959,7 @@ Hola {{ $json.nombre }}
 
 37. Decís:
 
-<p style="color:#1a7f37">Miren lo que escribió n8n solo cuando arrastré: llaves dobles, $json.nombre. Quiere decir "acá no va un texto fijo; va el casillero nombre del JSON que llega del nodo anterior". Esto se llama mapear un dato, y es lo que más van a hacer en todo el curso.</p>
+<p style="color:#1a7f37">Miren lo que escribió n8n solo cuando arrastré: llaves dobles, $json.nombre. Quiere decir "acá no va un texto fijo; va el casillero nombre del JSON que llega del nodo anterior". Las llaves dobles avisan "esto no es texto, es un dato que hay que ir a buscar"; $json quiere decir "la ficha que llegó"; y nombre es el casillero. Esto se llama mapear un dato, que es decirle al nodo de qué casillero sacar cada cosa, y es lo que más van a hacer en todo el curso.</p>
 
 38. **Execute step**. Mostrás la salida:
 
@@ -935,29 +984,37 @@ Hola {{ $json.nombre }}
 
 <p style="color:#1a7f37">Ahora lo vamos a romper a propósito. Los errores van a aparecer siempre, y lo importante es perderles el miedo y saber leerlos.</p>
 
-42. Abrís el último Edit Fields y en *value* de `saludo` borrás todo y escribís (o pegás):
+42. **El error que avisa.** Abrís el último Edit Fields (el del saludo) y, en el campo `saludo`, cambiás el tipo de
+    **String** a **Number** (el desplegable que está al lado del nombre del campo). El valor lo dejás como está:
+    `Hola {{ $json.nombre }}`. Decís:
+
+<p style="color:#1a7f37">Le acabo de decir a n8n que en el casillero saludo va un número. Pero lo que le llega es un texto: "Hola Martín Gómez". Veamos qué pasa.</p>
+
+43. **Execute step**. El nodo se pone en **rojo** y aparece este mensaje (probado en n8n 2.46):
 
 ```text
-{{ $json.email.toUpperCase() }}
+'saludo' expects a number but we got 'Hola Martín Gómez' [item 0]
 ```
 
-43. **Execute step**. El nodo se pone en **rojo** y aparece un mensaje parecido a este (el texto exacto depende de la
-    versión):
-
-```text
-Cannot read properties of undefined (reading 'toUpperCase')
-```
+Abajo, n8n agrega una sugerencia: *To fix the error try to change the type for the field "saludo"* ("para
+arreglarlo, probá cambiar el tipo del campo saludo").
 
 44. Lo leés en voz alta y lo traducís:
 
-<p style="color:#1a7f37">Traducido: "quisiste pasar a mayúsculas algo que no existe". Le pedí el casillero email, y el nodo anterior solo manda nombre y destino. El dato no está, y n8n me avisa. Es el error más común de todos. En un flujo real pasa cuando un mail llega sin un dato, o cuando la IA devuelve una llave con otro nombre, por ejemplo "Nombre" con mayúscula. Por eso la semana pasada insistimos tanto en que las llaves sean siempre las mismas.</p>
+<p style="color:#1a7f37">Palabra por palabra: "saludo esperaba un número, pero recibimos 'Hola Martín Gómez'". Item 0 quiere decir "en la primera ficha": n8n empieza a contar desde cero. Y fíjense que abajo hasta nos dice cómo arreglarlo: cambiar el tipo. Este error pasa mucho en la vida real: la planilla espera un número en la columna adultos y la IA devuelve "dos", escrito con letras. Un nodo en rojo no es que n8n se rompió: es n8n diciéndonos exactamente qué dato no le cierra.</p>
 
 45. Cerrás el nodo, apretás **Execute workflow** y vas a la pestaña **Executions**. Abrís la última corrida: aparece
     marcada como error, y adentro se ve en qué nodo se cortó. Decís:
 
-<p style="color:#1a7f37">Un nodo en rojo no es un problema de n8n: es n8n diciéndote qué arreglar. Y en Executions queda registrado: cuándo pasó, en qué nodo y con qué datos.</p>
+<p style="color:#1a7f37">Y en Executions queda registrado: cuándo pasó, en qué nodo y con qué datos. Cuando un flujo activo falle a las tres de la mañana, esto es lo primero que van a mirar.</p>
 
-46. Lo arreglás: volvés a poner `Hola {{ $json.nombre }}` y ejecutás. Vuelve a verde.
+46. **El error que no avisa.** Volvés a poner el tipo en **String** y ejecutás: vuelve a verde. Ahora cambiás el
+    valor por `Hola {{ $json.email }}` (pidiendo un casillero que no existe) y apretás **Execute step**. El nodo
+    queda **verde**, pero la salida dice `"saludo": "Hola "`, sin nada después. Decís:
+
+<p style="color:#1a7f37">Miren esto, que es todavía más importante. Le pedí el casillero email, que no existe: el nodo anterior solo manda nombre y destino. Y n8n no se queja: queda en verde y escribe "Hola " con un vacío. Este es el error más peligroso de todos, porque nadie se entera. En un flujo real, si la IA devuelve "Nombre" con mayúscula en vez de "nombre", la planilla se llena de filas con el nombre vacío, y el flujo sigue en verde. Por eso la semana pasada insistimos tanto en que las llaves sean siempre las mismas, y por eso siempre hay que mirar la salida, no solo el color.</p>
+
+Lo arreglás: volvés a poner `Hola {{ $json.nombre }}` y ejecutás. Sale `Hola Martín Gómez`.
 
 #### Paso F · Ejercicio 4: lo arman los alumnos (92–100)
 
@@ -977,8 +1034,10 @@ EJERCICIO 4 · Tu primer flujo en n8n (8 min)
    Apretá Execute step y mirá la salida en Table y en JSON.
 3. + → otro Edit Fields. Add Field: saludo. En el valor escribí "Hola " y ARRASTRÁ el campo nombre desde la izquierda.
    Execute step: tiene que salir "Hola Martín Gómez".
-4. Rompelo: en el valor de saludo poné {{ $json.email.toUpperCase() }} y ejecutá. Leé el error.
+4. Rompelo: en el campo saludo, cambiá el tipo de String a Number y ejecutá. Leé el error rojo.
 5. Andá a la pestaña Executions y buscá la corrida con error.
+6. Volvé el tipo a String y cambiá el valor por: Hola {{ $json.email }}
+   Ejecutá: ¿se pone en rojo? ¿Qué sale en el saludo?
 ```
 
 49. Mientras trabajan, mirás el chat. Las trabas más comunes y qué les decís:
@@ -988,7 +1047,8 @@ EJERCICIO 4 · Tu primer flujo en n8n (8 min)
 | "No encuentro Edit Fields" | Que busquen `set` o `edit`; en algunas versiones se llama solo **Set**. |
 | "No me aparece nada a la izquierda para arrastrar" | Que ejecuten antes el nodo anterior (**Execute previous nodes** en el panel Input). |
 | "Me sale el texto `{{ nombre }}` tal cual" | Lo escribieron a mano. Que lo borren y arrastren el campo: n8n escribe `{{ $json.nombre }}` solo. |
-| "Me sale Hola sin el nombre" | El cuadro quedó en modo *Fixed*. Que lo pasen a *Expression* (arriba del cuadro) o vuelvan a arrastrar. |
+| "Me sale Hola sin el nombre" | El cuadro quedó en modo *Fixed* (texto fijo). Que lo pasen a *Expression* (arriba del cuadro) o vuelvan a arrastrar. |
+| "No me da error, sale verde" | Si es el paso 6, está bien: es el error silencioso. Si es el paso 4, que revisen que el tipo diga **Number** y no String. |
 | "No tengo instancia" | Que miren la pantalla de algún compañero o la grabación, y lo hagan en casa con el Ejercicio 8. |
 
 50. A los 8 minutos preguntás: *"¿A quién le salió el saludo? ¿Y el error? ¿Qué decía el suyo?"* y pasás a la
@@ -1001,7 +1061,8 @@ EJERCICIO 4 · Tu primer flujo en n8n (8 min)
 | Los botones tienen otro nombre | Es por la versión de n8n. Buscá el equivalente: *Test* ↔ *Execute*, *Active* ↔ *Publish*. Decilo en voz alta para que los alumnos no se pierdan. |
 | El template no se importa | Mostrá solo la biblioteca en n8n.io y leé el flujo desde la página del template, que muestra el dibujo de los nodos. |
 | La credencial de Gmail no se conecta | Saltealo y decí que se ve a fondo en el Módulo 4. No es necesario para el flujo mínimo. |
-| El error dice otra cosa | Leé lo que diga. Lo importante es la idea: pediste un dato que no existe. |
+| El error dice otra cosa | Leé lo que diga. Lo importante es la idea: el nodo recibió un dato que no es el que esperaba. |
+| Algo no te sale en vivo | Importá el workflow ya armado de la carpeta `n8n/` (ver "Los workflows listos para importar", en Preparación) y seguí desde ahí. |
 | Se va el tiempo | Recortá el template (solo la biblioteca) y dejá el Ejercicio 4 para casa (Ejercicio 8). |
 
 #### Para ampliar: qué explicar de cada parte de la pantalla
@@ -1035,8 +1096,8 @@ mails en tu nombre. Por eso, antes de conectar un template de la comunidad, se m
 primer Edit Fields hace de "dato que llega": en un flujo real, esos datos los traería el mail o los devolvería la
 IA. Las llaves dobles `{{ }}` le dicen a n8n "acá no va un texto fijo, va un dato que viene del nodo anterior".
 
-*Ejemplo:* Un caso real del error del paso E: la IA devuelve la llave `"Nombre"` con mayúscula y el nodo de Sheets
-busca `nombre`. El dato está, pero con otro nombre, y n8n no lo encuentra.
+*Ejemplo:* Un caso real del error silencioso del paso E: la IA devuelve la llave `"Nombre"` con mayúscula y el nodo
+de Sheets busca `nombre`. El dato está, pero con otro nombre: n8n no lo encuentra, deja la columna vacía y no avisa.
 
 ---
 
@@ -1081,7 +1142,7 @@ Para explicar:
   - *Ejemplo:* 30 pedidos por día × 3 minutos = 90 minutos por día: unas 30 horas por mes.
 - **"Preguntarte qué harías con ese tiempo: ese es el costo de oportunidad."** En el ejemplo de la agencia: con 13 horas por mes, el vendedor puede responder antes las consultas y cerrar más ventas. Es la parte del ROI que no sale en la cuenta, pero que convence.
   - *Ejemplo:* Con esas 30 horas, la encargada podría armar las promociones de Instagram que nunca tiene tiempo de hacer.
-- **"Chequear si sigue teniendo sentido cuando el volumen se multiplique por diez."** Si con diez veces más trabajo sin automatizar haría falta otra persona, la automatización escala. Con 400 consultas por semana, cargarlas a mano serían más de 130 horas por mes, casi un sueldo entero; el flujo, en cambio, las procesa igual.
+- **"Chequear si sigue teniendo sentido cuando el volumen se multiplique por diez."** Es la pregunta de si "escala": si sigue funcionando igual de bien cuando el trabajo crece mucho. Si con diez veces más trabajo sin automatizar haría falta otra persona, la automatización escala. Con 400 consultas por semana, cargarlas a mano serían más de 130 horas por mes, casi un sueldo entero; el flujo, en cambio, las procesa igual.
   - *Ejemplo:* Con 300 pedidos por día serían 15 horas diarias de carga: dos personas. El flujo procesa 300 igual que 30.
 - **"Resultado esperado: dos o tres líneas que argumentan por qué automatizarlo, y por qué no."** El "por qué no" es importante: muestra que se pensó. Por ejemplo: "si las consultas son muy pocas, o si cada una necesita una respuesta muy personalizada, quizás no convenga". No hay que convencer a nadie de que todo es perfecto: hay que mostrar que se evaluaron los dos lados.
   - *Ejemplo:* "Por qué no: los pedidos con indicaciones raras ('sin azúcar pero que sea bien dulce') la IA los puede interpretar mal; esos conviene que los revise una persona."
@@ -1111,7 +1172,7 @@ Para explicar:
     3. Guardar en la planilla "Pedidos"
     4. Confirmarle al cliente por WhatsApp
     ```
-- **"Definir el output final: dónde termina el dato y en qué formato."** Una planilla, un mensaje de WhatsApp, un mail, una base de datos. Si termina en una planilla, conviene anotar qué columnas tiene: van a coincidir con las llaves del JSON que devuelve la IA.
+- **"Definir el output final: dónde termina el dato y en qué formato."** *Output* quiere decir "salida": el resultado, lo que queda al final. Una planilla, un mensaje de WhatsApp, un mail, una base de datos. Si termina en una planilla, conviene anotar qué columnas tiene: van a coincidir con las llaves del JSON que devuelve la IA.
   - *Ejemplo:* Una fila nueva en la planilla "Pedidos" (columnas producto, cantidad, fecha y cliente), más un mensaje de confirmación al cliente.
 - **"Resultado esperado: una lista de pasos, o un diagrama simple, del flujo completo."** Alcanza con una lista numerada o con cajitas y flechas en un papel. Lo que se evalúa es que se entienda el camino del dato de punta a punta, no el dibujo.
   - *Ejemplo:* Una lista de cuatro líneas, como el ✅ de abajo, alcanza.
@@ -1184,9 +1245,9 @@ Devolvé únicamente un JSON con estas llaves, sin ningún texto antes ni despu�
 Para explicar:
 - **"Objetivo: anticipar dónde se rompe antes de que se rompa."** Todo flujo falla alguna vez: llega un mensaje raro, falta un dato, la IA interpreta mal. Pensarlo antes permite diseñar la red de contención, en vez de enterarse cuando el cliente se queja.
   - *Ejemplo:* Pregunta para hacerse: "¿qué pasa si llega un mail que solo dice 'hola, info'?". Si la respuesta es "la IA inventa los datos", hay que diseñar qué hacer en ese caso.
-- **"Elegir un riesgo del módulo 1: alucinación, límite de contexto o ambigüedad."** Ambigüedad: el mensaje se puede entender de dos formas (por ejemplo, "el 12" sin decir de qué mes). Alucinación: que la IA complete un dato que no estaba, como un teléfono o un año. Límite de contexto: que el texto a procesar sea tan largo (un hilo de mails entero, un documento) que no entre completo o que la IA pierda partes.
+- **"Elegir un riesgo del módulo 1: alucinación, límite de contexto o ambigüedad."** Los tres, en criollo. Ambigüedad: el mensaje se puede entender de dos formas (por ejemplo, "el 12" sin decir de qué mes). Alucinación: que la IA complete un dato que no estaba, como un teléfono o un año. Límite de contexto: que el texto a procesar sea tan largo (un hilo de mails entero, un documento) que no entre completo o que la IA pierda partes.
   - *Ejemplo:* Alucinación: inventa la fecha. Límite de contexto: un pedido con un hilo de 50 mensajes no entra entero. Ambigüedad: "la quiero para el viernes", ¿este o el próximo?
-- **"Escribir cómo lo mitigás desde el prompt o desde el diseño del flujo."** Desde el prompt: prohibir inventar, `no_disponible`. Desde el flujo: si un dato clave falta, la fila se marca "a revisar" para que la vea una persona. Lo mejor es combinar las dos cosas: el prompt reduce el error y el flujo lo atrapa si igual pasa. Mitigar no quiere decir eliminar el riesgo, sino tener un plan para cuando aparezca.
+- **"Escribir cómo lo mitigás desde el prompt o desde el diseño del flujo."** Mitigar es achicar un riesgo, hacer que pase menos o que haga menos daño. Desde el prompt: prohibir inventar, `no_disponible`. Desde el flujo: si un dato clave falta, la fila se marca "a revisar" para que la vea una persona. Lo mejor es combinar las dos cosas: el prompt reduce el error y el flujo lo atrapa si igual pasa. Mitigar no quiere decir eliminar el riesgo, sino tener un plan para cuando aparezca.
   - *Ejemplo:* Riesgo: "el viernes" es ambiguo. En el prompt: "si la fecha no es exacta, poné no_disponible". En el flujo: si la fecha es no_disponible, se le pregunta al cliente por WhatsApp "¿para qué fecha exacta?".
 - **"Juntar las cinco partes en un solo documento."** Proceso, ROI, boceto, prompt y riesgo, en ese orden, en un solo PDF. Ese orden cuenta una historia: qué problema hay, por qué conviene resolverlo, cómo sería el flujo, qué hace la IA adentro y qué puede salir mal.
   - *Ejemplo:* 1. Proceso · 2. ROI · 3. Boceto · 4. Prompt · 5. Riesgos → un PDF de dos o tres páginas.
@@ -1219,8 +1280,8 @@ Para explicar: **"El objetivo: diseñar una automatización simple que use un pa
 funcione todavía. Lo que sí hace falta: justificar por qué vale la pena y cómo sería el prompt."** Las cinco
 partes (proceso, ROI, boceto, prompt y reflexión) **son exactamente los cinco pasos que acabamos de ver**.
 Que no se asusten si todavía no saben armarlo en n8n: es a propósito. Primero se aprende a pensar la
-automatización y después a construirla. En las próximas semanas van a ir sumando las piezas (decisiones,
-APIs, credenciales) para que este diseño se convierta en un flujo que corre de verdad.
+automatización y después a construirla. En las próximas semanas van a ir sumando las piezas (nodos que deciden caminos,
+conexiones con otras aplicaciones por su API, credenciales) para que este diseño se convierta en un flujo que corre de verdad.
 
 *Ejemplo:* No hace falta tener Gmail conectado ni la planilla creada. Alcanza con escribir "Gmail Trigger → IA → Sheets" y el prompt completo.
 
@@ -1245,7 +1306,7 @@ automatiza, por qué y cómo.
 Para explicar:
 - **"Elegí un proceso manual y repetitivo de tu trabajo, estudio o vida diaria."** Es el paso 1. Tiene que ser propio, porque lo van a seguir construyendo en las próximas semanas. Responde la pregunta: ¿qué tarea se automatiza?
   - *Ejemplo:* "Cargar en la planilla los pedidos que llegan por WhatsApp a la pastelería."
-- **"Justificá el ROI en dos o tres líneas: tiempo, frecuencia y escalabilidad."** Es el paso 2. Tres datos: cuánto tarda cada vez, cada cuánto pasa y qué pasaría si se multiplicara por diez. Responde: ¿por qué vale la pena? Y una razón para no hacerlo.
+- **"Justificá el ROI en dos o tres líneas: tiempo, frecuencia y escalabilidad."** Es el paso 2. Escalabilidad es lo mismo que "escalar": que siga funcionando cuando el volumen crece. Tres datos: cuánto tarda cada vez, cada cuánto pasa y qué pasaría si se multiplicara por diez. Responde: ¿por qué vale la pena? Y una razón para no hacerlo.
   - *Ejemplo:* "3 minutos × 30 pedidos por día ≈ 30 horas por mes. Con diez veces más pedidos haría falta otra persona. Por qué no: los pedidos con indicaciones raras los tiene que ver alguien."
 - **"Bocetá el flujo: qué lo dispara, pasos intermedios, dónde entra la IA y cuál es el output final."** Es el paso 3, y el que más pesa en la nota. Responde: ¿cómo sería el flujo? Una lista numerada alcanza.
   - *Ejemplo:* "1. Llega un WhatsApp → 2. IA: extrae producto, cantidad, fecha y cliente → 3. Fila nueva en Sheets → 4. Confirmación al cliente."
@@ -1272,7 +1333,7 @@ Para explicar cada criterio:
 - **La reflexión:** un riesgo real de cómo procesa texto un LLM y su mitigación. Un riesgo concreto de su caso, no uno genérico. "La IA puede equivocarse" no alcanza; "si el cliente no dice el mes, la IA puede inventarlo, por eso pedimos no_disponible y marcamos la fila" sí.
   - *Ejemplo:* Bien: "la IA puede inventar el año de la fecha; lo evito con no_disponible y marcando la fila". Mal: "la IA a veces falla".
 
-Mostrá también los pesos de la rúbrica del programa (en `ejercicios-alumnos.md`): **el boceto del flujo vale
+Mostrá también los pesos de la rúbrica del programa (la rúbrica es la grilla de corrección: qué se mira y cuántos puntos vale cada parte) (en `ejercicios-alumnos.md`): **el boceto del flujo vale
 40 %** y el prompt 30 %.
 
 #### Filmina 37 · ¿Cómo sigue? Del boceto al flujo que corre (2 min)
@@ -1316,3 +1377,63 @@ si su proceso pasa el filtro de alta frecuencia y bajo juicio humano, y algún e
 - [ ] Vieron un template real leído nodo por nodo.
 - [ ] Armaron (o vieron armar) un flujo mínimo, lo rompieron y leyeron el error.
 - [ ] Tienen la consigna de la pre-entrega y un ejemplo resuelto.
+
+---
+
+### Glosario de la clase
+
+Todas las palabras técnicas de hoy, en criollo. Sirve para responder un "¿qué era eso?" sin perder el hilo, y se
+puede pegar en el chat al final de la clase.
+
+| Palabra | Qué quiere decir | Ejemplo |
+|---|---|---|
+| **n8n** | Se pronuncia "ene-ocho-ene". Un programa que conecta aplicaciones para que hagan tareas solas. Viene de *nodemation*: n + 8 letras + n. | "Cada mail que llega, copialo en la planilla." |
+| **Automatización** | Una tarea que la computadora hace sola, siempre igual, sin que nadie la toque. | La factura se genera sola cuando entra una compra. |
+| **Lineal** | Automatización con reglas fijas: "si pasa A, hacé B". No usa IA. | Formulario → fila en la planilla. |
+| **Cognitiva** | Automatización con un paso donde la IA lee y entiende. | La IA lee el mail y decide si es reclamo o consulta. |
+| **Orquestar** | Hacer que varias aplicaciones trabajen coordinadas. | Entra el pago → se anota → se avisa al cliente. |
+| **ROI** | *Return on Investment*, retorno de la inversión: cuánto te vuelve por lo que ponés. | Pongo 10 horas, me ahorra 40: conviene. |
+| **Frecuencia** | Cada cuánto pasa una tarea. | 30 pedidos por día: frecuencia alta. |
+| **Costo de oportunidad** | Lo que dejás de hacer mientras hacés la tarea a mano. | La hora de anotar pedidos son dos tortas que no se hicieron. |
+| **Break-even** | Punto de equilibrio: cuando lo ahorrado alcanza lo invertido. | "En cinco semanas se paga sola." |
+| **Escalar** | Seguir funcionando igual de bien cuando el volumen crece mucho. | El flujo procesa 300 pedidos igual que 30. |
+| **Juicio humano** | Cuando hace falta que una persona piense y decida. | Negociar un precio con un proveedor. |
+| **Servidor** | Una computadora prendida todo el tiempo y conectada a internet. | Donde viven las páginas web y n8n Cloud. |
+| **La nube** | Computadoras de otra empresa que usás por internet. | Tus fotos en Google Fotos. |
+| **Hosting** | El alquiler de una computadora en internet donde corre un programa. | Pagar un servidor para tener n8n prendido. |
+| **SaaS** | Un programa que se usa desde el navegador, sin instalar nada. | Gmail, n8n Cloud. |
+| **Self-hosted** | "Alojado por vos": el programa corre en una computadora tuya. | n8n con Docker en tu notebook. |
+| **Instancia** | Tu n8n, el tuyo, funcionando en algún lado. | `tunombre.app.n8n.cloud` o `localhost:5678`. |
+| **Docker** | Una herramienta que baja un programa listo para usar, en una "caja" con todo lo que necesita. | La imagen oficial de n8n. |
+| **Terminal / comando** | Una ventana donde se le escriben órdenes a la computadora; cada orden es un comando. | `docker volume create n8n_data` |
+| **Localhost** | "Esta misma computadora". | `http://localhost:5678` |
+| **Puerto** | El "número de departamento" donde atiende cada programa en la computadora. | n8n atiende en el 5678. |
+| **Código / programar** | Las instrucciones escritas de un programa / escribirlas. | El nodo Code. |
+| **No-code / low-code** | Sin código (todo con clics) / poco código (casi todo con clics, a veces una línea). | Zapier es no-code; n8n es low-code. |
+| **Open source** | Código abierto: las instrucciones del programa son públicas. | Cualquiera puede instalar n8n gratis. |
+| **Integración** | Un bloque listo para hablar con una aplicación en particular. | La integración de Gmail. |
+| **Workflow / flujo** | Una automatización completa, de punta a punta. | "Consultas por mail a planilla." |
+| **Nodo** | Cada bloque del flujo. Hace una sola cosa. | El nodo de Google Sheets. |
+| **Lienzo** | La pantalla tipo pizarrón donde se ponen los nodos. | Donde se arrastran y se unen con flechas. |
+| **Trigger** | Disparador: el primer nodo, el que hace arrancar el flujo. | "Cuando llega un mail." |
+| **Acción** | Un nodo que hace algo en una aplicación. | "Mandá un mail", "agregá una fila". |
+| **Parámetros** | Los campos que se le completan a un nodo para decirle qué hacer. | Qué planilla, qué hoja, qué columnas. |
+| **Webhook** | Un aviso automático que una aplicación le manda a otra cuando pasa algo. | La tienda avisa "entró un pedido". |
+| **JSON** | La ficha con casilleros con la que los nodos se pasan los datos. | `{"nombre": "Martín", "destino": "Bariloche"}` |
+| **Item** | Cada dato suelto que pasa por el flujo. | Cinco mails son cinco items. |
+| **Expresión / mapear** | Las llaves dobles `{{ }}` que traen un dato de otro nodo / decirle al nodo de qué casillero sacar cada cosa. | `Hola {{ $json.nombre }}` |
+| **String** | En programación, "texto". | `Martín Gómez` es un String. |
+| **Number** | En programación, "número". | `2` es un Number; `"dos"` es un String. |
+| **Ejecutar / ejecución** | Hacer correr el flujo / cada vez que corrió. | La pestaña *Executions*. |
+| **Credencial** | El permiso que le das a n8n para entrar a una cuenta tuya. | Tu Gmail conectado a n8n. |
+| **API / clave de API** | La puerta por la que un programa le habla a otro / la contraseña de esa puerta. | n8n le habla a ChatGPT por su API. |
+| **LLM** | Modelo de lenguaje grande: el tipo de IA de ChatGPT, Claude o Gemini. | El modelo dentro del nodo de IA. |
+| **Token** | Un pedacito de palabra; la unidad con la que la IA lee y cobra. | Una palabra larga puede ser dos o tres tokens. |
+| **Alucinar** | Cuando la IA inventa un dato con total seguridad. | Inventa el año de una fecha. |
+| **Template** | Plantilla: un flujo armado por otro que se puede copiar. | "Resumir mails y mandarlos a Telegram." |
+| **Importar / exportar** | Traer un flujo a tu n8n / sacarlo como archivo. | `consultas.json` |
+| **Lead** | Un posible cliente que dejó sus datos. | Alguien que completó el formulario de consulta. |
+| **Output** | Salida: el resultado final. | La fila nueva en la planilla. |
+| **Boceto** | Un borrador del flujo, en lista o con flechas, antes de armarlo. | Gmail → IA → Sheets. |
+| **Mitigar** | Achicar un riesgo. | Pedir no_disponible para que la IA no invente. |
+| **Rúbrica** | La grilla de corrección. | El boceto vale 40 %. |

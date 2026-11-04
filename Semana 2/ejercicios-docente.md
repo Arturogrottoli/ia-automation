@@ -74,7 +74,10 @@ formulario, un mail o un horario). Evitá los que necesitan muchas credenciales 
 
 1. **Manual Trigger** → **Edit Fields (Set)**: `nombre` = `Martín Gómez`, `destino` = `Bariloche`.
 2. Segundo **Edit Fields**: `saludo` = "Hola " + el campo `nombre` arrastrado desde la entrada. Queda como `Hola {{ $json.nombre }}` y sale `Hola Martín Gómez`.
-3. Romperlo: `saludo` = `{{ $json.email.toUpperCase() }}`. Como `email` no existe, el nodo falla y el error indica que no puede leer esa propiedad (el texto exacto depende de la versión). **Probalo antes** para saber qué mensaje vas a mostrar.
+3. Romperlo (probado en n8n 2.46):
+   - **Error rojo:** cambiar el tipo de `saludo` a **Number**. Sale `'saludo' expects a number but we got 'Hola Martín Gómez' [item 0]`.
+   - **Error silencioso:** tipo **String** y valor `Hola {{ $json.email }}`. El nodo queda verde y sale `"saludo": "Hola "`. En esta versión, pedir un casillero que no existe **no da error**: devuelve vacío. (Por eso ya no se usa `{{ $json.email.toUpperCase() }}`, que en versiones viejas daba *Cannot read properties of undefined* y ahora devuelve `null` sin avisar.)
+   - Los dos están armados en `n8n/02-mi-primer-flujo-roto.json`.
 4. Mostrar la corrida fallida en **Executions**.
 
 ### Ejercicio 4 · Los alumnos lo replican

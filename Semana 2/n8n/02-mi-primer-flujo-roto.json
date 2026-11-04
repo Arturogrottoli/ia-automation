@@ -1,0 +1,172 @@
+{
+  "name": "02 · Mi primer flujo (roto a propósito)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "ae62024a-dc0d-431b-887b-09d83914dca4",
+      "name": "Arrancar a mano",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "aab6662d-103e-4e73-82cf-f5daae7229cf",
+              "name": "nombre",
+              "value": "Martín Gómez",
+              "type": "string"
+            },
+            {
+              "id": "3997ef0c-cdbd-4b5a-a171-311ae652e713",
+              "name": "destino",
+              "value": "Bariloche",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a6d4e69d-bf15-49ee-afa4-e1edc816f526",
+      "name": "Dato de entrada",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6e39358f-dca2-4971-a1ed-e6c9a1d96460",
+              "name": "saludo",
+              "value": "=Hola {{ $json.nombre }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "64e29775-436d-4454-9632-bbe2f3904d8e",
+      "name": "Error rojo (tipo Number)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        520,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1effd8a4-0e3b-4bd6-a34c-a3a1f7a59549",
+              "name": "saludo",
+              "value": "=Hola {{ $json.email }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a0644ea7-8dfe-4657-b75c-c079c4cdb97a",
+      "name": "Error silencioso (email)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        520,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Dos formas de romperlo\n\nEl mismo dato de entrada va a dos nodos rotos. Apretá **Execute workflow**: primero corre el de arriba (sale verde, pero vacío) y después el de abajo (se pone en rojo). Abrí cada uno.",
+        "height": 180,
+        "width": 520,
+        "color": 4
+      },
+      "id": "54fc0841-b06f-461d-9be3-1c8af89f84fb",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        -340
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 2 · El error que avisa\n\nEl campo `saludo` está como tipo **Number** (número), pero recibe el texto \"Hola Martín Gómez\". El nodo se pone en **rojo**:\n\n*'saludo' expects a number but we got 'Hola Martín Gómez'* = \"saludo esperaba un número y le llegó un texto\".\n\n**Arreglo:** cambiar el tipo a **String** (texto).",
+        "height": 300,
+        "width": 380,
+        "color": 3
+      },
+      "id": "f7c606ee-6868-4381-9d32-b947a78f2666",
+      "name": "Nota: error rojo",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        780,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 1 · El error que NO avisa\n\nPide el casillero `email`, que no existe. No se pone en rojo: sale **\"Hola \" sin nada**, en verde.\n\nEs el más peligroso: el flujo sigue y la planilla se llena con casilleros vacíos. Por eso las llaves del JSON tienen que ser siempre las mismas.",
+        "height": 300,
+        "width": 380,
+        "color": 3
+      },
+      "id": "0caa03e5-9ba4-4a80-b8cd-e952c6b94b0f",
+      "name": "Nota: error silencioso",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        780,
+        -260
+      ]
+    }
+  ],
+  "connections": {
+    "Arrancar a mano": {
+      "main": [
+        [
+          {
+            "node": "Dato de entrada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dato de entrada": {
+      "main": [
+        [
+          {
+            "node": "Error rojo (tipo Number)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Error silencioso (email)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

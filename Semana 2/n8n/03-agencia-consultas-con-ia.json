@@ -1,0 +1,291 @@
+{
+  "name": "03 · Agencia: consultas por mail con IA",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "cb7a5af3-7921-4658-9b78-2526620ec513",
+      "name": "Arrancar a mano",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Simula el Gmail Trigger: devuelve dos mails, como si hubieran llegado juntos.\n// Cada uno es un \"item\": el resto del flujo corre una vez por cada uno.\nreturn [\n  { json: { de: 'Martín Gómez', text: \"hola!! como andan? les escribo xq queremos ir con mi señora y los 2 chicos a bariloche en las\\nvacaciones de invierno, la idea seria salir el 14 de julio mas o menos y volver una semana despues.\\nsomos de rosario. presupuesto no se, unos 2 millones?? si tienen algo con hotel y excursiones mejor.\\nah y uno de los nenes es celiaco. me llamo Martín Gómez, mi cel 341 555-0192. gracias!!!\" } },\n  { json: { de: 'Lucía Fernández', text: \"Buenas tardes. Consulto por un paquete a Cancún para 2 adultos, del 3 al 10 de marzo de 2027.\\nSalimos desde Córdoba. Nos interesa all inclusive. Mi correo es lucia.fernandez@mail.com.\\nSaludos, Lucía Fernández.\" } },\n];"
+      },
+      "id": "70a24e03-a773-48c9-91df-f72fd8b0a93c",
+      "name": "Mails que llegan (simulados)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Sos un asistente de ventas de una agencia de viajes. Recibís consultas de clientes por mail y las\ncargás en el sistema de reservas. No le respondés al cliente: solo sacás los datos.\n\nTarea: extraé del mail que está entre ### los datos de la consulta.\n\nReglas:\n- Usá solo la información que está en el mail. No inventes ni completes datos.\n- Si un dato no aparece, poné \"no_disponible\".\n- Si una fecha no tiene año, dejala como está escrita. No supongas el año.\n- No hagas cuentas: si el cliente dice \"una semana después\", copialo así.\n- Si algo es aproximado (\"más o menos\", \"unos 2 millones\"), copialo como aproximado.\n- Pensá paso a paso antes de responder, pero devolvé solo el JSON final.\n\nEjemplo de mail:\n\"Hola, soy Ana Ruiz. Quiero ir a Salta el 2 de mayo, vuelvo el 6. Viajo sola desde Mendoza. Mi mail es ana.ruiz@mail.com\"\nEjemplo de respuesta:\n{\"nombre\": \"Ana Ruiz\", \"telefono\": \"no_disponible\", \"email\": \"ana.ruiz@mail.com\", \"origen\": \"Mendoza\", \"destino\": \"Salta\", \"fecha_salida\": \"2 de mayo\", \"fecha_regreso\": \"6 de mayo\", \"adultos\": 1, \"menores\": 0, \"presupuesto\": \"no_disponible\", \"servicios\": [], \"restricciones\": []}\n\nFormato: devolvé únicamente un objeto JSON válido con estas llaves: nombre, telefono, email, origen,\ndestino, fecha_salida, fecha_regreso, adultos, menores, presupuesto, servicios (lista),\nrestricciones (lista). Sin texto antes ni después, sin ``` y sin comentarios.\n\n###\n{{ $json.text }}\n###"
+      },
+      "id": "c4697913-793c-4126-9a9b-e1fc5eaaa4cb",
+      "name": "Extraer datos con IA",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        460,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3-flash-preview",
+        "options": {}
+      },
+      "id": "aa4c3ac9-3db9-417a-85ab-d15a9c43ef04",
+      "name": "Modelo: Google Gemini",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        460,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// La IA devuelve el JSON como texto. Acá lo convertimos en una ficha con casilleros.\n// Si la IA agregó ``` o algún texto alrededor, se lo sacamos.\nconst texto = $json.text || '';\nconst inicio = texto.indexOf('{');\nconst fin = texto.lastIndexOf('}');\nreturn { json: JSON.parse(texto.slice(inicio, fin + 1)) };",
+        "mode": "runOnceForEachItem"
+      },
+      "id": "2b703041-5e57-41b3-addf-eaa6b9da1e16",
+      "name": "Pasar a JSON",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        760,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ef99dca9-27db-4817-b38a-f936169fdb88",
+              "name": "nombre",
+              "value": "={{ $json.nombre }}",
+              "type": "string"
+            },
+            {
+              "id": "d5cfc527-8c71-47bb-b4ba-44eab9dde9fc",
+              "name": "telefono",
+              "value": "={{ $json.telefono }}",
+              "type": "string"
+            },
+            {
+              "id": "e63c6e52-a8d1-4f96-b7b2-62537251f25c",
+              "name": "email",
+              "value": "={{ $json.email }}",
+              "type": "string"
+            },
+            {
+              "id": "99f5a4a4-7e16-453b-a0cf-850d1e676e62",
+              "name": "origen",
+              "value": "={{ $json.origen }}",
+              "type": "string"
+            },
+            {
+              "id": "4a19f641-9c83-4ff2-8628-572b4e885b5c",
+              "name": "destino",
+              "value": "={{ $json.destino }}",
+              "type": "string"
+            },
+            {
+              "id": "d61abaae-1544-4924-b224-5091b646c909",
+              "name": "fecha_salida",
+              "value": "={{ $json.fecha_salida }}",
+              "type": "string"
+            },
+            {
+              "id": "2785066d-526a-4956-97ee-76900decc14a",
+              "name": "fecha_regreso",
+              "value": "={{ $json.fecha_regreso }}",
+              "type": "string"
+            },
+            {
+              "id": "6e6edbc2-d0bb-4a86-997f-dff7298b1332",
+              "name": "adultos",
+              "value": "={{ $json.adultos }}",
+              "type": "string"
+            },
+            {
+              "id": "f9a5ee61-7594-4a5d-8df6-b6c81788a8ce",
+              "name": "menores",
+              "value": "={{ $json.menores }}",
+              "type": "string"
+            },
+            {
+              "id": "fd89c801-1f2e-4b7a-b988-cfd17fd383b3",
+              "name": "presupuesto",
+              "value": "={{ $json.presupuesto }}",
+              "type": "string"
+            },
+            {
+              "id": "4e3a69d4-bef3-4089-a128-f504e80eedb5",
+              "name": "servicios",
+              "value": "={{ ($json.servicios || []).join(', ') }}",
+              "type": "string"
+            },
+            {
+              "id": "bb82b292-4090-4f17-9d0f-6d7b572fa5cd",
+              "name": "restricciones",
+              "value": "={{ ($json.restricciones || []).join(', ') }}",
+              "type": "string"
+            },
+            {
+              "id": "2b6273e3-3d40-4019-8cbd-9aef2c289706",
+              "name": "estado",
+              "value": "={{ Object.values($json).includes('no_disponible') ? 'a revisar' : 'completa' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "86ccc0f4-04be-409c-8075-0ef5bb5e0bba",
+      "name": "Fila para la planilla",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1000,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Consultas por mail → planilla (la agencia de viajes)\n\nEs el flujo de la clase: llega un mail desordenado, la IA lo lee con la plantilla de la Semana 1 y sale una fila lista para la planilla.\n\nPara que se pueda probar sin conectar Gmail ni Google Sheets, el mail está **simulado** (nodo 2) y la fila se arma en un **Edit Fields** (nodo 5) en vez de escribirse en Sheets.",
+        "height": 260,
+        "width": 760,
+        "color": 4
+      },
+      "id": "f0fa4f9c-73e1-40ae-8d89-476f8410d266",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        -360
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### Antes de ejecutar\n\nAbrí **Modelo: Google Gemini** → *Credential* → *Create new credential* y pegá tu clave de API de Google AI Studio (aistudio.google.com → *Get API key*). Es gratis para probar.\n\nSi preferís otro modelo (OpenAI, Anthropic), borrá este sub-nodo y conectá el que quieras.",
+        "height": 260,
+        "width": 360,
+        "color": 3
+      },
+      "id": "d8f60a92-6461-460b-91e2-f3c8da9a64d5",
+      "name": "Nota: credencial",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        380,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### Dos mails = dos items\n\nEl nodo 2 entrega dos mails juntos. La IA corre **dos veces**, una por cada uno, sin programar ninguna repetición. Fijate en la salida: dos filas.",
+        "height": 200,
+        "width": 280,
+        "color": 6
+      },
+      "id": "1b34ee91-295b-4b9c-8e9e-2c9b5ea6ba1a",
+      "name": "Nota: items",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        700,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### a revisar / completa\n\nLa columna **estado** dice *a revisar* si algún dato vino como `no_disponible` (al mail de Martín le falta el email). Es el control de riesgos del paso 5 de la pre-entrega.",
+        "height": 200,
+        "width": 300,
+        "color": 6
+      },
+      "id": "873e25fa-5240-451a-9e4c-31b33d013329",
+      "name": "Nota: estado",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        180
+      ]
+    }
+  ],
+  "connections": {
+    "Arrancar a mano": {
+      "main": [
+        [
+          {
+            "node": "Mails que llegan (simulados)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mails que llegan (simulados)": {
+      "main": [
+        [
+          {
+            "node": "Extraer datos con IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer datos con IA": {
+      "main": [
+        [
+          {
+            "node": "Pasar a JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pasar a JSON": {
+      "main": [
+        [
+          {
+            "node": "Fila para la planilla",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Modelo: Google Gemini": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Extraer datos con IA",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

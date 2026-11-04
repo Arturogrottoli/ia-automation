@@ -1,0 +1,128 @@
+{
+  "name": "01 · Mi primer flujo",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "cd884278-0af3-4ca6-ae79-23ca33bfdd9f",
+      "name": "Arrancar a mano",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "35f08c47-e127-4144-b5a2-522aff2cfce5",
+              "name": "nombre",
+              "value": "Martín Gómez",
+              "type": "string"
+            },
+            {
+              "id": "3fcddb2f-057d-4022-a6b3-c73f9b7d1fc4",
+              "name": "destino",
+              "value": "Bariloche",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "adc9e3e6-05d6-4502-b42c-c0a132c472f6",
+      "name": "Dato de entrada",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e4c889e1-272e-425e-9502-69b1c916e554",
+              "name": "saludo",
+              "value": "=Hola {{ $json.nombre }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "55e9afb2-adf9-427b-8af8-5a26568957d5",
+      "name": "Saludo",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Mi primer flujo\n\nTres nodos. El primero arranca el flujo con un botón, el segundo inventa un dato (como si hubiera llegado el mail de Martín) y el tercero usa ese dato para armar un saludo.\n\nApretá **Execute workflow** abajo y abrí cada nodo para ver qué entra y qué sale.",
+        "height": 240,
+        "width": 640,
+        "color": 4
+      },
+      "id": "c2f1a9c9-8a08-4d70-8ccb-fd01911463e4",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        -300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### Mapear un dato\n\nEn el nodo **Saludo**, el valor es `Hola {{ $json.nombre }}`: las llaves dobles quieren decir \"acá va el casillero nombre de la ficha que llega del nodo anterior\".\n\nProbá: cambiá el nombre en **Dato de entrada** y volvé a ejecutar.",
+        "height": 240,
+        "width": 340,
+        "color": 6
+      },
+      "id": "eb3da511-bd86-43a7-bd9d-f407d5fabee5",
+      "name": "Nota: saludo",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        400,
+        160
+      ]
+    }
+  ],
+  "connections": {
+    "Arrancar a mano": {
+      "main": [
+        [
+          {
+            "node": "Dato de entrada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dato de entrada": {
+      "main": [
+        [
+          {
+            "node": "Saludo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

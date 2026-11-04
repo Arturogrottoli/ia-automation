@@ -2,6 +2,27 @@
 
 **Módulo 2: Introducción a las automatizaciones y n8n**
 
+### Palabras que vas a ver en estos ejercicios
+
+| Palabra | Qué quiere decir |
+|---|---|
+| **n8n** | Se pronuncia "ene-ocho-ene". El programa que conecta aplicaciones (Gmail, WhatsApp, planillas) para que hagan tareas solas. |
+| **Instancia** | Tu n8n, el tuyo, funcionando en internet (n8n Cloud) o en tu computadora (con Docker). |
+| **Workflow o flujo** | Una automatización completa, de punta a punta: "cada mail que llega, copialo en la planilla". |
+| **Nodo** | Cada bloque del flujo. Hace una sola cosa: recibir un mail, leerlo con IA, escribir en la planilla. |
+| **Trigger** | Disparador: el primer nodo, el que hace arrancar el flujo ("cuando llega un mail", "todos los lunes a las 9"). |
+| **Acción** | Un nodo que hace algo: mandar un mail, agregar una fila. |
+| **Webhook** | Un aviso automático que una aplicación le manda a otra cuando pasa algo ("entró un pedido"). |
+| **JSON** | La ficha con casilleros con la que los nodos se pasan los datos: `{"nombre": "Martín", "destino": "Bariloche"}`. |
+| **Credencial** | El permiso que le das a n8n para entrar a una cuenta tuya (tu Gmail, tu planilla). |
+| **Template** | Plantilla: un flujo que armó otra persona y que podés copiar y adaptar. |
+| **Output** | Salida: dónde termina el dato al final del flujo (una fila en la planilla, un mensaje). |
+| **ROI** | Retorno de la inversión: por lo que ponés (tiempo o plata), cuánto te vuelve. |
+| **Break-even** | Punto de equilibrio: el momento en que lo ahorrado alcanza lo que costó armarlo. |
+| **Escalar** | Seguir funcionando igual de bien cuando el trabajo se multiplica. |
+| **LLM** | Modelo de lenguaje grande: el tipo de IA que hay detrás de ChatGPT, Claude o Gemini. |
+| **Mitigar** | Achicar un riesgo: hacer que pase menos o que haga menos daño. |
+
 ---
 
 ## En clase
@@ -49,7 +70,8 @@ En tu instancia de n8n, armá el flujo que mostró el profe:
 1. Creá un workflow nuevo y agregá un **Manual Trigger**.
 2. Agregá un nodo **Edit Fields (Set)** con dos campos: `nombre` = `Martín Gómez` y `destino` = `Bariloche`. Ejecutalo y mirá la salida en las vistas **Table** y **JSON**.
 3. Agregá otro **Edit Fields** con un campo `saludo`: escribí `Hola ` y **arrastrá** el campo `nombre` desde la entrada del nodo. Ejecutalo: tiene que salir `Hola Martín Gómez`.
-4. **Rompelo:** cambiá el valor de `saludo` por `{{ $json.email.toUpperCase() }}`. Ejecutalo, leé el error y buscá la corrida fallida en **Executions**.
+4. **Rompelo:** en el campo `saludo`, cambiá el tipo de **String** (texto) a **Number** (número). Ejecutalo, leé el error rojo y buscá la corrida fallida en **Executions**.
+5. **El error que no avisa:** volvé el tipo a **String** y cambiá el valor por `Hola {{ $json.email }}`. Ejecutalo: ¿se pone en rojo? ¿Qué sale en el saludo? ¿Por qué es peligroso?
 
 Si no tenés instancia todavía, mirá la demo y hacelo en casa (Ejercicio 8).
 
