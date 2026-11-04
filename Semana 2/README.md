@@ -757,54 +757,265 @@ en un chat de IA para que lo explique.
 
 ### 60–100 · Sección 04 · n8n en vivo: cómo se usa
 
-**Filmina 25 · Separador "04"** — pasarla y quedate con la **filmina 26** de fondo mientras compartís tu
-instancia.
+Todo lo que sigue está en el orden en que lo hacés. Cada bloque gris es algo que copiás, pegás o escribís tal
+cual. El texto en verde es lo que decís. Los nombres de algunos botones cambian entre versiones de n8n (por
+ejemplo, *Execute step* en las nuevas y *Test step* en las anteriores); cuando pasa, están los dos.
 
-<p style="color:#1a7f37">Ahora n8n en vivo: les muestro cómo se usa.</p>
+#### Antes de la clase (una sola vez, 15 minutos)
 
-**Filmina 26 · Ejemplo en vivo.** Dice: *"Desafío de priorización. El profe pone tres casos en pantalla y el
-grupo vota (ya lo hicimos en la sección de ROI). Después construimos juntos un flujo mínimo en n8n y lo
-rompemos a propósito para leer el error."* Este bloque lo amplía con un recorrido por la interfaz y un
-template real.
+1. Abrí tu instancia de n8n (Cloud o la de Docker en `localhost:5678`) y dejala logueada.
+2. Elegí el template que vas a mostrar en n8n.io/workflows: chico (4 a 6 nodos), con un nodo de IA y con un
+   trigger fácil de explicar (un formulario, un mail o un horario). Importalo una vez para saber qué credenciales
+   pide. Anotá en un papel, para leerlo en voz alta: cuál es el trigger, dónde está la IA y dónde termina el dato.
+3. Hacé una vez el flujo mínimo de los pasos 26 a 46 de esta sección, para ver cómo se ven los botones en tu
+   versión y qué texto exacto tiene el error.
+4. Tené a mano la cuenta de Gmail de prueba (no la personal), para crear la credencial en vivo.
+5. Tené este README en otra pantalla o en el celular. No lo compartas.
 
-<p style="color:#1a7f37">Vamos a recorrer la interfaz, mirar un template real, armar un flujo desde cero y romperlo a propósito para leer el error. Después lo hacen ustedes.</p>
+#### Paso A · La consigna (filminas 25 y 26)
 
-> Pasos detallados de cada demo en `ejercicios-docente.md`, sección "n8n en vivo".
+6. Pasás la **filmina 25** (separador "04") y la **26** (Ejemplo en vivo), y la dejás de fondo. Decís:
 
-#### 60–70 · Recorrido por la interfaz (10 min)
+<p style="color:#1a7f37">Hasta acá vimos qué es n8n. Ahora lo vamos a usar. Primero les muestro la pantalla: dónde está cada cosa. Después abrimos un flujo real que armó otra persona, para ver para qué sirve. Y al final armamos uno chiquito desde cero, lo rompemos a propósito para aprender a leer los errores, y lo arman ustedes en su instancia.</p>
+
+7. Preguntás en el chat de la videollamada: *"¿Quién tiene la instancia de n8n abierta?"*. Decís:
+
+<p style="color:#1a7f37">Si no tienen la instancia todavía, no pasa nada: miren en mi pantalla y la crean en casa con el Ejercicio 8. Si la tienen, ábranla, pero por ahora solo miren. Les aviso cuando les toque.</p>
+
+8. **Compartís pantalla** (la ventana del navegador con n8n).
+
+#### Paso B · Recorrido por la pantalla (60–70)
+
+9. Mostrás la **pantalla de inicio**, con la lista de workflows. Decís:
+
+<p style="color:#1a7f37">Esta es la pantalla de inicio. Acá van a vivir todos los flujos que armen. Pónganles nombres claros desde el primer día, por ejemplo "Consultas por mail a planilla": cuando tengan diez, lo van a agradecer.</p>
+
+10. Hacés clic en **Credentials** (en las versiones nuevas es una pestaña de la pantalla de inicio, al lado de
+    *Workflows*). Decís:
+
+<p style="color:#1a7f37">Esto son las credenciales: los permisos para que n8n entre a su Gmail, a su planilla o a una IA en su nombre. Se cargan una vez y las usan todos los flujos. Son como las llaves de su casa: no se muestran en pantalla y no se comparten.</p>
+
+11. Creás un workflow nuevo: botón **Create Workflow** (o **+**, arriba a la izquierda). Aparece el lienzo vacío.
+12. Hacés clic en **Add first step** (el **+** del medio). Se abre el **buscador de nodos**. Escribís `gmail` y
+    mostrás la lista: algunas opciones dicen *On message received* (son **triggers**, arrancan el flujo) y otras
+    *Send a message*, *Get many messages* (son **acciones**, hacen algo). Decís:
+
+<p style="color:#1a7f37">Esto es el buscador de nodos. Fíjense que Gmail aparece de dos formas. Los triggers son los que arrancan el flujo: "cuando llega un mail". Las acciones son las que hacen algo: "mandá un mail". Todo flujo que corre solo arranca con un trigger.</p>
+
+13. Elegís **On message received** (Gmail Trigger). Se abre el nodo. Mostrás:
+    - arriba, *Credential to connect with*;
+    - el resto, los **parámetros** del nodo.
+
+14. **La credencial de Gmail en vivo:** en *Credential to connect with*, elegís **Create new credential**. En n8n Cloud
+    aparece **Sign in with Google**: lo apretás, elegís la cuenta de prueba y aceptás los permisos. Queda guardada.
+    (En la instancia de Docker este botón necesita configurar antes una app en Google Cloud; si usás Docker, mostrá
+    solo hasta esta pantalla y decí que se ve en el Módulo 4.) Decís:
+
+<p style="color:#1a7f37">Acabo de darle permiso a n8n para leer los mails de esta cuenta. Lo hice una vez; de ahora en adelante, cualquier nodo de Gmail usa esta credencial sin volver a pedirla. Si un día cambio la contraseña, el nodo se pone en rojo con un error de autorización. No es que el flujo esté mal: hay que volver a conectar la credencial.</p>
+
+15. Cerrás el nodo y mostrás la sección **Credentials**: ahí aparece la credencial nueva.
+16. Mostrás, arriba del lienzo, el botón **Save** y el interruptor **Active** (en las versiones más nuevas puede
+    decir **Publish**). Y abajo del lienzo, el botón **Execute workflow** (o **Test workflow**). Decís:
+
+<p style="color:#1a7f37">Dos formas de correr un flujo. Mientras lo armamos, lo probamos a mano con este botón de abajo: corre una vez y vemos qué pasó en cada nodo. Cuando funciona, lo activamos con este interruptor de arriba, y desde ahí corre solo cada vez que pasa lo del trigger, aunque yo cierre la computadora (en Cloud).</p>
+
+17. Mostrás arriba, en el centro, la pestaña **Executions** (al lado de *Editor*). Decís:
+
+<p style="color:#1a7f37">Executions es el historial: cada vez que el flujo corrió, si terminó bien o con error, y en qué nodo se cortó. Cuando algo falla, esto es lo primero que se mira.</p>
+
+18. Explicás los **items** con este ejemplo, sin hacer nada en pantalla:
+
+<p style="color:#1a7f37">Un detalle importante: si llegan cinco mails juntos, el trigger los entrega como cinco "items", cinco filas. Y cada nodo que sigue trabaja con los cinco, uno por uno: la IA corre cinco veces y la planilla recibe cinco filas. No hay que programar ninguna repetición. Por eso el prompt se escribe pensando en un solo mail. Ojo con el costo: cinco items son cinco llamadas a la IA, y se paga cada una.</p>
+
+19. Borrás el nodo de Gmail (lo seleccionás y apretás **Delete**). Ya no lo usamos.
+
+#### Paso C · Para qué sirve: un template real (70–80)
+
+20. Abrís otra pestaña en **n8n.io/workflows**. Mostrás el buscador: escribís un caso de uso (por ejemplo `email
+    summary` o `gmail ai`). Decís:
+
+<p style="color:#1a7f37">Esta es la biblioteca de templates: miles de flujos que armó la comunidad. Antes de armar algo desde cero, conviene buscar acá: muchas veces alguien ya resolvió algo parecido.</p>
+
+21. Abrís el template que elegiste antes de la clase y lo importás. Hay dos formas, usá la que te funcione en tu
+    versión:
+    - el botón **Use for free** y después **Copy template to clipboard**; vas a tu n8n, abrís un workflow nuevo y
+      pegás con **Ctrl + V** en el lienzo;
+    - o, desde tu n8n, el menú **…** de arriba a la derecha → **Import from URL** y pegás la dirección del template.
+22. Aparece el flujo en tu lienzo. Lo leés **en voz alta, nodo por nodo, de izquierda a derecha**, respondiendo
+    tres preguntas. Por ejemplo, para un template que resume mails:
+
+<p style="color:#1a7f37">Leamos este flujo como un mapa. Primero: ¿dónde empieza? Acá, en este nodo: cada vez que llega un mail. Segundo: ¿dónde decide la IA? En este nodo: lee el mail y lo resume en tres líneas. Tercero: ¿dónde termina el dato? En este último: manda el resumen a Telegram. Esas tres preguntas son las mismas que ustedes van a responder en el boceto de la pre-entrega.</p>
+
+23. Abrís el **nodo de IA** del template y mostrás el prompt que tiene adentro. Decís:
+
+<p style="color:#1a7f37">Miren el prompt que tiene adentro. ¿Reconocen algo? Tiene un rol, una tarea y un formato: lo mismo que vimos la semana pasada. Y esto de las llaves dobles es el mail que llega del nodo anterior. El prompt que ustedes armaron en el desafío va acá adentro.</p>
+
+24. Mostrás los **triángulos o avisos rojos** de los nodos que piden credenciales. Decís:
+
+<p style="color:#1a7f37">Estos avisos dicen que faltan credenciales: el template no trae las de la persona que lo armó, por seguridad. Para usarlo, conecto mi Gmail, mi clave de IA y mi Telegram, y adapto los campos a mi caso. Y antes de conectar mis cuentas a un template de otra persona, miro qué hace cada nodo: si tiene permiso para mandar mails, podría mandar mails en mi nombre.</p>
+
+25. Cerrás el template (no hace falta guardarlo). Decís:
+
+<p style="color:#1a7f37">Esto es para lo que sirve n8n. Al final del curso ustedes van a armar uno así desde cero. Ahora vamos a lo más chiquito posible, para entender cómo pasan los datos de un nodo a otro.</p>
+
+#### Paso D · El flujo mínimo, construido desde cero (80–88)
+
+26. Decís qué vamos a armar:
+
+<p style="color:#1a7f37">Vamos a armar un flujo de tres nodos. El primero lo arranca con un botón. El segundo inventa un dato, como si hubiera llegado un mail de Martín, el de la clase pasada. Y el tercero usa ese dato para armar un saludo. Lo que quiero que vean es cómo un nodo le pasa el dato al siguiente.</p>
+
+27. Workflow nuevo: **Create Workflow**. Le ponés nombre arriba a la izquierda: `Mi primer flujo`.
+28. **Add first step** → escribís `manual` → elegís **Trigger manually** (también aparece como *Manual Trigger* o
+    *When clicking 'Execute workflow'*). Decís:
+
+<p style="color:#1a7f37">Este trigger arranca el flujo cuando aprieto un botón. Es para probar: en un flujo real, en su lugar iría "cuando llega un mail" o "cuando se completa un formulario".</p>
+
+29. Hacés clic en el **+** que aparece a la derecha del trigger → escribís `edit` → elegís **Edit Fields (Set)**.
+30. Dentro del nodo, en *Fields to Set*, hacés clic en **Add Field** dos veces y completás:
+
+```text
+Campo 1 →  name: nombre    type: String    value: Martín Gómez
+Campo 2 →  name: destino   type: String    value: Bariloche
+```
+
+31. Apretás **Execute step** (o **Test step**), arriba a la derecha del nodo. A la derecha aparece la salida.
+    Mostrás las dos vistas: **Table** (una fila con dos columnas) y **JSON**:
+
+```json
+[
+  {
+    "nombre": "Martín Gómez",
+    "destino": "Bariloche"
+  }
+]
+```
+
+32. Decís:
+
+<p style="color:#1a7f37">Esto que sale es un JSON, la ficha con casilleros de la semana pasada: el casillero "nombre" con Martín Gómez y el casillero "destino" con Bariloche. En un flujo real, este JSON lo devolvería la IA después de leer el mail. Así es como se pasan los datos todos los nodos de n8n.</p>
+
+33. Cerrás el nodo. En el lienzo, **+** a la derecha del Edit Fields → otro **Edit Fields (Set)**.
+34. Al abrirlo, a la izquierda vas a ver el panel **Input** con los datos que llegan del nodo anterior (`nombre` y
+    `destino`). Si no aparecen, apretá **Execute previous nodes** en ese panel. Decís:
+
+<p style="color:#1a7f37">A la izquierda está lo que le llega a este nodo: los datos del nodo anterior. Para que aparezcan, el nodo anterior tiene que haberse ejecutado al menos una vez.</p>
+
+35. **Add Field** → name: `saludo`, type: String. En *value* escribís `Hola ` (con un espacio al final).
+36. **Arrastrás** el campo `nombre` desde el panel Input de la izquierda hasta el cuadro *value*, después de
+    "Hola ". El cuadro cambia a modo expresión y queda así:
+
+```text
+Hola {{ $json.nombre }}
+```
+
+37. Decís:
+
+<p style="color:#1a7f37">Miren lo que escribió n8n solo cuando arrastré: llaves dobles, $json.nombre. Quiere decir "acá no va un texto fijo; va el casillero nombre del JSON que llega del nodo anterior". Esto se llama mapear un dato, y es lo que más van a hacer en todo el curso.</p>
+
+38. **Execute step**. Mostrás la salida:
+
+```json
+[
+  {
+    "saludo": "Hola Martín Gómez"
+  }
+]
+```
+
+39. Volvés al primer Edit Fields, cambiás `Martín Gómez` por `Lucía Fernández` y apretás **Execute workflow** abajo
+    del lienzo. Abrís el último nodo: dice `Hola Lucía Fernández`. Decís:
+
+<p style="color:#1a7f37">Cambié el dato de entrada y no toqué el nodo del saludo. Saluda a Lucía solo. Eso es lo que hace un flujo: el mismo proceso, con cualquier dato que llegue.</p>
+
+40. **Save** (o **Ctrl + S**).
+
+#### Paso E · Romperlo y leer el error (88–92)
+
+41. Decís:
+
+<p style="color:#1a7f37">Ahora lo vamos a romper a propósito. Los errores van a aparecer siempre, y lo importante es perderles el miedo y saber leerlos.</p>
+
+42. Abrís el último Edit Fields y en *value* de `saludo` borrás todo y escribís (o pegás):
+
+```text
+{{ $json.email.toUpperCase() }}
+```
+
+43. **Execute step**. El nodo se pone en **rojo** y aparece un mensaje parecido a este (el texto exacto depende de la
+    versión):
+
+```text
+Cannot read properties of undefined (reading 'toUpperCase')
+```
+
+44. Lo leés en voz alta y lo traducís:
+
+<p style="color:#1a7f37">Traducido: "quisiste pasar a mayúsculas algo que no existe". Le pedí el casillero email, y el nodo anterior solo manda nombre y destino. El dato no está, y n8n me avisa. Es el error más común de todos. En un flujo real pasa cuando un mail llega sin un dato, o cuando la IA devuelve una llave con otro nombre, por ejemplo "Nombre" con mayúscula. Por eso la semana pasada insistimos tanto en que las llaves sean siempre las mismas.</p>
+
+45. Cerrás el nodo, apretás **Execute workflow** y vas a la pestaña **Executions**. Abrís la última corrida: aparece
+    marcada como error, y adentro se ve en qué nodo se cortó. Decís:
+
+<p style="color:#1a7f37">Un nodo en rojo no es un problema de n8n: es n8n diciéndote qué arreglar. Y en Executions queda registrado: cuándo pasó, en qué nodo y con qué datos.</p>
+
+46. Lo arreglás: volvés a poner `Hola {{ $json.nombre }}` y ejecutás. Vuelve a verde.
+
+#### Paso F · Ejercicio 4: lo arman los alumnos (92–100)
+
+47. Decís:
+
+<p style="color:#1a7f37">Ahora ustedes. Les paso los pasos por el chat. Armen el mismo flujo, ejecútenlo, y después rómpanlo y busquen el error en Executions. Tienen ocho minutos. Si se traban, escriban en el chat en qué paso.</p>
+
+48. Pegás en el chat de la videollamada:
+
+```text
+EJERCICIO 4 · Tu primer flujo en n8n (8 min)
+
+1. Workflow nuevo. Add first step → buscá "manual" → Trigger manually.
+2. + → buscá "edit" → Edit Fields (Set). Add Field dos veces:
+   nombre = Martín Gómez
+   destino = Bariloche
+   Apretá Execute step y mirá la salida en Table y en JSON.
+3. + → otro Edit Fields. Add Field: saludo. En el valor escribí "Hola " y ARRASTRÁ el campo nombre desde la izquierda.
+   Execute step: tiene que salir "Hola Martín Gómez".
+4. Rompelo: en el valor de saludo poné {{ $json.email.toUpperCase() }} y ejecutá. Leé el error.
+5. Andá a la pestaña Executions y buscá la corrida con error.
+```
+
+49. Mientras trabajan, mirás el chat. Las trabas más comunes y qué les decís:
+
+| Lo que escriben | Qué les respondés |
+|---|---|
+| "No encuentro Edit Fields" | Que busquen `set` o `edit`; en algunas versiones se llama solo **Set**. |
+| "No me aparece nada a la izquierda para arrastrar" | Que ejecuten antes el nodo anterior (**Execute previous nodes** en el panel Input). |
+| "Me sale el texto `{{ nombre }}` tal cual" | Lo escribieron a mano. Que lo borren y arrastren el campo: n8n escribe `{{ $json.nombre }}` solo. |
+| "Me sale Hola sin el nombre" | El cuadro quedó en modo *Fixed*. Que lo pasen a *Expression* (arriba del cuadro) o vuelvan a arrastrar. |
+| "No tengo instancia" | Que miren la pantalla de algún compañero o la grabación, y lo hagan en casa con el Ejercicio 8. |
+
+50. A los 8 minutos preguntás: *"¿A quién le salió el saludo? ¿Y el error? ¿Qué decía el suyo?"* y pasás a la
+    filmina 27.
+
+#### Si algo sale distinto de lo esperado
+
+| Lo que pasa | Qué hacés |
+|---|---|
+| Los botones tienen otro nombre | Es por la versión de n8n. Buscá el equivalente: *Test* ↔ *Execute*, *Active* ↔ *Publish*. Decilo en voz alta para que los alumnos no se pierdan. |
+| El template no se importa | Mostrá solo la biblioteca en n8n.io y leé el flujo desde la página del template, que muestra el dibujo de los nodos. |
+| La credencial de Gmail no se conecta | Saltealo y decí que se ve a fondo en el Módulo 4. No es necesario para el flujo mínimo. |
+| El error dice otra cosa | Leé lo que diga. Lo importante es la idea: pediste un dato que no existe. |
+| Se va el tiempo | Recortá el template (solo la biblioteca) y dejá el Ejercicio 4 para casa (Ejercicio 8). |
+
+#### Para ampliar: qué explicar de cada parte de la pantalla
+
+Si te preguntan, o para profundizar mientras los alumnos trabajan.
 
 | Qué mostrar | Para explicar |
 |---|---|
 | La pantalla de inicio con la lista de workflows | Acá vive todo lo que armen. Cada workflow se puede exportar como `.json`. Conviene ponerles nombres claros desde el primer día ("Consultas mail → planilla"): cuando tengan diez, se agradece. |
 | Dónde están las **credenciales** | Son las llaves para que n8n entre a Gmail, Sheets o una IA en tu nombre. Se cargan una vez y se reutilizan en todos los workflows. Las vemos a fondo en el Módulo 4. Son información sensible: no se comparten ni se muestran en pantalla, y no viajan cuando se exporta un workflow. |
-| Un workflow nuevo y el **buscador de nodos** | Hay **triggers** (lo que arranca el flujo) y **acciones** (lo que hace). Todo workflow que corre solo necesita al menos un trigger. Mostrá que se puede buscar por nombre de aplicación ("Gmail") o por lo que se quiere hacer, y que cada aplicación trae varias acciones (mandar un mail, leer mails, marcar como leído). |
-| Un nodo abierto | Parámetros por un lado; entrada y salida por el otro. La salida tiene vista **Table** y vista **JSON**: es el JSON de la filmina 20. Mostrá que se puede ver qué datos entraron al nodo y qué datos salieron: es la herramienta principal para entender qué está pasando en un flujo. |
+| Un workflow nuevo y el **buscador de nodos** | Hay **triggers** (lo que arranca el flujo) y **acciones** (lo que hace). Todo workflow que corre solo necesita al menos un trigger. Se puede buscar por nombre de aplicación ("Gmail") o por lo que se quiere hacer, y cada aplicación trae varias acciones (mandar un mail, leer mails, marcar como leído). |
+| Un nodo abierto | Parámetros por un lado; entrada y salida por el otro. La salida tiene vista **Table** y vista **JSON**: es el JSON de la filmina 20. Se puede ver qué datos entraron al nodo y qué datos salieron: es la herramienta principal para entender qué está pasando en un flujo. |
 | Guardar, ejecutar y el interruptor para activarlo | Ejecutar a mano sirve para probar. Para que corra solo hace falta un trigger real y activarlo. Mientras se arma, se prueba con el botón; cuando funciona, se activa y desde ahí corre solo cada vez que pasa el evento del trigger. |
-| **Executions** | El historial de cada corrida, con su estado. Es lo primero que se mira cuando algo falla. Muestra cuándo corrió, si terminó bien o con error, y en qué nodo se cortó. Permite abrir una corrida vieja y ver los datos exactos que pasaron por cada nodo. |
-
-**Credenciales: un ejemplo con Gmail** (incluido en estos 10 minutos)
-
-<p style="color:#1a7f37">Para que n8n pueda leer tus mails o escribir en tu planilla, primero le tenés que dar permiso. Eso es una credencial: se crea una vez y la usan todos tus workflows.</p>
-
-1. Abrí un nodo de **Gmail** y en *Credential to connect with* elegí *Create new credential*.
-2. En n8n Cloud aparece un botón *Sign in with Google*: se abre la ventana de Google que pregunta "n8n quiere
-   acceder a tu cuenta". Al aceptar, la credencial queda guardada. (En self-hosted hace falta crear antes
-   una app en Google Cloud; lo vemos en el Módulo 4.)
-3. Mostrá que la credencial aparece en la sección **Credentials** y que cualquier otro nodo de Gmail la puede
-   usar sin volver a pedirla.
-
-Para explicar: una credencial es como darle a alguien una llave de tu casa. Conviene darle solo las puertas
-que necesita (por ejemplo, solo leer mails y no borrarlos), no compartirla y no mostrarla en pantalla. Si un
-día la llave deja de andar (cambiaste la contraseña, venció el permiso), el nodo queda en rojo con un error
-de autorización: no es que el flujo esté mal, hay que reconectar la credencial. Para los modelos de IA es
-parecido, pero en vez de "iniciar sesión" se pega una **clave de API** que da el proveedor (OpenAI, Anthropic,
-Google).
-
-*Ejemplo:* Si una credencial de Gmail tiene permiso para leer y mandar mails, un template mal hecho podría mandar mails en tu nombre. Por eso, antes de conectar un template de la comunidad, se mira qué hace cada nodo.
-
-**Ejecutar a mano vs. flujo activo, y los items**
-
-<p style="color:#1a7f37">Mientras armamos, probamos con el botón. Cuando funciona, lo activamos y corre solo. Y si llegan cinco mails, n8n los procesa uno por uno: cada uno es un item.</p>
+| **Executions** | El historial de cada corrida, con su estado. Muestra cuándo corrió, si terminó bien o con error, y en qué nodo se cortó. Permite abrir una corrida vieja y ver los datos exactos que pasaron por cada nodo. |
 
 | | Ejecutar a mano (*Execute workflow*) | Flujo activo (*Active*) |
 |---|---|---|
@@ -812,45 +1023,20 @@ Google).
 | Para qué sirve | Probar y ver los datos de cada nodo | Que trabaje solo, 24/7 |
 | Qué ves | Los datos en pantalla en cada nodo | El historial en **Executions** |
 
-Ejemplo de **items**: si el Gmail Trigger trae 5 mails nuevos, la salida tiene 5 items (en la vista Table
-son 5 filas). El nodo de IA corre 5 veces, una por mail, y Google Sheets agrega 5 filas. No hace falta armar
-ninguna repetición: n8n la hace solo. Para explicar: por eso el prompt se escribe pensando en *un* mail; n8n
-se encarga de aplicarlo a todos los que lleguen. Ojo con el costo: 5 items son 5 llamadas a la IA, y se paga
-cada una.
+**Credenciales, más a fondo:** una credencial es como darle a alguien una llave de tu casa. Conviene darle solo las
+puertas que necesita (por ejemplo, solo leer mails y no borrarlos), no compartirla y no mostrarla en pantalla. Para
+los modelos de IA es parecido, pero en vez de "iniciar sesión" se pega una **clave de API** que da el proveedor
+(OpenAI, Anthropic, Google).
 
-#### 70–80 · Para qué sirve: un template real (10 min)
+*Ejemplo:* Si una credencial de Gmail tiene permiso para leer y mandar mails, un template mal hecho podría mandar
+mails en tu nombre. Por eso, antes de conectar un template de la comunidad, se mira qué hace cada nodo.
 
-1. Entrá a **n8n.io/workflows** y mostrá cómo se busca por caso de uso o por integración.
-2. **Importá el template** que elegiste.
-3. **Leelo en voz alta, nodo por nodo:** ¿cuál es el trigger? ¿dónde está la IA? ¿dónde termina el dato?
-4. Mostrá lo que habría que adaptar: los avisos de **credenciales** faltantes y los campos que dependen del caso.
-- *"Esto es para lo que sirve n8n. Al final del curso ustedes arman uno así desde cero."*
-- Para explicar: leer un flujo ajeno es como leer un mapa. Primero se busca dónde empieza (el trigger), después se sigue el camino de las flechas y, por último, se mira dónde termina el dato. Si el template tiene un nodo de IA, abrilo y mostrá el prompt: van a reconocer las partes de la Semana 1 (rol, tarea, formato). Esas tres preguntas (¿qué lo dispara?, ¿dónde decide la IA?, ¿dónde termina?) son las mismas que van a responder en el boceto de la pre-entrega.
-  - *Ejemplo:* Lectura en voz alta: "Este flujo arranca cuando llega un mail (Gmail Trigger). El nodo de IA lo resume en tres líneas. El último nodo manda ese resumen a Telegram. Para usarlo, conecto mi Gmail, mi clave de IA y mi Telegram".
+**Mapear, más a fondo:** el Manual Trigger reemplaza, mientras probamos, al trigger real (un mail, un formulario). El
+primer Edit Fields hace de "dato que llega": en un flujo real, esos datos los traería el mail o los devolvería la
+IA. Las llaves dobles `{{ }}` le dicen a n8n "acá no va un texto fijo, va un dato que viene del nodo anterior".
 
-#### 80–88 · El flujo mínimo, construido desde cero (8 min)
-
-1. Workflow nuevo → **Manual Trigger**: un trigger que se dispara con un botón, para probar.
-2. **Edit Fields (Set)** con dos campos: `nombre` = "Martín Gómez" y `destino` = "Bariloche". Ejecutalo y mostrá la salida: es un JSON con esas dos llaves.
-3. Otro **Edit Fields** con `saludo`: escribí "Hola " y **arrastrá** el campo `nombre` desde la entrada. Mostrá que n8n escribe solo la expresión `{{ $json.nombre }}`: quiere decir "el campo nombre del JSON que llega". Eso es **mapear** un dato de un nodo al siguiente.
-4. Ejecutalo: sale "Hola Martín Gómez".
-- Para explicar: el Manual Trigger reemplaza, mientras probamos, al trigger real (un mail, un formulario). El primer Edit Fields hace de "dato que llega": en un flujo real, esos datos los traería el mail o los devolvería la IA. Lo importante es el paso 3: las llaves dobles `{{ }}` le dicen a n8n "acá no va un texto fijo, va un dato que viene del nodo anterior". Con eso, el mismo flujo saluda a Martín, a Lucía o a quien llegue, sin cambiar nada. Mapear es la habilidad que más van a usar en todo el curso.
-  - *Ejemplo:* Si el primer nodo trae "Lucía Fernández" en lugar de "Martín Gómez", el saludo sale "Hola Lucía Fernández" sin tocar el segundo nodo.
-
-#### 88–92 · Romperlo y leer el error (4 min)
-
-- Cambiá la expresión de `saludo` por un campo que no existe: `{{ $json.email.toUpperCase() }}`. El nodo queda en rojo.
-- **Leé el error en voz alta:** dice que no encuentra el dato que pediste. Después mirá la corrida fallida en **Executions**.
-  - *Ejemplo:* El mensaje suele decir algo como `Cannot read properties of undefined (reading 'toUpperCase')`. Traducido: "quisiste pasar a mayúsculas algo que no existe" (el campo `email`).
-- *"Un nodo en rojo no es un problema de n8n: es n8n diciéndote qué arreglar."*
-- Para explicar: lo rompemos a propósito para perderle el miedo al rojo. El flujo pide el campo `email`, pero el nodo anterior solo manda `nombre` y `destino`: el dato no existe y n8n avisa. Es el error más común de todos, y en un flujo real pasa cuando un mail llega sin un dato o cuando la IA devuelve una llave con otro nombre. Por eso la semana pasada insistimos tanto en que las llaves del JSON sean siempre las mismas.
-  - *Ejemplo:* Un caso real del mismo error: la IA devuelve la llave `"Nombre"` con mayúscula y el nodo de Sheets busca `nombre`. El dato está, pero con otro nombre, y n8n no lo encuentra.
-
-#### 92–100 · Ejercicio 4 · Los alumnos lo replican (8 min)
-
-- Cada uno arma el flujo mínimo en su instancia con el paso a paso de `ejercicios-alumnos.md` y lo rompe.
-- Recorré el chat: las trabas más comunes son no encontrar el nodo Edit Fields y no poder arrastrar el campo (hay que ejecutar antes el nodo anterior).
-- Quien no tenga instancia, lo hace en casa (Ejercicio 8).
+*Ejemplo:* Un caso real del error del paso E: la IA devuelve la llave `"Nombre"` con mayúscula y el nodo de Sheets
+busca `nombre`. El dato está, pero con otro nombre, y n8n no lo encuentra.
 
 ---
 
@@ -864,6 +1050,8 @@ alumnos lo hacen en casa con su propio proceso.
 <p style="color:#1a7f37">Paso 1 de la pre-entrega: elijan una tarea repetitiva, que pase seguido y no requiera criterio. Descarten lo que pasa una vez al año.</p>
 
 Para explicar:
+- **"Objetivo: elegir un candidato que valga la pena."** No cualquier tarea manual merece un flujo. Un buen candidato pasa seguido, se hace siempre más o menos igual y le come tiempo a alguien que podría hacer algo más valioso. Elegir bien acá ahorra trabajo en todos los pasos que siguen: con un mal candidato, el ROI no cierra y el boceto se complica.
+  - *Ejemplo:* Buen candidato: "cargar los pedidos de WhatsApp en la planilla", 30 veces por día. Mal candidato: "decidir el menú del mes", una vez por mes y con mucho criterio.
 - **"Listar tres tareas manuales y repetitivas de tu trabajo, tu estudio o tu vida diaria."** Tres, para poder comparar y elegir. Si piensan en una sola, se quedan con la primera que se les ocurre, que no siempre es la mejor. Pueden ser de cualquier ámbito: el trabajo, un emprendimiento, el club, la facultad.
   - *Ejemplo:* Cargar en una planilla los pedidos que llegan por WhatsApp; mandar recordatorios de turnos; responder "¿cuánto sale el envío?".
 - **"Descartar las de baja frecuencia: si pasa una vez al año, el ROI va a ser negativo."** Es lo que vimos en la filmina 14: armar y mantener el flujo cuesta más que hacer la tarea a mano. Si la tarea pasa una vez por mes o menos, probablemente no conviene.
@@ -887,6 +1075,8 @@ paso donde la IA ayuda: entender el mail.
 <p style="color:#1a7f37">Paso 2: el ROI. Cuánto tarda, cada cuánto pasa, qué harían con ese tiempo y si escala. Y una razón para no automatizarlo.</p>
 
 Para explicar:
+- **"Objetivo: justificar con criterio por qué conviene automatizarlo."** Con criterio quiere decir con números y con argumentos, no con "me parece". Es lo que le mostrarían a un jefe o a un cliente para que apruebe el proyecto: cuánto tiempo se ahorra, qué se hace con ese tiempo y qué pasa si el negocio crece.
+  - *Ejemplo:* "Me ahorra mucho" no convence a nadie. "Me ahorra 13 horas por mes, que hoy el vendedor gasta cargando datos en vez de vender" sí.
 - **"Estimar cuánto tiempo te lleva hoy hacerlo a mano y con qué frecuencia se repite."** En el ejemplo: 40 consultas por semana × 5 minutos = unas 13 horas por mes. No hace falta exactitud: alcanza con una estimación honesta. Si no saben cuánto tarda, que lo midan una vez con el reloj del celular.
   - *Ejemplo:* 30 pedidos por día × 3 minutos = 90 minutos por día: unas 30 horas por mes.
 - **"Preguntarte qué harías con ese tiempo: ese es el costo de oportunidad."** En el ejemplo de la agencia: con 13 horas por mes, el vendedor puede responder antes las consultas y cerrar más ventas. Es la parte del ROI que no sale en la cuenta, pero que convence.
@@ -910,6 +1100,8 @@ personalizada, la IA ayudaría poco."*
 <p style="color:#1a7f37">Paso 3: el boceto. Qué lo dispara, los pasos del medio, dónde entra la IA y dónde termina el dato.</p>
 
 Para explicar:
+- **"Objetivo: traducir el proceso a pasos de n8n."** Pasar de la descripción en palabras ("cargo las consultas en la planilla") a una lista de pasos que después van a ser nodos: qué lo arranca, qué pasa en el medio y dónde termina. Es el plano del flujo antes de construirlo.
+  - *Ejemplo:* En palabras: "leo los mails y anoto los datos". En pasos de n8n: Gmail Trigger → nodo de IA → Google Sheets.
 - **"Definir el disparador: ¿arranca por un evento o por horario?"** Evento: llega un mail, se completa un formulario. Horario: todos los lunes a las 9. Es el trigger que vimos en la filmina 21. La pregunta para elegir es: ¿la tarea tiene que pasar en el momento en que llega algo, o puede esperar a una hora fija?
   - *Ejemplo:* Evento: "cada vez que llega un mensaje de WhatsApp". Horario: "todos los días a las 20, revisar los pedidos del día y mandar un resumen".
 - **"Listar los pasos intermedios y marcar en cuál entra el nodo de IA."** Cada paso, una acción concreta: "leer el mail", "extraer los datos con IA", "guardar en la planilla". Marcar el paso de IA ayuda a ver que casi todo el flujo es lineal y que la IA aparece en un solo lugar, el que necesita interpretar.
@@ -921,6 +1113,8 @@ Para explicar:
     ```
 - **"Definir el output final: dónde termina el dato y en qué formato."** Una planilla, un mensaje de WhatsApp, un mail, una base de datos. Si termina en una planilla, conviene anotar qué columnas tiene: van a coincidir con las llaves del JSON que devuelve la IA.
   - *Ejemplo:* Una fila nueva en la planilla "Pedidos" (columnas producto, cantidad, fecha y cliente), más un mensaje de confirmación al cliente.
+- **"Resultado esperado: una lista de pasos, o un diagrama simple, del flujo completo."** Alcanza con una lista numerada o con cajitas y flechas en un papel. Lo que se evalúa es que se entienda el camino del dato de punta a punta, no el dibujo.
+  - *Ejemplo:* Una lista de cuatro líneas, como el ✅ de abajo, alcanza.
 - En el ejemplo: Gmail Trigger → nodo de IA → Google Sheets. *"Eso es un workflow como el del template que acabamos de ver."* El boceto se puede hacer en papel, en una diapositiva o con flechas en un documento: no hace falta armarlo en n8n todavía. Lo que importa es que se entienda el camino del dato de punta a punta.
 
 **Ejemplo: boceto vago y boceto claro**
@@ -947,12 +1141,16 @@ No dice qué mail, qué hace la IA ni dónde se guarda.
 <p style="color:#1a7f37">Paso 4: el prompt del nodo de IA, con la anatomía de la semana pasada y las llaves del JSON.</p>
 
 Para explicar:
+- **"Objetivo: escribir la instrucción que va adentro del nodo de IA."** Es el único paso del flujo que "piensa", y lo que piensa depende de este prompt. El resto del flujo mueve datos; este nodo los entiende. Por eso es la parte donde se usa todo lo que vimos en la Semana 1.
+  - *Ejemplo:* En el boceto Gmail → IA → Sheets, este prompt es lo que va en la flecha del medio: recibe el mail y devuelve el JSON con las columnas de la planilla.
 - **"Aplicar la anatomía del módulo 1: persona, contexto, tarea y formato."** Es la plantilla que armaron en el desafío de la Semana 1, adaptada al proceso que eligieron. Si el desafío ya era sobre el mismo caso, gran parte del trabajo está hecho.
   - *Ejemplo:* Persona: "Sos el asistente de pedidos de una pastelería". Contexto: "Los pedidos se toman con 48 horas de anticipación". Tarea: "Extraé producto, cantidad, fecha y nombre del cliente". Formato: el JSON con esas llaves.
 - **"Declarar las llaves exactas del JSON que el nodo tiene que devolver."** Las llaves tienen que coincidir con lo que espera el paso siguiente del boceto: si el dato termina en una planilla con las columnas nombre, destino y fecha, el JSON tiene que tener esas mismas llaves. Así se conectan el prompt y el boceto.
   - *Ejemplo:* Columnas de la planilla: producto · cantidad · fecha · cliente. Llaves del JSON: `producto`, `cantidad`, `fecha`, `cliente`. Los mismos nombres.
 - **"Descartar cualquier versión vaga tipo 'resumime esto': eso no alcanza."** Un prompt así devuelve cada vez algo distinto y ningún nodo lo puede usar. Si el prompt de la pre-entrega no tiene rol, contexto, tarea concreta y formato, no está listo para ir dentro de un flujo.
   - *Ejemplo:* "Resumime este pedido" → "La clienta quiere una torta para el sábado". ¿Qué va en cada columna? No se sabe.
+- **"Resultado esperado: el prompt completo del nodo de IA, listo para pegar."** Completo quiere decir que, si se pega tal cual en el nodo, funciona: con rol, contexto, tarea, reglas, formato y el lugar donde va el texto que llega.
+  - *Ejemplo:* Si para usarlo hay que "completar algunas cosas", no está listo. El ✅ de abajo se puede pegar directo en n8n.
 - En el ejemplo: la plantilla de la Semana 1, tal cual. Es la prueba de que lo que hicieron la semana pasada no era un ejercicio suelto: es la pieza que va adentro del nodo de IA.
 
 **Ejemplo: el prompt del nodo de IA**
@@ -984,12 +1182,16 @@ Devolvé únicamente un JSON con estas llaves, sin ningún texto antes ni despu�
 <p style="color:#1a7f37">Paso 5: un riesgo, como una alucinación o un dato ambiguo, y cómo lo evitan desde el prompt o desde el flujo.</p>
 
 Para explicar:
+- **"Objetivo: anticipar dónde se rompe antes de que se rompa."** Todo flujo falla alguna vez: llega un mensaje raro, falta un dato, la IA interpreta mal. Pensarlo antes permite diseñar la red de contención, en vez de enterarse cuando el cliente se queja.
+  - *Ejemplo:* Pregunta para hacerse: "¿qué pasa si llega un mail que solo dice 'hola, info'?". Si la respuesta es "la IA inventa los datos", hay que diseñar qué hacer en ese caso.
 - **"Elegir un riesgo del módulo 1: alucinación, límite de contexto o ambigüedad."** Ambigüedad: el mensaje se puede entender de dos formas (por ejemplo, "el 12" sin decir de qué mes). Alucinación: que la IA complete un dato que no estaba, como un teléfono o un año. Límite de contexto: que el texto a procesar sea tan largo (un hilo de mails entero, un documento) que no entre completo o que la IA pierda partes.
   - *Ejemplo:* Alucinación: inventa la fecha. Límite de contexto: un pedido con un hilo de 50 mensajes no entra entero. Ambigüedad: "la quiero para el viernes", ¿este o el próximo?
 - **"Escribir cómo lo mitigás desde el prompt o desde el diseño del flujo."** Desde el prompt: prohibir inventar, `no_disponible`. Desde el flujo: si un dato clave falta, la fila se marca "a revisar" para que la vea una persona. Lo mejor es combinar las dos cosas: el prompt reduce el error y el flujo lo atrapa si igual pasa. Mitigar no quiere decir eliminar el riesgo, sino tener un plan para cuando aparezca.
   - *Ejemplo:* Riesgo: "el viernes" es ambiguo. En el prompt: "si la fecha no es exacta, poné no_disponible". En el flujo: si la fecha es no_disponible, se le pregunta al cliente por WhatsApp "¿para qué fecha exacta?".
 - **"Juntar las cinco partes en un solo documento."** Proceso, ROI, boceto, prompt y riesgo, en ese orden, en un solo PDF. Ese orden cuenta una historia: qué problema hay, por qué conviene resolverlo, cómo sería el flujo, qué hace la IA adentro y qué puede salir mal.
   - *Ejemplo:* 1. Proceso · 2. ROI · 3. Boceto · 4. Prompt · 5. Riesgos → un PDF de dos o tres páginas.
+- **"Resultado esperado: tu pre-entrega terminada."** Con este paso se completan las cinco partes. Antes de entregar, conviene leerlas seguidas para ver si cuentan la misma historia.
+  - *Ejemplo:* Control final: ¿el riesgo del paso 5 es de este proceso? ¿Las llaves del prompt coinciden con el boceto? ¿El ROI habla de la misma tarea?
 
 **Ejemplo: riesgo genérico y riesgo concreto**
 
@@ -1040,11 +1242,19 @@ automatiza, por qué y cómo.
 
 <p style="color:#1a7f37">Son cinco partes: proceso, ROI, boceto, prompt y riesgos. Los mismos cinco pasos de recién.</p>
 
-Para explicar: cada parte responde una pregunta. El proceso: ¿qué tarea se automatiza? El ROI: ¿por qué
-vale la pena? El boceto: ¿cómo sería el flujo? El prompt: ¿qué hace la IA adentro? Los riesgos: ¿qué puede
-salir mal y cómo se evita? Si cada parte responde su pregunta, la entrega está completa.
+Para explicar:
+- **"Elegí un proceso manual y repetitivo de tu trabajo, estudio o vida diaria."** Es el paso 1. Tiene que ser propio, porque lo van a seguir construyendo en las próximas semanas. Responde la pregunta: ¿qué tarea se automatiza?
+  - *Ejemplo:* "Cargar en la planilla los pedidos que llegan por WhatsApp a la pastelería."
+- **"Justificá el ROI en dos o tres líneas: tiempo, frecuencia y escalabilidad."** Es el paso 2. Tres datos: cuánto tarda cada vez, cada cuánto pasa y qué pasaría si se multiplicara por diez. Responde: ¿por qué vale la pena? Y una razón para no hacerlo.
+  - *Ejemplo:* "3 minutos × 30 pedidos por día ≈ 30 horas por mes. Con diez veces más pedidos haría falta otra persona. Por qué no: los pedidos con indicaciones raras los tiene que ver alguien."
+- **"Bocetá el flujo: qué lo dispara, pasos intermedios, dónde entra la IA y cuál es el output final."** Es el paso 3, y el que más pesa en la nota. Responde: ¿cómo sería el flujo? Una lista numerada alcanza.
+  - *Ejemplo:* "1. Llega un WhatsApp → 2. IA: extrae producto, cantidad, fecha y cliente → 3. Fila nueva en Sheets → 4. Confirmación al cliente."
+- **"Escribí el prompt del nodo de IA con contexto claro, instrucción específica y formato de salida."** Es el paso 4: la plantilla de la Semana 1 adaptada al caso. Responde: ¿qué hace la IA adentro?
+  - *Ejemplo:* Rol de asistente de pedidos, reglas (no inventar, no_disponible), tarea de extraer y un JSON con producto, cantidad, fecha y cliente.
+- **"Reflexioná en tres o cuatro líneas sobre qué podría salir mal y cómo lo mitigarías."** Es el paso 5. Un riesgo concreto de su caso y qué harían: desde el prompt, desde el flujo o desde los dos. Responde: ¿qué puede salir mal y cómo se evita?
+  - *Ejemplo:* "Si el cliente dice 'para el viernes', no se sabe cuál. El prompt pone no_disponible si la fecha no es exacta, y el flujo le pregunta al cliente."
 
-*Ejemplo:* Las cinco, en una línea cada una. Proceso: cargar los pedidos de WhatsApp. ROI: 30 horas por mes. Boceto: WhatsApp → IA → Sheets → confirmación. Prompt: la plantilla con producto, cantidad, fecha y cliente. Riesgo: fechas ambiguas, con no_disponible y repregunta.
+Si cada parte responde su pregunta, la entrega está completa.
 
 #### Filmina 36 · ¿Cómo se evalúa? (2 min)
 
