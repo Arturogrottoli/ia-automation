@@ -34,7 +34,7 @@ Fuente: `program-summary.pdf` (Módulo 2). **Una clase de 2 horas.**
 ## A tener en cuenta
 
 - **El número de la pre-entrega no coincide:** las filminas (3, 31 y 32) dicen "Pre-entrega 2"; el `program-summary.pdf` la llama "Preentrega 1: De la idea al prompt". Conviene unificarlo antes de la clase.
-- **La filmina 26 tiene dos actividades:** el desafío de priorización (adelantado a la sección de ROI) y un flujo mínimo en n8n que se rompe a propósito. El bloque de n8n en vivo la amplía con un recorrido por la interfaz y un template real.
+- **La filmina 26 tiene dos actividades:** el desafío de priorización (adelantado a la sección de ROI) y un flujo mínimo en n8n que se rompe a propósito. El bloque de n8n en vivo la amplía con un recorrido por la interfaz y el flujo de la agencia funcionando (workflow 03 de la carpeta `n8n/`).
 - **La instalación de n8n se hace en clase**, en la Sección 03, cada uno en su computadora (Docker, gratis). En la Semana 1 no se pide nada. En Windows hay que reiniciar la computadora: por eso la instalación está partida en dos, antes y después del break, y el reinicio cae en el break.
 - **Las filminas 33 a 36** resumen la pre-entrega; los pesos exactos de la rúbrica están en el programa y en `ejercicios-alumnos.md`.
 - **El Módulo 3 menciona nodos** (IF, Switch, Merge, Wait) en la filmina 37: es el adelanto de la semana que viene.
@@ -59,8 +59,8 @@ Fuente: `program-summary.pdf` (Módulo 2). **Una clase de 2 horas.**
 | 110–116 | **05 · Pre-entrega** y cómo sigue | 32–37 | |
 | 116–120 | Preguntas y cierre | 38–39 | Tarea |
 
-**Si el tiempo se aprieta** (la instalación es lo que más se puede estirar), recortá en este orden: la tabla de n8n frente a Zapier y Make y el workflow exportado (se mencionan, no se muestran), el Ejercicio 3 (priorización), la parte del template en
-vivo (se muestra solo la biblioteca), el Ejercicio 4 en clase (los alumnos arman el flujo mínimo en casa, con el Ejercicio 8)
+**Si el tiempo se aprieta** (la instalación es lo que más se puede estirar), recortá en este orden: la tabla de n8n frente a Zapier y Make y el workflow exportado (se mencionan, no se muestran), el Ejercicio 3 (priorización), la lectura nodo por nodo del
+flujo 03 (se ejecuta y se muestra solo el prompt y el resultado), el Ejercicio 4 en clase (los alumnos arman el flujo mínimo en casa, con el Ejercicio 8)
 y los pasos 3 a 5 de la pre-entrega (se lee la consigna y listo).
 
 ---
@@ -75,10 +75,10 @@ y los pasos 3 a 5 de la pre-entrega (se lee la consigna y listo).
   - `03-agencia-consultas-con-ia.json`: el flujo de la agencia con la plantilla de la Semana 1 adentro de un nodo
     de IA. Simula la llegada de dos mails (Martín y Lucía) y arma la fila de la planilla, con la columna *estado*
     en "a revisar" si falta un dato. No necesita Gmail ni Google Sheets, solo una clave de API de Gemini
-    (gratis en aistudio.google.com → *Get API key*). Sirve para mostrar en vivo cómo queda la pre-entrega
-    construida, o en lugar del template si no encontrás uno que te convenza.
-- [ ] **Un template elegido** en n8n.io/workflows para importar en vivo: uno chico (4 a 6 nodos) que use IA. Importalo una vez antes, para saber qué credenciales pide.
-- [ ] **Una cuenta de Gmail de prueba** (no la personal) para crear la credencial en vivo, y una clave de API de un modelo de IA cargada como credencial, para mostrar el nodo de IA.
+    (gratis en aistudio.google.com → *Get API key*). Es el flujo que mostrás en el Paso C de la Sección 04.
+  Cómo se usa cada uno en clase está en "Antes de la clase", al principio de la Sección 04.
+- [ ] **Una clave de API de Gemini** (aistudio.google.com → *Get API key*), cargada como credencial en el flujo 03.
+- [ ] **Una cuenta de Gmail de prueba** (no la personal) para crear la credencial en vivo en el recorrido.
 - [ ] `ejercicios-alumnos.md` listo para compartir: tiene el paso a paso del flujo mínimo que replican los alumnos.
 - [ ] **El día anterior**, avisales que en esta clase instalamos n8n: que se conecten desde una computadora (no desde el celular), con unos 10 GB libres y con permiso para instalar programas (si es una compu del trabajo, que lo consulten antes). No tienen que instalar nada antes.
 - [ ] **La guía [instalar-n8n-local.md](instalar-n8n-local.md)** lista para compartir durante la instalación.
@@ -987,16 +987,24 @@ Todo lo que sigue está en el orden en que lo hacés. Cada bloque gris es algo q
 cual. El texto en verde es lo que decís. Los nombres de algunos botones cambian entre versiones de n8n (por
 ejemplo, *Execute step* en las nuevas y *Test step* en las anteriores); cuando pasa, están los dos.
 
-#### Antes de la clase (una sola vez, 15 minutos)
+#### Antes de la clase (una sola vez, 20 minutos)
 
-1. Abrí tu instancia de n8n (Cloud o la de Docker en `localhost:5678`) y dejala logueada.
-2. Elegí el template que vas a mostrar en n8n.io/workflows: chico (4 a 6 nodos), con un nodo de IA y con un
-   trigger fácil de explicar (un formulario, un mail o un horario). Importalo una vez para saber qué credenciales
-   pide. Anotá en un papel, para leerlo en voz alta: cuál es el trigger, dónde está la IA y dónde termina el dato.
-3. Hacé una vez el flujo mínimo de los pasos 26 a 46 de esta sección, para ver cómo se ven los botones en tu
-   versión y qué texto exacto tiene el error.
-4. Tené a mano la cuenta de Gmail de prueba (no la personal), para crear la credencial en vivo.
-5. Tené este README en otra pantalla o en el celular. No lo compartas.
+- Abrí tu instancia de n8n (Cloud o la de Docker en `localhost:5678`) y dejala logueada.
+- **Importá los tres workflows** de la carpeta [n8n/](n8n/). Para cada uno: en la pantalla de inicio,
+   **Create Workflow** → menú **…** (arriba a la derecha) → **Import from File** → elegís el archivo → **Save**.
+   Quedan en tu lista como *01 · Mi primer flujo*, *02 · Mi primer flujo (roto a propósito)* y *03 · Agencia:
+   consultas por mail con IA*.
+- **Dejá andando el 03**, que es el único que pide credencial:
+   - abrís el nodo **Modelo: Google Gemini** → *Credential to connect with* → **Create new credential**;
+   - en *API Key* pegás tu clave de Google AI Studio y apretás **Save**;
+   - cerrás el nodo y apretás **Execute workflow**. Tienen que quedar todos los nodos en verde, y el último,
+     *Fila para la planilla*, con dos filas.
+   Si el nodo de Gemini da un error del tipo *model not found* ("no se encontró el modelo"), el modelo que trae el
+   archivo ya no existe: en el nodo, en *Model*, elegí otro de la lista (uno que diga *flash*) y volvé a ejecutar.
+- Hacé una vez el flujo mínimo de los pasos 26 a 46 de esta sección, para ver cómo se ven los botones en tu
+   versión. El 01 y el 02 te sirven para comparar: es lo que te tiene que quedar.
+- Tené a mano la cuenta de Gmail de prueba (no la personal), para crear la credencial en vivo.
+- Tené este README en otra pantalla o en el celular. No lo compartas.
 
 #### Paso A · La consigna (filminas 25 y 26)
 
@@ -1010,7 +1018,7 @@ ejemplo, *Execute step* en las nuevas y *Test step* en las anteriores); cuando p
 
 8. **Compartís pantalla** (la ventana del navegador con n8n).
 
-#### Paso B · Recorrido por la pantalla (78–84)
+#### Paso B · Recorrido por la pantalla (78–83)
 
 9. Mostrás la **pantalla de inicio**, con la lista de workflows. Decís:
 
@@ -1058,39 +1066,69 @@ ejemplo, *Execute step* en las nuevas y *Test step* en las anteriores); cuando p
 
 19. Borrás el nodo de Gmail (lo seleccionás y apretás **Delete**). Ya no lo usamos.
 
-#### Paso C · Para qué sirve: un template real (84–88)
+#### Paso C · Para qué sirve: el flujo de la agencia, funcionando (83–89)
 
-20. Abrís otra pestaña en **n8n.io/workflows**. Mostrás el buscador: escribís un caso de uso (por ejemplo `email
-    summary` o `gmail ai`). Decís:
+20. Abrís otra pestaña en **n8n.io/workflows** y mostrás el buscador un minuto: escribís un caso de uso (por
+    ejemplo `email summary` o `gmail ai`). Decís:
 
-<p style="color:#1a7f37">Esta es la biblioteca de templates, o sea, de plantillas: miles de flujos que armaron otras personas que usan n8n. Antes de armar algo desde cero, conviene buscar acá: muchas veces alguien ya resolvió algo parecido.</p>
+<p style="color:#1a7f37">Esta es la biblioteca de templates, o sea, de plantillas: miles de flujos que armaron otras personas que usan n8n. Antes de armar algo desde cero, conviene buscar acá: muchas veces alguien ya resolvió algo parecido. Se importan con el botón Use for free. Hoy no vamos a importar uno de estos, porque casi todos piden conectar Gmail, Telegram o una planilla. En cambio, les muestro uno que armé para el curso y que hace exactamente el trabajo de la semana pasada.</p>
 
-21. Abrís el template que elegiste antes de la clase y lo importás. Hay dos formas, usá la que te funcione en tu
-    versión:
-    - el botón **Use for free** ("usar gratis") y después **Copy template to clipboard** ("copiar el template");
-      vas a tu n8n, abrís un workflow nuevo y
-      pegás con **Ctrl + V** en el lienzo;
-    - o, desde tu n8n, el menú **…** de arriba a la derecha → **Import from URL** y pegás la dirección del template.
-22. Aparece el flujo en tu lienzo. Lo leés **en voz alta, nodo por nodo, de izquierda a derecha**, respondiendo
-    tres preguntas. Por ejemplo, para un template que resume mails:
+21. Volvés a tu n8n y abrís **03 · Agencia: consultas por mail con IA** (lo importaste antes de la clase). Decís:
 
-<p style="color:#1a7f37">Leamos este flujo como un mapa. Primero: ¿dónde empieza? Acá, en este nodo: cada vez que llega un mail. Segundo: ¿dónde decide la IA? En este nodo: lee el mail y lo resume en tres líneas. Tercero: ¿dónde termina el dato? En este último: manda el resumen a Telegram. Esas tres preguntas son las mismas que ustedes van a responder en el boceto de la pre-entrega.</p>
+<p style="color:#1a7f37">Este flujo hace lo que la semana pasada hacíamos a mano: agarra un mail desordenado, se lo pasa a la IA con nuestra plantilla y arma la fila para la planilla. Los cuadros amarillos son notas: no hacen nada, son para explicar. Leámoslo como un mapa, de izquierda a derecha.</p>
 
-23. Abrís el **nodo de IA** del template y mostrás el prompt que tiene adentro. Decís:
+22. Hacés clic en cada nodo, de izquierda a derecha, y decís lo de cada uno:
+- **Arrancar a mano** (el trigger):
 
-<p style="color:#1a7f37">Miren el prompt que tiene adentro. ¿Reconocen algo? Tiene un rol, una tarea y un formato: lo mismo que vimos la semana pasada. Y esto de las llaves dobles es el mail que llega del nodo anterior. El prompt que ustedes armaron en el desafío va acá adentro.</p>
+<p style="color:#1a7f37">El primero arranca el flujo con un botón, para probar. En el flujo de verdad, acá iría el Gmail Trigger: cada vez que llega un mail a consultas de la agencia.</p>
 
-24. Mostrás los **triángulos o avisos rojos** de los nodos que piden credenciales. Decís:
+- **Mails que llegan (simulados)**: lo abrís y mostrás los dos mails en el código.
 
-<p style="color:#1a7f37">Estos avisos dicen que faltan credenciales: el template no trae las de la persona que lo armó, por seguridad. Para usarlo, conecto mi Gmail, mi clave de IA y mi Telegram, y adapto los campos a mi caso. Y antes de conectar mis cuentas a un template de otra persona, miro qué hace cada nodo: si tiene permiso para mandar mails, podría mandar mails en mi nombre.</p>
+<p style="color:#1a7f37">Este nodo hace de bandeja de entrada: inventa dos mails, como si hubieran llegado juntos. Son los de la semana pasada: el desordenado de Martín, que va a Bariloche, y el prolijo de Lucía, que va a Cancún. Es un nodo de código, pero no hace falta entenderlo: solo tiene los dos textos adentro. Dos mails son dos items, y el resto del flujo va a correr dos veces, una por cada uno.</p>
 
-25. Cerrás el template (no hace falta guardarlo). Decís:
+- **Extraer datos con IA**: lo abrís y mostrás el prompt. Señalás el `{{ $json.text }}` del final, entre los ###.
 
-<p style="color:#1a7f37">Esto es para lo que sirve n8n. Al final del curso ustedes van a armar uno así desde cero. Ahora vamos a lo más chiquito posible, para entender cómo pasan los datos de un nodo a otro.</p>
+<p style="color:#1a7f37">Acá está la plantilla maestra de la semana pasada, tal cual: el rol, las reglas, el ejemplo de Ana y el formato JSON. La única diferencia está abajo, entre los numerales: donde antes pegábamos el mail a mano, ahora dice llaves dobles, json punto text. Quiere decir "acá va el texto del mail que llega del nodo anterior". El prompt es siempre el mismo; lo que cambia en cada vuelta es el mail.</p>
 
-#### Paso D · El flujo mínimo, construido desde cero (88–95)
+- **Modelo: Google Gemini** (el cuadrito de abajo, enganchado al de IA):
 
-26. Decís qué vamos a armar:
+<p style="color:#1a7f37">Este cuadrito de abajo es el modelo, la IA que hace el trabajo: en este caso Gemini, de Google. Se le podría enchufar ChatGPT o Claude en su lugar, y el resto del flujo queda igual. Para usarlo le cargué una credencial con mi clave de API, la contraseña que da Google para que n8n le hable a Gemini.</p>
+
+- **Pasar a JSON**:
+
+<p style="color:#1a7f37">La IA responde con texto que tiene forma de JSON. Este nodo lo convierte en una ficha de verdad, con casilleros, para que el nodo siguiente pueda leer cada dato por separado. También es código, y tampoco hace falta entenderlo: es un traductor.</p>
+
+- **Fila para la planilla**:
+
+<p style="color:#1a7f37">Y el último arma la fila: un casillero por cada columna de la planilla. En el flujo de verdad, acá iría el nodo de Google Sheets que la agrega. Y fíjense en la última columna, estado: si algún dato vino como no_disponible, dice "a revisar". Es el control de riesgos que van a escribir en el paso 5 de la pre-entrega, armado en un nodo.</p>
+
+23. Apretás **Execute workflow** (abajo del lienzo). Mientras corre, mostrás que el nodo de IA se pone en naranja
+    (trabajando) y después en verde, con un **2** al lado: corrió dos veces. Abrís **Fila para la planilla** y
+    mostrás la vista **Table**: dos filas, una de Martín y una de Lucía. Va a salir algo así (la IA puede redactar
+    distinto algún valor):
+
+```text
+nombre           telefono       email                      destino    fecha_salida              estado
+Martín Gómez     341 555-0192   no_disponible              Bariloche  14 de julio (aproximado)  a revisar
+Lucía Fernández  no_disponible  lucia.fernandez@mail.com   Cancún     3 de marzo de 2027        a revisar
+```
+
+24. Decís:
+
+<p style="color:#1a7f37">Dos mails, uno desordenado y uno prolijo, y nadie copió ni pegó nada. Los dos quedaron a revisar, y está bien: a Martín le falta el mail, y a Lucía, el teléfono y el presupuesto. Una persona los mira antes de responder. Y fíjense que la IA no inventó ningún dato. Esto que ven es una pre-entrega construida: el proceso es cargar consultas, el boceto es mail, IA y planilla, el prompt es la plantilla y el riesgo se controla con la columna estado. Lo que ustedes entregan esta semana es este mismo diseño, en papel.</p>
+
+25. Cerrás el workflow (sin guardar cambios). Decís:
+
+<p style="color:#1a7f37">Esto es para lo que sirve n8n. Al final del curso ustedes van a armar uno así, con el mail y la planilla de verdad. Ahora vamos a lo más chiquito posible, para entender cómo pasan los datos de un nodo a otro.</p>
+
+Si el nodo de IA se pone en rojo en vivo (sin internet, clave vencida, límite de uso de Gemini), no lo arregles
+delante de todos: mostrá el resultado de la corrida que hiciste antes de la clase en **Executions** (la pestaña de
+arriba): ahí quedan guardados los datos de cada nodo.
+
+#### Paso D · El flujo mínimo, construido desde cero (89–95)
+
+26. Decís qué vamos a armar. (Plan B: si algo no te sale en vivo, abrí **01 · Mi primer flujo**, que es este mismo
+    flujo terminado, y explicalo nodo por nodo desde ahí.)
 
 <p style="color:#1a7f37">Vamos a armar un flujo de tres nodos. El primero lo arranca con un botón. El segundo inventa un dato, como si hubiera llegado un mail de Martín, el de la clase pasada. Y el tercero usa ese dato para armar un saludo. Lo que quiero que vean es cómo un nodo le pasa el dato al siguiente.</p>
 
@@ -1168,7 +1206,9 @@ Hola {{ $json.nombre }}
 
 #### Paso E · Romperlo y leer el error (95–98)
 
-41. Decís:
+41. Decís lo de abajo. (Atajo: si preferís no editar en vivo, abrí **02 · Mi primer flujo (roto a propósito)**.
+    Tiene los dos errores ya armados, uno arriba del otro: apretás **Execute workflow**, el de arriba queda verde
+    pero con el saludo vacío y el de abajo se pone en rojo. Abrís cada uno y seguís desde el paso 43.)
 
 <p style="color:#1a7f37">Ahora lo vamos a romper a propósito. Los errores van a aparecer siempre, y lo importante es perderles el miedo y saber leerlos.</p>
 
@@ -1247,11 +1287,11 @@ EJERCICIO 4 · Tu primer flujo en n8n (7 min)
 | Lo que pasa | Qué hacés |
 |---|---|
 | Los botones tienen otro nombre | Es por la versión de n8n. Buscá el equivalente: *Test* ↔ *Execute*, *Active* ↔ *Publish*. Decilo en voz alta para que los alumnos no se pierdan. |
-| El template no se importa | Mostrá solo la biblioteca en n8n.io y leé el flujo desde la página del template, que muestra el dibujo de los nodos. |
+| El flujo 03 da error en el nodo de IA | Mostrá la corrida buena de antes de la clase en **Executions**. Si el error dice *model not found*, elegí otro modelo en el nodo de Gemini. |
 | La credencial de Gmail no se conecta | Saltealo y decí que se ve a fondo en el Módulo 4. No es necesario para el flujo mínimo. |
 | El error dice otra cosa | Leé lo que diga. Lo importante es la idea: el nodo recibió un dato que no es el que esperaba. |
 | Algo no te sale en vivo | Importá el workflow ya armado de la carpeta `n8n/` (ver "Los workflows listos para importar", en Preparación) y seguí desde ahí. |
-| Se va el tiempo | Recortá el template (solo la biblioteca) y dejá el Ejercicio 4 para casa (Ejercicio 8). |
+| Se va el tiempo | En el Paso C, ejecutá el 03 sin leer cada nodo (solo el prompt y el resultado), y dejá el Ejercicio 4 para casa (Ejercicio 8). |
 
 #### Para ampliar: qué explicar de cada parte de la pantalla
 
@@ -1562,7 +1602,7 @@ si su proceso pasa el filtro de alta frecuencia y bajo juicio humano, y algún e
 
 - [ ] Saben qué es n8n, para qué sirve y qué es una instancia.
 - [ ] Recorrieron la interfaz: lienzo, nodos, salida en JSON y Executions.
-- [ ] Vieron un template real leído nodo por nodo.
+- [ ] Vieron el flujo de la agencia (03) funcionando, leído nodo por nodo, y la biblioteca de templates.
 - [ ] Armaron (o vieron armar) un flujo mínimo, lo rompieron y leyeron el error.
 - [ ] Tienen la consigna de la pre-entrega y un ejemplo resuelto.
 
