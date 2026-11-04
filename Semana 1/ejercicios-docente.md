@@ -38,7 +38,9 @@ Respuesta esperada: `RECHAZADO`. Para el curso conviene agregar que, en un flujo
 ### Ejercicio 3 · Práctica en 5 pasos
 
 Hay dos casos en paralelo: **vos** hacés la demo con la **agencia de viajes** (filminas 26 a 31) y **los
-alumnos** practican con la **pastelería** (textos en `ejercicios-alumnos.md`).
+alumnos** practican con la **pastelería** (textos en `ejercicios-alumnos.md`). El paso a paso completo, con
+los prompts enteros (mail incluido) y lo que probablemente responda cada versión, está en la Sección 04 del
+`README.md`. Cada versión va en un chat nuevo.
 
 #### Demo del docente · Agencia de viajes
 
@@ -82,14 +84,14 @@ Formato: una lista con un dato por línea.
 **v3 · Ejemplos (filmina 29)** — se agregan antes del mail real:
 ```
 Ejemplo de mail:
-"Hola, soy Ana Ruiz. Quiero ir a Salta el 2 de mayo, vuelvo el 6. Viajo sola desde Mendoza."
+"Hola, soy Ana Ruiz. Quiero ir a Salta el 2 de mayo, vuelvo el 6. Viajo sola desde Mendoza. Mi mail es ana.ruiz@mail.com"
 Ejemplo de respuesta:
-nombre: Ana Ruiz | origen: Mendoza | destino: Salta | salida: 2 de mayo | regreso: 6 de mayo | adultos: 1 | menores: 0
+nombre: Ana Ruiz | telefono: no_disponible | email: ana.ruiz@mail.com | origen: Mendoza | destino: Salta | salida: 2 de mayo | regreso: 6 de mayo | adultos: 1 | menores: 0 | presupuesto: no_disponible | servicios: no_disponible | restricciones: no_disponible
 
 Ejemplo de mail:
-"Somos 3 amigos de La Plata, queremos Mar del Plata en enero, algo barato."
+"Somos 3 amigos de La Plata, queremos Mar del Plata en enero, algo barato. Llamame al 221 444-1234"
 Ejemplo de respuesta:
-nombre: no figura | origen: La Plata | destino: Mar del Plata | salida: enero | regreso: no figura | adultos: 3 | menores: 0
+nombre: no_disponible | telefono: 221 444-1234 | email: no_disponible | origen: La Plata | destino: Mar del Plata | salida: enero | regreso: no_disponible | adultos: 3 | menores: 0 | presupuesto: barato | servicios: no_disponible | restricciones: no_disponible
 ```
 
 **v4 · Anti-alucinación (filmina 30)** — se agregan las reglas:
@@ -98,6 +100,7 @@ Reglas:
 - Usá solo la información que está en el mail. No inventes ni completes datos.
 - Si un dato no aparece, poné "no_disponible".
 - Si una fecha no tiene año, dejala como está escrita. No supongas el año.
+- No hagas cuentas: si el cliente dice "una semana después", copialo así.
 - Si algo es aproximado ("más o menos", "unos 2 millones"), copialo como aproximado.
 - Antes de responder, revisá paso a paso cada campo y verificá que esté en el texto.
 ```
@@ -114,13 +117,14 @@ Tarea: extraé del mail que está entre ### los datos de la consulta.
 Reglas:
 - Usá solo la información que está en el mail. No inventes ni completes datos.
 - Si un dato no aparece, poné "no_disponible".
-- Si una fecha no tiene año, dejala como está escrita.
-- Si algo es aproximado, copialo como aproximado.
+- Si una fecha no tiene año, dejala como está escrita. No supongas el año.
+- No hagas cuentas: si el cliente dice "una semana después", copialo así.
+- Si algo es aproximado ("más o menos", "unos 2 millones"), copialo como aproximado.
 - Pensá paso a paso antes de responder, pero devolvé solo el JSON final.
 
-Ejemplo de mail: "Hola, soy Ana Ruiz. Quiero ir a Salta el 2 de mayo, vuelvo el 6. Viajo sola desde Mendoza."
+Ejemplo de mail: "Hola, soy Ana Ruiz. Quiero ir a Salta el 2 de mayo, vuelvo el 6. Viajo sola desde Mendoza. Mi mail es ana.ruiz@mail.com"
 Ejemplo de respuesta:
-{"nombre": "Ana Ruiz", "telefono": "no_disponible", "email": "no_disponible", "origen": "Mendoza", "destino": "Salta", "fecha_salida": "2 de mayo", "fecha_regreso": "6 de mayo", "adultos": 1, "menores": 0, "presupuesto": "no_disponible", "servicios": [], "restricciones": []}
+{"nombre": "Ana Ruiz", "telefono": "no_disponible", "email": "ana.ruiz@mail.com", "origen": "Mendoza", "destino": "Salta", "fecha_salida": "2 de mayo", "fecha_regreso": "6 de mayo", "adultos": 1, "menores": 0, "presupuesto": "no_disponible", "servicios": [], "restricciones": []}
 
 ###
 [texto]
