@@ -63,7 +63,7 @@ Tenés **solo dos horas** para automatizar uno de estos procesos. ¿Cuál elegí
 - **B.** Armar el balance anual para el contador: una vez por año, 8 horas.
 - **C.** Copiar los pedidos de un formulario a la planilla de stock: 30 por día, 1 minuto cada uno, siempre igual.
 
-### Ejercicio 4 · Tu primer flujo en n8n (8 min)
+### Ejercicio 4 · Tu primer flujo en n8n (7 min)
 
 En tu instancia de n8n, armá el flujo que mostró el profe:
 
@@ -73,7 +73,7 @@ En tu instancia de n8n, armá el flujo que mostró el profe:
 4. **Rompelo:** en el campo `saludo`, cambiá el tipo de **String** (texto) a **Number** (número). Ejecutalo, leé el error rojo y buscá la corrida fallida en **Executions**.
 5. **El error que no avisa:** volvé el tipo a **String** y cambiá el valor por `Hola {{ $json.email }}`. Ejecutalo: ¿se pone en rojo? ¿Qué sale en el saludo? ¿Por qué es peligroso?
 
-Si no tenés instancia todavía, mirá la demo y hacelo en casa (Ejercicio 8).
+Si la instalación de n8n no te anduvo en clase, mirá la demo y hacelo en casa (Ejercicio 8).
 
 ---
 
@@ -119,20 +119,23 @@ Ejemplo:
 
 1. Creá tu instancia. Tenés dos opciones:
    - **n8n Cloud:** te registrás en n8n.io y entrás desde el navegador. Tiene prueba gratuita; después se paga por mes.
-   - **Gratis, en tu computadora, con Docker:**
-     1. Instalá **Docker Desktop** desde docker.com (en Windows puede pedirte activar WSL 2 y reiniciar).
-     2. Abrí Docker Desktop y esperá a que diga *Engine running*.
-     3. Abrí una terminal (PowerShell en Windows, Terminal en Mac) y corré estos dos comandos:
+   - **Gratis, en tu computadora, con Docker:** seguí la guía [instalar-n8n-local.md](instalar-n8n-local.md), paso a
+     paso. Lleva entre 15 y 30 minutos. En resumen:
+     1. En Windows, activá WSL (PowerShell como administrador → `wsl --install --no-distribution` → reiniciar).
+     2. Descargá e instalá **Docker Desktop** desde docker.com/products/docker-desktop, y abrilo hasta que diga
+        *Engine running*.
+     3. En una terminal, corré estos tres comandos, uno por vez:
 
         ```bash
+        docker pull docker.n8n.io/n8nio/n8n
         docker volume create n8n_data
-        docker run -it --rm --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n
+        docker run -d --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n
         ```
 
-     4. Entrá a `http://localhost:5678` y creá tu cuenta de dueño de la instancia.
-     5. Para apagarlo, `Ctrl + C` en la terminal. Para prenderlo de nuevo, abrí Docker Desktop y corré el segundo comando otra vez: tus workflows siguen ahí.
+     4. Entrá a `http://localhost:5678` y creá tu cuenta de dueño (*Set up owner account*).
+     5. Desde ahí en adelante, se prende y se apaga con ▶ y ■ en Docker Desktop → **Containers**: tus workflows siguen ahí.
 
-     Ojo: con Docker, n8n funciona solo mientras tu computadora está prendida y la terminal abierta.
+     Ojo: con Docker, n8n funciona solo mientras tu computadora y Docker Desktop están prendidos.
 2. Hacé el **Ejercicio 4** completo y sacá una captura del flujo funcionando.
 
 **Además:** leé `Semana 2.docx` y hacé el cuestionario del módulo en la plataforma.

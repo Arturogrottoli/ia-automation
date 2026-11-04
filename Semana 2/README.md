@@ -9,6 +9,7 @@ Fuente: `program-summary.pdf` (Módulo 2). **Una clase de 2 horas.**
 | `Modulo_2_AI_Automation.pptx` | Las filminas del módulo (39). |
 | `Semana 2.docx` | El material de lectura del módulo, con el cuestionario de 6 preguntas. |
 | [ejercicios-alumnos.md](ejercicios-alumnos.md) | Ejercicios en clase, para casa y la consigna completa de la pre-entrega con su rúbrica. Se comparte con los alumnos. |
+| [instalar-n8n-local.md](instalar-n8n-local.md) | Guía paso a paso para instalar n8n gratis en la computadora con Docker (WSL, Docker Desktop, bajar n8n, crear el usuario). Se comparte con los alumnos. |
 | [n8n/](n8n/) | Tres workflows listos para importar en n8n (el flujo mínimo, el flujo roto y el de la agencia con IA). |
 | [ejercicios-docente.md](ejercicios-docente.md) | Respuestas, el paso a paso de las demos de n8n en vivo y la pre-entrega resuelta con el caso de la agencia de viajes. **No se comparte.** |
 
@@ -19,7 +20,7 @@ Fuente: `program-summary.pdf` (Módulo 2). **Una clase de 2 horas.**
 | En clase | 1 · ¿Lineal o cognitiva? | 2 min |
 | En clase | 2 · Calculá el ROI (con break-even) | 3 min |
 | En clase | 3 · Desafío de priorización | 3 min |
-| En clase | 4 · Tu primer flujo en n8n (y romperlo) | 8 min |
+| En clase | 4 · Tu primer flujo en n8n (y romperlo) | 7 min |
 | Casa | 5 · ¿Trigger o acción? | 5 min |
 | Casa | 6 · Explorá un template | 15 min |
 | Casa | 7 · Tu proceso en JSON | 10 min |
@@ -34,7 +35,7 @@ Fuente: `program-summary.pdf` (Módulo 2). **Una clase de 2 horas.**
 
 - **El número de la pre-entrega no coincide:** las filminas (3, 31 y 32) dicen "Pre-entrega 2"; el `program-summary.pdf` la llama "Preentrega 1: De la idea al prompt". Conviene unificarlo antes de la clase.
 - **La filmina 26 tiene dos actividades:** el desafío de priorización (adelantado a la sección de ROI) y un flujo mínimo en n8n que se rompe a propósito. El bloque de n8n en vivo la amplía con un recorrido por la interfaz y un template real.
-- **Los alumnos necesitan su instancia de n8n** creada antes de la clase (fue tarea de la Semana 1). Conviene recordarlo el día anterior.
+- **La instalación de n8n se hace en clase**, en la Sección 03, cada uno en su computadora (Docker, gratis). En la Semana 1 no se pide nada. En Windows hay que reiniciar la computadora: por eso la instalación está partida en dos, antes y después del break, y el reinicio cae en el break.
 - **Las filminas 33 a 36** resumen la pre-entrega; los pesos exactos de la rúbrica están en el programa y en `ejercicios-alumnos.md`.
 - **El Módulo 3 menciona nodos** (IF, Switch, Merge, Wait) en la filmina 37: es el adelanto de la semana que viene.
 
@@ -49,14 +50,16 @@ Fuente: `program-summary.pdf` (Módulo 2). **Una clase de 2 horas.**
 | 0–10 | Apertura y repaso de la Semana 1 | 1–5 | |
 | 10–22 | **01 · Qué es una automatización** | 6–10 | Ej. 1 (2 min) |
 | 22–35 | **02 · ROI: cuándo vale la pena** | 11–16 | Ej. 2 y Ej. 3 (3 min c/u) |
-| 35–50 | **03 · n8n: qué es y para qué sirve** (ejemplos, instancia, JSON, tipos de nodos, el nodo de IA, workflow, templates) | 17–23 | |
-| 50–60 | Break | 24 | |
-| 60–100 | **04 · n8n en vivo: cómo se usa** | 25–26 | Ej. 4 (8 min) |
-| 100–108 | Los 5 pasos de la pre-entrega, con el ejemplo resuelto | 27–31 | |
-| 108–115 | **05 · Pre-entrega** y cómo sigue | 32–37 | |
-| 115–120 | Preguntas y cierre | 38–39 | Tarea |
+| 35–48 | **03 · n8n: qué es y para qué sirve** (ejemplos, instancia, JSON, tipos de nodos, el nodo de IA, workflow, templates) | 17–23 | |
+| 48–55 | **03 · Instalación en vivo, parte 1:** WSL y Docker Desktop (y qué es Docker, mientras se instala) | sin filmina | Cada uno en su computadora |
+| 55–65 | Break (en Windows, reinician acá) | 24 | |
+| 65–78 | **03 · Instalación en vivo, parte 2:** bajar n8n, prenderlo y crear el usuario | sin filmina | Cada uno en su computadora |
+| 78–105 | **04 · n8n en vivo: cómo se usa** | 25–26 | Ej. 4 (7 min) |
+| 105–110 | Los 5 pasos de la pre-entrega, con el ejemplo resuelto | 27–31 | |
+| 110–116 | **05 · Pre-entrega** y cómo sigue | 32–37 | |
+| 116–120 | Preguntas y cierre | 38–39 | Tarea |
 
-**Si el tiempo se aprieta**, recortá en este orden: la tabla de n8n frente a Zapier y Make y el workflow exportado (se mencionan, no se muestran), el Ejercicio 3 (priorización), la parte del template en
+**Si el tiempo se aprieta** (la instalación es lo que más se puede estirar), recortá en este orden: la tabla de n8n frente a Zapier y Make y el workflow exportado (se mencionan, no se muestran), el Ejercicio 3 (priorización), la parte del template en
 vivo (se muestra solo la biblioteca), el Ejercicio 4 en clase (los alumnos arman el flujo mínimo en casa, con el Ejercicio 8)
 y los pasos 3 a 5 de la pre-entrega (se lee la consigna y listo).
 
@@ -77,7 +80,8 @@ y los pasos 3 a 5 de la pre-entrega (se lee la consigna y listo).
 - [ ] **Un template elegido** en n8n.io/workflows para importar en vivo: uno chico (4 a 6 nodos) que use IA. Importalo una vez antes, para saber qué credenciales pide.
 - [ ] **Una cuenta de Gmail de prueba** (no la personal) para crear la credencial en vivo, y una clave de API de un modelo de IA cargada como credencial, para mostrar el nodo de IA.
 - [ ] `ejercicios-alumnos.md` listo para compartir: tiene el paso a paso del flujo mínimo que replican los alumnos.
-- [ ] **El día anterior**, recordarles que traigan su instancia de n8n creada (fue tarea de la Semana 1). Quien no la tenga, sigue la demo en pantalla y la crea en casa.
+- [ ] **El día anterior**, avisales que en esta clase instalamos n8n: que se conecten desde una computadora (no desde el celular), con unos 10 GB libres y con permiso para instalar programas (si es una compu del trabajo, que lo consulten antes). No tienen que instalar nada antes.
+- [ ] **La guía [instalar-n8n-local.md](instalar-n8n-local.md)** lista para compartir durante la instalación.
 - [ ] **Definí el número de la pre-entrega:** las filminas dicen "Pre-entrega 2", el programa dice "Preentrega 1: De la idea al prompt".
 - [ ] Avisar que la clase queda grabada.
 
@@ -348,7 +352,7 @@ Para explicar:
 
 ---
 
-### 35–50 · Sección 03 · n8n: qué es
+### 35–48 · Sección 03 · n8n: qué es
 
 **Filmina 17 · Separador "03"** — pasarla.
 
@@ -454,153 +458,15 @@ Para explicar:
   - *Ejemplo:* Te registrás en n8n.io con tu mail y en un minuto tenés una dirección del tipo `tunombre.app.n8n.cloud` con n8n funcionando.
 - **"Self-hosted: la infraestructura es tuya, y la responsabilidad también. Pide saber de redes, bases de datos y Docker."** *Self-hosted* quiere decir "alojado por vos": n8n corre en una computadora tuya. **Redes** es cómo se conectan las computadoras entre sí y con internet; Docker lo explicamos en un rato. Lo instalás en tu computadora o en un servidor. Es gratis y sin límite de ejecuciones, y los datos no salen de tu máquina; a cambio, si se cae o hay que actualizarlo, es tu problema. Para que lo usen otras personas o reciba avisos desde internet, tiene que estar en un servidor accesible. Si está instalado en tu notebook, los flujos solo corren mientras la notebook está prendida y con n8n abierto. Para practicar alcanza; para un negocio real, se usa un servidor.
   - *Ejemplo:* Una clínica que no quiere que los datos de los pacientes salgan de su servidor instala n8n ahí. Si el servidor se apaga, los flujos se frenan hasta que alguien lo vuelva a levantar.
-- **"Cómo se instala: en el caso self-hosted, con Node o con Docker."** Node es un programa que hace funcionar a otros programas escritos en JavaScript, y n8n es uno de ellos; con Node instalado, escribiendo la orden `npx n8n` se prende n8n en la computadora ("levantar" un programa es prenderlo). Docker es una herramienta que empaqueta programas con todo lo que necesitan para correr. Contá cuál usan ustedes en el curso. Con Docker, n8n viene en una especie de "caja" que trae todo lo necesario y funciona igual en cualquier computadora; por eso es la forma más usada en servidores. La elección no cambia cómo se usa n8n: la pantalla y los nodos son los mismos en todas las versiones.
+- **"Cómo se instala: en el caso self-hosted, con Node o con Docker."** Node es un programa que hace funcionar a otros programas escritos en JavaScript, y n8n es uno de ellos; con Node instalado, escribiendo la orden `npx n8n` se prende n8n en la computadora ("levantar" un programa es prenderlo). Docker es una herramienta que empaqueta programas con todo lo que necesitan para correr. En el curso usamos Docker: el paso a paso completo está más abajo, después de explicar qué es. Con Docker, n8n viene en una especie de "caja" que trae todo lo necesario y funciona igual en cualquier computadora; por eso es la forma más usada en servidores. La elección no cambia cómo se usa n8n: la pantalla y los nodos son los mismos en todas las versiones.
   - *Ejemplo:* ```bash
     # Con Node instalado:
     npx n8n
     # Con Docker:
-    docker run -it --rm --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n
+    docker run -d --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n
     ```
 
     En los dos casos, n8n queda abierto en el navegador en `http://localhost:5678`. *Localhost* quiere decir "esta misma computadora": es una dirección que no sale a internet, apunta a tu propia máquina.
-
-**Docker: cómo usar n8n gratis, sin pagar el plan de n8n Cloud**
-
-<p style="color:#1a7f37">n8n Cloud es lo más cómodo, pero después de la prueba gratuita se paga por mes. La alternativa es instalar n8n en nuestra propia computadora, gratis y sin límite de ejecuciones. Para eso usamos Docker, una herramienta que nos baja n8n listo para usar, con todo lo que necesita para funcionar, y lo prende con un solo comando, es decir, con una sola orden escrita.</p>
-
-**Qué es Docker, explicado desde cero**
-
-<p style="color:#1a7f37">Antes de instalar nada, entendamos qué es Docker, porque lo van a escuchar mucho. Docker es una herramienta para que un programa funcione igual en cualquier computadora, sin tener que instalarle a mano todo lo que necesita. Lo usan casi todas las empresas de software del mundo.</p>
-
-**1. Un programa necesita "ingredientes" para funcionar.** Ningún programa funciona solo: necesita otras
-piezas instaladas en la computadora, en una versión determinada. En programación a eso se le llama
-**dependencias**.
-
-- *Ejemplo:* una receta de torta no alcanza con leerla: necesitás harina, huevos, un horno que llegue a 180
-  grados y un molde de cierto tamaño. Si te falta algo, o tu horno no calienta bien, la torta sale mal aunque
-  la receta sea perfecta. n8n es igual: necesita un programa llamado Node, en una versión concreta, y otras
-  piezas más.
-- *Ejemplo:* ¿alguna vez instalaron un juego en la computadora y les salió un error del tipo "falta tal
-  archivo" o "se necesita una versión más nueva de Windows"? Eso es un problema de dependencias.
-
-**2. El problema clásico: "en mi computadora funciona".** Un programador arma un programa en su
-computadora, donde anda perfecto. Se lo pasa a un compañero o lo sube a un servidor, y ahí no anda, porque esa
-otra computadora tiene otra versión de algo, o le falta una pieza. Es una de las frases más famosas (y más
-odiadas) de la programación.
-
-- *Ejemplo:* es como mandarle a alguien la receta de la torta y que te diga "a mí me salió cruda". No es que
-  la receta esté mal: su horno es distinto.
-
-**3. La solución de Docker: mandar todo junto, en una caja.** En vez de mandar solo el programa y esperar
-que la otra computadora tenga todo lo necesario, Docker empaqueta el programa **con todos sus ingredientes**
-en una caja cerrada, llamada **contenedor**. Esa caja funciona igual en cualquier computadora que tenga
-Docker instalado.
-
-- *Ejemplo:* en vez de mandar la receta, mandás la torta ya hecha, en un táper. El que la recibe no necesita
-  horno ni ingredientes: abre el táper y listo.
-- *Ejemplo:* el nombre viene de los **contenedores de los barcos**. Antes, cada carga se subía al barco de
-  otra forma (bolsas, cajones, barriles) y era un caos. Con los contenedores, todo viaja en cajas del mismo
-  tamaño: a la grúa le da igual si adentro hay zapatillas o celulares, los mueve igual. Docker hace lo mismo
-  con los programas: a Docker le da igual si adentro hay n8n, una base de datos o una página web, los corre
-  igual.
-
-**4. Para qué se usa en programación.**
-
-| Para qué | Ejemplo |
-|---|---|
-| Que un programa funcione igual en todas las computadoras | Todo el curso usa la misma imagen de n8n: a todos les anda igual, tengan Windows o Mac. |
-| Instalar herramientas sin "ensuciar" la computadora | Un programador necesita probar una base de datos un rato. La levanta con Docker, la usa y la borra: la computadora queda como estaba. |
-| Subir programas a internet (servidores) | Una empresa arma su sistema en contenedores y los sube a un servidor alquilado. Si necesita atender a más usuarios, prende más contenedores iguales. |
-| Que todo un equipo trabaje con lo mismo | Diez programadores usan exactamente el mismo contenedor, así nadie dice "en mi computadora funciona". |
-| Tener varias versiones a la vez | Probar la versión nueva de n8n en un contenedor sin tocar la que ya usás en otro. |
-
-**5. Para qué lo usamos nosotros.** Para tener n8n instalado en nuestra computadora **sin pagar el plan de
-n8n Cloud** y sin pelearnos con la instalación de Node y sus dependencias. El equipo de n8n ya armó la caja
-oficial con n8n adentro; nosotros solo la bajamos y la abrimos con un comando.
-
-**Tres palabras de Docker que van a escuchar:**
-
-| Palabra | Qué es | En nuestro caso |
-|---|---|---|
-| **Imagen** | La "receta" o el paquete listo para usar, que se descarga una vez. | `docker.n8n.io/n8nio/n8n`, la imagen oficial de n8n. |
-| **Contenedor** | Una imagen funcionando. Se puede prender, apagar y borrar. | El n8n que está corriendo en tu computadora. |
-| **Volumen** | Una carpeta que guarda datos fuera del contenedor, para que no se pierdan. | `n8n_data`: ahí quedan tus workflows y credenciales aunque borres el contenedor. |
-
-**Cloud o Docker: cuál conviene**
-
-| | n8n Cloud | n8n con Docker (self-hosted) |
-|---|---|---|
-| Costo | Prueba gratuita; después, plan mensual | Gratis |
-| Ejecuciones | Limitadas según el plan | Sin límite |
-| Instalación | Ninguna: te registrás y entrás | Instalar Docker y correr un comando |
-| Cuándo corren los flujos | Siempre, aunque tu computadora esté apagada | Solo mientras tu computadora está prendida y Docker corriendo |
-| Recibir avisos desde internet (webhooks, WhatsApp) | Sí, ya tiene una dirección pública (una dirección de internet a la que cualquiera puede llegar) | Hace falta una dirección pública: un servidor, o un "túnel", un servicio que le da a tu computadora una dirección de internet. Lo vemos cuando lo necesitemos |
-| Actualizaciones y copias de seguridad (*backups*) | Las hace n8n | Las hacés vos |
-
-Para explicar: para aprender y practicar, Docker en la computadora alcanza y no cuesta nada. Para un negocio
-real, donde el flujo tiene que estar prendido las 24 horas, se usa n8n Cloud o el mismo Docker instalado en un
-servidor alquilado. La pantalla de n8n y los nodos son los mismos en las dos versiones: lo que aprendan en una
-sirve para la otra.
-
-**Paso a paso para instalarlo**
-
-1. **Instalar Docker Desktop** desde docker.com. En Windows, el instalador puede pedir activar *WSL 2* (un
-   componente de Windows que Docker necesita) y reiniciar la computadora. Docker Desktop es gratis para uso
-   personal, educativo y para empresas chicas.
-2. **Abrir Docker Desktop** y esperar a que diga que está funcionando (*Engine running*, "motor funcionando").
-3. **Abrir una terminal** (en Windows, PowerShell; en Mac, Terminal). La **terminal** es una ventana donde, en vez
-   de hacer clic, se le escriben órdenes a la computadora; cada orden se llama **comando** y se ejecuta al apretar
-   Enter. Se copia el comando tal cual, se pega y se aprieta Enter. Primero, crear el volumen donde se van a guardar
-   los datos:
-
-   ```bash
-   docker volume create n8n_data
-   ```
-
-4. **Levantar n8n:**
-
-   ```bash
-   docker run -it --rm --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n
-   ```
-
-   La primera vez tarda unos minutos porque descarga la imagen. Cuando en la terminal aparece que el editor está
-   disponible en `http://localhost:5678`, está listo.
-5. **Entrar desde el navegador** a `http://localhost:5678`. La primera vez pide crear la cuenta de dueño de la
-   instancia (mail y contraseña). Esa cuenta es local: vive en tu computadora, no en la nube de n8n.
-
-**Qué quiere decir cada parte del comando**
-
-| Parte | Qué hace |
-|---|---|
-| `docker run` | Crea un contenedor a partir de una imagen y lo prende. |
-| `-it` | Muestra lo que pasa en la terminal, para ver si arrancó bien. |
-| `--rm` | Cuando se apaga, borra el contenedor (los datos no se pierden: están en el volumen). |
-| `--name n8n` | Le pone nombre al contenedor, para poder referirse a él. |
-| `-p 5678:5678` | Conecta el puerto 5678 de tu computadora con el del contenedor: por eso se entra por `localhost:5678`. Un **puerto** es como el número de departamento en un edificio: la computadora es el edificio, y cada programa atiende en su número. n8n atiende en el 5678. |
-| `-v n8n_data:/home/node/.n8n` | Guarda los datos de n8n en el volumen `n8n_data`. Sin esto, al apagar se pierde todo. |
-| `docker.n8n.io/n8nio/n8n` | La imagen oficial de n8n. |
-
-**El día a día**
-
-- **Apagarlo:** en la terminal donde está corriendo, `Ctrl + C`.
-- **Volver a prenderlo:** abrir Docker Desktop y correr el mismo comando del paso 4. Los workflows siguen ahí,
-  porque están en el volumen.
-- **Actualizar n8n:** bajar la imagen nueva con `docker pull docker.n8n.io/n8nio/n8n` y volver a correr el
-  comando del paso 4.
-
-**Errores comunes**
-
-- *Ejemplo:* `docker: command not found` ("no se encontró el comando") o "no se reconoce el comando". Docker no está instalado o Docker Desktop
-  no está abierto.
-- *Ejemplo:* "port is already allocated" ("el puerto ya está ocupado"). Ya hay algo usando el puerto 5678, casi siempre otro n8n que quedó
-  prendido. Se cierra la otra terminal o se apaga el contenedor desde Docker Desktop.
-- *Ejemplo:* "Se me borraron los workflows". Seguramente se corrió el comando sin `-v n8n_data:/home/node/.n8n`.
-  Siempre usar el comando completo.
-- *Ejemplo:* la computadora se pone lenta. Docker Desktop consume memoria; cuando no se usa n8n, se puede cerrar.
-
-Para la clase: si la mayoría va a usar Docker, la instalación puede llevar 10 a 15 minutos y conviene dejarla
-como tarea con esta guía (está en el Ejercicio 8 de `ejercicios-alumnos.md`), o mostrarla en vivo en lugar del
-template si es lo que más necesita el grupo.
 
 #### Filmina 20 · JSON: el idioma de los datos dentro de n8n (3 min)
 
@@ -785,15 +651,337 @@ en un chat de IA para que lo explique.
 
 ---
 
-### 50–60 · Break
+### 48–55 · Sección 03 · Instalación en vivo, parte 1: WSL y Docker Desktop
 
-**Filmina 24 · Break**
+Sin filmina: compartís pantalla con la página de Docker. Cada alumno lo hace en su computadora al mismo tiempo. El
+objetivo es que el instalador de Docker termine justo antes del break, para que en Windows el **reinicio** caiga en
+el break y nadie se pierda la clase. Vos ya tenés Docker instalado, así que en esta parte mostrás la página de
+descarga y vas leyendo los pasos; las pantallas del instalador las ven ellos en su computadora.
 
-<p style="color:#1a7f37">Diez minutos de break. Cuando volvemos, abrimos n8n.</p>
+<p style="color:#1a7f37">Ahora vamos a instalar n8n en nuestra computadora, gratis. Son cuatro etapas. Primero, en Windows, activamos WSL, una pieza que Docker necesita. Segundo, instalamos Docker, el programa que maneja las cajas. Tercero, bajamos la caja de n8n y la prendemos. Y cuarto, entramos a n8n desde el navegador y nos creamos el usuario. Las dos primeras las hacemos ahora; en Windows, la computadora se va a reiniciar justo en el break. Las otras dos, cuando volvemos. Si están en la videollamada desde la misma computadora, al reiniciar se van a desconectar: vuelven a entrar después del break.</p>
+
+Los nombres de los botones de Docker Desktop pueden cambiar un poco entre versiones; los de esta guía están en
+inglés, que es como viene instalado.
+
+**Antes de empezar: qué hace falta**
+
+| Qué | Por qué | Cómo te fijás |
+|---|---|---|
+| Windows 10 u 11 de 64 bits, o una Mac | Docker Desktop no funciona en Windows más viejos ni de 32 bits | Windows: Inicio → Configuración → Sistema → Información. Tiene que decir "Tipo de sistema: 64 bits". |
+| 8 GB de memoria RAM (con 4 anda, pero lento) | Docker y n8n usan memoria mientras están prendidos | En la misma pantalla, "RAM instalada". |
+| Unos 10 GB libres en el disco | Docker, WSL y la caja de n8n ocupan lugar | Explorador de archivos → Este equipo. |
+| Poder instalar programas (permiso de administrador) | El instalador cambia cosas de Windows | En tu computadora personal, lo tenés. En una del trabajo, quizás haya que pedírselo al área de sistemas. |
+| Internet | Se descargan varios cientos de MB | — |
+
+Preguntás en el chat: *"¿Quién está en Windows y quién en Mac?"*. Los de Mac se saltean la etapa 1 y no reinician.
+Después pegás en el chat de la videollamada (y compartís el archivo [instalar-n8n-local.md](instalar-n8n-local.md)):
+
+```text
+INSTALAR N8N · Parte 1 (antes del break)
+Guía completa, por si te perdés: instalar-n8n-local.md
+
+WINDOWS
+1. Inicio → escribí PowerShell → clic derecho → Ejecutar como administrador → Sí
+2. Pegá esto y apretá Enter:
+   wsl --install --no-distribution
+3. NO reinicies todavía.
+4. Entrá a docker.com/products/docker-desktop → Download Docker Desktop → Download for Windows – AMD64
+5. Abrí el archivo descargado → Sí → dejá tildado "Use WSL 2 instead of Hyper-V" → OK
+6. Cuando diga "Close and restart": ESPERÁ. Lo apretamos al empezar el break.
+
+MAC
+1. Menú  → Acerca de esta Mac: ¿dice "Chip Apple M…" o "Intel"?
+2. docker.com/products/docker-desktop → Download Docker Desktop → Apple Silicon o Intel chip
+3. Abrí Docker.dmg → arrastrá la ballena a Aplicaciones → abrila desde Aplicaciones
+```
+
+**Etapa 1 · WSL (solo Windows; en Mac se saltea)**
+
+<p style="color:#1a7f37">Las cajas de Docker están hechas para Linux, que es otro sistema operativo, como Windows o el de las Mac. Es el que usan casi todos los servidores del mundo. WSL quiere decir "Subsistema de Windows para Linux": es una pieza oficial de Microsoft que deja correr Linux adentro de Windows. Docker la usa por debajo; ustedes no la van a ver ni tocar nunca. Es como un adaptador de enchufe: el enchufe de Docker es de otro país, y WSL hace que entre en la pared de Windows.</p>
+
+1. Hacés clic en **Inicio**, escribís `PowerShell`, hacés **clic derecho** sobre *Windows PowerShell* y elegís
+   **Ejecutar como administrador**. Windows pregunta "¿Quieres permitir que esta aplicación haga cambios?": **Sí**.
+   Se abre una ventana azul o negra: es la terminal.
+2. Escribís (o pegás) este comando y apretás **Enter**:
+
+```bash
+wsl --install --no-distribution
+```
+
+Instala WSL solo, sin instalar además un Linux completo, que no hace falta. Si dice que WSL ya está instalado,
+mejor: escribís `wsl --update` para actualizarlo y pasás a la etapa 2. Si dice que la opción `--no-distribution`
+no existe (pasa en Windows desactualizados), escribís solo `wsl --install`; en ese caso, después de reiniciar
+se abre una ventana de Ubuntu que pide un usuario y una contraseña: inventá cualquiera (en minúsculas y sin
+espacios), anotala y cerrá esa ventana.
+
+3. **No reinicies todavía.** El instalador de Docker (etapa 2) también pide reiniciar, así que se hace una sola
+   vez, al final de la etapa 2.
+
+**Etapa 2 · Descargar e instalar Docker Desktop**
+
+<p style="color:#1a7f37">Docker Desktop es el programa con ventanas para usar Docker. Desde ahí vamos a prender y apagar n8n con un botón, como un reproductor de música. Es gratis para uso personal, para estudiar y para empresas chicas.</p>
+
+4. Entrás a **docker.com/products/docker-desktop** y apretás **Download Docker Desktop**. Elegís tu versión:
+   - **Windows:** *Download for Windows – AMD64*. Es la de casi todas las computadoras. La *ARM64* es solo para
+     las pocas que tienen procesador ARM (algunas Surface): lo dice en Configuración → Sistema → Información →
+     "Procesador".
+   - **Mac:** menú  → **Acerca de esta Mac**. Si dice "Chip Apple M1" (o M2, M3, M4…), elegís *Apple Silicon*;
+     si dice "Procesador Intel", elegís *Intel chip*.
+5. **Windows:** abrís el archivo que se descargó (*Docker Desktop Installer.exe*) y a la pregunta de Windows le
+   decís **Sí**. Aparece la pantalla *Configuration*: dejás tildada la opción **Use WSL 2 instead of Hyper-V
+   (recommended)** ("usar WSL 2", lo de la etapa 1) y apretás **OK**. Tarda unos minutos. Al final aparece
+   **Close and restart** (o *Close and log out*). **En clase, no lo aprietes todavía:** se aprieta al empezar el
+   break, y la computadora se reinicia mientras tanto.
+   **Mac:** abrís el archivo *Docker.dmg*, arrastrás la ballena a la carpeta **Aplicaciones** y la abrís desde ahí.
+   Te pide la contraseña de la Mac: es para terminar de instalarse.
+
+**Mientras se descarga y se instala** (tarda unos minutos), explicás qué es Docker. Es teoría que se entiende mejor
+justo cuando lo están instalando:
+
+**Docker: cómo usar n8n gratis, sin pagar el plan de n8n Cloud**
+
+<p style="color:#1a7f37">n8n Cloud es lo más cómodo, pero después de la prueba gratuita se paga por mes. La alternativa es instalar n8n en nuestra propia computadora, gratis y sin límite de ejecuciones. Para eso usamos Docker, una herramienta que nos baja n8n listo para usar, con todo lo que necesita para funcionar, y lo prende con un solo comando, es decir, con una sola orden escrita.</p>
+
+**Qué es Docker, explicado desde cero**
+
+<p style="color:#1a7f37">Antes de instalar nada, entendamos qué es Docker, porque lo van a escuchar mucho. Docker es una herramienta para que un programa funcione igual en cualquier computadora, sin tener que instalarle a mano todo lo que necesita. Lo usan casi todas las empresas de software del mundo.</p>
+
+**1. Un programa necesita "ingredientes" para funcionar.** Ningún programa funciona solo: necesita otras
+piezas instaladas en la computadora, en una versión determinada. En programación a eso se le llama
+**dependencias**.
+
+- *Ejemplo:* una receta de torta no alcanza con leerla: necesitás harina, huevos, un horno que llegue a 180
+  grados y un molde de cierto tamaño. Si te falta algo, o tu horno no calienta bien, la torta sale mal aunque
+  la receta sea perfecta. n8n es igual: necesita un programa llamado Node, en una versión concreta, y otras
+  piezas más.
+- *Ejemplo:* ¿alguna vez instalaron un juego en la computadora y les salió un error del tipo "falta tal
+  archivo" o "se necesita una versión más nueva de Windows"? Eso es un problema de dependencias.
+
+**2. El problema clásico: "en mi computadora funciona".** Un programador arma un programa en su
+computadora, donde anda perfecto. Se lo pasa a un compañero o lo sube a un servidor, y ahí no anda, porque esa
+otra computadora tiene otra versión de algo, o le falta una pieza. Es una de las frases más famosas (y más
+odiadas) de la programación.
+
+- *Ejemplo:* es como mandarle a alguien la receta de la torta y que te diga "a mí me salió cruda". No es que
+  la receta esté mal: su horno es distinto.
+
+**3. La solución de Docker: mandar todo junto, en una caja.** En vez de mandar solo el programa y esperar
+que la otra computadora tenga todo lo necesario, Docker empaqueta el programa **con todos sus ingredientes**
+en una caja cerrada, llamada **contenedor**. Esa caja funciona igual en cualquier computadora que tenga
+Docker instalado.
+
+- *Ejemplo:* en vez de mandar la receta, mandás la torta ya hecha, en un táper. El que la recibe no necesita
+  horno ni ingredientes: abre el táper y listo.
+- *Ejemplo:* el nombre viene de los **contenedores de los barcos**. Antes, cada carga se subía al barco de
+  otra forma (bolsas, cajones, barriles) y era un caos. Con los contenedores, todo viaja en cajas del mismo
+  tamaño: a la grúa le da igual si adentro hay zapatillas o celulares, los mueve igual. Docker hace lo mismo
+  con los programas: a Docker le da igual si adentro hay n8n, una base de datos o una página web, los corre
+  igual.
+
+**4. Para qué se usa en programación.**
+
+| Para qué | Ejemplo |
+|---|---|
+| Que un programa funcione igual en todas las computadoras | Todo el curso usa la misma imagen de n8n: a todos les anda igual, tengan Windows o Mac. |
+| Instalar herramientas sin "ensuciar" la computadora | Un programador necesita probar una base de datos un rato. La levanta con Docker, la usa y la borra: la computadora queda como estaba. |
+| Subir programas a internet (servidores) | Una empresa arma su sistema en contenedores y los sube a un servidor alquilado. Si necesita atender a más usuarios, prende más contenedores iguales. |
+| Que todo un equipo trabaje con lo mismo | Diez programadores usan exactamente el mismo contenedor, así nadie dice "en mi computadora funciona". |
+| Tener varias versiones a la vez | Probar la versión nueva de n8n en un contenedor sin tocar la que ya usás en otro. |
+
+**5. Para qué lo usamos nosotros.** Para tener n8n instalado en nuestra computadora **sin pagar el plan de
+n8n Cloud** y sin pelearnos con la instalación de Node y sus dependencias. El equipo de n8n ya armó la caja
+oficial con n8n adentro; nosotros solo la bajamos y la abrimos con un comando.
+
+**Tres palabras de Docker que van a escuchar:**
+
+| Palabra | Qué es | En nuestro caso |
+|---|---|---|
+| **Imagen** | La "receta" o el paquete listo para usar, que se descarga una vez. | `docker.n8n.io/n8nio/n8n`, la imagen oficial de n8n. |
+| **Contenedor** | Una imagen funcionando. Se puede prender, apagar y borrar. | El n8n que está corriendo en tu computadora. |
+| **Volumen** | Una carpeta que guarda datos fuera del contenedor, para que no se pierdan. | `n8n_data`: ahí quedan tus workflows y credenciales aunque borres el contenedor. |
+
+**Cloud o Docker: cuál conviene**
+
+| | n8n Cloud | n8n con Docker (self-hosted) |
+|---|---|---|
+| Costo | Prueba gratuita; después, plan mensual | Gratis |
+| Ejecuciones | Limitadas según el plan | Sin límite |
+| Instalación | Ninguna: te registrás y entrás | Instalar Docker y correr un comando |
+| Cuándo corren los flujos | Siempre, aunque tu computadora esté apagada | Solo mientras tu computadora está prendida y Docker corriendo |
+| Recibir avisos desde internet (webhooks, WhatsApp) | Sí, ya tiene una dirección pública (una dirección de internet a la que cualquiera puede llegar) | Hace falta una dirección pública: un servidor, o un "túnel", un servicio que le da a tu computadora una dirección de internet. Lo vemos cuando lo necesitemos |
+| Actualizaciones y copias de seguridad (*backups*) | Las hace n8n | Las hacés vos |
+
+Para explicar: para aprender y practicar, Docker en la computadora alcanza y no cuesta nada. Para un negocio
+real, donde el flujo tiene que estar prendido las 24 horas, se usa n8n Cloud o el mismo Docker instalado en un
+servidor alquilado. La pantalla de n8n y los nodos son los mismos en las dos versiones: lo que aprendan en una
+sirve para la otra.
+
+**A los 55 minutos**, aunque alguno no haya terminado, decís:
+
+<p style="color:#1a7f37">Los que están en Windows y ya les apareció "Close and restart": apriétenlo ahora. La computadora se reinicia durante el break. Los que todavía no terminaron, déjenlo instalando y reinicien cuando termine. Los de Mac, abran Docker Desktop. Diez minutos de break; cuando vuelvan, entren de nuevo a la videollamada y abran Docker Desktop desde Inicio.</p>
 
 ---
 
-### 60–100 · Sección 04 · n8n en vivo: cómo se usa
+### 55–65 · Break
+
+**Filmina 24 · Break**
+
+<p style="color:#1a7f37">Diez minutos de break. Los de Windows: reinicien ahora. Cuando vuelvan, entren de nuevo a la videollamada y abran Docker Desktop.</p>
+
+---
+
+### 65–78 · Sección 03 · Instalación en vivo, parte 2: n8n funcionando
+
+<p style="color:#1a7f37">Bienvenidos de vuelta. Abran Docker Desktop, que es el ícono de la ballena. Ahora le pedimos a Docker que baje n8n, lo prendemos y nos creamos el usuario. Les paso los pasos por el chat.</p>
+
+Pegás en el chat de la videollamada:
+
+```text
+INSTALAR N8N · Parte 2
+1. Abrí Docker Desktop → Accept → Skip (no hace falta cuenta) → Skip
+2. Esperá a que abajo a la izquierda diga "Engine running"
+3. Abrí PowerShell común (en Mac, Terminal) y pegá estos 3 comandos, UNO POR VEZ, con Enter:
+   docker pull docker.n8n.io/n8nio/n8n
+   docker volume create n8n_data
+   docker run -d --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n
+4. Abrí el navegador en:  http://localhost:5678
+5. Set up owner account: mail, nombre, apellido y contraseña
+   (8 caracteres o más, con un número y una mayúscula). ANOTÁ LA CONTRASEÑA.
+6. Encuesta: Get started. Listo.
+```
+
+Si querés mostrar los comandos en vivo: como tu n8n ya usa el nombre y el puerto 5678, en tu demostración cambiá el
+nombre, el puerto y el volumen, para no pisar el tuyo. Después lo borrás desde Docker Desktop (■ y el tacho).
+
+```bash
+docker run -d --name n8n_demo -p 5679:5678 -v n8n_demo:/home/node/.n8n docker.n8n.io/n8nio/n8n
+```
+
+Y entrás a `http://localhost:5679`: te muestra la pantalla de *Set up owner account* desde cero, igual que a ellos.
+
+**Etapa 2 (sigue) · Abrir Docker Desktop por primera vez**
+
+6. Abrís **Docker Desktop** (en Windows, desde Inicio; queda un ícono de una ballena). La primera vez aparecen tres
+   pantallas:
+   - el contrato de uso (*Docker Subscription Service Agreement*): **Accept** ("aceptar");
+   - una invitación a crear una cuenta de Docker o iniciar sesión: **no hace falta**. Apretás **Skip** o *Continue
+     without signing in* ("seguir sin iniciar sesión");
+   - una encuesta sobre para qué lo vas a usar: **Skip**.
+7. Esperás a que abajo a la izquierda aparezca, en verde, **Engine running** ("motor funcionando"). Docker ya
+   está listo.
+
+<p style="color:#1a7f37">La ballena es el logo de Docker: carga contenedores en el lomo, como un barco. Cuando dice Engine running, Docker está prendido y listo para recibir cajas. Ojo con una cosa: Docker Desktop tiene que estar abierto cada vez que quieran usar n8n. Si lo cierran, n8n se apaga.</p>
+
+**Etapa 3 · Bajar n8n y prenderlo**
+
+<p style="color:#1a7f37">Ahora le pedimos a Docker la caja de n8n. Son tres comandos que se copian y se pegan, uno por vez. No hace falta entenderlos de memoria; abajo está qué hace cada parte.</p>
+
+8. Abrís una terminal **común** (esta vez no hace falta administrador): Inicio → `PowerShell` → Enter. En Mac,
+   abrís **Terminal** (Aplicaciones → Utilidades). Recordá: en la terminal, en vez de hacer clic, se escriben
+   órdenes; se pega el comando y se aprieta **Enter**.
+9. **Bajar n8n.** Pegás esto y apretás Enter:
+
+```bash
+docker pull docker.n8n.io/n8nio/n8n
+```
+
+Vas a ver varias barras de descarga que avanzan. Tarda unos minutos, según tu internet. Termina cuando dice
+algo como `Status: Downloaded newer image for docker.n8n.io/n8nio/n8n:latest` ("se descargó la imagen").
+
+10. **Crear la carpeta donde se guardan tus datos** (el volumen):
+
+```bash
+docker volume create n8n_data
+```
+
+Responde solamente `n8n_data`. Ahí van a quedar tus workflows y credenciales, aunque apagues o borres n8n.
+
+11. **Prender n8n:**
+
+```bash
+docker run -d --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n
+```
+
+Responde con un código largo de letras y números, que es el número de identificación del contenedor. Si aparece
+eso, n8n arrancó. Ya podés cerrar la terminal: n8n sigue prendido adentro de Docker.
+
+12. **Comprobarlo.** En Docker Desktop, a la izquierda, entrás en **Containers** ("contenedores"). Aparece **n8n**
+    con un punto verde (prendido) y, al lado, `5678:5678`. Si hacés clic en el nombre se abre la pestaña **Logs**
+    (el registro de lo que va haciendo n8n). Al final tiene que decir:
+
+```text
+Editor is now accessible via:
+http://localhost:5678
+```
+
+("El editor ya está disponible en http://localhost:5678.") La primera vez puede tardar un minuto en aparecer.
+
+**Qué quiere decir cada parte del comando del paso 11**
+
+| Parte | Qué hace |
+|---|---|
+| `docker run` | Crea un contenedor a partir de una imagen y lo prende. |
+| `-d` | Lo deja corriendo "por detrás" (*detached*, "desenganchado"), así se puede cerrar la terminal. |
+| `--name n8n` | Le pone nombre al contenedor: así aparece en Docker Desktop. |
+| `-p 5678:5678` | Conecta el puerto 5678 de tu computadora con el del contenedor: por eso se entra por `localhost:5678`. Un **puerto** es como el número de departamento en un edificio: la computadora es el edificio, y cada programa atiende en su número. n8n atiende en el 5678. |
+| `-v n8n_data:/home/node/.n8n` | Guarda los datos de n8n en el volumen `n8n_data`. Sin esto, al borrar el contenedor se pierde todo. |
+| `docker.n8n.io/n8nio/n8n` | La imagen oficial de n8n, la que bajamos en el paso 9. |
+
+**Etapa 4 · Entrar a n8n y crear tu usuario**
+
+13. Abrís el navegador (Chrome, Edge, Firefox) y escribís arriba, donde van las direcciones:
+    **`http://localhost:5678`**. También podés hacer clic en `5678:5678` en Docker Desktop.
+14. Aparece **Set up owner account** ("crear la cuenta de dueño"). Completás:
+    - *Email*: tu mail;
+    - *First Name* y *Last Name*: nombre y apellido;
+    - *Password*: una contraseña de al menos 8 caracteres, con un número y una mayúscula.
+
+    Apretás **Next** ("siguiente").
+
+<p style="color:#1a7f37">Esta cuenta no es de internet: es la del dueño de su n8n, y vive en su computadora. No es una cuenta de n8n.io ni de Docker. Anoten la contraseña, porque n8n local no les puede mandar un mail para recuperarla.</p>
+
+15. Aparece una encuesta, *Customize n8n to you* ("personalizá n8n"): la completás o la salteás con **Get started**
+    ("empezar").
+16. Puede aparecer un ofrecimiento de funciones extra gratis a cambio de tu mail (*Get paid features for free*). Es
+    opcional: si lo aceptás, te llega un mail con una clave de licencia y un botón para activarla. Para el curso no
+    hace falta.
+17. Llegás a la **pantalla de inicio** de n8n, con la lista de workflows vacía. Listo: esta es tu instancia.
+
+<p style="color:#1a7f37">Esto que ven es su n8n, el mismo que el de la nube, pero corriendo en su computadora. Todo lo que hagamos en el curso funciona igual acá. La única diferencia: los flujos corren solo mientras la computadora y Docker Desktop estén prendidos.</p>
+
+**El día a día**
+
+- **Prenderlo:** abrís Docker Desktop, esperás *Engine running*, vas a **Containers** y apretás ▶ (*Start*) en la
+  fila de n8n. Después, `http://localhost:5678` en el navegador. **No** se vuelve a correr el comando del paso 11:
+  el contenedor ya existe.
+- **Apagarlo:** ■ (*Stop*) en la fila de n8n, o cerrás Docker Desktop del todo (clic derecho en la ballena, abajo a
+  la derecha → *Quit Docker Desktop*).
+- **Tus workflows no se pierden** al apagar: están en el volumen `n8n_data`.
+- **Actualizar n8n** (más o menos una vez por mes): ■ *Stop*, después el tacho (*Delete*) en la fila de n8n; eso
+  borra la caja, no tus datos, que están en el volumen. Después corrés en la terminal el comando del paso 9 (baja la
+  versión nueva) y el del paso 11.
+
+**Si algo sale mal**
+
+| Lo que aparece | Qué quiere decir | Qué hacer |
+|---|---|---|
+| Docker Desktop dice *WSL update failed* o *WSL needs updating* | WSL está desactualizado | PowerShell como administrador → `wsl --update` → reiniciar. |
+| *Virtualization support not detected* o algo con *virtualization* | La **virtualización** (una función del procesador que permite correr una computadora adentro de otra) está apagada | Fijate en el Administrador de tareas (Ctrl + Shift + Esc) → Rendimiento → CPU → "Virtualización". Si dice "Deshabilitado", hay que activarla en la BIOS: el menú que aparece al prender la computadora (con F2, F10 o Supr, según la marca), en una opción llamada *Virtualization*, *Intel VT-x* o *SVM*. Si no te animás, pedí ayuda y mientras tanto usá n8n Cloud. |
+| `docker: command not found` o "no se reconoce el término docker" | La terminal no encuentra Docker | Abrí Docker Desktop; cerrá la terminal y abrí una nueva (si estaba abierta desde antes de instalar Docker, no lo ve). |
+| *Cannot connect to the Docker daemon* o *error during connect* | Docker Desktop todavía no terminó de arrancar | Esperá a que diga *Engine running* y repetí el comando. |
+| *The container name "/n8n" is already in use* | Ya creaste el contenedor antes | No hace falta el paso 11: prendelo con ▶ en Containers. |
+| *port is already allocated* ("el puerto ya está ocupado") | Hay otro n8n (u otro programa) usando el 5678 | En Containers, apagá el otro con ■. |
+| `localhost:5678` dice "No se puede acceder a este sitio" | n8n está apagado o todavía arrancando | Fijate en Containers que tenga el punto verde y esperá a que los Logs digan *Editor is now accessible*. |
+| "Se me borraron los workflows" | El contenedor se creó sin la parte `-v n8n_data:...` | Usar siempre el comando completo del paso 11. |
+| La computadora anda lenta | Docker usa memoria | Cuando no uses n8n, cerrá Docker Desktop. |
+
+**A los 78 minutos**, aunque a alguien no le haya funcionado, seguís con la Sección 04. Decís:
+
+<p style="color:#1a7f37">Si a alguno no le anduvo, no se preocupen: es normal, cada computadora es un mundo. Hoy sigan la clase en mi pantalla, o creen una cuenta de prueba gratis en n8n.io para practicar. Escríbanme en el canal del curso qué mensaje les aparece y lo terminamos de resolver; la guía completa está en el archivo que les pasé.</p>
+
+---
+
+### 78–105 · Sección 04 · n8n en vivo: cómo se usa
 
 Todo lo que sigue está en el orden en que lo hacés. Cada bloque gris es algo que copiás, pegás o escribís tal
 cual. El texto en verde es lo que decís. Los nombres de algunos botones cambian entre versiones de n8n (por
@@ -816,13 +1004,13 @@ ejemplo, *Execute step* en las nuevas y *Test step* en las anteriores); cuando p
 
 <p style="color:#1a7f37">Hasta acá vimos qué es n8n. Ahora lo vamos a usar. Primero les muestro la pantalla: dónde está cada cosa. Después abrimos un flujo real que armó otra persona, para ver para qué sirve. Y al final armamos uno chiquito desde cero, lo rompemos a propósito para aprender a leer los errores, y lo arman ustedes en su instancia.</p>
 
-7. Preguntás en el chat de la videollamada: *"¿Quién tiene la instancia de n8n abierta?"*. Decís:
+7. Preguntás en el chat de la videollamada: *"¿A quién le quedó n8n funcionando?"*. Decís:
 
-<p style="color:#1a7f37">Si no tienen la instancia todavía, no pasa nada: miren en mi pantalla y la crean en casa con el Ejercicio 8. Si la tienen, ábranla, pero por ahora solo miren. Les aviso cuando les toque.</p>
+<p style="color:#1a7f37">Abran su n8n en localhost:5678, el que acabamos de instalar, pero por ahora solo miren: les aviso cuando les toque. Si la instalación no les anduvo, sigan en mi pantalla y lo terminan en casa con la guía.</p>
 
 8. **Compartís pantalla** (la ventana del navegador con n8n).
 
-#### Paso B · Recorrido por la pantalla (60–70)
+#### Paso B · Recorrido por la pantalla (78–84)
 
 9. Mostrás la **pantalla de inicio**, con la lista de workflows. Decís:
 
@@ -870,7 +1058,7 @@ ejemplo, *Execute step* en las nuevas y *Test step* en las anteriores); cuando p
 
 19. Borrás el nodo de Gmail (lo seleccionás y apretás **Delete**). Ya no lo usamos.
 
-#### Paso C · Para qué sirve: un template real (70–80)
+#### Paso C · Para qué sirve: un template real (84–88)
 
 20. Abrís otra pestaña en **n8n.io/workflows**. Mostrás el buscador: escribís un caso de uso (por ejemplo `email
     summary` o `gmail ai`). Decís:
@@ -900,7 +1088,7 @@ ejemplo, *Execute step* en las nuevas y *Test step* en las anteriores); cuando p
 
 <p style="color:#1a7f37">Esto es para lo que sirve n8n. Al final del curso ustedes van a armar uno así desde cero. Ahora vamos a lo más chiquito posible, para entender cómo pasan los datos de un nodo a otro.</p>
 
-#### Paso D · El flujo mínimo, construido desde cero (80–88)
+#### Paso D · El flujo mínimo, construido desde cero (88–95)
 
 26. Decís qué vamos a armar:
 
@@ -978,7 +1166,7 @@ Hola {{ $json.nombre }}
 
 40. **Save** (o **Ctrl + S**).
 
-#### Paso E · Romperlo y leer el error (88–92)
+#### Paso E · Romperlo y leer el error (95–98)
 
 41. Decís:
 
@@ -1016,16 +1204,16 @@ arreglarlo, probá cambiar el tipo del campo saludo").
 
 Lo arreglás: volvés a poner `Hola {{ $json.nombre }}` y ejecutás. Sale `Hola Martín Gómez`.
 
-#### Paso F · Ejercicio 4: lo arman los alumnos (92–100)
+#### Paso F · Ejercicio 4: lo arman los alumnos (98–105)
 
 47. Decís:
 
-<p style="color:#1a7f37">Ahora ustedes. Les paso los pasos por el chat. Armen el mismo flujo, ejecútenlo, y después rómpanlo y busquen el error en Executions. Tienen ocho minutos. Si se traban, escriban en el chat en qué paso.</p>
+<p style="color:#1a7f37">Ahora ustedes. Les paso los pasos por el chat. Armen el mismo flujo, ejecútenlo, y después rómpanlo y busquen el error en Executions. Tienen siete minutos. Si se traban, escriban en el chat en qué paso.</p>
 
 48. Pegás en el chat de la videollamada:
 
 ```text
-EJERCICIO 4 · Tu primer flujo en n8n (8 min)
+EJERCICIO 4 · Tu primer flujo en n8n (7 min)
 
 1. Workflow nuevo. Add first step → buscá "manual" → Trigger manually.
 2. + → buscá "edit" → Edit Fields (Set). Add Field dos veces:
@@ -1049,9 +1237,9 @@ EJERCICIO 4 · Tu primer flujo en n8n (8 min)
 | "Me sale el texto `{{ nombre }}` tal cual" | Lo escribieron a mano. Que lo borren y arrastren el campo: n8n escribe `{{ $json.nombre }}` solo. |
 | "Me sale Hola sin el nombre" | El cuadro quedó en modo *Fixed* (texto fijo). Que lo pasen a *Expression* (arriba del cuadro) o vuelvan a arrastrar. |
 | "No me da error, sale verde" | Si es el paso 6, está bien: es el error silencioso. Si es el paso 4, que revisen que el tipo diga **Number** y no String. |
-| "No tengo instancia" | Que miren la pantalla de algún compañero o la grabación, y lo hagan en casa con el Ejercicio 8. |
+| "No me anduvo la instalación" | Que miren tu pantalla, y lo terminen en casa con la guía de instalación y el Ejercicio 8. Que te escriban en el canal qué error les aparece. |
 
-50. A los 8 minutos preguntás: *"¿A quién le salió el saludo? ¿Y el error? ¿Qué decía el suyo?"* y pasás a la
+50. A los 7 minutos preguntás: *"¿A quién le salió el saludo? ¿Y el error? ¿Qué decía el suyo?"* y pasás a la
     filmina 27.
 
 #### Si algo sale distinto de lo esperado
@@ -1101,12 +1289,12 @@ de Sheets busca `nombre`. El dato está, pero con otro nombre: n8n no lo encuent
 
 ---
 
-### 100–108 · Los 5 pasos de la pre-entrega
+### 105–110 · Los 5 pasos de la pre-entrega
 
 Mostrá cada paso con el **ejemplo resuelto de la agencia de viajes** (en `ejercicios-docente.md`). Los
 alumnos lo hacen en casa con su propio proceso.
 
-#### Filmina 27 · Paso 1: el proceso (1,5 min)
+#### Filmina 27 · Paso 1: el proceso (1 min)
 
 <p style="color:#1a7f37">Paso 1 de la pre-entrega: elijan una tarea repetitiva, que pase seguido y no requiera criterio. Descarten lo que pasa una vez al año.</p>
 
@@ -1131,7 +1319,7 @@ humanas (lugar, presupuesto, menú).
 fechas y cantidad de pasajeros en una planilla."* Pasa todos los días, se describe en dos líneas y tiene un
 paso donde la IA ayuda: entender el mail.
 
-#### Filmina 28 · Paso 2: el ROI (1,5 min)
+#### Filmina 28 · Paso 2: el ROI (1 min)
 
 <p style="color:#1a7f37">Paso 2: el ROI. Cuánto tarda, cada cuánto pasa, qué harían con ese tiempo y si escala. Y una razón para no automatizarlo.</p>
 
@@ -1156,7 +1344,7 @@ vendedor puede responder antes y cerrar más ventas. Si las consultas se multipl
 falta otra persona; el flujo las procesa igual. Por qué no: si cada consulta necesitara una respuesta muy
 personalizada, la IA ayudaría poco."*
 
-#### Filmina 29 · Paso 3: el boceto (2 min)
+#### Filmina 29 · Paso 3: el boceto (1 min)
 
 <p style="color:#1a7f37">Paso 3: el boceto. Qué lo dispara, los pasos del medio, dónde entra la IA y dónde termina el dato.</p>
 
@@ -1197,7 +1385,7 @@ No dice qué mail, qué hace la IA ni dónde se guarda.
 4. Si algún dato vino como "no_disponible", la fila se marca "a revisar"
 ```
 
-#### Filmina 30 · Paso 4: el prompt (1,5 min)
+#### Filmina 30 · Paso 4: el prompt (1 min)
 
 <p style="color:#1a7f37">Paso 4: el prompt del nodo de IA, con la anatomía de la semana pasada y las llaves del JSON.</p>
 
@@ -1238,7 +1426,7 @@ Devolvé únicamente un JSON con estas llaves, sin ningún texto antes ni despu�
 ###
 ```
 
-#### Filmina 31 · Paso 5: los riesgos (1,5 min)
+#### Filmina 31 · Paso 5: los riesgos (1 min)
 
 <p style="color:#1a7f37">Paso 5: un riesgo, como una alucinación o un dato ambiguo, y cómo lo evitan desde el prompt o desde el flujo.</p>
 
@@ -1266,7 +1454,7 @@ pregunta al cliente."*
 
 ---
 
-### 108–115 · Sección 05 · Pre-entrega
+### 110–116 · Sección 05 · Pre-entrega
 
 **Filmina 32 · Separador "05"** — pasarla.
 
@@ -1352,7 +1540,7 @@ Para explicar:
 
 ---
 
-### 115–120 · Preguntas y cierre
+### 116–120 · Preguntas y cierre
 
 **Filmina 38 · ¿Preguntas?** (3 min) — las tres de la filmina: el mapeo de datos entre un nodo y el siguiente,
 si su proceso pasa el filtro de alta frecuencia y bajo juicio humano, y algún error rojo que no sepan leer.
@@ -1405,6 +1593,8 @@ puede pegar en el chat al final de la clase.
 | **Self-hosted** | "Alojado por vos": el programa corre en una computadora tuya. | n8n con Docker en tu notebook. |
 | **Instancia** | Tu n8n, el tuyo, funcionando en algún lado. | `tunombre.app.n8n.cloud` o `localhost:5678`. |
 | **Docker** | Una herramienta que baja un programa listo para usar, en una "caja" con todo lo que necesita. | La imagen oficial de n8n. |
+| **WSL** | "Subsistema de Windows para Linux": una pieza de Windows que deja correr Linux adentro, y que Docker necesita. | `wsl --install --no-distribution` |
+| **Imagen / contenedor / volumen** | La caja cerrada que se descarga / esa caja abierta y funcionando / la carpeta donde quedan tus datos. | `docker.n8n.io/n8nio/n8n` / el n8n prendido / `n8n_data` |
 | **Terminal / comando** | Una ventana donde se le escriben órdenes a la computadora; cada orden es un comando. | `docker volume create n8n_data` |
 | **Localhost** | "Esta misma computadora". | `http://localhost:5678` |
 | **Puerto** | El "número de departamento" donde atiende cada programa en la computadora. | n8n atiende en el 5678. |

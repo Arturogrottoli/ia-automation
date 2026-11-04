@@ -44,7 +44,7 @@ No hay una única respuesta correcta; lo que importa es el argumento.
 Usá la discusión para repasar: frecuencia, juicio humano, costo de oportunidad y que la primera
 automatización conviene que sea chica.
 
-## n8n en vivo (60–100 min)
+## n8n en vivo (78–105 min; la instalación va antes, 48–78, en el README)
 
 > **Probá todo antes de la clase en tu instancia.** Los nombres de algunos botones cambian entre
 > versiones de n8n; lo que importa es mostrar cada pieza.
@@ -156,5 +156,5 @@ o `true`/`false` entre comillas (pasan a ser texto).
 
 Lo que suele trabar al crear la instancia:
 - **n8n Cloud:** verificar cuánto dura la prueba gratuita; si vence antes de que termine el curso, conviene que pasen a local.
-- **Local:** `npx n8n` necesita Node instalado; la primera vez descarga bastante. Abre en `http://localhost:5678`.
+- **Local con Docker:** seguir `instalar-n8n-local.md`, que tiene una tabla con los errores típicos (WSL, virtualización, puerto ocupado). Abre en `http://localhost:5678`.
 - El flujo es el del Ejercicio 4.
