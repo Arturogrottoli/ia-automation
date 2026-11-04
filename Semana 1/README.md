@@ -783,6 +783,70 @@ anteriores": que encuentren el problema en el chat. Mostrá la versión corregid
 
 <p style="color:#1a7f37">Ahora lo hacemos en vivo: agarramos un mensaje desordenado de un cliente y, en cinco pasos, lo convertimos en un JSON listo para una automatización. Yo lo hago en pantalla con una agencia de viajes y ustedes lo hacen al mismo tiempo con una pastelería.</p>
 
+#### Qué vamos a hacer en esta media hora
+
+**La idea en una frase:** agarrar un mensaje de un cliente escrito "como sale" (desordenado, con faltas, con datos
+que faltan) y escribir un prompt que lo convierta en una ficha ordenada (JSON) que una planilla o n8n puedan usar
+sin que nadie la toque. No se hace de una: se arranca con el prompt más pobre posible y se lo mejora en cinco pasos,
+uno por filmina, corriendo cada versión y mirando qué cambió.
+
+**Quién hace qué:**
+- **Vos**, compartiendo pantalla: lo hacés con el mail de una agencia de viajes (Martín, que quiere ir a Bariloche).
+- **Los alumnos**, cada uno en su computadora, al mismo tiempo: lo mismo con el mensaje de una pastelería (Carla, que
+  encarga una torta). Así no copian tu resultado: tienen que pensar su propio prompt.
+
+**Los cinco pasos, de un vistazo:**
+
+| Paso | Filmina | Qué se le agrega al prompt | Qué problema arregla |
+|---|---|---|---|
+| 1 · Línea base | 27 | Nada: "Extraé los datos de este mail" | Ninguno. Es la foto del "antes". |
+| 2 · Estructura | 28 | Persona, contexto, lista de campos, formato y ### | Que saque siempre los mismos datos. |
+| 3 · Ejemplos | 29 | Dos ejemplos de mail y respuesta | Que los devuelva siempre escritos igual. |
+| 4 · Anti-alucinación | 30 | Reglas: no inventar, `no_disponible`, revisar paso a paso | Que no complete años, fechas ni emails. |
+| 5 · JSON | 31 | Llaves exactas y nada de texto alrededor | Que un programa lo pueda leer. |
+
+Antes de los cinco pasos, en la filmina 26 (Prompt Battle), mostrás el paso 1 y el paso 5 juntos, para que vean
+adónde se llega.
+
+**Qué material necesitás y dónde está:**
+
+| Qué | Dónde está | Qué hacés con eso |
+|---|---|---|
+| El mail de Martín y el de Lucía | Acá abajo, en "Los dos textos de la demo" (y en `ejercicios-docente.md`) | Antes de la clase los copiás en un bloc de notas abierto al lado del chat. |
+| Los cinco prompts | En cada filmina, en "En pantalla, paso a paso". Ya traen el mail adentro. | En clase, copiás el bloque entero desde este README y lo pegás en el chat. |
+| Los textos de la pastelería (Carla y Jorge) | `ejercicios-alumnos.md`, Ejercicio 3 | Al empezar la práctica los pegás en el chat de la videollamada (abajo está el mensaje listo). |
+| Un chat de IA | ChatGPT, Claude o Gemini | Lo tenés abierto y logueado. Cada paso, un chat nuevo. |
+| Un JSON Formatter | jsonlint.com o jsonformatter.org | Abierto en otra pestaña, para el paso 5. |
+| Un documento de pruebas | Un Google Docs o un bloc de notas vacío | Ahí vas pegando cada respuesta (v1, v2…) para compararlas. |
+
+**Cómo armar la pantalla:** compartí la ventana del navegador, con tres pestañas: el chat de IA, el documento de
+pruebas y el JSON Formatter. Este README lo tenés en la otra pantalla o en el celular, para copiar los prompts y
+leer lo que va en verde. No compartas el README: los alumnos no tienen que ver las respuestas antes.
+
+**Cómo se hace cada paso, siempre igual:**
+1. Pasás la filmina y explicás qué se agrega.
+2. Abrís un chat nuevo, pegás el prompt de ese paso y lo corrés.
+3. Copiás la respuesta en el documento de pruebas y la comparás con la anterior: qué mejoró, qué sigue fallando.
+4. Les das 2 o 3 minutos para que hagan lo mismo con el mensaje de Carla.
+
+**El mensaje para pegar en el chat de la videollamada** al arrancar la práctica:
+
+```text
+Para la práctica: abran ChatGPT, Claude o Gemini (el que tengan) y un documento en blanco.
+Este es el mensaje con el que van a trabajar:
+
+hola buenas! queria encargar una torta para el cumple de mi hija el sabado 12, que sea de chocolate
+con dulce de leche para unas 20 personas, si se puede que diga feliz cumple sofi. la retiro yo a la
+tarde. soy Carla, 11 5555-0134
+
+Y este lo guardan para el final:
+
+Buen día, necesito 3 docenas de medialunas y una tarta de frutillas para el viernes a las 9 am, con
+envío a Av. Corrientes 1234. Pago con transferencia. Gracias, Jorge Medina.
+```
+
+<p style="color:#1a7f37">Lo que vamos a hacer ahora: agarrar un mensaje desordenado de un cliente y, en cinco pasos, escribir un prompt que lo convierta en una ficha ordenada que una planilla pueda leer sola. Yo lo hago en pantalla con un mail de una agencia de viajes; ustedes lo hacen al mismo tiempo con el pedido de una pastelería, que les acabo de pegar en el chat. En cada paso le agregamos algo al prompt y miramos qué cambió.</p>
+
 #### Antes de arrancar: qué se usa y cómo
 
 **¿ChatGPT, Claude o Gemini?** Da igual: el ejercicio funciona en los tres, y en la versión gratuita. Lo que no da
