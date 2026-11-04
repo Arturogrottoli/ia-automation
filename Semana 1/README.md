@@ -38,7 +38,7 @@ En clase se hace la teoría rápido y se reserva media hora para la práctica en
 - **Filmina 2:** dice Profesor / Coordinador / Tutor. Hay que dejar a Arturo Grottoli y Romina Diaz, sacar coordinador y tutor, y completar el N° de comisión.
 - **Nombres distintos para lo mismo:** las filminas hablan de *persona, contexto, tarea y formato*; el material de lectura, de *rol, tarea, contexto y formato de salida*; el podcast del material, de *objetivo, contexto, restricciones y formato*. Conviene aclararlo en clase.
 - **Chain of Thought:** aparece en las filminas (21 y 30) pero no en el material de lectura del Módulo 1.
-- **JSON:** se usa esta semana (filminas 22 y 31) y se explica a fondo en el Módulo 2.
+- **JSON:** se usa esta semana (filminas 20, 22 y 31). Está explicado desde cero, para quien no viene de sistemas, después de la filmina 20; en el Módulo 2 se profundiza.
 
 ---
 
@@ -467,10 +467,122 @@ Para explicar:
   - *Ejemplo:* Contexto de una pastelería: "Los pedidos se toman con 48 horas de anticipación. No hacemos tortas sin TACC. El envío cuesta $3.000 dentro de la ciudad". Sin esto, el modelo puede aceptar un pedido para mañana o prometer una torta sin TACC.
 - **"Tarea: qué tiene que hacer, en una instrucción explícita."** Con un verbo concreto: clasificar, extraer, resumir, responder. "Mirá este mail" no es una tarea; "extraé el nombre, la fecha y el destino de este mail" sí. Conviene que sea una sola tarea principal por prompt. Si le pedimos que clasifique, responda al cliente y resuma, todo a la vez, sube la chance de que haga mal alguna. En automatización, es mejor encadenar varios pasos simples que pedir todo en uno.
   - *Ejemplo:* Vago: "Fijate este mensaje". Concreto: "Extraé del mensaje el producto, la cantidad y la fecha de entrega".
-- **"Formato: cómo tiene que devolverlo. Lista, tabla o un JSON con estas llaves."** En automatización es la parte más importante, porque lo que devuelve la IA lo va a leer otro programa, no una persona. Una persona entiende una respuesta aunque venga con otro orden o con una frase de más; un programa no. Si el paso siguiente espera encontrar el dato `destino`, tiene que estar siempre ahí, escrito igual.
+- **"Formato: cómo tiene que devolverlo. Lista, tabla o un JSON con estas llaves."** En automatización es la parte más importante, porque lo que devuelve la IA lo va a leer otro programa, no una persona. Una persona entiende una respuesta aunque venga con otro orden o con una frase de más; un programa no. Si el paso siguiente espera encontrar el dato `destino`, tiene que estar siempre ahí, escrito igual. Para eso existe el JSON: una ficha con casilleros, escrita en texto, donde cada casillero tiene una etiqueta fija (eso es una "llave") y adentro el dato. Lo explicamos desde cero justo abajo.
   - *Ejemplo:* "Respondé con una lista de tres viñetas", "Respondé con una tabla de dos columnas: producto y precio", o "Respondé solo con este JSON: `{"producto": "", "cantidad": 0}`".
 - **"La IA no sabe lo que querés: es un predictor de texto y necesita instrucciones explícitas."** Todo lo que no esté dicho, lo va a completar con lo más probable, que casi nunca es lo que necesitamos. Las cuatro partes son una lista para chequear que no nos olvidemos de nada: quién es, con qué trabaja, qué tiene que hacer y cómo lo tiene que devolver.
   - *Ejemplo:* "Hacelo corto": ¿corto es una línea o un párrafo? Mejor: "en no más de 30 palabras". "Que sea formal": ¿de usted o de vos? Mejor: "tratando al cliente de usted".
+
+**Qué es un JSON, explicado desde cero**
+
+<p style="color:#1a7f37">Un JSON es una ficha con casilleros, pero escrita en texto. Cada casillero tiene una etiqueta que no cambia, como "nombre" o "destino", y adentro va el dato. Es la forma en que los programas se pasan datos entre sí, y por eso le vamos a pedir a la IA que nos conteste así.</p>
+
+**1. La idea: una ficha con casilleros.** Piensen en un formulario de papel: el de inscripción a un club, el de una
+guardia médica o la ficha que completás en una inmobiliaria. Tiene casilleros con una etiqueta impresa ("Nombre:",
+"Teléfono:", "Fecha:") y vos escribís el dato al lado. La etiqueta es igual para todos; lo que cambia es lo que
+cada uno escribe. Gracias a eso, el empleado que recibe cien formularios sabe que el teléfono siempre está en el
+mismo lugar y no tiene que leer cada uno entero para encontrarlo. Un JSON es exactamente eso, pero escrito con
+letras y símbolos para que lo lea un programa en lugar de una persona.
+
+- *Ejemplo:* La ficha de papel de una agencia de viajes:
+
+    ```text
+    Nombre:   Martín
+    Destino:  Bariloche
+    Personas: 4
+    ```
+
+  La misma ficha escrita como JSON:
+
+    ```json
+    {"nombre": "Martín", "destino": "Bariloche", "personas": 4}
+    ```
+
+**2. Por qué no alcanza con un párrafo.** Una persona entiende "Hola, soy Martín, queremos ir 4 a Bariloche" sin
+problema. Un programa no "entiende" frases: no sabe que "Martín" es un nombre y "Bariloche" un lugar. Lo que sí
+puede hacer es buscar la etiqueta `"nombre"` y tomar lo que viene después. Por eso, si queremos que la respuesta de
+la IA la use otro programa (una planilla, un mail automático, un sistema de reservas), tiene que venir como una
+ficha con etiquetas fijas y no como una charla.
+
+- *Ejemplo:* El mismo dato de tres formas. "El cliente se llama Martín y quiere ir a Bariloche" (una persona lo
+  entiende; un programa no sabe dónde está el nombre). "Nombre: Martín / Destino: Bariloche" (mejor, pero cada vez
+  puede venir distinto). `{"nombre": "Martín", "destino": "Bariloche"}` (el programa va directo a `"nombre"` y
+  encuentra "Martín").
+
+**3. Las piezas de un JSON.** Son pocas y siempre las mismas:
+
+| Pieza | Qué es | Ejemplo |
+|---|---|---|
+| `{` y `}` | Abren y cierran la ficha. Todo el JSON va adentro. | `{ ... }` |
+| La etiqueta (también se le dice **llave** o **clave**) | El nombre del casillero. Va entre comillas y no cambia nunca. | `"nombre"` |
+| `:` | Separa la etiqueta del dato. Es como el "Nombre:" del formulario. | `"nombre": "Martín"` |
+| El valor | El dato que va en el casillero. Cambia en cada mensaje. | `"Martín"`, `4` |
+| `,` | Separa un casillero del siguiente. Después del último no va coma. | `"nombre": "Martín", "personas": 4` |
+| `[` y `]` | Una lista: un casillero con varios datos adentro. | `"productos": ["torta", "budín"]` |
+
+Un detalle de palabras: en castellano a los símbolos `{ }` también les decimos "llaves". Cuando la filmina dice
+"un JSON con estas llaves", habla de las etiquetas (`nombre`, `destino`), no de los símbolos.
+
+- *Ejemplo:* Una ficha de pedido de pastelería, con texto, número y lista:
+
+    ```json
+    {
+      "cliente": "Caro",
+      "producto": "torta de chocolate",
+      "porciones": 20,
+      "extras": ["velitas", "cartel de feliz cumple"],
+      "fecha_entrega": "sábado"
+    }
+    ```
+
+  Leído en voz alta: "cliente: Caro; producto: torta de chocolate; porciones: 20; extras: velitas y cartel;
+  fecha de entrega: sábado". Los textos van entre comillas; los números (`20`) van sin comillas.
+
+**4. Del JSON a la planilla.** La forma más fácil de verlo: cada etiqueta es el título de una columna y cada JSON
+es una fila. Si llegan tres mensajes de clientes y la IA devuelve tres JSON con las mismas etiquetas, la planilla
+se completa sola, sin que nadie copie nada.
+
+- *Ejemplo:* Tres respuestas de la IA:
+
+    ```json
+    {"nombre": "Martín", "destino": "Bariloche", "personas": 4}
+    {"nombre": "Lucía", "destino": "Salta", "personas": 2}
+    {"nombre": "Jorge", "destino": "Mendoza", "personas": 6}
+    ```
+
+  Se convierten en esta planilla:
+
+  | nombre | destino | personas |
+  |---|---|---|
+  | Martín | Bariloche | 4 |
+  | Lucía | Salta | 2 |
+  | Jorge | Mendoza | 6 |
+
+**5. Dónde está el JSON aunque no lo veamos.** Casi todas las aplicaciones se pasan datos en JSON por detrás. Cuando
+abrís la app del clima, el teléfono le pregunta a un servidor y recibe algo como
+`{"ciudad": "Córdoba", "temperatura": 22, "lluvia": false}`; la app lo convierte en el dibujito del sol y el
+número grande. Lo mismo pasa cuando la app del banco te muestra el saldo o cuando una tienda online te muestra el
+precio de un producto. Nosotros no lo vemos, pero está ahí. En n8n lo vamos a ver todo el tiempo, porque es la forma
+en que un paso del flujo le pasa los datos al siguiente.
+
+- *Ejemplo:* Cuando una app de delivery muestra "Tu pedido llega en 25 minutos", lo que recibió fue algo así:
+  `{"pedido": 4821, "estado": "en camino", "minutos": 25}`.
+
+**6. Por qué es tan delicado.** Un formulario de papel aguanta una letra fea o una flecha en el margen. Un JSON no
+aguanta nada: si falta una comilla o sobra una coma, el programa no lo puede leer y el flujo se frena. Por eso,
+cuando la IA contesta, hay que controlar que el JSON sea válido (con un JSON Formatter, como vamos a ver en el
+paso 5).
+
+| JSON | ¿Sirve? | Por qué |
+|---|---|---|
+| `{"nombre": "Martín"}` | ✅ | Está bien escrito. |
+| `Acá está: {"nombre": "Martín"}` | ❌ | Tiene texto antes de la ficha. |
+| `{"nombre": "Martín",}` | ❌ | Sobra la coma después del último dato. |
+| `{nombre: "Martín"}` | ❌ | A la etiqueta le faltan las comillas. |
+| `{"nombre": "Martín"` | ❌ | Falta cerrar con `}`. |
+| `{"Nombre": "Martín"}` | ⚠️ | Es válido, pero si el flujo espera `"nombre"` en minúscula, no lo encuentra. |
+
+- *Ejemplo:* Es como un lector de código de barras en el súper: si la etiqueta está un poco arrugada, no la lee, y
+  la cajera tiene que cargar el precio a mano. Un JSON con una coma de más es una etiqueta arrugada.
 
 **Ejemplo: el mismo pedido sin anatomía y con anatomía**
 
@@ -571,7 +683,7 @@ Resultado correcto: 36.000 − 3.600 = 32.400 − 2.000 = **$30.400**.
 Para explicar:
 - **"El problema: si la IA responde 'Acá tenés tu respuesta, amigo', ninguna automatización puede usar eso."** El paso siguiente de un flujo es un programa: necesita encontrar el dato siempre en el mismo lugar. Una frase amable, un saludo o un formato distinto en cada corrida lo rompen. Imaginate tener que cargar en una planilla el nombre del cliente, y que una vez la IA conteste "El cliente se llama Juan", otra "Nombre: Juan" y otra "¡Claro! Juan es quien escribe". Una persona entiende las tres; un programa necesita que el nombre esté siempre en el mismo casillero.
   - *Ejemplo:* El paso siguiente es un nodo de Google Sheets que espera el dato `nombre`. Recibe "¡Claro! El nombre es Martín 😊". Resultado: la columna "nombre" queda con todo ese texto, o el flujo falla.
-- **"Lo que necesitamos: un objeto JSON válido, sin una sola letra de texto alrededor."** JSON (*JavaScript Object Notation*) es un formato de texto para datos ordenados: llave y valor. Mostrá uno chiquito: `{"nombre": "Juan", "destino": "Bariloche"}`. Las llaves (`nombre`, `destino`) son siempre las mismas; los valores cambian en cada mensaje. (El JSON se ve a fondo en el Módulo 2.) Se puede pensar como una ficha con casilleros: cada casillero tiene una etiqueta fija y adentro va el dato de ese mensaje. Es el formato que usan casi todas las aplicaciones para pasarse datos entre sí, y es el idioma en el que se hablan los pasos de n8n.
+- **"Lo que necesitamos: un objeto JSON válido, sin una sola letra de texto alrededor."** JSON (*JavaScript Object Notation*) es un formato de texto para datos ordenados: llave y valor. Mostrá uno chiquito: `{"nombre": "Juan", "destino": "Bariloche"}`. Las llaves (`nombre`, `destino`) son siempre las mismas; los valores cambian en cada mensaje. (Es la ficha con casilleros que explicamos en la filmina 20.) Se puede pensar como una ficha con casilleros: cada casillero tiene una etiqueta fija y adentro va el dato de ese mensaje. Es el formato que usan casi todas las aplicaciones para pasarse datos entre sí, y es el idioma en el que se hablan los pasos de n8n.
   - *Ejemplo:* `{"nombre": "Martín"}` ✅ · `Acá está: {"nombre": "Martín"}` ❌ (texto alrededor) · `{"nombre": "Martín",}` ❌ (coma de más) · `{nombre: "Martín"}` ❌ (llave sin comillas).
 - **"Cómo se pide: declarando las llaves del objeto dentro del prompt y prohibiendo explícitamente cualquier texto extra."** Hay que decirle exactamente qué llaves usar, y que no agregue saludos, explicaciones ni bloques de código alrededor. Muchas herramientas, incluido n8n, tienen además opciones para forzar o validar la estructura; lo vamos a ver más adelante. Lo ideal es mostrarle el JSON exacto que queremos, con las llaves escritas tal cual, y decirle de qué tipo es cada valor (un texto, un número, una fecha con un formato determinado).
   - *Ejemplo:* "Respondé solo con este JSON, sin ningún texto adicional: `{"nombre": "", "destino": "", "fecha": ""}`". Abajo está el ejemplo completo, con lo que responde cada versión.
