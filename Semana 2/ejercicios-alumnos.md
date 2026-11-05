@@ -125,16 +125,12 @@ Ejemplo:
         tenés: `wsl --update` y seguí. Si da error, `wsl --install --no-distribution` → reiniciar.
      2. Descargá e instalá **Docker Desktop** desde docker.com/products/docker-desktop, y abrilo hasta que diga
         *Engine running*.
-     3. En una terminal, corré estos tres comandos, uno por vez:
-
-        ```bash
-        docker pull docker.n8n.io/n8nio/n8n
-        docker volume create n8n_data
-        docker run -d --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n
-        ```
-
-     4. Entrá a `http://localhost:5678` y creá tu cuenta de dueño (*Set up owner account*).
-     5. Desde ahí en adelante, se prende y se apaga con ▶ y ■ en Docker Desktop → **Containers**: tus workflows siguen ahí.
+     3. Creá una carpeta `n8n` en el Escritorio.
+     4. En Docker Desktop: buscador de arriba → `n8nio/n8n` → **Pull**. Después, **Images** → ▶ **Run** → abrí
+        **Optional settings** y completá: *Container name* `n8n`, *Host port* `5678`, *Host path* la carpeta `n8n`
+        del escritorio, *Container path* `/home/node/.n8n` → **Run**.
+     5. Entrá a `http://localhost:5678` y creá tu cuenta de dueño (*Set up owner account*).
+     6. Desde ahí en adelante, se prende y se apaga con ▶ y ■ en Docker Desktop → **Containers**: tus workflows siguen ahí.
 
      Ojo: con Docker, n8n funciona solo mientras tu computadora y Docker Desktop están prendidos.
 2. Hacé el **Ejercicio 4** completo y sacá una captura del flujo funcionando.

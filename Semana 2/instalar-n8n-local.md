@@ -7,8 +7,8 @@ contando en qué paso estás y qué mensaje te aparece (una captura de pantalla 
 **Qué es Docker, en dos líneas.** Un programa que baja otros programas listos para usar, metidos en una "caja"
 (un **contenedor**) que trae todo lo que necesitan para funcionar. Así n8n anda igual en cualquier computadora, sin
 instalarle nada a mano. Tres palabras que vas a ver: la **imagen** es la caja cerrada que se descarga; el
-**contenedor** es esa caja abierta y funcionando; el **volumen** es la carpeta donde se guardan tus datos para que no
-se pierdan.
+**contenedor** es esa caja abierta y funcionando; el **volumen** es un túnel entre la caja y una carpeta de tu
+computadora, donde se guardan tus datos para que no se pierdan.
 
 Vamos a instalar n8n en tu computadora, gratis. Son cuatro etapas. Primero, en Windows, activamos WSL, una pieza que Docker necesita. Segundo, instalamos Docker, el programa que maneja las cajas. Tercero, bajamos la caja de n8n y la prendemos. Y cuarto, entrás a n8n desde el navegador y te creás el usuario. Se hace una sola vez y lleva entre 15 y 30 minutos, casi todo esperando descargas.
 
@@ -89,60 +89,109 @@ Docker Desktop es el programa con ventanas para usar Docker. Desde ahí vamos a 
 
 La ballena es el logo de Docker: carga contenedores en el lomo, como un barco. Cuando dice Engine running, Docker está prendido y listo para recibir cajas. Ojo con una cosa: Docker Desktop tiene que estar abierto cada vez que quieras usar n8n. Si lo cerrás, n8n se apaga.
 
-## Etapa 3 · Bajar n8n y prenderlo
+## Etapa 3 · Bajar n8n y prenderlo, desde Docker Desktop
 
-Ahora le pedimos a Docker la caja de n8n. Son tres comandos que se copian y se pegan, uno por vez. No hace falta entenderlos de memoria; abajo está qué hace cada parte.
+Ahora le pedimos a Docker la caja de n8n. Se hace todo con clics, sin escribir comandos: crear una carpeta en el
+escritorio, bajar la imagen de n8n, prenderla y comprobar que anda.
 
-8. Abrís una terminal **común** (esta vez no hace falta administrador): Inicio → `PowerShell` → Enter. En Mac,
-   abrís **Terminal** (Aplicaciones → Utilidades). Recordá: en la terminal, en vez de hacer clic, se escriben
-   órdenes; se pega el comando y se aprieta **Enter**.
-9. **Bajar n8n.** Pegás esto y apretás Enter:
+8. **Crear la carpeta donde van a vivir tus datos.** En el **Escritorio**: clic derecho en un lugar vacío →
+   **Nuevo** → **Carpeta** → nombre `n8n` (en minúsculas) → Enter. En Mac: clic derecho en el escritorio →
+   **Nueva carpeta** → `n8n`. Por ahora queda vacía; cuando prendas n8n se va a llenar sola.
+9. **Bajar la imagen de n8n.** En Docker Desktop, en el **buscador de arriba** (*Search*; también con **Ctrl + K**)
+   escribís `n8nio/n8n`. Aparece **n8nio/n8n**, con el logo de n8n: apretás **Pull** ("traer", descargar). Tarda
+   unos minutos. Cuando termina, la ves en la pestaña **Images** ("imágenes"), a la izquierda: `n8nio/n8n`,
+   etiqueta `latest` ("la última versión"), alrededor de 2 GB.
 
-```bash
-docker pull docker.n8n.io/n8nio/n8n
+   La imagen viene **todo empaquetado**: n8n, el programa Node que necesita, en la versión justa, y todas las demás
+   piezas. Por eso pesa casi 2 GB y por eso funciona igual en todas las computadoras. Usá siempre la de `n8nio`
+   (la cuenta oficial de n8n), no otras que se llaman parecido.
+10. **Prenderla.** En **Images**, en la fila de `n8nio/n8n`, apretás ▶ (*Run*, "correr"), a la derecha. Se abre la
+    ventana *Run a new container* ("correr un contenedor nuevo"). **Todavía no aprietes Run:** primero abrís
+    **Optional settings** ("configuración opcional"). Para nosotros no es opcional.
+
+    El **contenedor** es la caja abierta y funcionando. La imagen es la caja cerrada que quedó guardada; de una
+    imagen se pueden abrir muchos contenedores, como de una receta salen muchas tortas.
+11. **Completar la configuración.** Tres cosas; el resto queda como está:
+
+```text
+Container name:   n8n
+Ports → Host port:   5678        (al lado dice :5678/tcp)
+Volumes → Host path:   la carpeta n8n del escritorio   (botón … para elegirla)
+          Container path:   /home/node/.n8n
 ```
 
-Vas a ver varias barras de descarga que avanzan. Tarda unos minutos, según tu internet. Termina cuando dice
-algo como `Status: Downloaded newer image for docker.n8n.io/n8nio/n8n:latest` ("se descargó la imagen").
+- **Container name** ("nombre del contenedor"): `n8n`. Si queda vacío, Docker inventa uno (tipo *happy_turing*).
+- **Host port** ("puerto de tu computadora"): `5678`. Un **puerto** es como el número de departamento en un
+  edificio: la computadora es el edificio, y cada programa atiende en su número. Adentro de la caja, n8n atiende en
+  el 5678; esto abre esa puerta hacia tu computadora. Si queda vacío, n8n funciona pero no podés entrar.
+- **Host path** ("ruta en tu computadora"): con el botón **…** elegís la carpeta `n8n` del escritorio.
+- **Container path** ("ruta adentro del contenedor"): exactamente `/home/node/.n8n`, con la barra al principio y
+  el punto antes de n8n.
 
-10. **Crear la carpeta donde se guardan tus datos** (el volumen):
+Apretás **Run**.
 
-```bash
-docker volume create n8n_data
-```
+### Qué es `/home/node/.n8n` y por qué hay que ponerlo
 
-Responde solamente `n8n_data`. Ahí van a quedar tus workflows y credenciales, aunque apagues o borres n8n.
+Adentro de la caja de n8n hay una computadora en miniatura, con Linux, con sus propias carpetas. `/home/node/.n8n`
+es la dirección de la carpeta donde n8n guarda **todo lo suyo**: workflows, credenciales, tu usuario.
 
-11. **Prender n8n:**
+- **Las barras `/`:** en Linux las carpetas se separan con barra común. Se lee "carpeta home → node → .n8n". En
+  Windows sería algo como `C:\Users\node\.n8n`.
+- **`/home`:** donde están las carpetas personales de los usuarios, como `C:\Users` en Windows.
+- **`node`:** el usuario que usa n8n adentro de la caja (se llama así porque n8n está hecho con Node).
+  `/home/node` es su carpeta personal, como `C:\Users\TuNombre` es la tuya.
+- **`.n8n`:** la carpeta de n8n. El punto adelante quiere decir "carpeta oculta" en Linux.
 
-```bash
-docker run -d --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n
-```
+**Por qué conectarla con tu escritorio:** todo lo que está adentro de un contenedor se pierde cuando se borra el
+contenedor, y se borra cada vez que actualizás n8n. El **volumen** es un túnel: le dice a Docker "cuando n8n guarde
+algo en `/home/node/.n8n`, guardalo en realidad en mi carpeta `n8n` del escritorio". n8n ni se entera, y tus datos
+quedan afuera de la caja, a salvo. Es como pasar las fotos del celular a un pendrive: si cambiás de celular, las
+fotos siguen ahí. *Host* quiere decir anfitrión (tu computadora); *container* es la caja. Un lado del túnel y el
+otro.
 
-Responde con un código largo de letras y números, que es el número de identificación del contenedor. Si aparece
-eso, n8n arrancó. Ya podés cerrar la terminal: n8n sigue prendido adentro de Docker.
+**Por qué exactamente esa dirección:** n8n siempre guarda ahí y no se puede cambiar. Si escribís otra cosa
+(`/n8n`, `/home/node/n8n` sin el punto), el túnel va a un cajón que n8n no usa: funciona igual, pero guarda adentro
+de la caja, y lo perdés el día que actualizás.
 
-12. **Comprobarlo.** En Docker Desktop, a la izquierda, entrás en **Containers** ("contenedores"). Aparece **n8n**
-    con un punto verde (prendido) y, al lado, `5678:5678`. Si hacés clic en el nombre se abre la pestaña **Logs**
-    (el registro de lo que va haciendo n8n). Al final tiene que decir:
+12. **Comprobarlo.** Dos pruebas:
+    - En Docker Desktop, pestaña **Logs** del contenedor (el registro de lo que va haciendo n8n). Al final tiene que
+      decir lo de abajo ("el editor ya está disponible en…"). La primera vez puede tardar un minuto. En
+      **Containers** aparece **n8n** con un punto verde y `5678:5678`.
+    - Abrís la carpeta `n8n` del escritorio: **ya no está vacía**. Aparecen `database.sqlite`, `config`, `nodes`,
+      `storage` y algún archivo más. Eso lo escribió n8n desde adentro de la caja, por el túnel.
 
 ```text
 Editor is now accessible via:
 http://localhost:5678
 ```
 
-("El editor ya está disponible en http://localhost:5678.") La primera vez puede tardar un minuto en aparecer.
+### Qué hay en la carpeta `n8n` del escritorio
 
-### Qué quiere decir cada parte del comando del paso 11
-
-| Parte | Qué hace |
+| Archivo | Qué es |
 |---|---|
-| `docker run` | Crea un contenedor a partir de una imagen y lo prende. |
-| `-d` | Lo deja corriendo "por detrás" (*detached*, "desenganchado"), así se puede cerrar la terminal. |
-| `--name n8n` | Le pone nombre al contenedor: así aparece en Docker Desktop. |
-| `-p 5678:5678` | Conecta el puerto 5678 de tu computadora con el del contenedor: por eso se entra por `localhost:5678`. Un **puerto** es como el número de departamento en un edificio: la computadora es el edificio, y cada programa atiende en su número. n8n atiende en el 5678. |
-| `-v n8n_data:/home/node/.n8n` | Guarda los datos de n8n en el volumen `n8n_data`. Sin esto, al borrar el contenedor se pierde todo. |
-| `docker.n8n.io/n8nio/n8n` | La imagen oficial de n8n, la que bajamos en el paso 9. |
+| `database.sqlite` | La **base de datos**: tus workflows, credenciales, tu usuario y el historial de ejecuciones. Lo más importante. |
+| `config` | La configuración, con la **clave de encriptación**: la llave con la que n8n guarda tus credenciales bajo llave. Sin este archivo, las credenciales guardadas no se pueden volver a abrir. |
+| `nodes`, `storage` | Carpetas de n8n para nodos extra y archivos. |
+| `n8nEventLog.log` y otros | Registros internos. |
+
+- **No borres ni edites** nada de esta carpeta, y menos con n8n prendido.
+- **Copia de seguridad:** apagás n8n (■) y copiás la carpeta entera a otro lado (un pendrive, Google Drive).
+- **Si cambiás de computadora:** instalás Docker, copiás la carpeta `n8n` al escritorio nuevo y hacés los pasos 9 a
+  11. Aparece tu n8n con todo adentro.
+
+### Alternativa: lo mismo, con dos comandos
+
+Si preferís la terminal (PowerShell común, o Terminal en Mac). Antes, creá la carpeta del paso 8:
+
+```bash
+docker pull n8nio/n8n
+docker run -d --name n8n -p 5678:5678 -v "C:\Users\TuNombre\Desktop\n8n:/home/node/.n8n" n8nio/n8n
+```
+
+En Mac, la parte del volumen es `-v ~/Desktop/n8n:/home/node/.n8n`. Cada parte es un casillero del paso 11:
+`--name` es *Container name*, `-p` es el puerto (tu computadora a la izquierda, la caja a la derecha), `-v` es el
+túnel (tu carpeta a la izquierda, el cajón de n8n a la derecha), y `-d` lo deja corriendo por detrás para que
+puedas cerrar la terminal.
 
 ## Etapa 4 · Entrar a n8n y crear tu usuario
 
@@ -169,14 +218,15 @@ Esto que ves es tu n8n, el mismo que el de la nube, pero corriendo en tu computa
 ## El día a día
 
 - **Prenderlo:** abrís Docker Desktop, esperás *Engine running*, vas a **Containers** y apretás ▶ (*Start*) en la
-  fila de n8n. Después, `http://localhost:5678` en el navegador. **No** se vuelve a correr el comando del paso 11:
-  el contenedor ya existe.
+  fila de n8n. Después, `http://localhost:5678` en el navegador. **No** se vuelve a hacer el ▶ *Run* de la pestaña
+  Images (paso 10): eso crea un contenedor nuevo, y el tuyo ya existe.
 - **Apagarlo:** ■ (*Stop*) en la fila de n8n, o cerrás Docker Desktop del todo (clic derecho en la ballena, abajo a
   la derecha → *Quit Docker Desktop*).
-- **Tus workflows no se pierden** al apagar: están en el volumen `n8n_data`.
-- **Actualizar n8n** (más o menos una vez por mes): ■ *Stop*, después el tacho (*Delete*) en la fila de n8n; eso
-  borra la caja, no tus datos, que están en el volumen. Después corrés en la terminal el comando del paso 9 (baja la
-  versión nueva) y el del paso 11.
+- **Tus workflows no se pierden** al apagar: están en la carpeta `n8n` del escritorio.
+- **Actualizar n8n** (más o menos una vez por mes): ■ *Stop*, después el tacho (*Delete*) en la fila de n8n en
+  **Containers**; eso borra la caja, no tus datos, que están en la carpeta del escritorio. Después, en **Images**,
+  volvés a hacer **Pull** de `n8nio/n8n` (baja la versión nueva) y repetís los pasos 10 y 11 con los mismos datos y
+  la misma carpeta.
 
 ## Si algo sale mal
 
@@ -186,8 +236,11 @@ Esto que ves es tu n8n, el mismo que el de la nube, pero corriendo en tu computa
 | *Virtualization support not detected* o algo con *virtualization* | La **virtualización** (una función del procesador que permite correr una computadora adentro de otra) está apagada | Fijate en el Administrador de tareas (Ctrl + Shift + Esc) → Rendimiento → CPU → "Virtualización". Si dice "Deshabilitado", hay que activarla en la BIOS: el menú que aparece al prender la computadora (con F2, F10 o Supr, según la marca), en una opción llamada *Virtualization*, *Intel VT-x* o *SVM*. Si no te animás, pedí ayuda y mientras tanto usá n8n Cloud. |
 | `docker: command not found` o "no se reconoce el término docker" | La terminal no encuentra Docker | Abrí Docker Desktop; cerrá la terminal y abrí una nueva (si estaba abierta desde antes de instalar Docker, no lo ve). |
 | *Cannot connect to the Docker daemon* o *error during connect* | Docker Desktop todavía no terminó de arrancar | Esperá a que diga *Engine running* y repetí el comando. |
-| *The container name "/n8n" is already in use* | Ya creaste el contenedor antes | No hace falta el paso 11: prendelo con ▶ en Containers. |
+| El buscador no encuentra `n8nio/n8n`, o pide iniciar sesión | Docker Desktop busca en Docker Hub y a veces tarda | Esperá unos segundos y probá de nuevo, o usá la alternativa con comandos (`docker pull n8nio/n8n`), que no pide cuenta. |
+| *The container name "/n8n" is already in use* | Ya creaste el contenedor antes | No hace falta el paso 10: prendelo con ▶ en **Containers**. |
 | *port is already allocated* ("el puerto ya está ocupado") | Hay otro n8n (u otro programa) usando el 5678 | En Containers, apagá el otro con ■. |
+| En Containers, el n8n no muestra `5678:5678` y `localhost:5678` no carga | Se apretó Run sin completar *Host port* | ■ y tacho en ese contenedor, y repetí los pasos 10 y 11 completando *Optional settings*. |
 | `localhost:5678` dice "No se puede acceder a este sitio" | n8n está apagado o todavía arrancando | Fijate en Containers que tenga el punto verde y esperá a que los Logs digan *Editor is now accessible*. |
-| "Se me borraron los workflows" | El contenedor se creó sin la parte `-v n8n_data:...` | Usar siempre el comando completo del paso 11. |
+| La carpeta `n8n` del escritorio sigue vacía con n8n prendido | El *Container path* está mal escrito o quedó vacío | Antes de crear workflows: ■ y tacho, y repetí los pasos 10 y 11 con `/home/node/.n8n` exacto. |
+| "Se me borraron los workflows" | El contenedor se creó sin el volumen, o con otra carpeta | Usá siempre la misma carpeta del escritorio y el *Container path* `/home/node/.n8n`. |
 | La computadora anda lenta | Docker usa memoria | Cuando no uses n8n, cerrá Docker Desktop. |
