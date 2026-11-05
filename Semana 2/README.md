@@ -682,8 +682,10 @@ Guía completa, por si te perdés: instalar-n8n-local.md
 
 WINDOWS
 1. Inicio → escribí PowerShell → clic derecho → Ejecutar como administrador → Sí
-2. Pegá esto y apretá Enter:
-   wsl --install --no-distribution
+2. Primero fijate si ya tenés WSL. Pegá esto y apretá Enter:
+   wsl --version
+   → Si dice "Versión de WSL: …" con números: pegá  wsl --update  y saltá al paso 4.
+   → Si sale un error o un texto largo de ayuda: pegá  wsl --install --no-distribution
 3. NO reinicies todavía.
 4. Entrá a docker.com/products/docker-desktop → Download Docker Desktop → Download for Windows – AMD64
 5. Abrí el archivo descargado → Sí → dejá tildado "Use WSL 2 instead of Hyper-V" → OK
@@ -702,17 +704,40 @@ MAC
 1. Hacés clic en **Inicio**, escribís `PowerShell`, hacés **clic derecho** sobre *Windows PowerShell* y elegís
    **Ejecutar como administrador**. Windows pregunta "¿Quieres permitir que esta aplicación haga cambios?": **Sí**.
    Se abre una ventana azul o negra: es la terminal.
-2. Escribís (o pegás) este comando y apretás **Enter**:
+2. **Antes de instalar, te fijás si ya lo tenés.** Escribís (o pegás) este comando y apretás **Enter**:
+
+```bash
+wsl --version
+```
+
+<p style="color:#1a7f37">Antes de instalar nada, nos fijamos si ya lo tienen. Muchas computadoras con Windows 11 ya traen WSL, y si está, no hace falta instalarlo de nuevo: alcanza con actualizarlo. Este comando pregunta "¿qué versión de WSL tengo?". Version, en inglés, es versión.</p>
+
+Lo que puede pasar:
+
+- **Aparecen varias líneas con números**, la primera dice *Versión de WSL: …* (o *WSL version: …* si Windows
+  está en inglés). WSL ya está instalado. Lo actualizás con este comando, que tarda un minuto, y pasás directo a
+  la etapa 2 (no hace falta reiniciar por esto):
+
+```bash
+wsl --update
+```
+
+<p style="color:#1a7f37">Update quiere decir actualizar. Es como actualizar una aplicación del celular: baja la última versión de WSL. Conviene hacerlo porque Docker Desktop a veces se queja si WSL está viejo, y nos ahorramos ese error después.</p>
+
+- **Aparece un error o un texto largo en inglés** con una lista de opciones (*Usage: wsl.exe…*). WSL no está
+  instalado, o es una versión muy vieja que no entiende la pregunta. Lo instalás:
 
 ```bash
 wsl --install --no-distribution
 ```
 
-Instala WSL solo, sin instalar además un Linux completo, que no hace falta. Si dice que WSL ya está instalado,
-mejor: escribís `wsl --update` para actualizarlo y pasás a la etapa 2. Si dice que la opción `--no-distribution`
-no existe (pasa en Windows desactualizados), escribís solo `wsl --install`; en ese caso, después de reiniciar
-se abre una ventana de Ubuntu que pide un usuario y una contraseña: inventá cualquiera (en minúsculas y sin
-espacios), anotala y cerrá esa ventana.
+Instala WSL solo, sin instalar además un Linux completo, que no hace falta. Si dice que la opción
+`--no-distribution` no existe (pasa en Windows desactualizados), escribís solo `wsl --install`; en ese caso,
+después de reiniciar se abre una ventana de Ubuntu que pide un usuario y una contraseña: inventá cualquiera (en
+minúsculas y sin espacios), anotala y cerrá esa ventana.
+
+*Ejemplo:* en una computadora con Windows 11 que ya tenía WSL, `wsl --version` responde *Versión de WSL:
+3.0.3.0*, *Versión de kernel: …* y unas líneas más. Esa persona hace `wsl --update` y ya está.
 
 3. **No reinicies todavía.** El instalador de Docker (etapa 2) también pide reiniciar, así que se hace una sola
    vez, al final de la etapa 2.
@@ -1202,7 +1227,8 @@ Hola {{ $json.nombre }}
 
 <p style="color:#1a7f37">Cambié el dato de entrada y no toqué el nodo del saludo. Saluda a Lucía solo. Eso es lo que hace un flujo: el mismo proceso, con cualquier dato que llegue.</p>
 
-40. **Save** (o **Ctrl + S**).
+40. **Save** (o **Ctrl + S**). (Si sobra tiempo o alguien pregunta cómo seguir el flujo, ver "Para ampliar: agregar
+    un nodo a un flujo que ya existe", al final de esta sección.)
 
 #### Paso E · Romperlo y leer el error (95–98)
 
@@ -1272,6 +1298,7 @@ EJERCICIO 4 · Tu primer flujo en n8n (7 min)
 
 | Lo que escriben | Qué les respondés |
 |---|---|
+| "No me aparece Add first step" | Ese botón solo está en un workflow vacío. Si ya tienen nodos (por ejemplo, importaron el 01), se agrega con el **+** a la derecha del último nodo. |
 | "No encuentro Edit Fields" | Que busquen `set` o `edit`; en algunas versiones se llama solo **Set**. |
 | "No me aparece nada a la izquierda para arrastrar" | Que ejecuten antes el nodo anterior (**Execute previous nodes** en el panel Input). |
 | "Me sale el texto `{{ nombre }}` tal cual" | Lo escribieron a mano. Que lo borren y arrastren el campo: n8n escribe `{{ $json.nombre }}` solo. |
@@ -1326,6 +1353,77 @@ IA. Las llaves dobles `{{ }}` le dicen a n8n "acá no va un texto fijo, va un da
 
 *Ejemplo:* Un caso real del error silencioso del paso E: la IA devuelve la llave `"Nombre"` con mayúscula y el nodo
 de Sheets busca `nombre`. El dato está, pero con otro nombre: n8n no lo encuentra, deja la columna vacía y no avisa.
+
+#### Para ampliar: agregar un nodo a un flujo que ya existe
+
+Para usar si sobra tiempo después del Paso D, si alguien pregunta "¿y si quiero agregar algo más?", o para
+practicar antes de la clase sobre el **01 · Mi primer flujo** importado. Agrega un cuarto nodo, **Mensaje**, que
+arma *"Hola Martín Gómez, gracias por consultar por Bariloche"*.
+
+<p style="color:#1a7f37">Un flujo nunca queda terminado: siempre se le agrega un paso más. Vamos a sumarle un cuarto nodo al que ya tenemos, que arme un mensaje más completo con el nombre y el destino.</p>
+
+**Por qué no aparece "Add first step":** ese botón solo está cuando el workflow está **vacío**. En un flujo que ya
+tiene nodos, todo se agrega desde el **+** a la derecha del último nodo.
+
+*Ejemplo:* al importar el 01, el lienzo ya tiene tres nodos. No hay *Add first step*; hay un **+** chiquito a la
+derecha de **Saludo**.
+
+1. Pasás el mouse por **Saludo**, el último nodo. A su derecha aparece un **+** (o una línea con un **+** en la
+   punta). Clic → se abre el buscador *What happens next?* ("¿qué pasa después?") → escribís `edit` → **Edit Fields
+   (Set)**. El nodo nuevo aparece ya conectado con una flecha.
+   - Si no encontrás ese **+**: el **+** grande arriba a la derecha del lienzo (*Open nodes panel*, "abrir el panel
+     de nodos") o la tecla **Tab**. Ahí el nodo queda suelto y hay que **conectarlo**: arrastrás desde el puntito
+     derecho de **Saludo** hasta el puntito izquierdo del nodo nuevo.
+2. **Add Field** → name: `mensaje`, type: String.
+3. Mirás el panel **Input** de la izquierda: solo aparece `saludo`. Decís:
+
+<p style="color:#1a7f37">Fíjense que acá solo llega saludo: el nodo anterior devuelve únicamente lo que él creó, no reenvía nombre ni destino. Pero no se perdieron: siguen en el nodo Dato de entrada, y los podemos ir a buscar ahí.</p>
+
+4. Arriba del panel **Input** hay un desplegable que dice **Saludo**. Lo cambiás a **Dato de entrada**: ahora sí
+   aparecen `nombre` y `destino`.
+5. En *value* escribís `Hola `, arrastrás `nombre`, escribís `, gracias por consultar por ` y arrastrás `destino`.
+   Queda así:
+
+```text
+Hola {{ $('Dato de entrada').item.json.nombre }}, gracias por consultar por {{ $('Dato de entrada').item.json.destino }}
+```
+
+<p style="color:#1a7f37">Ahora la expresión es más larga. $('Dato de entrada') quiere decir "andá a buscar al nodo que se llama Dato de entrada", no al de justo antes. .item es la ficha que corresponde, y .json.nombre el casillero. Por eso es tan importante ponerles nombres claros a los nodos: si se llamara Edit Fields1, nadie entendería de dónde sale el dato.</p>
+
+6. Le cambiás el nombre al nodo: clic en el título ("Edit Fields") → `Mensaje`. (Desde el lienzo: lo seleccionás y
+   apretás **F2**.)
+7. **Execute step**. La salida:
+
+```json
+[
+  {
+    "mensaje": "Hola Martín Gómez, gracias por consultar por Bariloche"
+  }
+]
+```
+
+8. **Ctrl + S** y **Execute workflow**: los cuatro nodos en verde.
+
+**Otra forma, más corta:** en **Saludo**, abajo de todo, **Add option** ("agregar opción") → **Include Other Input
+Fields** ("incluir los otros campos de la entrada"). Así Saludo reenvía también `nombre` y `destino`, y en el nodo
+siguiente alcanza con `{{ $json.destino }}`.
+
+*Ejemplo:* es lo que se hace en el flujo de la agencia cuando el último nodo necesita a la vez el texto del mail
+original y los datos que sacó la IA: o se trae cada uno con `$('Nombre del nodo')`, o se van arrastrando los campos
+de nodo en nodo.
+
+**Atajos del lienzo, para tener a mano:**
+
+| Para… | Hacés… |
+|---|---|
+| Agregar un nodo al final | **+** a la derecha del último nodo, o **Tab** |
+| Conectar dos nodos | Arrastrás del puntito derecho de uno al puntito izquierdo del otro |
+| Borrar una flecha | Mouse sobre la flecha → ícono del tachito |
+| Borrar un nodo | Lo seleccionás → **Supr** |
+| Renombrar un nodo | Lo seleccionás → **F2** |
+| Agregar una nota amarilla (*sticky note*) | **Shift + S**, o el botón de nota en la barra de la derecha. Doble clic para escribir |
+| Centrar todo si te perdés | **Fit view** ("ajustar vista"), abajo a la izquierda, o la tecla **1** |
+| Guardar | **Ctrl + S** |
 
 ---
 
@@ -1633,7 +1731,7 @@ puede pegar en el chat al final de la clase.
 | **Self-hosted** | "Alojado por vos": el programa corre en una computadora tuya. | n8n con Docker en tu notebook. |
 | **Instancia** | Tu n8n, el tuyo, funcionando en algún lado. | `tunombre.app.n8n.cloud` o `localhost:5678`. |
 | **Docker** | Una herramienta que baja un programa listo para usar, en una "caja" con todo lo que necesita. | La imagen oficial de n8n. |
-| **WSL** | "Subsistema de Windows para Linux": una pieza de Windows que deja correr Linux adentro, y que Docker necesita. | `wsl --install --no-distribution` |
+| **WSL** | "Subsistema de Windows para Linux": una pieza de Windows que deja correr Linux adentro, y que Docker necesita. | `wsl --version` (¿lo tengo?), `wsl --update` (actualizarlo), `wsl --install --no-distribution` (instalarlo) |
 | **Imagen / contenedor / volumen** | La caja cerrada que se descarga / esa caja abierta y funcionando / la carpeta donde quedan tus datos. | `docker.n8n.io/n8nio/n8n` / el n8n prendido / `n8n_data` |
 | **Terminal / comando** | Una ventana donde se le escriben órdenes a la computadora; cada orden es un comando. | `docker volume create n8n_data` |
 | **Localhost** | "Esta misma computadora". | `http://localhost:5678` |

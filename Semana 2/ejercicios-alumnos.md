@@ -121,7 +121,8 @@ Ejemplo:
    - **n8n Cloud:** te registrás en n8n.io y entrás desde el navegador. Tiene prueba gratuita; después se paga por mes.
    - **Gratis, en tu computadora, con Docker:** seguí la guía [instalar-n8n-local.md](instalar-n8n-local.md), paso a
      paso. Lleva entre 15 y 30 minutos. En resumen:
-     1. En Windows, activá WSL (PowerShell como administrador → `wsl --install --no-distribution` → reiniciar).
+     1. En Windows, activá WSL: PowerShell como administrador → `wsl --version`. Si muestra números, ya lo
+        tenés: `wsl --update` y seguí. Si da error, `wsl --install --no-distribution` → reiniciar.
      2. Descargá e instalá **Docker Desktop** desde docker.com/products/docker-desktop, y abrilo hasta que diga
         *Engine running*.
      3. En una terminal, corré estos tres comandos, uno por vez:

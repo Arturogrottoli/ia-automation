@@ -32,17 +32,32 @@ Las cajas de Docker están hechas para Linux, que es otro sistema operativo, com
 1. Hacés clic en **Inicio**, escribís `PowerShell`, hacés **clic derecho** sobre *Windows PowerShell* y elegís
    **Ejecutar como administrador**. Windows pregunta "¿Quieres permitir que esta aplicación haga cambios?": **Sí**.
    Se abre una ventana azul o negra: es la terminal.
-2. Escribís (o pegás) este comando y apretás **Enter**:
+2. **Antes de instalar, fijate si ya lo tenés** (muchas computadoras con Windows 11 ya lo traen). Escribís (o
+   pegás) este comando y apretás **Enter**:
+
+```bash
+wsl --version
+```
+
+- **Si aparecen varias líneas con números** y la primera dice *Versión de WSL: …* (o *WSL version: …*): ya lo
+  tenés. Actualizalo con este comando (tarda un minuto; *update* quiere decir actualizar) y pasá directo a la
+  etapa 2:
+
+```bash
+wsl --update
+```
+
+- **Si aparece un error o un texto largo en inglés** con una lista de opciones (*Usage: wsl.exe…*): no lo tenés,
+  o es una versión muy vieja. Instalalo:
 
 ```bash
 wsl --install --no-distribution
 ```
 
-Instala WSL solo, sin instalar además un Linux completo, que no hace falta. Si dice que WSL ya está instalado,
-mejor: escribís `wsl --update` para actualizarlo y pasás a la etapa 2. Si dice que la opción `--no-distribution`
-no existe (pasa en Windows desactualizados), escribís solo `wsl --install`; en ese caso, después de reiniciar
-se abre una ventana de Ubuntu que pide un usuario y una contraseña: inventá cualquiera (en minúsculas y sin
-espacios), anotala y cerrá esa ventana.
+Instala WSL solo, sin instalar además un Linux completo, que no hace falta. Si dice que la opción
+`--no-distribution` no existe (pasa en Windows desactualizados), escribís solo `wsl --install`; en ese caso,
+después de reiniciar se abre una ventana de Ubuntu que pide un usuario y una contraseña: inventá cualquiera (en
+minúsculas y sin espacios), anotala y cerrá esa ventana.
 
 3. Cuando termina, podés **reiniciar la computadora** ahora, o esperar al final de la etapa 2: el instalador de
    Docker también pide reiniciar, y con un solo reinicio alcanza.
