@@ -1,0 +1,139 @@
+{
+  "name": "03 · Detective de errores HTTP",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "76311854-6f60-4e96-82c3-12a5b124858a",
+      "name": "Arrancar a mano",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://httpbin.org/status/401",
+        "options": {}
+      },
+      "id": "1555b4e6-3098-4c88-8ae4-3250c4aa0b20",
+      "name": "Error A",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        300,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://httpbin.org/status/403",
+        "options": {}
+      },
+      "id": "4b9d1ba4-955c-4184-a10e-5eb14ad73fe4",
+      "name": "Error B",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        300,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://httpbin.org/status/404",
+        "options": {}
+      },
+      "id": "c864e4ef-0897-40e7-bc10-0aa8b7da6493",
+      "name": "Error C",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        300,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://httpbin.org/status/429",
+        "options": {}
+      },
+      "id": "901b4340-1ac5-4507-9507-f8dd2ce306b9",
+      "name": "Error D",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        300,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://httpbin.org/status/500",
+        "options": {}
+      },
+      "id": "a7c74bc4-1f12-4a7c-9d44-37130cca2eed",
+      "name": "Error E",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        300,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Detective de errores\n\nCinco pedidos, cinco errores reales. Ejecutá **cada nodo por separado** (abrilo → *Execute step*) y leé el mensaje.\n\nPara cada uno: ¿qué número es? ¿de quién es la culpa, tuya o del servidor? ¿qué harías?",
+        "height": 240,
+        "width": 560,
+        "color": 3
+      },
+      "id": "a878c67f-23ad-4278-81c1-a7598e072e88",
+      "name": "Nota: el desafío",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -320
+      ]
+    }
+  ],
+  "connections": {
+    "Arrancar a mano": {
+      "main": [
+        [
+          {
+            "node": "Error A",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Error B",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Error C",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Error D",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Error E",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

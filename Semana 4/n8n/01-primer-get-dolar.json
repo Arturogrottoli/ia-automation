@@ -1,0 +1,115 @@
+{
+  "name": "01 · Primer GET: la cotización del dólar",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "4fda091b-3e7a-4f9e-90dc-effab5df1251",
+      "name": "Arrancar a mano",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://dolarapi.com/v1/dolares/oficial",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "id": "76cd1f77-d09e-4910-bde8-332b623991f5",
+      "name": "Cotización del dólar",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c0d2140f-cf2f-4bb2-a1c5-e539b2a92cef",
+              "name": "dolar_venta",
+              "value": "={{ $json.body.venta }}",
+              "type": "number"
+            },
+            {
+              "id": "63c84fab-4df0-44f6-af19-8c66070d5a91",
+              "name": "actualizado",
+              "value": "={{ $json.body.fechaActualizacion }}",
+              "type": "string"
+            },
+            {
+              "id": "d2a5b327-461b-4ed7-be0c-ce2b72f83c33",
+              "name": "estado_http",
+              "value": "={{ $json.statusCode }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b0488c91-2f40-4a1c-a1b4-fd00c9c6c814",
+      "name": "Quedarme con lo que sirve",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Paso 1 · El primer GET\n\nLe pedimos a **dolarapi.com** la cotización del dólar oficial. No pide clave.\n\nEl HTTP Request tiene activada la opción **Include Response Headers and Status**: por eso la salida trae `statusCode`, `headers` y `body` por separado.\n\nEl último nodo se queda solo con lo que sirve: el precio de venta.",
+        "height": 280,
+        "width": 600,
+        "color": 4
+      },
+      "id": "550db45f-4926-45e5-ba23-9ff2494fd38c",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -340
+      ]
+    }
+  ],
+  "connections": {
+    "Arrancar a mano": {
+      "main": [
+        [
+          {
+            "node": "Cotización del dólar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cotización del dólar": {
+      "main": [
+        [
+          {
+            "node": "Quedarme con lo que sirve",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

@@ -1,0 +1,181 @@
+{
+  "name": "04 · Webhook: consulta con dólar y noticias",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "consulta",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "3a1ad007-d95c-4550-adc3-d4024db9fc9f",
+      "name": "Recibir consulta",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "3fdd9ece-1c80-4fce-86df-2022560d9ccd"
+    },
+    {
+      "parameters": {
+        "url": "https://dolarapi.com/v1/dolares/oficial",
+        "options": {}
+      },
+      "id": "ba1eace3-cd34-437a-9f2b-35a7e65dab2c",
+      "name": "Cotización del dólar",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://newsapi.org/v2/everything",
+        "options": {},
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "={{ $('Recibir consulta').item.json.body.destino }}"
+            },
+            {
+              "name": "language",
+              "value": "es"
+            },
+            {
+              "name": "sortBy",
+              "value": "publishedAt"
+            },
+            {
+              "name": "pageSize",
+              "value": "3"
+            }
+          ]
+        },
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "id": "7fa767b7-3bdc-4392-8a2c-9bb79fecacd8",
+      "name": "Noticias del destino",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0a385820-b732-45d4-b0a1-22d2d5e2d9e7",
+              "name": "nombre",
+              "value": "={{ $('Recibir consulta').item.json.body.nombre }}",
+              "type": "string"
+            },
+            {
+              "id": "0930d9da-8ed3-498f-97d3-2119a8d1f8a4",
+              "name": "destino",
+              "value": "={{ $('Recibir consulta').item.json.body.destino }}",
+              "type": "string"
+            },
+            {
+              "id": "46aa8aa5-538f-4baf-ba0f-30125cb2d593",
+              "name": "monto_usd",
+              "value": "={{ $('Recibir consulta').item.json.body.monto_usd }}",
+              "type": "number"
+            },
+            {
+              "id": "d07362da-b653-4898-bf7a-2eb2e93942d4",
+              "name": "dolar_oficial",
+              "value": "={{ $('Cotización del dólar').item.json.venta }}",
+              "type": "number"
+            },
+            {
+              "id": "2e4a9c11-2b2e-4e24-a19f-8f404ac34617",
+              "name": "monto_pesos",
+              "value": "={{ $('Recibir consulta').item.json.body.monto_usd * $('Cotización del dólar').item.json.venta }}",
+              "type": "number"
+            },
+            {
+              "id": "f14b2c86-03a2-448e-994a-5c042717a81c",
+              "name": "noticias",
+              "value": "={{ $json.articles.map(a => a.title) }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d5664ffb-3632-42fe-bee7-1b9b5eddd170",
+      "name": "Armar respuesta",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        720,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Pasos 4 y 5 · El webhook y todo junto\n\n1. **Recibir consulta** (Webhook, POST): espera que alguien le mande un JSON con `nombre`, `destino` y `monto_usd`.\n2. **Cotización del dólar**: GET a dolarapi.com (sin clave).\n3. **Noticias del destino**: GET a NewsAPI, con la credencial del Paso 2.\n4. **Armar respuesta**: pasa el monto a pesos y junta los titulares. El webhook se la devuelve al que mandó la consulta.\n\nPara probar: **Execute workflow** (queda escuchando) y mandá la consulta con el flujo 05 o con el comando de la guía.",
+        "height": 320,
+        "width": 760,
+        "color": 4
+      },
+      "id": "62f5d426-cfa5-479c-9a4f-cc9ed01c2255",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -380
+      ]
+    }
+  ],
+  "connections": {
+    "Recibir consulta": {
+      "main": [
+        [
+          {
+            "node": "Cotización del dólar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cotización del dólar": {
+      "main": [
+        [
+          {
+            "node": "Noticias del destino",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Noticias del destino": {
+      "main": [
+        [
+          {
+            "node": "Armar respuesta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

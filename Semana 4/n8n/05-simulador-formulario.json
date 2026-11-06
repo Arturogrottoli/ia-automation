@@ -1,0 +1,81 @@
+{
+  "name": "05 · Simulador: mandar una consulta al webhook",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "6ac3b3ad-3661-4882-9498-fb8b7a4e842a",
+      "name": "Arrancar a mano",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:5678/webhook-test/consulta",
+        "options": {},
+        "method": "POST",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "nombre",
+              "value": "Martín Gómez"
+            },
+            {
+              "name": "destino",
+              "value": "Bariloche"
+            },
+            {
+              "name": "monto_usd",
+              "value": "={{ 1200 }}"
+            }
+          ]
+        }
+      },
+      "id": "d7baae18-ff74-49eb-b8c1-fc9d5ec9a1a1",
+      "name": "Mandar consulta al webhook",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Simulador de formulario\n\nHace de \"servicio externo\": le manda una consulta al webhook del flujo 04, como si alguien hubiera llenado un formulario.\n\n1. En el flujo 04, apretá **Execute workflow** (queda esperando).\n2. Volvé acá y apretá **Execute workflow**.\n\nLa salida de este nodo es la **respuesta** del flujo 04: el monto en pesos y las noticias.",
+        "height": 280,
+        "width": 560,
+        "color": 6
+      },
+      "id": "3295cd4d-2f64-45c1-93e9-3807c5dee8fe",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -340
+      ]
+    }
+  ],
+  "connections": {
+    "Arrancar a mano": {
+      "main": [
+        [
+          {
+            "node": "Mandar consulta al webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

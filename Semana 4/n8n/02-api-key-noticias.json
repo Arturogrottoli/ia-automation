@@ -1,0 +1,126 @@
+{
+  "name": "02 · API Key: noticias con NewsAPI",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "e9c4e23c-5c99-4f45-a6b0-8c8ebf973a3a",
+      "name": "Arrancar a mano",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://newsapi.org/v2/everything",
+        "options": {},
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "Bariloche"
+            },
+            {
+              "name": "language",
+              "value": "es"
+            },
+            {
+              "name": "sortBy",
+              "value": "publishedAt"
+            },
+            {
+              "name": "pageSize",
+              "value": "3"
+            }
+          ]
+        },
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "id": "4db406ce-61f5-46a2-9327-536156e9874b",
+      "name": "Noticias de Bariloche",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6630453b-be46-4e11-bc54-b260957f020c",
+              "name": "total",
+              "value": "={{ $json.totalResults }}",
+              "type": "number"
+            },
+            {
+              "id": "3903676c-0294-4063-820d-06164f5eb55b",
+              "name": "titulares",
+              "value": "={{ $json.articles.map(a => a.title) }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d6856f11-2867-4d9f-a3c3-787270031e1e",
+      "name": "Titulares",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Paso 2 · La credencial\n\nNewsAPI pide una **API Key**. Se crea gratis en newsapi.org → *Get API Key*.\n\nEn el nodo: *Authentication* → **Generic Credential Type** → **Header Auth** → credencial con:\n- **Name:** `X-Api-Key`\n- **Value:** tu clave\n\nProbá romperla (cambiá una letra de la clave): vas a ver el **401**.",
+        "height": 300,
+        "width": 600,
+        "color": 4
+      },
+      "id": "c4c4756c-d30d-4e13-bfcf-d4a991c0a406",
+      "name": "Nota: la credencial",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -360
+      ]
+    }
+  ],
+  "connections": {
+    "Arrancar a mano": {
+      "main": [
+        [
+          {
+            "node": "Noticias de Bariloche",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Noticias de Bariloche": {
+      "main": [
+        [
+          {
+            "node": "Titulares",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}
