@@ -1,0 +1,269 @@
+{
+  "name": "03 · Desafío: se congela en el Merge",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "c2f297cf-ed7f-4f8d-8382-552ba0580b8a",
+      "name": "Arrancar a mano",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"consultas\": [\n    {\n      \"nombre\": \"Lucía Fernández\",\n      \"monto\": 3500,\n      \"categoria\": \"vuelo\"\n    },\n    {\n      \"nombre\": \"Diego Ramírez\",\n      \"monto\": 800,\n      \"categoria\": \"hotel\"\n    },\n    {\n      \"nombre\": \"Carla Méndez\",\n      \"monto\": 6000,\n      \"categoria\": \"crucero\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "3e38003a-326f-4e95-9567-fdcef15f7621",
+      "name": "Consultas de hoy",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "consultas",
+        "options": {}
+      },
+      "id": "a0aa2d38-7c0a-415b-ad95-dab063565e89",
+      "name": "Separar en items",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        440,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "dcb652c0-ad8b-4650-b511-89398893ccf1",
+              "leftValue": "={{ $json.monto }}",
+              "rightValue": 10000,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "0df4ec7a-857b-4ed1-b3df-089fc3795e4e",
+      "name": "¿Más de USD 10.000?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        660,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "93bae49e-8ecb-4acb-b31e-6d1faefd6493",
+              "name": "asignado_a",
+              "value": "Gerencia",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {},
+        "includeOtherFields": true
+      },
+      "id": "f98dfc39-2199-4c45-aa69-456532541553",
+      "name": "Venta grande",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        900,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "60eaf73a-32bf-470b-a520-14f698f8c9e3",
+              "name": "asignado_a",
+              "value": "Equipo de ventas",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {},
+        "includeOtherFields": true
+      },
+      "id": "1922913d-0ac5-4116-a63d-5a1da0f0360d",
+      "name": "Venta común",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        900,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition"
+      },
+      "id": "855a1163-75c7-49b9-b1f3-fca8969ad195",
+      "name": "Juntar ventas",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        1140,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "884128d8-aa7a-4e1b-a3cd-e6fc6d5a1b86",
+              "name": "mensaje",
+              "value": "=Consulta de {{ $json.nombre }}: asignada a {{ $json.asignado_a }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ded631f0-5edd-4ea9-a43a-b04bf0084248",
+      "name": "Mail al gerente (simulado)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1360,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Desafío de diagnóstico\n\nEste flujo debería terminar en **Mail al gerente**. Apretá **Execute workflow**: el mail nunca se arma.\n\n**Antes de abrir nada:** mirá el canvas. ¿Qué nodos quedaron en verde? ¿Cuál quedó sin ejecutar? ¿Cuántos items tiene cada flecha?",
+        "height": 260,
+        "width": 620,
+        "color": 3
+      },
+      "id": "3550d424-16fb-4e47-b3b4-04e2566df036",
+      "name": "Nota: el desafío",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -320
+      ]
+    }
+  ],
+  "connections": {
+    "Consultas de hoy": {
+      "main": [
+        [
+          {
+            "node": "Separar en items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Arrancar a mano": {
+      "main": [
+        [
+          {
+            "node": "Consultas de hoy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Separar en items": {
+      "main": [
+        [
+          {
+            "node": "¿Más de USD 10.000?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Más de USD 10.000?": {
+      "main": [
+        [
+          {
+            "node": "Venta grande",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Venta común",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Venta grande": {
+      "main": [
+        [
+          {
+            "node": "Juntar ventas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Venta común": {
+      "main": [
+        [
+          {
+            "node": "Juntar ventas",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Juntar ventas": {
+      "main": [
+        [
+          {
+            "node": "Mail al gerente (simulado)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

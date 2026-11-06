@@ -1,0 +1,199 @@
+{
+  "name": "04 · Detective de datos (campo que no existe)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "c9186385-d78d-457d-86a0-4b256329982d",
+      "name": "Arrancar a mano",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"consultas\": [\n    {\n      \"nombre\": \"Martín Gómez\",\n      \"monto\": 12000,\n      \"categoria\": \"paquete\"\n    },\n    {\n      \"nombre\": \"Lucía Fernández\",\n      \"monto\": 3500,\n      \"categoria\": \"vuelo\"\n    },\n    {\n      \"nombre\": \"Diego Ramírez\",\n      \"monto\": 800,\n      \"categoria\": \"hotel\"\n    },\n    {\n      \"nombre\": \"Sofía Herrera\",\n      \"monto\": 15000,\n      \"categoria\": \"paquete\"\n    },\n    {\n      \"nombre\": \"Carla Méndez\",\n      \"monto\": 6000,\n      \"categoria\": \"crucero\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "d76b4186-4367-4d31-9ad3-225acee40905",
+      "name": "Consultas de prueba",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "consultas",
+        "options": {}
+      },
+      "id": "33ded1af-4948-4ca2-808e-c2b75004ba2a",
+      "name": "Separar en items",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        440,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9809101a-ac99-4690-ae88-39d88914936c",
+              "leftValue": "={{ $json.importe }}",
+              "rightValue": 10000,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "fc9c2434-c4bf-4499-884b-165adaac9a1b",
+      "name": "¿Más de USD 10.000?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        660,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fd15b274-76d3-4bcb-a19f-0d07c3cf9bf8",
+              "name": "asignado_a",
+              "value": "Gerencia",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {},
+        "includeOtherFields": true
+      },
+      "id": "b76806f0-d243-4de3-a30f-b817e3dbcb9a",
+      "name": "Asignar a gerencia",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        900,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9b0f7672-90b3-4319-846b-5f92f88585b9",
+              "name": "asignado_a",
+              "value": "Equipo de ventas",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {},
+        "includeOtherFields": true
+      },
+      "id": "ca238df2-4ed3-4337-a2af-8d2cf6a31810",
+      "name": "Asignar a ventas",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        900,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Detective de datos\n\nMartín y Sofía piden más de USD 10.000: tendrían que ir a **gerencia**. Pero al ejecutar, los 5 van a **ventas**.\n\n¿Por qué falla?\n- **A)** Error de conexión\n- **B)** Campo inexistente\n- **C)** El nodo está mal configurado\n\nPista: abrí **Consultas de prueba** y mirá la pestaña **JSON** de la salida.",
+        "height": 320,
+        "width": 620,
+        "color": 3
+      },
+      "id": "af351c38-acbf-4a4b-a61f-551280c77b1e",
+      "name": "Nota: el caso",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -380
+      ]
+    }
+  ],
+  "connections": {
+    "Consultas de prueba": {
+      "main": [
+        [
+          {
+            "node": "Separar en items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Arrancar a mano": {
+      "main": [
+        [
+          {
+            "node": "Consultas de prueba",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Separar en items": {
+      "main": [
+        [
+          {
+            "node": "¿Más de USD 10.000?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Más de USD 10.000?": {
+      "main": [
+        [
+          {
+            "node": "Asignar a gerencia",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Asignar a ventas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

@@ -1,0 +1,478 @@
+{
+  "name": "02 · Consultas con lógica (completo)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "1befe1f5-afdd-4478-abdf-796e514d9dba",
+      "name": "Arrancar a mano",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"consultas\": [\n    {\n      \"nombre\": \"Martín Gómez\",\n      \"monto\": 12000,\n      \"categoria\": \"paquete\"\n    },\n    {\n      \"nombre\": \"Lucía Fernández\",\n      \"monto\": 3500,\n      \"categoria\": \"vuelo\"\n    },\n    {\n      \"nombre\": \"Diego Ramírez\",\n      \"monto\": 800,\n      \"categoria\": \"hotel\"\n    },\n    {\n      \"nombre\": \"Sofía Herrera\",\n      \"monto\": 15000,\n      \"categoria\": \"paquete\"\n    },\n    {\n      \"nombre\": \"Carla Méndez\",\n      \"monto\": 6000,\n      \"categoria\": \"crucero\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "5fc8e0a9-39b3-4513-808b-abe2ad56184c",
+      "name": "Consultas de prueba",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "consultas",
+        "options": {}
+      },
+      "id": "4b9037b7-4378-42f6-a36e-801818d5c1d8",
+      "name": "Separar en items",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        440,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "28a0df7b-cfd5-46b3-aada-22942ec22c27",
+                    "leftValue": "={{ $json.categoria }}",
+                    "rightValue": "paquete",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Paquetes"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "99d00b57-dc0d-4ce3-87f0-55f1700c6a7c",
+                    "leftValue": "={{ $json.categoria }}",
+                    "rightValue": "vuelo",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Vuelos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b28e82ed-d6cf-4caa-bf12-7aa4668a748a",
+                    "leftValue": "={{ $json.categoria }}",
+                    "rightValue": "hotel",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Hoteles"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "Otra"
+        }
+      },
+      "id": "187a9fce-42a9-4b5b-aa4c-f580ecd0a70e",
+      "name": "¿Qué tipo de consulta?",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        660,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "72daf8f5-3da1-4bcd-b33e-9c03a4ecefe3",
+              "name": "area",
+              "value": "Área de paquetes",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {},
+        "includeOtherFields": true
+      },
+      "id": "047b307b-446f-4711-8325-794b047cbb83",
+      "name": "Para área de paquetes",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        920,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4f2e5f6e-f2cb-4712-93fc-bcbc950540c6",
+              "name": "area",
+              "value": "Área de vuelos",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {},
+        "includeOtherFields": true
+      },
+      "id": "29c37da4-e858-445f-8cd9-e0c4892b722b",
+      "name": "Para área de vuelos",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        920,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "500c985e-6e88-4195-9746-e0dd2b78e8bf",
+              "name": "area",
+              "value": "Área de hoteles",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {},
+        "includeOtherFields": true
+      },
+      "id": "3ffff2dc-351d-48dd-a317-4883529e193d",
+      "name": "Para área de hoteles",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        920,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6a2ed46e-f498-4316-ad79-f10e74f8d3ff",
+              "name": "area",
+              "value": "Revisar a mano",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {},
+        "includeOtherFields": true
+      },
+      "id": "fa171388-e855-40f7-8b6c-c059efd97fb9",
+      "name": "Para revisar a mano",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        920,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "numberInputs": 4
+      },
+      "id": "0dc84fd4-07f5-40a1-a6c9-1776195c5145",
+      "name": "Juntar las ramas",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        1180,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "consultas",
+        "options": {}
+      },
+      "id": "36128c24-aae3-40bb-940e-74b8503cd685",
+      "name": "Todas en una lista",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 5,
+        "unit": "seconds"
+      },
+      "id": "535a8a3f-1400-4a59-b502-cb8cd328ec9a",
+      "name": "Esperar 5 segundos",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1620,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1f68e96f-c949-42d6-bda9-e06196bd239c",
+              "name": "mensaje",
+              "value": "=Buen día. Hoy entraron {{ $json.consultas.length }} consultas:\n{{ $json.consultas.map(c => '- ' + c.nombre + ' (' + c.categoria + ', USD ' + c.monto + '): ' + c.area).join('\\n') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3ad45cc5-ff00-4305-a55f-e673402322e1",
+      "name": "Mail de resumen (simulado)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1840,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Consultas con lógica\n\nCinco consultas de prueba de la agencia. El flujo:\n\n1. **Switch**: manda cada consulta a su área según la categoría (paquete, vuelo, hotel). Lo que no encaja sale por **Otra** y va a revisar a mano.\n2. **Merge**: vuelve a juntar las cuatro ramas.\n3. **Aggregate**: pasa de 5 items a 1 solo, con la lista adentro.\n4. **Wait**: espera unos segundos antes de la acción final.\n5. **Mail de resumen**: arma el texto de un único mail con todas las consultas (simulado: en el módulo 4 lo mandamos de verdad).",
+        "height": 320,
+        "width": 760,
+        "color": 4
+      },
+      "id": "1e6d83a7-2ea0-4c26-846c-39606232b6db",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -360
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### La salida Otra\n\nCarla pidió un **crucero**, una categoría que el Switch no tiene. No se pierde: sale por la salida de más (*fallback*) y queda marcada para revisar a mano.",
+        "height": 200,
+        "width": 360,
+        "color": 6
+      },
+      "id": "c11d9630-cd35-4bec-949f-f49e09023a5f",
+      "name": "Nota: la salida Otra",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        640,
+        560
+      ]
+    }
+  ],
+  "connections": {
+    "Consultas de prueba": {
+      "main": [
+        [
+          {
+            "node": "Separar en items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Arrancar a mano": {
+      "main": [
+        [
+          {
+            "node": "Consultas de prueba",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Separar en items": {
+      "main": [
+        [
+          {
+            "node": "¿Qué tipo de consulta?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Qué tipo de consulta?": {
+      "main": [
+        [
+          {
+            "node": "Para área de paquetes",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Para área de vuelos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Para área de hoteles",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Para revisar a mano",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Para área de paquetes": {
+      "main": [
+        [
+          {
+            "node": "Juntar las ramas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Para área de vuelos": {
+      "main": [
+        [
+          {
+            "node": "Juntar las ramas",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Para área de hoteles": {
+      "main": [
+        [
+          {
+            "node": "Juntar las ramas",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Para revisar a mano": {
+      "main": [
+        [
+          {
+            "node": "Juntar las ramas",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Juntar las ramas": {
+      "main": [
+        [
+          {
+            "node": "Todas en una lista",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Todas en una lista": {
+      "main": [
+        [
+          {
+            "node": "Esperar 5 segundos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Esperar 5 segundos": {
+      "main": [
+        [
+          {
+            "node": "Mail de resumen (simulado)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}
