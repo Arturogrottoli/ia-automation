@@ -1,0 +1,121 @@
+{
+  "name": "S8 · 04 · Mandar un mensaje simulado",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "a10c7957-45cc-4519-b93c-29486fbf6b92",
+      "name": "Arrancar a mano",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "488a5bc1-044e-408a-a26e-72ea402bdeb5",
+              "name": "telefono",
+              "value": "5491155550001",
+              "type": "string"
+            },
+            {
+              "id": "c515e0ff-b549-447c-ac74-b987fb598776",
+              "name": "nombre",
+              "value": "Juan",
+              "type": "string"
+            },
+            {
+              "id": "1d30be94-76ec-410b-8ac0-e563ed807b5b",
+              "name": "tipo",
+              "value": "text",
+              "type": "string"
+            },
+            {
+              "id": "049e788e-dac0-4e1b-a40f-8a2e3b847739",
+              "name": "texto",
+              "value": "Hola! Me llamo Juan. Qué paquetes tienen para el sur?",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a8b4be84-1f44-4fa6-9c9a-1741a77dd125",
+      "name": "Mensaje de prueba",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:5678/webhook/whatsapp-simulado",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  object: 'whatsapp_business_account',\n  entry: [{\n    id: '000000000000000',\n    changes: [{\n      field: 'messages',\n      value: {\n        messaging_product: 'whatsapp',\n        metadata: { display_phone_number: '15550000000', phone_number_id: '000000000000000' },\n        contacts: [{ profile: { name: $json.nombre }, wa_id: $json.telefono }],\n        messages: [{\n          from: $json.telefono,\n          id: 'wamid.prueba' + Date.now(),\n          timestamp: String(Math.floor(Date.now() / 1000)),\n          type: $json.tipo,\n          ...($json.tipo === 'text' ? { text: { body: $json.texto } } : { [$json.tipo]: { id: 'archivo-de-prueba' } })\n        }]\n      }\n    }]\n  }]\n}) }}",
+        "options": {
+          "timeout": 600000
+        }
+      },
+      "id": "24157b5d-5846-45f7-abc0-27bf129e104c",
+      "name": "Mandar al simulador",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Hace de celular\n\nArma el mismo paquete que manda Meta cuando alguien escribe, y se lo manda al flujo **03** (que tiene que estar **publicado**).\n\n**Para jugar**, cambiá en *Mensaje de prueba*:\n- `texto`: lo que escribiría el cliente.\n- `telefono`: otro número = otra persona (la memoria no se mezcla).\n- `tipo`: `image` o `audio` para probar los bordes.\n\n**La URL:** con n8n en tu máquina (Docker o Desktop) es `http://localhost:5678/webhook/whatsapp-simulado`. Con n8n Cloud, copiá la *Production URL* del Webhook del flujo 03.",
+        "height": 360,
+        "width": 700,
+        "color": 6
+      },
+      "id": "f753936c-99eb-4d40-95c1-2e1ecbabf4c4",
+      "name": "Nota: el celular de mentira",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -400
+      ]
+    }
+  ],
+  "connections": {
+    "Arrancar a mano": {
+      "main": [
+        [
+          {
+            "node": "Mensaje de prueba",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensaje de prueba": {
+      "main": [
+        [
+          {
+            "node": "Mandar al simulador",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

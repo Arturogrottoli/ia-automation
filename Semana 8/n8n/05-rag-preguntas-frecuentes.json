@@ -1,0 +1,341 @@
+{
+  "name": "S8 · 05 · RAG: Ana con las preguntas frecuentes",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "4b9b06c2-72b8-43c6-bcd5-a8c24ff2f92e",
+      "name": "Cargar el documento",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3fbb559f-ce48-40c8-b18d-5d3436d336e5",
+              "name": "texto",
+              "value": "PREGUNTAS FRECUENTES DE RUMBO SUR (vigentes desde marzo de 2026)\n\nCancelaciones y devoluciones. Si cancelás con más de 30 días de anticipación a la salida, te devolvemos el 100% de lo pagado menos un 10% de gastos administrativos. Entre 30 y 15 días antes de la salida, devolvemos el 50%. Con menos de 15 días, la reserva no es reembolsable, salvo por fuerza mayor con certificado (enfermedad, fallecimiento de un familiar directo).\n\nCambios de fecha. Podés cambiar la fecha de salida una vez sin cargo, hasta 20 días antes del viaje. Los cambios posteriores tienen un costo de USD 50 por persona, sujeto a disponibilidad.\n\nFormas de pago. Para reservar se paga una seña del 30%. El saldo se paga hasta 15 días antes de la salida. Aceptamos transferencia bancaria y tarjeta de crédito en hasta 6 cuotas sin interés. No aceptamos pagos en efectivo en las oficinas.\n\nDocumentación. Para los viajes dentro de Argentina alcanza con el DNI vigente; no se acepta la constancia de DNI en trámite. Los menores de edad que viajan con uno solo de sus padres necesitan una autorización del otro progenitor firmada ante escribano.\n\nEquipaje. Todos los paquetes incluyen una valija de hasta 15 kg en bodega y un bolso de mano de hasta 8 kg. El equipo de esquí o snowboard se despacha aparte, con un recargo de USD 60 por tramo.\n\nAlimentación especial. Los hoteles de todos los paquetes ofrecen opciones sin TACC para personas celíacas y menús vegetarianos, siempre que se avise al momento de reservar. Sin aviso previo no podemos garantizarlo.\n\nMascotas. Los paquetes no incluyen el traslado de mascotas. Algunos hoteles de Mendoza y Salta aceptan perros chicos con un recargo; consultá con un vendedor antes de reservar.\n\nSeguro de viaje. Todos los paquetes incluyen una asistencia al viajero básica, con cobertura médica de hasta USD 10.000. Se puede ampliar a USD 40.000 por USD 35 por persona.\n\nHorario de atención. Las oficinas atienden de lunes a viernes de 9 a 18 y los sábados de 9 a 13. El asistente de WhatsApp responde las 24 horas, y los pedidos fuera de horario los retoma un vendedor el siguiente día hábil.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "dd1fe9eb-a0f2-4fab-b9c6-c36bc78336de",
+      "name": "Documento: preguntas frecuentes",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "memoryKey": {
+          "__rl": true,
+          "value": "faq_rumbo_sur",
+          "mode": "id"
+        },
+        "clearStore": true
+      },
+      "id": "9fda9230-a38d-445a-abb6-b8004ae8d41e",
+      "name": "Guardar en la base vectorial",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "model": "embeddinggemma:latest"
+      },
+      "id": "836bf785-ba0b-4d9f-b599-3778b679dc7f",
+      "name": "Embeddings (carga)",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOllama",
+      "typeVersion": 1,
+      "position": [
+        380,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsonMode": "expressionData",
+        "jsonData": "={{ $json.texto }}",
+        "textSplittingMode": "custom",
+        "options": {}
+      },
+      "id": "dd337526-23b5-47d9-9ed6-24735883e801",
+      "name": "Leer el texto",
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        600,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "chunkSize": 600,
+        "chunkOverlap": 100,
+        "options": {}
+      },
+      "id": "4aacd876-55ba-490d-9789-c2ea9dda0178",
+      "name": "Cortar en pedazos",
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        680,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "92386413-95d6-4e64-aee9-9197445e832a",
+      "name": "Llega una pregunta",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        600
+      ],
+      "webhookId": "50f3d97d-933b-462d-9ede-1ebc312f7442"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=Sos Ana, la asesora de la agencia de viajes \"Rumbo Sur\", y atendés por WhatsApp.\n\nPara cualquier pregunta sobre políticas de la agencia (cancelaciones, cambios, pagos, documentación, equipaje, comidas especiales, mascotas, seguro u horarios), usá SIEMPRE la herramienta de preguntas frecuentes antes de responder.\n\nRespondé solo con lo que diga la herramienta. Si la información no está, decí que no la tenés y que lo consultás con un vendedor. No inventes porcentajes, montos ni plazos.\n\nFormato de WhatsApp: 2 o 3 líneas, negritas con un solo asterisco (*así*), como mucho un emoji, y terminá con una pregunta o el próximo paso."
+        }
+      },
+      "id": "1dd5c0e3-0c88-44c8-ac5c-99b224395e68",
+      "name": "Ana con el manual",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        300,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3-flash-preview",
+        "options": {
+          "temperature": 0.2
+        }
+      },
+      "id": "302093bd-61fd-41b5-8d04-1b627b041398",
+      "name": "Cerebro: Gemini",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        300,
+        820
+      ]
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "id": "c04e7a74-713a-4b40-b8b8-e203a93e17cf",
+      "name": "Memoria",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        460,
+        820
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Busca en las preguntas frecuentes de la agencia: cancelaciones y devoluciones, cambios de fecha, formas de pago, documentación, equipaje, comidas especiales (celíacos, vegetarianos), mascotas, seguro de viaje y horarios de atención.",
+        "memoryKey": {
+          "__rl": true,
+          "value": "faq_rumbo_sur",
+          "mode": "id"
+        },
+        "topK": 3
+      },
+      "id": "aebd9f19-959e-4f41-abc1-7957c8a213c5",
+      "name": "preguntas_frecuentes",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        640,
+        820
+      ]
+    },
+    {
+      "parameters": {
+        "model": "embeddinggemma:latest"
+      },
+      "id": "c39f6512-4ad3-4a4d-8eb7-d22d24983940",
+      "name": "Embeddings (consulta)",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOllama",
+      "typeVersion": 1,
+      "position": [
+        640,
+        1020
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Flujo A · La carga (una vez, o cuando cambia el documento)\n\n*Documento* → *Leer el texto* → *Cortar en pedazos* (600 caracteres, 100 de solapamiento) → *Embeddings* → *Guardar en la base vectorial* (clave `faq_rumbo_sur`).\n\nApretá **Execute workflow** una vez. La base es **Simple Vector Store**: vive en la memoria de n8n y **se borra si n8n se reinicia** (para producción: Supabase, Pinecone o Qdrant).",
+        "height": 290,
+        "width": 900,
+        "color": 5
+      },
+      "id": "f4f3353b-376d-4910-9f21-6fd850b072d2",
+      "name": "Nota: carga",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -330
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Flujo B · La consulta (cada vez que alguien pregunta)\n\nLa pregunta entra por el chat → *Ana* decide usar la herramienta *preguntas_frecuentes* → la pregunta se pasa a números con **el mismo modelo de embeddings** → vuelven los 3 pedazos más parecidos → Ana responde con eso.\n\n**Antes de usarlo:** `ollama pull embeddinggemma` (el modelo de embeddings: entiende castellano), tu credencial de Ollama en los dos nodos de *Embeddings*, y la de Gemini en el cerebro.\n\nLos embeddings son locales y gratis; el cerebro es Gemini porque `llama3.2`, al probarlo, respondió mal aunque la búsqueda le trajo el pedazo correcto. Si querés todo local, cambiá el cerebro por *Ollama Chat Model* y compará.",
+        "height": 330,
+        "width": 620,
+        "color": 6
+      },
+      "id": "85d47525-0824-4319-81bf-b320f7f007ab",
+      "name": "Nota: consulta",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        900,
+        560
+      ]
+    }
+  ],
+  "connections": {
+    "Cargar el documento": {
+      "main": [
+        [
+          {
+            "node": "Documento: preguntas frecuentes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Documento: preguntas frecuentes": {
+      "main": [
+        [
+          {
+            "node": "Guardar en la base vectorial",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings (carga)": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Guardar en la base vectorial",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer el texto": {
+      "ai_document": [
+        [
+          {
+            "node": "Guardar en la base vectorial",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cortar en pedazos": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Leer el texto",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Llega una pregunta": {
+      "main": [
+        [
+          {
+            "node": "Ana con el manual",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cerebro: Gemini": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Ana con el manual",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memoria": {
+      "ai_memory": [
+        [
+          {
+            "node": "Ana con el manual",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "preguntas_frecuentes": {
+      "ai_tool": [
+        [
+          {
+            "node": "Ana con el manual",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings (consulta)": {
+      "ai_embedding": [
+        [
+          {
+            "node": "preguntas_frecuentes",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

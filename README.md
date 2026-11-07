@@ -20,8 +20,8 @@ Material de los docentes (Arturo Grottoli y Romina Diaz): filminas, guiones y ej
 | [5](Semana%205/README.md) | 5 | Workflows con aplicaciones y servicios externos (Google) | — (sin pre-entrega) | ✅ Filminas, lectura, guion, ejercicios y workflows |
 | [6](Semana%206/README.md) | 6 | Implementación del AI Agent | **Pre-Entrega 3:** Planificá y construí tu primer AI Agent | ✅ Filminas, lectura, guion, ejercicios y workflows |
 | [7](Semana%207/README.md) | 7 | IA local con Ollama | — (sin pre-entrega) | ✅ Filminas, lectura, guion, ejercicios y workflows |
-| [8](Semana%208/README.md) | 8 | WhatsApp Business | **Pre-Entrega 4:** Ensamblaje del asistente de WhatsApp e IA | Pendiente |
-| [9](Semana%209/README.md) | 9 | Proyecto Final: despliegue de agente autónomo cognitivo | **Entrega Final:** asistente autónomo de WhatsApp desplegado | Pendiente |
+| [8](Semana%208/README.md) | 8 | WhatsApp Business | **Pre-Entrega 4:** Ensamblaje del asistente de WhatsApp e IA | ✅ Filminas, lectura, guion, ejercicios y workflows (última clase) |
+| [9](Semana%209/README.md) | 9 | Proyecto Final: despliegue de agente autónomo cognitivo | **Entrega Final:** asistente autónomo de WhatsApp desplegado | Sin clase: solo la entrega |
 
 Todas las entregas son sobre 100 pts y se aprueban con 70 (según `program-summary.pdf`).
 
@@ -30,8 +30,8 @@ Todas las entregas son sobre 100 pts y se aprueban con 70 (según `program-summa
 ## Estado y próximos pasos
 
 - [x] Estructura de 9 semanas creada. Las 16 clases del programa anterior se borraron (quedan en el historial de git).
-- [x] **Semanas 1 a 7** completas: filminas y lectura (provistas), guion de la clase y ejercicios (de la 2 en adelante, además, con workflows de n8n para importar).
-- [ ] **Semanas 8 y 9:** armar guion y ejercicios a medida que lleguen las filminas y el material de lectura de cada semana.
+- [x] **Semanas 1 a 8** completas: filminas y lectura (provistas), guion de la clase y ejercicios (de la 2 en adelante, además, con workflows de n8n para importar).
+- [x] **La Semana 8 es la última clase.** La Semana 9 no tiene clase: es la Entrega Final (la consigna está en `program-summary.pdf` y se presenta en la Semana 8, filminas 28 a 30).
 
 ## Material del programa anterior (a revisar)
 

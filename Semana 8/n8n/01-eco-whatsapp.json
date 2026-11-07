@@ -1,0 +1,132 @@
+{
+  "name": "S8 · 01 · Eco por WhatsApp",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "messages"
+        ],
+        "options": {
+          "messageStatusUpdates": []
+        }
+      },
+      "id": "d1cd4d3b-dc13-484a-ab13-6d1f51c7d05f",
+      "name": "WhatsApp Trigger",
+      "type": "n8n-nodes-base.whatsAppTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "7e6e8bf0-8053-40b7-b41d-99a5c3fd8c18"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "264873c0-f5db-4edf-852a-2cde98169713",
+              "name": "telefono",
+              "value": "={{ $json.messages?.[0]?.from }}",
+              "type": "string"
+            },
+            {
+              "id": "691607d8-40e4-4711-9f92-8c96475a1934",
+              "name": "nombre",
+              "value": "={{ $json.contacts?.[0]?.profile?.name }}",
+              "type": "string"
+            },
+            {
+              "id": "f3ed4499-047b-4171-b480-918342c00382",
+              "name": "tipo",
+              "value": "={{ $json.messages?.[0]?.type }}",
+              "type": "string"
+            },
+            {
+              "id": "0f45f006-6b64-409d-b0b5-0a7ea5b6aae7",
+              "name": "texto",
+              "value": "={{ $json.messages?.[0]?.text?.body }}",
+              "type": "string"
+            },
+            {
+              "id": "4f91a221-c982-448f-80a5-966a21da7b83",
+              "name": "phoneNumberId",
+              "value": "={{ $json.metadata?.phone_number_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a514ab1d-5927-4d8b-b80c-ebd5b0a215f2",
+      "name": "Datos del mensaje",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "={{ $('Datos del mensaje').item.json.phoneNumberId }}",
+        "recipientPhoneNumber": "={{ $('Datos del mensaje').item.json.telefono }}",
+        "textBody": "=Hola {{ $json.nombre }}, recibí tu mensaje: \"{{ $json.texto }}\"",
+        "additionalFields": {}
+      },
+      "id": "9ad16de6-cb7b-425d-9a55-7325a88b80e3",
+      "name": "Responder por WhatsApp",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Paso 1: el canal (eco)\n\nEl flujo más chico posible: lo que entra por WhatsApp, vuelve.\n\n- **WhatsApp Trigger:** escucha los mensajes de tu app de Meta. Credencial *WhatsApp OAuth API* (App ID y App Secret). En *Options* → *Receive Message Status Updates* no hay nada elegido: así los avisos de \"entregado\" y \"leído\" no disparan el flujo.\n- **Datos del mensaje:** saca del paquete de Meta el teléfono (`from`), el nombre, el tipo y el texto (`text.body`).\n- **Responder por WhatsApp:** operación *Send*, credencial *WhatsApp API* (token y Business Account ID).\n\nSi el eco funciona, el tubo está conectado. Recién ahí se suma la IA.",
+        "height": 300,
+        "width": 720,
+        "color": 4
+      },
+      "id": "ebac980e-f836-4303-bf51-b934926a6d05",
+      "name": "Nota: el eco",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -330
+      ]
+    }
+  ],
+  "connections": {
+    "WhatsApp Trigger": {
+      "main": [
+        [
+          {
+            "node": "Datos del mensaje",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Datos del mensaje": {
+      "main": [
+        [
+          {
+            "node": "Responder por WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

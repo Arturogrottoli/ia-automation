@@ -2,8 +2,9 @@
 
 Fuente: `program-summary.pdf` (Módulo 9).
 
-> **Pendiente de armar.** Cuando estén las filminas y el material de lectura de esta semana, se suman
-> acá el guion de la clase (2 horas) y los ejercicios, igual que en la Semana 1.
+> **Esta semana no hay clase.** La Semana 8 fue la última: ahí se presenta la Entrega Final (filminas 28 a 30,
+> con los requisitos mínimos en el guion) y cómo pasar el asistente al WhatsApp de verdad (Ejercicio 5 de la
+> Semana 8).
 
 ## Unidades del módulo
 
