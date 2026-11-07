@@ -1,0 +1,125 @@
+{
+  "name": "01 · Hola mundo: n8n + Ollama",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "782f1102-5c22-4c90-b6dd-3d2af578c112",
+      "name": "Arrancar a mano",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "78c635da-ab9c-4cce-800b-e75aec59a31b",
+              "name": "pregunta",
+              "value": "Sos la asesora de una agencia de viajes. En 3 líneas, recomendale a un cliente qué llevar para ir a Bariloche en invierno.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c4ece1c9-c696-414c-ad99-a0c9637241fa",
+      "name": "La pregunta",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.pregunta }}",
+        "batching": {}
+      },
+      "id": "cb1847e1-482d-4059-89d9-759ee5866d07",
+      "name": "Preguntarle al modelo local",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        460,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "model": "llama3.2:latest",
+        "options": {
+          "temperature": 0.3
+        }
+      },
+      "id": "1af403f7-4660-44fe-a2c1-605d771a6809",
+      "name": "Cerebro local: Ollama",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        460,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Hola mundo con IA local\n\nLa misma Basic LLM Chain de la Semana 6, pero el cerebro es **Ollama**, corriendo en tu computadora.\n\n**Antes de usarlo**, en *Cerebro local: Ollama* creá la credencial **Ollama** con la *Base URL*:\n- n8n en Docker: `http://host.docker.internal:11434`\n- n8n instalado sin Docker: `http://localhost:11434`\n\nY elegí el modelo que descargaste (`llama3.2:latest` o `llama3.2:1b`).\n\nLa primera ejecución tarda: Ollama tiene que cargar el modelo en memoria. La segunda es mucho más rápida.",
+        "height": 360,
+        "width": 760,
+        "color": 4
+      },
+      "id": "66841e53-6e5d-47ac-9308-8377974bde51",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -400
+      ]
+    }
+  ],
+  "connections": {
+    "Arrancar a mano": {
+      "main": [
+        [
+          {
+            "node": "La pregunta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "La pregunta": {
+      "main": [
+        [
+          {
+            "node": "Preguntarle al modelo local",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cerebro local: Ollama": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Preguntarle al modelo local",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

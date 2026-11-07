@@ -1,0 +1,182 @@
+{
+  "name": "03 · Privado: clasificar quejas con datos de tarjeta",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "8e350090-ccbb-40f3-8575-f90cac7e68a7",
+      "name": "Arrancar a mano",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"quejas\": [\n    {\n      \"cliente\": \"Marta Suárez\",\n      \"queja\": \"Me cobraron dos veces el mismo pasaje en la tarjeta 4517 6601 2345 9087. Necesito que me devuelvan uno de los cobros ya.\"\n    },\n    {\n      \"cliente\": \"Jorge Benítez\",\n      \"queja\": \"Aparece una compra en Miami que yo no hice, con mi tarjeta 5299 1120 8834 0012. ¡Yo nunca viajé a Miami!\"\n    },\n    {\n      \"cliente\": \"Lucía Fernández\",\n      \"queja\": \"Llamé tres veces al número de atención y nadie me atendió. Quiero cambiar la fecha de mi viaje a Mendoza.\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "ca6c5e6a-2994-4979-a270-082347556b76",
+      "name": "Quejas de prueba",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "quejas",
+        "options": {}
+      },
+      "id": "3fb24646-df89-4a21-b975-f00adb9c66d4",
+      "name": "Una por una",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Sos un asistente interno de una agencia de viajes. Leé esta queja de un cliente y respondé SOLO con dos líneas, sin nada más:\nCategoría: (una sola palabra: Fraude, Cobro o Atención)\nResumen: (una oración corta)\n\nRegla: en el resumen NUNCA escribas números de tarjeta.\n\nQueja: {{ $json.queja }}",
+        "batching": {}
+      },
+      "id": "a7a4f105-1cec-47e0-8df2-39615485467e",
+      "name": "Clasificar y resumir (local)",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        660,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "model": "llama3.2:latest",
+        "options": {
+          "temperature": 0.1
+        }
+      },
+      "id": "f440de99-81ae-4db1-84a9-ed7d0084501a",
+      "name": "Cerebro local: Ollama",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        660,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bf4c55c7-d8da-4792-ac12-6f173fd50c6b",
+              "name": "cliente",
+              "value": "={{ $('Una por una').item.json.cliente }}",
+              "type": "string"
+            },
+            {
+              "id": "18713b6c-7eb3-4f81-b653-e2d40e89e55e",
+              "name": "clasificacion",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1dd4ea88-e0d2-46fd-bf24-5bde32cd757d",
+      "name": "Para el equipo",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        960,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Quejas con datos sensibles, sin salir de tu máquina\n\nTres quejas de clientes; dos traen el **número de tarjeta**. El modelo local las clasifica (Fraude, Cobro o Atención) y las resume.\n\nNingún dato sale de tu computadora: Ollama corre acá. Es el caso del banco de la filmina 12.\n\nMirá la salida: ¿respetó la regla de no repetir el número de tarjeta? Un modelo chico a veces no: por eso, con datos sensibles, **además** conviene taparlos antes (Ejercicio 6).",
+        "height": 340,
+        "width": 820,
+        "color": 4
+      },
+      "id": "23d298ed-0b93-4247-a36d-f3145f234cc7",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -380
+      ]
+    }
+  ],
+  "connections": {
+    "Arrancar a mano": {
+      "main": [
+        [
+          {
+            "node": "Quejas de prueba",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Quejas de prueba": {
+      "main": [
+        [
+          {
+            "node": "Una por una",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Una por una": {
+      "main": [
+        [
+          {
+            "node": "Clasificar y resumir (local)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cerebro local: Ollama": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Clasificar y resumir (local)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clasificar y resumir (local)": {
+      "main": [
+        [
+          {
+            "node": "Para el equipo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

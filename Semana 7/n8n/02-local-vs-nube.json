@@ -1,0 +1,379 @@
+{
+  "name": "02 · Comparar: el mismo prompt, local y en la nube",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "63c6c918-6f84-4110-9562-bbf02518e5b3",
+      "name": "Arrancar a mano",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -260,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fa7803a8-d211-44e0-865b-76b89d0af784",
+              "name": "prompt",
+              "value": "Un cliente escribe: \"Hola, somos 2 adultos y un nene de 8 años. Queremos ir 5 días a Salta en julio, ¿qué nos recomendás?\". Respondé como asesora de una agencia de viajes argentina, en español rioplatense, en no más de 5 líneas.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ed8ca7fb-77fd-44a3-82a1-39654f08add4",
+      "name": "El mismo prompt",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -40,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "29b6065a-fc30-409d-9631-c6ef8b34ec8a",
+              "name": "inicio",
+              "value": "={{ $now.toMillis() }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {},
+        "includeOtherFields": true
+      },
+      "id": "0e2fb19c-a93b-475b-83b0-490751800391",
+      "name": "Marcar inicio (local)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.prompt }}",
+        "batching": {}
+      },
+      "id": "fc360598-a541-4d6b-a2cc-923027780c61",
+      "name": "Responder (local)",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "076b436a-ce1a-41b4-a016-ad02b41f62c2",
+              "name": "modelo",
+              "value": "Local · llama3.2 (Ollama)",
+              "type": "string"
+            },
+            {
+              "id": "6c023c8e-9f13-4c1e-aef5-cd55aaaee667",
+              "name": "segundos",
+              "value": "={{ Math.round(($now.toMillis() - $('Marcar inicio (local)').item.json.inicio) / 100) / 10 }}",
+              "type": "number"
+            },
+            {
+              "id": "e2ca54af-8ae0-4744-bef5-15ae249f6fdc",
+              "name": "costo",
+              "value": "$ 0 por pedido: solo la luz y la máquina",
+              "type": "string"
+            },
+            {
+              "id": "db258d32-6b29-46bc-b855-1cde5aca5e16",
+              "name": "respuesta",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5e859670-5c62-41b6-a16f-59f6454fe5a7",
+      "name": "Resultado (local)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        760,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ca610334-86c9-4ebc-8e8d-54ee4cff7f30",
+              "name": "inicio",
+              "value": "={{ $now.toMillis() }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {},
+        "includeOtherFields": true
+      },
+      "id": "552d96bb-bf78-4ec8-9942-031f88e6560d",
+      "name": "Marcar inicio (nube)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.prompt }}",
+        "batching": {}
+      },
+      "id": "5910589e-dbaa-40dc-bbf7-45c35a7dc73c",
+      "name": "Responder (nube)",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        480,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cc0887bc-eb4c-4ec4-a901-557dd3c4825e",
+              "name": "modelo",
+              "value": "Nube · Gemini",
+              "type": "string"
+            },
+            {
+              "id": "aa383dea-4850-42fa-b570-4c77e8f7bd54",
+              "name": "segundos",
+              "value": "={{ Math.round(($now.toMillis() - $('Marcar inicio (nube)').item.json.inicio) / 100) / 10 }}",
+              "type": "number"
+            },
+            {
+              "id": "7c656732-1b9c-4939-97a7-b558275388df",
+              "name": "costo",
+              "value": "Plan gratis con límite de pedidos; pago, se cobra por token",
+              "type": "string"
+            },
+            {
+              "id": "e24f92c9-2331-4624-a87a-37a5c9413cb0",
+              "name": "respuesta",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b3e83c9e-d6ca-40cf-821e-36c0b2a0c9b5",
+      "name": "Resultado (nube)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        760,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "model": "llama3.2:latest",
+        "options": {
+          "temperature": 0.3
+        }
+      },
+      "id": "647a2694-b943-42f3-a0b6-c4fe3cd2a58b",
+      "name": "Cerebro local: Ollama",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        480,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3-flash-preview",
+        "options": {
+          "temperature": 0.3
+        }
+      },
+      "id": "e1f343df-2cf6-4e71-ad0d-adf32d200165",
+      "name": "Cerebro nube: Gemini",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        480,
+        420
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "aa0a22a7-c2e1-4c0b-8741-92179baa08a0",
+      "name": "Juntar las dos",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1000,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## El mismo prompt, local y en la nube\n\nArriba, Ollama en tu máquina. Abajo, Gemini en la nube (la credencial de la Semana 2).\n\nAl final, **Juntar las dos** muestra para cada uno: la respuesta, cuántos **segundos** tardó y qué **cuesta**.\n\nEjecutalo **dos veces**: la primera, el local tarda más porque carga el modelo en memoria.\n\nDespués, decidí: para tu caso, ¿cuál conviene y por qué?",
+        "height": 320,
+        "width": 760,
+        "color": 4
+      },
+      "id": "df24d459-af97-4797-a356-cdba50e3b308",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -300,
+        -340
+      ]
+    }
+  ],
+  "connections": {
+    "Arrancar a mano": {
+      "main": [
+        [
+          {
+            "node": "El mismo prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "El mismo prompt": {
+      "main": [
+        [
+          {
+            "node": "Marcar inicio (local)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Marcar inicio (nube)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Marcar inicio (local)": {
+      "main": [
+        [
+          {
+            "node": "Responder (local)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Responder (local)": {
+      "main": [
+        [
+          {
+            "node": "Resultado (local)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Marcar inicio (nube)": {
+      "main": [
+        [
+          {
+            "node": "Responder (nube)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Responder (nube)": {
+      "main": [
+        [
+          {
+            "node": "Resultado (nube)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cerebro local: Ollama": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Responder (local)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cerebro nube: Gemini": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Responder (nube)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resultado (local)": {
+      "main": [
+        [
+          {
+            "node": "Juntar las dos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resultado (nube)": {
+      "main": [
+        [
+          {
+            "node": "Juntar las dos",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}
