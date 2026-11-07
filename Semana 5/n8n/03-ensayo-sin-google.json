@@ -1,0 +1,333 @@
+{
+  "name": "03 · Ensayo sin Google: la misma lógica, sin credenciales",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "764df31f-ab3f-4091-93a0-928d6a494cbd",
+      "name": "Arrancar a mano",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"filas\": [\n    {\n      \"row_number\": 2,\n      \"ID\": 1,\n      \"Nombre\": \"\",\n      \"Edad\": \"\",\n      \"Cargo\": \"\",\n      \"Carpeta\": \"\"\n    },\n    {\n      \"row_number\": 3,\n      \"ID\": 2,\n      \"Nombre\": \"Michael Williams\",\n      \"Edad\": 36,\n      \"Cargo\": \"Support Specialist\",\n      \"Carpeta\": \"https://drive.google.com/drive/folders/ya-creada\"\n    },\n    {\n      \"row_number\": 4,\n      \"ID\": 3,\n      \"Nombre\": \"\",\n      \"Edad\": \"\",\n      \"Cargo\": \"\",\n      \"Carpeta\": \"\"\n    },\n    {\n      \"row_number\": 5,\n      \"ID\": 4,\n      \"Nombre\": \"\",\n      \"Edad\": \"\",\n      \"Cargo\": \"\",\n      \"Carpeta\": \"\"\n    },\n    {\n      \"row_number\": 6,\n      \"ID\": 5,\n      \"Nombre\": \"\",\n      \"Edad\": \"\",\n      \"Cargo\": \"\",\n      \"Carpeta\": \"\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "6e924161-98f1-40ab-90c7-b4d7072b3293",
+      "name": "Planilla de mentira",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "filas",
+        "options": {}
+      },
+      "id": "f22f4af3-8d43-45b9-b468-d3aa4a165140",
+      "name": "Leer planilla",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f1a67e96-d56e-4751-af53-699847a4b7ae",
+              "leftValue": "={{ $json.Nombre }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "afea4fc9-9a09-4ea4-9d8e-b6da2d97f14f",
+      "name": "Solo filas incompletas",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        660,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://dummyjson.com/users/{{ $json.ID }}",
+        "options": {},
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "select",
+              "value": "firstName,lastName,age,company"
+            }
+          ]
+        }
+      },
+      "id": "495d4b31-6c93-469d-ae6f-e8d53f73e9a9",
+      "name": "Buscar datos del empleado",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        880,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5ebe83a7-8280-4bfc-ae33-c16e6c0fca91",
+              "name": "id",
+              "value": "={{ 'carpeta-de-prueba-' + $('Solo filas incompletas').item.json.ID }}",
+              "type": "string"
+            },
+            {
+              "id": "3e48c2da-5be5-4608-b93f-b5f2a800de92",
+              "name": "name",
+              "value": "={{ $('Solo filas incompletas').item.json.ID }} - {{ $json.firstName }} {{ $json.lastName }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3402b938-9857-498d-bc17-f38eed6b0dd2",
+      "name": "Crear carpeta del empleado",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1100,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "361c1d95-870e-477c-9aff-2e3da32f930d",
+              "name": "ID",
+              "value": "={{ $('Solo filas incompletas').item.json.ID }}",
+              "type": "number"
+            },
+            {
+              "id": "dd79b584-40e7-4c74-ad49-ff898addb841",
+              "name": "Nombre",
+              "value": "={{ $('Buscar datos del empleado').item.json.firstName }} {{ $('Buscar datos del empleado').item.json.lastName }}",
+              "type": "string"
+            },
+            {
+              "id": "e6b387a9-657a-4caa-b225-73798f507120",
+              "name": "Edad",
+              "value": "={{ $('Buscar datos del empleado').item.json.age }}",
+              "type": "number"
+            },
+            {
+              "id": "1d8f2c7d-0c0a-4bf8-b753-943a5440c858",
+              "name": "Cargo",
+              "value": "={{ $('Buscar datos del empleado').item.json.company.title }}",
+              "type": "string"
+            },
+            {
+              "id": "b7286bdd-97a5-42ba-aaef-e53220a26ee3",
+              "name": "Carpeta",
+              "value": "=https://drive.google.com/drive/folders/{{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "449d1ab1-6c6e-499b-9890-7b6b2b01bf81",
+      "name": "Completar la fila",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1320,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "filas",
+        "options": {}
+      },
+      "id": "f481555b-a6d5-4bbe-81b3-b780e991fe50",
+      "name": "Juntar en un solo item",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1540,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "847e3fb5-ef46-4449-bdb8-edeacc26f3cf",
+              "name": "asunto",
+              "value": "=Planilla completa: {{ $json.filas.length }} empleados nuevos",
+              "type": "string"
+            },
+            {
+              "id": "629f5a60-566f-4981-a878-9330d35362c1",
+              "name": "mensaje",
+              "value": "=Hola:\n\nEl flujo terminó bien. Se completaron {{ $json.filas.length }} filas de la planilla:\n\n{{ $json.filas.map(f => '- ' + f.ID + ' · ' + f.Nombre + ' (' + f.Cargo + ')').join('\\n') }}\n\nCada uno tiene su carpeta en Drive (el link quedó en la columna Carpeta).\n\nEnviado por n8n.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e37e0687-0cac-4d47-9b1b-c2155d7c9195",
+      "name": "Avisar que terminó",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1760,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Ensayo sin Google\n\nEl mismo flujo que el 02, pero los nodos de Google están reemplazados por **Edit Fields** que hacen de cuenta. Sirve para entender la lógica (Filter, HTTP Request, Aggregate) mientras las credenciales de Google no estén listas.\n\nEjecutalo y mirá: entran **5** filas, el Filter deja pasar **4**, y al final sale **1** correo.",
+        "height": 280,
+        "width": 760,
+        "color": 6
+      },
+      "id": "3ccb1f40-8aeb-4614-974d-e96fa857032a",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -340
+      ]
+    }
+  ],
+  "connections": {
+    "Arrancar a mano": {
+      "main": [
+        [
+          {
+            "node": "Planilla de mentira",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Planilla de mentira": {
+      "main": [
+        [
+          {
+            "node": "Leer planilla",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer planilla": {
+      "main": [
+        [
+          {
+            "node": "Solo filas incompletas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Solo filas incompletas": {
+      "main": [
+        [
+          {
+            "node": "Buscar datos del empleado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar datos del empleado": {
+      "main": [
+        [
+          {
+            "node": "Crear carpeta del empleado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear carpeta del empleado": {
+      "main": [
+        [
+          {
+            "node": "Completar la fila",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Completar la fila": {
+      "main": [
+        [
+          {
+            "node": "Juntar en un solo item",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Juntar en un solo item": {
+      "main": [
+        [
+          {
+            "node": "Avisar que terminó",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

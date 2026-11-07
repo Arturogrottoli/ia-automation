@@ -17,8 +17,8 @@ Material de los docentes (Arturo Grottoli y Romina Diaz): filminas, guiones y ej
 | [2](Semana%202/README.md) | 2 | Introducción a las automatizaciones y n8n | **Pre-Entrega 1:** De la idea al prompt | ✅ Filminas, lectura, guion y ejercicios |
 | [3](Semana%203/README.md) | 3 | Conceptos básicos: anatomía de un workflow y nodos de n8n | — (sin pre-entrega) | ✅ Filminas, lectura, guion, ejercicios y workflows |
 | [4](Semana%204/README.md) | 4 | Conceptos técnicos: APIs, HTTP, credenciales | **Pre-Entrega 2:** Infraestructura de integración técnica | ✅ Filminas, lectura, guion, ejercicios y workflows |
-| [5](Semana%205/README.md) | 5 | Workflows con aplicaciones y servicios externos (Google) | — | Pendiente |
-| [6](Semana%206/README.md) | 6 | Implementación del AI Agent | **Pre-Entrega 3:** Planificá y construí tu primer AI Agent | Pendiente |
+| [5](Semana%205/README.md) | 5 | Workflows con aplicaciones y servicios externos (Google) | — (sin pre-entrega) | ✅ Filminas, lectura, guion, ejercicios y workflows |
+| [6](Semana%206/README.md) | 6 | Implementación del AI Agent | **Pre-Entrega 3:** Planificá y construí tu primer AI Agent | ✅ Filminas, lectura, guion, ejercicios y workflows |
 | [7](Semana%207/README.md) | 7 | IA local con Ollama | — | Pendiente |
 | [8](Semana%208/README.md) | 8 | WhatsApp Business | **Pre-Entrega 4:** Ensamblaje del asistente de WhatsApp e IA | Pendiente |
 | [9](Semana%209/README.md) | 9 | Proyecto Final: despliegue de agente autónomo cognitivo | **Entrega Final:** asistente autónomo de WhatsApp desplegado | Pendiente |
@@ -30,8 +30,8 @@ Todas las entregas son sobre 100 pts y se aprueban con 70 (según `program-summa
 ## Estado y próximos pasos
 
 - [x] Estructura de 9 semanas creada. Las 16 clases del programa anterior se borraron (quedan en el historial de git).
-- [x] **Semanas 1 a 4** completas: filminas y lectura (provistas), guion de la clase y ejercicios (de la 2 en adelante, además, con workflows de n8n para importar).
-- [ ] **Semanas 5 a 9:** armar guion y ejercicios a medida que lleguen las filminas y el material de lectura de cada semana.
+- [x] **Semanas 1 a 6** completas: filminas y lectura (provistas), guion de la clase y ejercicios (de la 2 en adelante, además, con workflows de n8n para importar).
+- [ ] **Semanas 7 a 9:** armar guion y ejercicios a medida que lleguen las filminas y el material de lectura de cada semana.
 
 ## Material del programa anterior (a revisar)
 

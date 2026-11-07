@@ -1,0 +1,344 @@
+{
+  "name": "02 · Planilla completa: Sheets, Drive y Gmail",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "4376481c-d5f9-4e60-b1b2-0972b514b0c3",
+      "name": "Arrancar a mano",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1"
+        },
+        "options": {}
+      },
+      "id": "5a69cd5b-93ab-4455-b883-b14a019453a0",
+      "name": "Leer planilla",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "5b372b94-81d8-47d6-a913-328ec9d6b8c6",
+              "leftValue": "={{ $json.Nombre }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "d947e1fb-4af7-433f-8dfe-9169248fd3bc",
+      "name": "Solo filas incompletas",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://dummyjson.com/users/{{ $json.ID }}",
+        "options": {},
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "select",
+              "value": "firstName,lastName,age,company"
+            }
+          ]
+        }
+      },
+      "id": "7bd316ed-2c0d-4f29-90c7-fcc2ddaaa307",
+      "name": "Buscar datos del empleado",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        660,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "name": "={{ $('Solo filas incompletas').item.json.ID }} - {{ $json.firstName }} {{ $json.lastName }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "id": "52e98e5e-0e1a-4f07-8691-dec966426517",
+      "name": "Crear carpeta del empleado",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        880,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $('Solo filas incompletas').item.json.ID }}",
+            "Nombre": "={{ $('Buscar datos del empleado').item.json.firstName }} {{ $('Buscar datos del empleado').item.json.lastName }}",
+            "Edad": "={{ $('Buscar datos del empleado').item.json.age }}",
+            "Cargo": "={{ $('Buscar datos del empleado').item.json.company.title }}",
+            "Carpeta": "=https://drive.google.com/drive/folders/{{ $json.id }}"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Nombre",
+              "displayName": "Nombre",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Edad",
+              "displayName": "Edad",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Cargo",
+              "displayName": "Cargo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Carpeta",
+              "displayName": "Carpeta",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "f7449cf7-9024-4625-a793-76428067706a",
+      "name": "Completar la fila",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1100,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "filas",
+        "options": {}
+      },
+      "id": "10eb4d71-3108-47c2-904f-d5db9df3e815",
+      "name": "Juntar en un solo item",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1320,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "",
+        "subject": "=Planilla completa: {{ $json.filas.length }} empleados nuevos",
+        "emailType": "text",
+        "message": "=Hola:\n\nEl flujo terminó bien. Se completaron {{ $json.filas.length }} filas de la planilla:\n\n{{ $json.filas.map(f => '- ' + f.ID + ' · ' + f.Nombre + ' (' + f.Cargo + ')').join('\\n') }}\n\nCada uno tiene su carpeta en Drive (el link quedó en la columna Carpeta).\n\nEnviado por n8n.",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "d8807785-4309-4dbe-8592-ce6fad268574",
+      "name": "Avisar que terminó",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1540,
+        0
+      ],
+      "webhookId": "a6970748-253c-46be-a4a3-a222a004d007"
+    },
+    {
+      "parameters": {
+        "content": "## El caso del módulo: completar la planilla\n\n1. **Leer planilla**: trae las filas del Google Sheet (columnas ID, Nombre, Edad, Cargo, Carpeta).\n2. **Solo filas incompletas**: deja pasar las que tienen el Nombre vacío. Es lo que evita duplicar si se ejecuta dos veces.\n3. **Buscar datos del empleado**: le pregunta a dummyjson.com por ese ID.\n4. **Crear carpeta del empleado**: una carpeta en Drive, adentro de la carpeta que elijas **por su ID**.\n5. **Completar la fila**: escribe Nombre, Edad, Cargo y el link de la carpeta en la fila de ese ID.\n6. **Juntar en un solo item**: para que salga **un** correo y no uno por fila.\n7. **Avisar que terminó**: el correo por Gmail.\n\n**Antes de ejecutar:** elegí tus credenciales de Google en los nodos 1, 4, 5 y 7, pegá el link de tu planilla en 1 y 5, el ID de tu carpeta en 4 y tu correo en 7.",
+        "height": 440,
+        "width": 1000,
+        "color": 4
+      },
+      "id": "39c8dc9b-3dbf-4231-bcb1-bffa539f2e19",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -500
+      ]
+    }
+  ],
+  "connections": {
+    "Arrancar a mano": {
+      "main": [
+        [
+          {
+            "node": "Leer planilla",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer planilla": {
+      "main": [
+        [
+          {
+            "node": "Solo filas incompletas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Solo filas incompletas": {
+      "main": [
+        [
+          {
+            "node": "Buscar datos del empleado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar datos del empleado": {
+      "main": [
+        [
+          {
+            "node": "Crear carpeta del empleado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear carpeta del empleado": {
+      "main": [
+        [
+          {
+            "node": "Completar la fila",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Completar la fila": {
+      "main": [
+        [
+          {
+            "node": "Juntar en un solo item",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Juntar en un solo item": {
+      "main": [
+        [
+          {
+            "node": "Avisar que terminó",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

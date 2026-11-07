@@ -1,0 +1,167 @@
+{
+  "name": "04 · Clínica de errores: tres flujos rotos",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "16219e83-52c1-4732-9ae5-98a4f766ce0a",
+      "name": "Arrancar a mano",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"filas\": [\n    {\n      \"ID\": 1,\n      \"Nombre\": \"\"\n    },\n    {\n      \"ID\": 4,\n      \"Nombre\": \"\"\n    },\n    {\n      \"ID\": 7,\n      \"Nombre\": \"\"\n    },\n    {\n      \"ID\": 250,\n      \"Nombre\": \"\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "18b93a5e-1d52-4071-860c-0d0c6f3601eb",
+      "name": "Planilla de mentira",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "filas",
+        "options": {}
+      },
+      "id": "f12a584f-34d0-4c68-ad34-97e3502449f6",
+      "name": "Leer planilla",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        440,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://dummyjson.com/users/{{ $json.id }}",
+        "options": {}
+      },
+      "id": "5d04030b-1f03-47b9-87d4-c125bbe2ae30",
+      "name": "Error A · Buscar empleado",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://dummyjson.com/users/{{ $json.ID }}",
+        "options": {}
+      },
+      "id": "09d0b24e-80b1-496f-80b4-8aee0e672455",
+      "name": "Error B · Buscar empleado",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6b2a53aa-46f1-47a2-a5fd-d31ab2b66b7a",
+              "name": "para",
+              "value": "vos@tuempresa.com",
+              "type": "string"
+            },
+            {
+              "id": "a7a86293-9793-41a5-a478-f3b670d9c262",
+              "name": "asunto",
+              "value": "Planilla completa",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "739adfde-c0f4-499b-aa37-54136d9267e7",
+      "name": "Error C · Mandar el correo",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        720,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Clínica de errores\n\nTres flujos rotos, tres errores distintos. Abrí **cada nodo de error por separado** → *Execute step*.\n\nPara cada uno: ¿qué dice el error (o la salida)? ¿cuál es la causa? ¿cómo lo arreglás?\n\nPista para el C: no da error. Contá cuántos items salen.",
+        "height": 280,
+        "width": 640,
+        "color": 3
+      },
+      "id": "1be2df58-e231-4f38-acb9-3e6852d0fe1d",
+      "name": "Nota: la clínica",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -340
+      ]
+    }
+  ],
+  "connections": {
+    "Arrancar a mano": {
+      "main": [
+        [
+          {
+            "node": "Planilla de mentira",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Planilla de mentira": {
+      "main": [
+        [
+          {
+            "node": "Leer planilla",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer planilla": {
+      "main": [
+        [
+          {
+            "node": "Error A · Buscar empleado",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Error B · Buscar empleado",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Error C · Mandar el correo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

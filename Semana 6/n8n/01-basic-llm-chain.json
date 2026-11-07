@@ -1,0 +1,125 @@
+{
+  "name": "01 · Basic LLM Chain: responde sin poder consultar",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "d9e5cf05-864e-42b5-96a9-b4ae082cadd4",
+      "name": "Arrancar a mano",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "46017c6b-3a2e-4c82-aceb-12367070f9fc",
+              "name": "consulta",
+              "value": "Hola! Quiero ir a Bariloche 5 días con mi pareja. ¿Qué paquetes tienen y cuánto sale en pesos?",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6df282d7-3910-403e-ad5c-d76dc046765a",
+      "name": "La consulta del cliente",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Sos la asesora de la agencia de viajes \"Rumbo Sur\". Respondé esta consulta de un cliente en español, en no más de 6 líneas:\n\n{{ $json.consulta }}",
+        "batching": {}
+      },
+      "id": "29494d54-53f0-495b-b5dd-c171512b0642",
+      "name": "Responder con una chain",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        460,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3-flash-preview",
+        "options": {
+          "temperature": 0.2
+        }
+      },
+      "id": "848251d4-803a-4eff-abae-1aace1531330",
+      "name": "Modelo: Gemini",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        460,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Basic LLM Chain: el camino fijo\n\nUn prompt → el modelo → un texto. Siempre el mismo camino.\n\nEjecutalo y leé la respuesta: ¿de dónde sacó los paquetes y el precio del dólar? **No tiene forma de saberlos**: no puede consultar nada. O los inventa, o te dice que no sabe.\n\nCompará con el flujo 02, el agente, que sí puede consultar.",
+        "height": 300,
+        "width": 720,
+        "color": 3
+      },
+      "id": "a9f5c58f-0676-4fba-9245-8b0053bfe43e",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -360
+      ]
+    }
+  ],
+  "connections": {
+    "Arrancar a mano": {
+      "main": [
+        [
+          {
+            "node": "La consulta del cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "La consulta del cliente": {
+      "main": [
+        [
+          {
+            "node": "Responder con una chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Modelo: Gemini": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Responder con una chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

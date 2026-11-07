@@ -1,0 +1,212 @@
+{
+  "name": "03 · Desafío: un agente mal descrito",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "e7bca569-0850-4f64-be91-769c887994b5",
+      "name": "Mensaje del chat",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "31a883cf-c2c0-457a-af5e-7c845067195c"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Sos un asistente.",
+          "maxIterations": 10
+        }
+      },
+      "id": "3e9ce635-06c0-4084-bdc4-b08da00f9812",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        420,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3-flash-preview",
+        "options": {
+          "temperature": 0.2
+        }
+      },
+      "id": "74af82dd-020c-46a8-9a27-439a7582d586",
+      "name": "Cerebro: Gemini",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        160,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "id": "cd3afdb3-6211-47d5-8e28-bf3f15b52eb2",
+      "name": "Diario: memoria simple",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        360,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Herramienta.",
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Destino",
+              "lookupValue": "={{ $fromAI('destino', 'valor', 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2f9dd423-cb2f-42d8-94e6-840c50c23c08",
+      "name": "tool1",
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        560,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "Hace un pedido.",
+        "url": "=https://dolarapi.com/v1/dolares/{{ $fromAI('tipo', 'valor', 'string') }}",
+        "options": {}
+      },
+      "id": "a2d4c6c7-5f71-47c3-bd18-fcaf32953261",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        760,
+        260
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "60a40357-c852-4f82-8586-2b0d9cff53e5",
+      "name": "Calculator",
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [
+        960,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Un agente mal descrito\n\nEs el mismo agente que el 02, con las mismas tres herramientas. Pero las herramientas se llaman `tool1`, `HTTP Request` y `Calculator`, sus descripciones no dicen nada, y el system prompt es una línea.\n\nProbalo con las mismas preguntas que el 02 y compará. Después arreglalo: nombres, descripciones y system prompt.",
+        "height": 340,
+        "width": 820,
+        "color": 3
+      },
+      "id": "82c41401-e821-43b5-a5aa-659563e48fc8",
+      "name": "Nota: el desafío",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -400
+      ]
+    }
+  ],
+  "connections": {
+    "Mensaje del chat": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cerebro: Gemini": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Diario: memoria simple": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "tool1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculator": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

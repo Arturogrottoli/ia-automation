@@ -1,0 +1,141 @@
+{
+  "name": "01 · Mapeo relámpago: del formulario al nodo siguiente",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "87320588-eb33-419a-a472-351a7ff5dd0b",
+      "name": "Arrancar a mano",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"respuestas\": [\n    {\n      \"Nombre completo\": \"Lucía Fernández\",\n      \"Email\": \"  Lucia.Fernandez@Gmail.com \",\n      \"Teléfono\": \"11 5555-1234\"\n    },\n    {\n      \"Nombre completo\": \"María Laura Gómez\",\n      \"Email\": \"mlgomez@hotmail.com\",\n      \"Teléfono\": \"(0351) 15-444-9876\"\n    },\n    {\n      \"Nombre completo\": \"Juan Martín del Potro\",\n      \"Email\": \"JMDP@yahoo.com.ar\",\n      \"Teléfono\": \"+54 9 223 600-1122\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "73bb0aab-037d-499b-8c7a-fb2a8ce2f0bd",
+      "name": "Lo que manda el formulario",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "respuestas",
+        "options": {}
+      },
+      "id": "6b1766ef-ebd9-4277-b88a-5bf870c7c37a",
+      "name": "Una respuesta por item",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "200f6323-205a-4af3-8bbf-294e549f0c4f",
+              "name": "nombre",
+              "value": "={{ $json['Nombre completo'].split(' ').slice(0, -1).join(' ') }}",
+              "type": "string"
+            },
+            {
+              "id": "b8516eaf-87d6-4791-af90-453e67dc3695",
+              "name": "apellido",
+              "value": "={{ $json['Nombre completo'].split(' ').pop() }}",
+              "type": "string"
+            },
+            {
+              "id": "0837ee0b-bedc-4de5-9049-6f0f26e67e07",
+              "name": "email",
+              "value": "={{ $json.Email.trim().toLowerCase() }}",
+              "type": "string"
+            },
+            {
+              "id": "a31004f8-c2ae-4367-9557-97e504d1c496",
+              "name": "telefono",
+              "value": "={{ $json['Teléfono'].replace(/\\D/g, '') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f39347b4-8bfc-49b4-af9d-2a0b0d4b2648",
+      "name": "Lo que pide el nodo siguiente",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        660,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Mapeo relámpago\n\nEl formulario manda **Nombre completo** en un solo campo. El nodo siguiente pide **nombre** y **apellido** por separado, el **email** limpio y el **teléfono** solo con números.\n\nAbrí **Lo que pide el nodo siguiente** y mirá la salida de las tres personas. ¿Con cuál se equivoca? ¿Cómo lo resolverías?",
+        "height": 280,
+        "width": 700,
+        "color": 4
+      },
+      "id": "8219d96b-5744-42f4-9ef3-59f580dc738b",
+      "name": "Nota: el desafío",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -340
+      ]
+    }
+  ],
+  "connections": {
+    "Arrancar a mano": {
+      "main": [
+        [
+          {
+            "node": "Lo que manda el formulario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lo que manda el formulario": {
+      "main": [
+        [
+          {
+            "node": "Una respuesta por item",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Una respuesta por item": {
+      "main": [
+        [
+          {
+            "node": "Lo que pide el nodo siguiente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}
