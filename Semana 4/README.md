@@ -34,6 +34,7 @@ Fuente: `program-summary.pdf` (Módulo 4). **Una clase de 2 horas.**
 
 ## A tener en cuenta
 
+- **En la teoría hay bloques "En n8n, paso a paso"**: al presentar cada nodo, los clics para agregarlo y configurarlo con un ejemplo de la clase. Están pensados para mostrarlos en tu n8n en un minuto mientras lo contás. Si vas corto de tiempo, pegá el bloque en el chat y seguí: en la práctica lo hacen completo.
 - **El número de la pre-entrega no coincide otra vez:** la filmina 32 dice "pre-entrega 4"; el
   `program-summary.pdf` y el material de lectura dicen **"Preentrega 2: Infraestructura de integración técnica"**,
   que es la que corresponde al Módulo 4. En el guion se dice "Pre-entrega 2".
@@ -436,6 +437,42 @@ EJERCICIO 2 · ¿Qué método? Respondé con el número y el método (GET, POST,
 Respuestas: 1 GET, 2 POST, 3 PATCH, 4 DELETE, 5 GET, 6 POST, 7 PUT. La que más se discute es la 3 (PATCH): si
 alguien dice PUT, no está mal del todo, pero PUT reemplaza la ficha entera.
 
+**En n8n, paso a paso** (lo mostrás en tu n8n mientras lo contás, 1 min):
+
+```text
+EN N8N · Elegir el método y mandar datos con POST
+1. + → buscá "http" → HTTP Request
+2. Method, el primer desplegable: GET, POST, PUT, PATCH, DELETE… (viene en GET)
+3. Method: POST · URL: https://httpbin.org/post
+4. Activá Send Body → Body Content Type: JSON → Specify Body: Using Fields Below
+   Agregá dos (Name → Value): nombre → Lucía Fernández · destino → Mendoza
+5. Execute step
+```
+
+Lo que se ve: httpbin.org es una API de prueba que devuelve lo que le mandaste. En la salida, dentro de
+`json`, aparece `{"nombre": "Lucía Fernández", "destino": "Mendoza"}`: los datos viajaron en el body, como
+pide un POST.
+
+**Ejemplo: el método equivocado**
+
+❌ Mal: pedirle el dólar con POST.
+
+```text
+Method: POST · URL: https://dolarapi.com/v1/dolares/oficial
+→ el nodo se pone rojo: 405 ("método no permitido")
+```
+
+✅ Bien: para leer, GET.
+
+```text
+Method: GET · URL: https://dolarapi.com/v1/dolares/oficial
+→ 200 y {"compra": 1520, "venta": 1570, ...}
+```
+
+Por qué: la dirección está bien, pero esa API solo acepta que le pidan, no que le manden. El **405** (*Method Not
+Allowed*) es la forma de decir "existe, pero no para eso". Si ven un 405, lo primero que se revisa es el
+desplegable *Method*. (Probado en n8n 2.46.)
+
 #### Filmina 15 · Los status codes: el número que te dice qué pasó (4 min)
 
 <p style="color:#1a7f37">Cada respuesta trae un número de tres cifras. Los 200 son éxito. Los 300, redirección, poco frecuente. Los 400 son error del cliente: pedimos algo mal. Los 500, error del servidor. La regla: si empieza con 4, revisá tu pedido; si empieza con 5, no es tu culpa.</p>
@@ -475,6 +512,23 @@ Para explicar:
  Reviso la clave, y nada más."
 ```
 
+**En n8n, paso a paso** (lo mostrás en tu n8n mientras lo contás, 1 min):
+
+```text
+EN N8N · Ver el status code en n8n
+1. HTTP Request → URL: https://httpbin.org/status/404 → Execute step
+2. El nodo se pone rojo. En el error, buscá el número: 404
+3. Para ver el código también cuando sale bien: Add option → Response
+   → activá Include Response Headers and Status → aparece "statusCode": 200
+4. Para que un error no corte el flujo: pestaña Settings del nodo → On Error → Continue
+   (el error sale como dato y el flujo sigue; útil para un IF "si falló, avisame")
+```
+
+Lo que se ve: con un 400 o un 500, el HTTP Request se pone rojo y el flujo se corta ahí. El número es lo
+primero que hay que leer: dice si el problema es nuestro (4) o del otro sistema (5). Para que httpbin.org devuelva
+otro código, se cambia el número del final de la URL (`/status/401`, `/status/500`…): es lo que usa el detective
+de errores de la práctica.
+
 #### Filmina 16 · El cliente pide, el servidor responde (1 min)
 
 <p style="color:#1a7f37">El cliente pide, el servidor responde. Todo lo demás es detalle. En los headers va el pasaporte; en el body, la maleta.</p>
@@ -511,6 +565,26 @@ Para explicar:
 | 404 | "Eso no existe." | Revisás la URL o el dato que buscás. |
 | 429 | "Pará un poco." | Espaciás los pedidos. |
 | 500 | "Se me rompió algo." | Reintentás más tarde; no es tuyo. |
+
+**Ejemplo: leer el error antes de culpar a la API**
+
+❌ Mal: ver el nodo rojo y concluir "NewsAPI está caída".
+
+```text
+401 - {"status":"error","code":"apiKeyInvalid",
+       "message":"Your API key is invalid or incorrect. ..."}
+→ "Debe estar caída, pruebo más tarde."
+```
+
+✅ Bien: leer el número y el mensaje.
+
+```text
+401 → empieza con 4: el problema está en MI pedido.
+"apiKeyInvalid" → la clave está mal. Reviso la credencial: ¿un espacio de más? ¿una letra cambiada?
+```
+
+Por qué: si la API estuviera caída, respondería con un 500 o directamente no respondería. Un 401 dice "no sé quién
+sos": es la credencial. (El mensaje es el real de NewsAPI con una clave falsa, probado en n8n 2.46.)
 
 ---
 
@@ -610,6 +684,40 @@ Para explicar:
   deja elegir: **Header Auth** (para una API Key en un header), **Bearer Auth**, **Basic Auth**, **OAuth2**…
   - *Ejemplo:* Para NewsAPI, en el HTTP Request: *Authentication* → *Generic Credential Type* → **Header Auth**.
 
+**En n8n, paso a paso** (lo mostrás en tu n8n mientras lo contás, 1 min):
+
+```text
+EN N8N · Crear una credencial y usarla en un nodo
+1. Pantalla de inicio → pestaña Credentials → Create credential (o el + del menú de la izquierda → Credential)
+2. Buscá el tipo: Header Auth (para una API Key que va en un header)
+3. Name: X-Api-Key · Value: (tu clave) → arriba, nombre de la credencial: NewsAPI → Save
+4. En el HTTP Request: Authentication → Generic Credential Type
+   → Generic Auth Type: Header Auth → elegí NewsAPI
+5. En cualquier otro flujo, el mismo desplegable ya te ofrece NewsAPI: no se carga de nuevo
+```
+
+Lo que se ve: en la pestaña Credentials aparece "NewsAPI" una sola vez, aunque la usen diez flujos. Lo hacemos
+completo en el Paso 2 de la práctica.
+
+**Ejemplo: dónde va la clave**
+
+❌ Mal: pegar la clave en la URL (o en *Send Headers*) del nodo.
+
+```text
+URL: https://newsapi.org/v2/everything?q=Bariloche&apiKey=a1b2c3d4e5...
+```
+
+✅ Bien: la clave en una credencial, y el nodo que la elige.
+
+```text
+URL: https://newsapi.org/v2/everything?q=Bariloche
+Authentication: Generic Credential Type → Header Auth → NewsAPI
+```
+
+Por qué: en el primero, la clave queda escrita en el flujo. Se ve en pantalla cuando compartís, viaja adentro del
+`.json` cuando lo exportás o se lo pasás a alguien, y si cambia hay que buscarla flujo por flujo. En el segundo,
+está guardada encriptada en un solo lugar y el `.json` exportado no la lleva.
+
 #### Filmina 22 · El nodo HTTP Request: la maquinaria que los otros esconden (3 min)
 
 <p style="color:#1a7f37">HTTP Request es un nodo genérico: armás a mano el pedido completo, método, URL, headers, body y credencial. Se usa cuando el servicio no tiene nodo, cuando el nodo no hace lo que necesitás, o para probar una API por primera vez.</p>
@@ -634,6 +742,41 @@ Para explicar:
 - **"Y además: cuando estás probando o explorando una API por primera vez, antes de automatizar algo más
   grande."** Hacer un GET simple y mirar qué devuelve es la mejor forma de conocer una API.
   - *Ejemplo:* Antes de armar el flujo de noticias, un GET suelto para ver cómo se llaman los casilleros.
+
+**En n8n, paso a paso** (lo mostrás en tu n8n mientras lo contás, 1 min):
+
+```text
+EN N8N · Armar un HTTP Request desde la documentación
+1. + → buscá "http" → HTTP Request
+2. Arriba del nodo, botón Import cURL
+3. Pegá: curl "https://dolarapi.com/v1/dolares/blue" → Import
+4. El nodo queda con Method: GET y la URL completa → Execute step
+```
+
+Lo que se ve: el nodo se llenó solo. Con una API que pide clave, el cURL de la documentación suele traer la
+clave en un header: después de importarlo, hay que borrar ese header y elegir la credencial (el ejemplo de la
+filmina anterior).
+
+**Ejemplo: los datos después del `?`**
+
+❌ Mal: escribir los parámetros a mano en la URL.
+
+```text
+URL: https://httpbin.org/get?q=vino & bodegas&language=es
+→ la API recibe  q = "vino "  y un parámetro raro " bodegas" vacío
+```
+
+✅ Bien: activar *Send Query Parameters* y cargarlos de a uno.
+
+```text
+URL: https://httpbin.org/get
+Send Query Parameters: q → vino & bodegas · language → es
+→ la API recibe  q = "vino & bodegas"  y  language = "es"
+```
+
+Por qué: en una URL, el `&` separa un parámetro del siguiente. Si el dato trae un `&` (o espacios, acentos, una
+`ñ`), escrito a mano se rompe sin dar error. Con *Send Query Parameters*, n8n lo prepara solo para que llegue
+entero. (Probado en n8n 2.46 contra httpbin.org.)
 
 #### Filmina 23 · Coder Tips: los nodos de marca son pedidos HTTP armados (1 min)
 

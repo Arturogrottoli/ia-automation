@@ -33,6 +33,7 @@ Fuente: `program-summary.pdf` (Módulo 3). **Una clase de 2 horas.**
 
 ## A tener en cuenta
 
+- **En la teoría hay bloques "En n8n, paso a paso"**: al presentar cada nodo, los clics para agregarlo y configurarlo con un ejemplo de la clase. Están pensados para mostrarlos en tu n8n en un minuto mientras lo contás. Si vas corto de tiempo, pegá el bloque en el chat y seguí: en la práctica lo hacen completo.
 - **"Un Edit Field que simule cinco consultas" (filmina 25) no alcanza solo.** En n8n 2.46, Edit Fields devuelve un
   item por cada item que le llega: con el trigger manual, uno solo. Por eso la práctica usa dos nodos: un Edit
   Fields en modo JSON con la lista de las cinco consultas, y un **Split Out** ("separar") que la parte en cinco
@@ -294,6 +295,22 @@ el medio ("leer el mail **y** guardarlo"), son dos nodos.
 
 Por qué: el segundo se puede armar en n8n tal cual, nodo por nodo. El primero hay que volver a pensarlo.
 
+**En n8n, paso a paso** (lo mostrás en tu n8n mientras lo contás, 1 min):
+
+```text
+EN N8N · Crear un workflow y agregarle nodos
+1. Pantalla de inicio → botón Create Workflow (arriba a la derecha)
+   (o el + del menú de la izquierda → Workflow)
+2. Arriba a la izquierda, clic en el nombre ("My workflow") → escribí: Consultas de la agencia
+3. En el medio del lienzo: Add first step → buscá "manual" → Trigger manually
+4. Para el nodo siguiente: el + que aparece a la derecha del primero → buscá el nodo → clic
+5. Ctrl + S para guardar
+```
+
+Lo que se ve: dos cajitas unidas por una línea. Eso es un workflow: nodos (las cajitas) y conexiones (las
+líneas). El + de la derecha de cada nodo es la forma más rápida de agregar el siguiente, porque ya lo deja
+conectado.
+
 #### Filmina 8 · Tipos según su función: trigger, action, transform (4 min)
 
 <p style="color:#1a7f37">Hay tres tipos de nodos. El trigger arranca el flujo y siempre va primero. Las acciones hacen algo en otra aplicación. Y los de transformación trabajan con los datos adentro de n8n, sin conectarse a nada externo.</p>
@@ -363,6 +380,23 @@ EJERCICIO 1 · ¿Trigger, action o transform? Respondé en el chat con el númer
 
 Respuestas: 1 T, 2 A, 3 X, 4 T, 5 X, 6 A, 7 X, 8 T. La que más se equivoca es la 3: el IF no "hace" nada afuera,
 decide adentro de n8n, por eso es transform.
+
+**En n8n, paso a paso** (lo mostrás en tu n8n mientras lo contás, 1 min):
+
+```text
+EN N8N · Dónde está cada tipo de nodo
+1. Workflow vacío → Add first step: la lista que se abre es SOLO de triggers
+   ("What triggers this workflow?", "¿qué dispara este flujo?")
+2. Elegí Trigger manually. Ahora apretá el + de su derecha: la lista cambia
+   ("What happens next?", "¿qué pasa después?")
+3. Action in an app → nodos de acción: Gmail, Google Sheets, Slack…
+4. Data transformation → nodos que transforman: Edit Fields, Aggregate, Split Out…
+5. Flow → nodos que deciden el camino: If, Switch, Merge, Wait…
+```
+
+Lo que se ve: n8n ya separa los nodos por su función. Los triggers solo aparecen al principio; acciones y
+transformaciones, después. (Los nombres de las categorías pueden cambiar un poco según la versión de n8n; el
+buscador de arriba siempre encuentra el nodo por su nombre.)
 
 #### Filmina 9 · Anatomía de un nodo: qué mirás cuando lo abrís (3 min)
 
@@ -549,6 +583,23 @@ campos de la entrada"). En la práctica lo vamos a activar en cada rama, para no
 Por qué: la planilla espera `nombre` en minúscula; con `Nombre` deja la columna vacía, sin error (el error
 silencioso de la semana pasada).
 
+**En n8n, paso a paso** (lo mostrás en tu n8n mientras lo contás, 1 min):
+
+```text
+EN N8N · Agregar un Edit Fields y armar un campo nuevo
+1. + a la derecha del nodo anterior → buscá "edit" → Edit Fields (Set)
+2. Mode: Manual Mapping (viene así)
+3. Add Field → name: saludo · tipo: String
+   value: Hola {{ $json.nombre }}, recibimos tu consulta
+   (para el {{ }}, arrastrá "nombre" desde el panel INPUT, a la izquierda)
+4. Si querés que sigan pasando los otros casilleros: activá Include Other Input Fields
+5. F2 → renombralo: Armar saludo → Execute step
+```
+
+Lo que se ve: en OUTPUT, cada consulta trae un casillero nuevo, `saludo`, con "Hola Martín Gómez, recibimos tu
+consulta". Sin *Include Other Input Fields*, sale solo `saludo`; con la opción activada, sale junto a `nombre`,
+`monto` y `categoria`.
+
 #### Filmina 14 · IF: la decisión binaria (4 min)
 
 <p style="color:#1a7f37">El IF evalúa una condición sobre cada item y lo manda por uno de dos caminos: true o false. Cada item se evalúa por separado: en la misma ejecución, unos pueden ir por true y otros por false. Y su límite: solo dos caminos.</p>
@@ -599,6 +650,21 @@ Se arregla escribiendo el número sin comillas, o activando en el IF la opción 
 {{ $json.monto }}   is greater than   10000
 → 2 items por true (Martín y Sofía), 3 por false.
 ```
+
+**En n8n, paso a paso** (lo mostrás en tu n8n mientras lo contás, 1 min):
+
+```text
+EN N8N · Agregar un IF y ver sus dos salidas
+1. + a la derecha del nodo anterior → buscá "if" → If
+2. En Conditions: arrastrá "monto" desde INPUT al primer cuadro
+3. Desplegable del medio: Number → is greater than
+4. Segundo cuadro: 10000
+5. Execute step → en OUTPUT, arriba, elegí True Branch o False Branch para ver cada salida
+6. Cerrá el nodo: tiene dos salidas, "true" y "false", cada una con su +
+```
+
+Lo que se ve: en el lienzo, sobre la salida *true* dice "2 items" y sobre la *false*, "3 items". Cada salida
+se conecta a un nodo distinto con su propio +. Es exactamente el Paso 2 de la práctica.
 
 #### Filmina 15 · Switch: cuando hay más de dos caminos (3 min)
 
@@ -653,6 +719,22 @@ Por qué: el segundo se lee de un vistazo, y sumar "cruceros" mañana es agregar
 
 **Cuidado con la salida por defecto:** si se deja en *None* ("ninguna"), lo que no encaja en ninguna regla
 **desaparece**, sin error. Un cliente que pidió un crucero no le llega a nadie. Siempre conviene activarla.
+
+**En n8n, paso a paso** (lo mostrás en tu n8n mientras lo contás, 1 min):
+
+```text
+EN N8N · Agregar un Switch con salida por defecto
+1. + a la derecha del nodo anterior → buscá "switch" → Switch
+2. Mode: Rules. En Routing Rules, regla 1:
+   arrastrá "categoria" al primer cuadro → String → is equal to → paquete
+   Activá Rename Output → Paquetes
+3. Add Routing Rule → lo mismo con: vuelo (Vuelos) y hotel (Hoteles)
+4. Abajo: Add option → Fallback Output → Extra Output
+5. Execute step → en OUTPUT, arriba, elegí cada salida para ver qué items fueron a cada una
+```
+
+Lo que se ve: el nodo tiene cuatro salidas con nombre: Paquetes, Vuelos, Hoteles y Fallback (la de "otros").
+Lo armamos completo en el Paso 3 de la práctica.
 
 #### Filmina 16 · Actividad: ¿dos IF anidados o un Switch? (4 min) — Ejercicio 3
 
@@ -723,6 +805,21 @@ Para explicar:
 "Hoy entraron 5 pedidos: Martín, Lucía, Diego, Sofía, Carla."
 ```
 
+**En n8n, paso a paso** (lo mostrás en tu n8n mientras lo contás, 1 min):
+
+```text
+EN N8N · Agregar un Aggregate
+1. + a la derecha del nodo anterior → buscá "aggregate" → Aggregate
+2. Opción A · Aggregate: Individual Fields → Input Field Name: nombre
+   → sale 1 item: {"nombre": ["Martín Gómez", "Lucía Fernández", "Diego Ramírez", ...]}
+3. Opción B · Aggregate: All Item Data (Into a Single List)
+   → sale 1 item con las cinco fichas completas adentro de "data"
+4. Execute step → arriba de OUTPUT dice "1 item"
+```
+
+Lo que se ve: antes del Aggregate, el contador dice "5 items"; después, "1 item". La opción A sirve cuando
+alcanza con un casillero (la lista de nombres); la B, cuando hacen falta todos los datos de cada ficha.
+
 #### Filmina 18 · Merge: el nodo que cierra una bifurcación (3 min)
 
 <p style="color:#1a7f37">Merge junta en una sola salida datos que vienen de dos ramas distintas. Se usa cuando el flujo se separó y hay que volver a reunirlo, o para cruzar datos de dos fuentes. Es un embudo donde llegan dos mangueras.</p>
@@ -757,6 +854,23 @@ Para explicar:
   - *Ejemplo:* Para volver a juntar ramas de un IF o un Switch, casi siempre se usa **Append**. *Combine* es para
     cruzar dos fuentes que se corresponden.
 
+**En n8n, paso a paso** (lo mostrás en tu n8n mientras lo contás, 1 min):
+
+```text
+EN N8N · Agregar un Merge para cerrar dos ramas
+1. Al final de una de las ramas: + → buscá "merge" → Merge
+   (queda conectado a la entrada Input 1)
+2. Arrastrá desde el puntito de salida de la otra rama hasta la entrada Input 2
+3. Mode: Append (pone los items de una rama abajo de los de la otra)
+   ¿Más de dos ramas? Number of Inputs → 3, 4…
+4. Para cruzar dos fuentes (el CRM y la planilla): Mode: Combine
+   → Combine By: Matching Fields → el casillero en común de cada lado (por ejemplo, email)
+5. Execute workflow (no Execute step: el Merge necesita que corran las dos ramas)
+```
+
+Lo que se ve: dos líneas que entran al Merge por la izquierda y una sola que sale. Con el IF de 2 y 3 items,
+del Merge salen 5.
+
 #### Filmina 19 · Wait: pausar sin perder los datos (3 min)
 
 <p style="color:#1a7f37">Wait frena el flujo un rato, hasta una fecha, o hasta que llegue un aviso de afuera. No toca los datos: después sigue exactamente con lo que tenía. Sirve para espaciar acciones, como un recordatorio 24 horas después.</p>
@@ -784,6 +898,22 @@ Para explicar:
 **Ojo con n8n en la computadora:** un Wait largo (horas o días) necesita que n8n esté prendido cuando termine la
 espera. Con Docker en la notebook, si la apagás, el flujo se retoma cuando vuelvas a prender n8n, no antes. Para
 esperas largas en serio, hace falta un servidor (lo vimos en la Semana 2).
+
+**En n8n, paso a paso** (lo mostrás en tu n8n mientras lo contás, 1 min):
+
+```text
+EN N8N · Agregar un Wait
+1. + a la derecha del nodo anterior → buscá "wait" → Wait
+2. Resume: After Time Interval → Wait Amount: 5 · Wait Unit: Seconds
+   (en la vida real, para el recordatorio: 24 · Hours)
+3. Las otras opciones de Resume:
+   At Specified Time → una fecha y hora
+   On Webhook Call   → hasta que llegue un aviso de afuera
+4. Execute workflow → el Wait queda "girando" 5 segundos y después sigue
+```
+
+Lo que se ve: el nodo siguiente recibe exactamente lo mismo que entró al Wait. Lo comprobás abriendo los dos:
+INPUT del Wait y OUTPUT del Wait son iguales.
 
 #### Filmina 20 · Los nodos de acción hacen; los de control deciden (2 min)
 
