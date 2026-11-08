@@ -60,8 +60,8 @@ Fuente: `program-summary.pdf` (Módulo 4). **Una clase de 2 horas.**
 
 | Min | Tramo | Filminas | En clase |
 |---|---|---|---|
-| 0–10 | Apertura y repaso de la Semana 3 | 1–5 | |
-| 10–25 | **01 · Qué es una API** | 6–10 | Ej. 1 (2 min) |
+| 0–13 | Apertura y repaso de la Semana 3 | 1–5 | Mini cuestionario (2 min) |
+| 13–25 | **01 · Qué es una API** | 6–10 | Ej. 1 (2 min) |
 | 25–45 | **02 · El protocolo HTTP** | 11–17 | Ej. 2 (3 min) |
 | 45–60 | **03 · Credenciales y HTTP Request** | 18–23 | |
 | 60–70 | Break | 24 | |
@@ -70,7 +70,7 @@ Fuente: `program-summary.pdf` (Módulo 4). **Una clase de 2 horas.**
 | 113–117 | Para practicar, Pre-entrega 2 y cómo sigue | 32–33 | |
 | 117–120 | Preguntas y cierre | 34–35 | Tarea |
 
-**Si el tiempo se aprieta**, recortá en este orden: el Ejercicio 2 (se dice la respuesta), el Basic Auth y la
+**Si el tiempo se aprieta**, recortá en este orden: el mini cuestionario del repaso (se dicen las respuestas), el Ejercicio 2 (se dice la respuesta), el Basic Auth y la
 idempotencia (se mencionan), el Paso 3 de OAuth2 (se muestra la credencial ya conectada y se deja todo para el
 Ejercicio 8), el Paso 5 (se muestra el flujo 04 ya armado, mandándole una consulta con el 05). Lo último que se
 recorta es el Paso 2 (la API Key y el 401) y el Paso 4 (el webhook): son los que pide la pre-entrega.
@@ -103,7 +103,7 @@ recorta es el Paso 2 (la API Key y el 401) y el Paso 4 (el webhook): son los que
 
 ---
 
-### 0–10 · Apertura y repaso de la Semana 3
+### 0–13 · Apertura y repaso de la Semana 3
 
 **Filmina 1 · Portada** (1 min) — Módulo 4: Conceptos técnicos.
 
@@ -157,22 +157,72 @@ Para explicar cada objetivo:
 
 <p style="color:#1a7f37">La clase queda grabada.</p>
 
-**Repaso de la Semana 3** (3 min, sin filmina) — antes de pasar a la filmina 5.
+**Repaso de la Semana 3** (6 min, sin filmina) — antes de pasar a la filmina 5.
 
-<p style="color:#1a7f37">Repasemos lo de la semana pasada. Primero: hay tres tipos de nodos. Los triggers arrancan el flujo, las acciones hacen algo en otra aplicación, y los de transformación trabajan con los datos adentro de n8n.</p>
+Abrís en tu n8n el flujo terminado de la semana pasada, **02 · Consultas con lógica (completo)** (`02-consultas-con-logica.json`) de la carpeta
+[../Semana 3/n8n/](../Semana%203/n8n/), y lo ejecutás una vez para que se vean los números de items en las flechas. El
+repaso se hace señalando ese flujo, nodo por nodo:
 
-<p style="color:#1a7f37">Segundo: para decidir, IF cuando hay dos caminos y Switch cuando hay tres o más, siempre con la salida por defecto activada. Merge junta las ramas, Aggregate pasa de muchos items a uno, y Wait espera.</p>
+```text
+Arrancar a mano → Consultas de prueba → Separar en items → ¿Qué tipo de consulta? (Switch)
+   ├─ Paquetes → Para área de paquetes ──┐
+   ├─ Vuelos   → Para área de vuelos   ──┤
+   ├─ Hoteles  → Para área de hoteles  ──┼→ Juntar las ramas (Merge) → Todas en una lista (Aggregate)
+   └─ Otra     → Para revisar a mano   ──┘        → Esperar 5 segundos (Wait) → Mail de resumen (simulado)
+```
 
-<p style="color:#1a7f37">Y tercero: cuando algo falla, primero se mira el canvas, después la entrada del nodo. El problema casi nunca está en el nodo rojo, sino en lo que le llegó.</p>
+<p style="color:#1a7f37">Antes de arrancar, repasemos la semana pasada con el flujo que armamos. Un workflow es una secuencia de nodos conectados, y lo que viaja por las flechas son items: cada consulta es un item. Fíjense en los números arriba de cada flecha: cinco consultas entran, se reparten por las ramas, y al final sale uno solo.</p>
 
-Para explicar:
-- **Los tres tipos de nodos.** Hoy vamos a conocer dos nodos nuevos que cuestan clasificar: el **HTTP Request** es
-  una acción (habla con algo de afuera), y el **Webhook** es un trigger (arranca el flujo cuando llega algo de
-  afuera).
-  - *Ejemplo:* Webhook = trigger, como el Gmail Trigger. HTTP Request = acción, como el nodo de Sheets.
-- **Mirar lo que llega.** Hoy lo que llega viene de afuera, y no lo controlamos nosotros: hay que leer la respuesta
-  con atención para encontrar el casillero que sirve.
+<p style="color:#1a7f37">Había tres tipos de nodos. El trigger arranca el flujo. Las acciones hacen algo en otra aplicación. Y los de transformación trabajan con los datos adentro de n8n, como el Edit Fields, que arma los datos con la forma que queremos.</p>
+
+<p style="color:#1a7f37">Para decidir: IF cuando hay dos caminos, Switch cuando hay tres o más, siempre con una salida para lo que no encaja. Después, Merge vuelve a juntar las ramas, Aggregate pasa de muchos items a uno, y Wait espera sin perder los datos.</p>
+
+<p style="color:#1a7f37">Y la regla para cuando algo falla: primero se mira el canvas, los colores y los números de items, y después la entrada del nodo. El problema casi nunca está en el nodo rojo, sino en lo que le llegó.</p>
+
+Para explicar (señalando cada nodo del flujo):
+- **Workflow e items.** Un **item** es cada "paquete" de datos que viaja por las flechas. Casi todos los nodos se
+  ejecutan una vez por cada item que les llega.
+  - *Ejemplo:* *Separar en items* convierte la lista de cinco consultas en cinco items. Por eso el Switch decide
+    cinco veces, una por consulta.
+- **Los tres tipos de nodos: trigger, acción y transformación.** Hoy vamos a conocer dos nodos nuevos, y conviene
+  ubicarlos ya: el **HTTP Request** es una acción (habla con algo de afuera), y el **Webhook** es un trigger (arranca
+  el flujo cuando llega algo de afuera).
+  - *Ejemplo:* *Arrancar a mano* es un trigger; *Consultas de prueba* (Edit Fields) es de transformación. Webhook =
+    trigger, como el Gmail Trigger. HTTP Request = acción, como el nodo de Sheets.
+- **IF y Switch.** El IF tiene dos salidas: *true* y *false*. El Switch tiene una por regla, y la salida por defecto
+  (*Fallback Output*) atrapa lo que no encaja en ninguna.
+  - *Ejemplo:* La consulta de categoría "crucero" no es paquete, vuelo ni hotel: sin la salida *Otra* se perdía en
+    silencio; con ella, va a *Para revisar a mano*.
+- **Merge, Aggregate y Wait.** El **Merge** junta ramas: para volver a juntar lo que separó un IF o un Switch, modo
+  *Append*. El **Aggregate** pasa de muchos items a uno (una lista). El **Wait** pausa y después sigue con los mismos
+  datos.
+  - *Ejemplo:* El desafío del flujo congelado: el Merge en modo *Combine* no devolvía nada porque una rama del IF
+    llegó vacía. Con *Append*, siguió con lo que había.
+- **Diagnosticar mirando lo que llega.** Primero el canvas (qué está verde, qué gris, cuántos items en cada flecha),
+  después la pestaña de entrada del nodo que falla. Hoy esto se vuelve más importante: lo que llega viene de afuera y
+  no lo controlamos nosotros, así que hay que leer la respuesta con atención para encontrar el casillero que sirve.
   - *Ejemplo:* La respuesta de una API de noticias tiene 20 casilleros; nos sirve uno, el título.
+
+**Mini cuestionario** (2 min). Pegás en el chat:
+
+```text
+REPASO · Semana 3. Respondé en el chat con el número y la letra (ej: 1a, 2c...)
+1. Quiero mandar las consultas de más de 10.000 dólares al gerente y el resto a ventas. ¿Qué nodo?
+   a) IF   b) Switch   c) Merge
+2. Las consultas pueden ser de paquete, vuelo, hotel o crucero. ¿Qué nodo?
+   a) IF   b) Switch   c) Aggregate
+3. Tengo 5 items y quiero UN solo mail con las 5 consultas. ¿Qué nodo?
+   a) Merge   b) Wait   c) Aggregate
+4. Después de un IF, el Merge no devuelve nada, sin error. ¿Qué miro primero?
+   a) Si una rama llegó vacía   b) La contraseña   c) Reinstalar n8n
+5. El Edit Fields (Set), ¿qué tipo de nodo es?
+   a) Trigger   b) Acción   c) Transformación
+```
+
+Respuestas: **1a, 2b, 3c, 4a, 5c**. Leés en voz alta cuántos acertaron cada una. Si alguna anda floja (suele ser la
+4), la volvés a explicar con el desafío del flujo congelado, en un minuto.
+
+<p style="color:#1a7f37">Bien. Todo eso sigue valiendo hoy. Lo único que cambia es de dónde vienen los datos: hasta ahora, del nodo Consultas de prueba, que inventamos nosotros. Desde hoy, de afuera.</p>
 
 **Filmina 5 · ¿Dónde quedamos? Del canvas al mundo exterior** (3 min)
 
@@ -197,7 +247,7 @@ Para explicar:
 
 ---
 
-### 10–25 · Sección 01 · Qué es una API
+### 13–25 · Sección 01 · Qué es una API
 
 **Filmina 6 · Separador "01"** — pasarla.
 
