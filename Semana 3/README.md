@@ -159,9 +159,39 @@ Para explicar cada objetivo:
   - *Ejemplo:* Un flujo con nodos que se llaman "Edit Fields1", "Edit Fields2" e "If3" no se entiende. El mismo
     flujo con "Consultas de prueba", "¿Más de USD 10.000?" y "Asignar a gerencia" se lee como un cuento.
 
-**Filmina 3 · Agenda** (1 min)
+**Filmina 3 · Agenda** (2 min)
 
-<p style="color:#1a7f37">Primero, la anatomía de un workflow. Después, los nodos que más van a usar. Break. Y después del break, armamos juntos un flujo con lógica, paso a paso.</p>
+<p style="color:#1a7f37">Les cuento el recorrido de hoy, así saben a dónde vamos. Primero, dónde quedamos: el boceto que hicieron la semana pasada y cómo se convierte en piezas de n8n. Después, la anatomía de un workflow: cómo se lee un flujo y cómo viajan los datos entre los nodos. Después, los nodos que más van a usar: los que preparan los datos, los que deciden, los que juntan y el que espera. Break. Y en la segunda hora, la práctica: cada uno arma en su n8n un flujo que reparte las consultas de una agencia y manda un solo resumen. Cerramos con qué practicar en casa y qué viene la semana que viene.</p>
+
+<p style="color:#1a7f37">La idea es simple: en la primera hora conocemos las piezas, y en la segunda las usamos todas juntas en un mismo flujo.</p>
+
+Para explicar (cada punto, adelantando qué van a hacer en esa parte):
+- **"Dónde quedamos: del boceto a las piezas."** Unos minutos para conectar con la pre-entrega: el boceto que
+  escribieron ya tenía, sin saberlo, decisiones y resúmenes. Hoy les ponemos nombre de nodo.
+  - *Ejemplo:* "Si es urgente, avisar al dueño" del boceto de alguien va a terminar siendo un IF.
+- **"Anatomía de un workflow: nodos y conexiones."** Aprendemos a **leer** un flujo antes de armarlo: los tres tipos
+  de nodos (el que arranca, el que transforma y el que actúa), las partes de un nodo cuando lo abrís, y qué quieren
+  decir los colores y los números sobre las flechas. Acá hacen dos ejercicios cortos: clasificar nodos en trigger,
+  action o transform, y hacer de detectives con un IF que manda todas las consultas por el camino equivocado sin dar
+  error.
+  - *Ejemplo:* Van a ver un flujo con un nodo gris y, sin abrir nada, decir hasta dónde llegaron los datos.
+- **"Los nodos que más vas a usar."** Una recorrida por seis nodos, uno por uno, con un ejemplo cada uno: **Edit
+  Fields** (preparar los datos), **IF** y **Switch** (decidir), **Merge** y **Aggregate** (juntar) y **Wait**
+  (esperar). En el medio, un ejercicio para elegir entre IF y Switch. Y acá aparece la respuesta al nodo misterioso
+  del rompehielo.
+  - *Ejemplo:* "¿Pago acreditado?" → IF. "¿De qué provincia?" → Switch. "Un solo mail con todo" → Aggregate.
+- **"Break."** Diez minutos. A la vuelta, con n8n abierto: el resto de la clase es práctica.
+- **"Práctica en vivo: tu primer flujo con lógica."** Arranca con un desafío: un flujo que "se congela" sin dar
+  error, y entre todos encontramos por qué. Después cada uno arma, a la par mía y en cinco pasos, el flujo de
+  consultas de la agencia: cinco consultas inventadas, un IF, un Switch que manda cada una a su área, un Merge que
+  vuelve a juntar, y un Aggregate con un Wait para el resumen final.
+  - *Ejemplo:* Entran cinco consultas (paquetes, vuelos, hoteles y una de crucero) y sale un solo mensaje que dice
+    cuántas fueron a cada área.
+- **"Para practicar y cierre."** Qué ejercicios hacer en casa (esta semana no hay pre-entrega), un adelanto de la
+  semana que viene, cuando el flujo deje de usar datos inventados y empiece a hablar con internet, y las preguntas.
+  - *Ejemplo:* El mismo flujo de hoy, la semana que viene, va a recibir consultas de un formulario real.
+
+Si vas justo de tiempo, alcanza con decir los dos textos en verde. El resto lo vas retomando al empezar cada parte.
 
 **Filmina 4 · La clase queda grabada** — pasarla.
 
