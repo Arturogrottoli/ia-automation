@@ -149,9 +149,42 @@ Para explicar cada objetivo:
   - *Ejemplo:* Un formulario manda la consulta a n8n (webhook) y n8n le pregunta al banco el dólar (HTTP Request)
     para responder el precio en pesos.
 
-**Filmina 3 · Agenda** (1 min)
+**Filmina 3 · Agenda** (2 min)
 
-<p style="color:#1a7f37">Primero, qué es una API. Después, HTTP: los métodos, las respuestas y los errores. Después, las credenciales y el nodo HTTP Request. Break. Y la práctica: nuestra primera integración real.</p>
+<p style="color:#1a7f37">Primero, qué es una API: cómo se hablan dos programas, y de dónde sacan los datos las apps que usan todos los días. Después, HTTP, el idioma de las APIs: los métodos, las respuestas y los errores; ahí vamos a jugar un rato con la API de Rick and Morty y la de Pokémon. Después, las credenciales, que es cómo n8n demuestra quién es, y el nodo HTTP Request, que sirve para hablarle a cualquier servicio. Break. Y la práctica: primero un desafío de detectives con errores, y después armamos paso a paso nuestra primera integración real.</p>
+
+<p style="color:#1a7f37">¿Y qué vamos a tener al final? Un flujo que recibe una consulta de viaje, le pregunta el dólar a una API, busca noticias del destino en otra, y le responde al cliente el precio en pesos con las noticias. Todo lo de la primera hora es para poder armar eso en la segunda.</p>
+
+Para explicar:
+- **Qué es una API.** La idea base de toda la clase: un programa le pide algo a otro con reglas fijas. Se explica
+  con la analogía del mozo y la carta, y con el Ejercicio 1 piensan de dónde saca los datos una app que usan.
+  - *Ejemplo:* "¿La app del clima tiene satélites? No: le pregunta a otro sistema. Eso es una API, y hoy n8n va a
+    hacer lo mismo".
+- **HTTP: métodos, respuestas y errores.** Cómo se arma un pedido (URL, método, headers, body) y cómo leer lo que
+  vuelve. Acá está la demo en el navegador con Rick and Morty y Pokémon, el Ejercicio 2 ("¿qué método usarías?") y
+  los números de error que más van a ver: 401, 404, 429 y 500.
+  - *Ejemplo:* "Si pedimos un Pokémon que no existe, la API nos va a contestar 404. Al final de esta parte van a
+    saber qué quiere decir sin buscarlo".
+- **Credenciales y el nodo HTTP Request.** Cómo se le demuestra a una API quiénes somos (API Key, OAuth2) y por qué
+  se guarda una vez en n8n y se reutiliza. Y el nodo HTTP Request: el que permite hablarle a un servicio aunque no
+  tenga nodo propio, incluso pegando un comando que copiamos de la documentación.
+  - *Ejemplo:* "La API del dólar no nos pide nada; la de noticias, una clave; la de Google, que iniciemos sesión.
+    Las tres las vamos a usar hoy".
+- **Break.** Lo aprovechan para prender n8n y, si no la tienen, crearse la cuenta gratis en NewsAPI: es la clave que
+  usamos en la práctica.
+  - *Ejemplo:* "Diez minutos: Docker Desktop, play, y newsapi.org para sacar la clave. Así arrancamos directo".
+- **La práctica: detectives y primera integración.** Arranca con el Ejercicio 3: un flujo con errores que tienen que
+  diagnosticar leyendo el número. Después, cinco pasos que arman a la par: el primer GET (el dólar), una API con
+  clave (noticias) y su error 401, la conexión con Google, un webhook que recibe consultas, y todo junto.
+  - *Ejemplo:* Llega "Mendoza, 800 dólares" y n8n responde con el precio en pesos al oficial de hoy y las noticias de
+    Mendoza.
+- **Cierre: Pre-entrega 2.** Al final cuento la Pre-entrega 2: un flujo propio que trae datos de afuera, los procesa
+  con lógica de la Semana 3 y entrega un resultado. Avisarlo ahora hace que miren la práctica pensando en su propio
+  proyecto.
+  - *Ejemplo:* "Mientras armamos, piensen qué dato de afuera necesita su proyecto: el clima, una cotización, un
+    turno. Eso va a ser su pre-entrega".
+
+Si vas justo de tiempo, alcanza con decir los dos textos en verde.
 
 **Filmina 4 · La clase queda grabada** — pasarla.
 
