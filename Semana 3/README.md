@@ -560,9 +560,36 @@ dice dónde mirar.
 
 ### 28–60 · Sección 02 · Los nodos principales
 
-**Filmina 12 · Separador "02"** — pasarla.
+**Filmina 12 · Separador "02"** (1 min)
 
-<p style="color:#1a7f37">Ahora los nodos que más van a usar: seis piezas que aparecen en casi todos los flujos.</p>
+<p style="color:#1a7f37">Ahora los nodos que más van a usar: seis piezas que aparecen en casi todos los flujos. Ya saben leer un flujo; ahora vamos a conocer las piezas con las que se arma.</p>
+
+<p style="color:#1a7f37">Vamos a ir de a uno, siempre con las consultas de la agencia de viajes. Primero el que ordena los datos, Edit Fields. Después los que deciden por dónde va cada consulta: el IF, cuando hay dos caminos, y el Switch, cuando hay más; y ahí les voy a pedir que elijan ustedes entre uno y otro. Después los que juntan: Aggregate, que arma un resumen, y Merge, que vuelve a unir dos caminos. Y al final Wait, que hace esperar al flujo. Con estas seis piezas armamos la práctica de después del break.</p>
+
+**Para explicar:**
+
+- **Seis piezas, tres familias.** Conviene que vean desde el principio que los seis nodos se agrupan por lo que hacen
+  con los datos: uno los ordena, dos deciden el camino, dos juntan y uno espera.
+  - *Ejemplo:* ordenar → Edit Fields; decidir → IF y Switch; juntar → Aggregate y Merge; esperar → Wait. Si quieren,
+    lo escriben así en un papel y lo van completando a medida que avanzamos.
+- **Siempre el mismo ejemplo.** Todos los nodos se explican con las consultas de la agencia, para que no tengan que
+  entender un caso nuevo con cada nodo. Es el mismo caso que van a armar después del break.
+  - *Ejemplo:* llegan cinco consultas (una de ellas por un crucero). Edit Fields les agrega o arregla casilleros, el
+    IF separa las de más de USD 10.000, el Switch las reparte por tipo (paquete, vuelo u hotel), Merge vuelve a juntar
+    las ramas, Aggregate arma el resumen del día y Wait espera antes de mandarlo.
+- **Hay un momento para que piensen ellos.** En el medio de la sección (filmina 16) hay una actividad: decidir si un
+  reparto se resuelve con dos IF o con un Switch. Avisarlo ahora hace que presten atención al IF y al Switch.
+  - *Ejemplo:* "en un rato les voy a preguntar cuándo conviene un IF y cuándo un Switch, así que miren bien la
+    diferencia".
+- **Se cierra el misterio del rompehielo.** Cuando lleguemos a Aggregate van a saber cuál era el nodo misterioso del
+  arranque de la clase.
+  - *Ejemplo:* "¿se acuerdan del flujo donde entraban cinco consultas y salía un solo mail? En un rato les digo qué
+    nodo hacía eso".
+- **Por ahora miramos; después del break armamos.** En esta sección no tienen que tocar n8n: se trata de entender
+  qué hace cada pieza. La práctica de la Sección 03 las usa todas juntas.
+  - *Ejemplo:* "no hace falta que lo repliquen ahora; anoten para qué sirve cada uno, que después lo vamos a necesitar".
+
+Si vas justo de tiempo, alcanza con decir los dos textos en verde.
 
 #### Filmina 13 · Edit Fields (Set): el nodo que le da forma a los datos (3 min)
 
