@@ -109,7 +109,7 @@ cambia los nombres seguido; estos son los de noviembre de 2026.
 
 ## Para casa
 
-### Ejercicio 5 · Repetilo con otra API
+### Ejercicio 5 · Repetilo con otras APIs
 
 - La URL de Open-Meteo devuelve (probado) algo como
   `{"latitude": -41.16, "longitude": -71.33, ..., "current_units": {"temperature_2m": "°C"}, "current": {"time": "2026-11-06T14:00", "interval": 900, "temperature_2m": 10.4}}`.
@@ -117,6 +117,14 @@ cambia los nombres seguido; estos son los de noviembre de 2026.
   n8n: `{{ $json.current.temperature_2m }}`.
 - Ojo: `current_units` también tiene un `temperature_2m`, pero es la unidad (`°C`), no el valor. Es un buen ejemplo
   de "identificar el campo que realmente sirve".
+- **PokeAPI** (probado con curl en noviembre 2026; la expresión no se corrió en n8n): Pikachu tiene `id` 25 y
+  `{{ $json.types[0].type.name }}` da `electric`. `types` es una lista de objetos, y el nombre está dos niveles
+  adentro (`type.name`). Si eligen un Pokémon de dos tipos (Charizard: fuego y volador), `types[1]` trae el segundo.
+  `pikachuu` da **404** (`{"status":404,"message":"Not Found"}`): empieza con 4, el error es del pedido. En n8n el
+  nodo se pone rojo.
+- **Rick and Morty:** con `name=rick&status=alive`, `info.count` es **29**; sin `status`, **107** (los números pueden
+  crecer si la API suma personajes). Cambió porque cada parámetro es un filtro: sacar uno trae más resultados. El
+  primero de la lista: `{{ $json.results[0].name }}` → `Rick Sanchez`.
 
 ### Ejercicio 6 · Leé una respuesta
 

@@ -20,7 +20,7 @@ Fuente: `program-summary.pdf` (Módulo 4). **Una clase de 2 horas.**
 | En clase | 2 · ¿Qué método usarías? | 3 min |
 | En clase | 3 · Detective de errores HTTP | 6 min |
 | En clase | 4 · Tu primera integración real (lo arman a la par del profe) | 37 min |
-| Casa | 5 · Repetilo con otra API | 20 min |
+| Casa | 5 · Repetilo con otras APIs (clima, Pokémon, Rick and Morty) | 35 min |
 | Casa | 6 · Leé una respuesta: objetos y listas | 10 min |
 | Casa | 7 · ¿Webhook o polling? | 10 min |
 | Casa | 8 · OAuth2 con Google, con calma | 30 min |
@@ -341,6 +341,10 @@ Para explicar:
   internet, como `https://dolarapi.com/v1/dolares/oficial`. A cada dirección de una API que acepta pedidos se le
   dice **endpoint** ("punto final"): es cada plato de la carta. Una API tiene muchos endpoints, uno para cada cosa.
   - *Ejemplo:* `/v1/dolares/oficial` da el oficial; `/v1/dolares/blue`, el blue. Mismo servicio, dos endpoints.
+  - *Ejemplo:* En la **PokeAPI** (una API gratis con los datos de todos los Pokémon), `/api/v2/pokemon/pikachu`
+    trae la ficha de Pikachu y `/api/v2/pokemon/charmander`, la de Charmander: mismo plato, cambia el nombre del
+    final. En la **API de Rick and Morty**, `/api/character/1` trae a un personaje y `/api/location/1`, un planeta:
+    otro endpoint, otro plato de la carta.
 - **"Con qué datos: si querés crear un contacto nuevo, le mandás nombre y email."** Para leer, casi nunca hace falta
   mandar datos. Para crear o cambiar algo, sí: los datos van en el pedido, en formato JSON.
   - *Ejemplo:* Crear un contacto: `{"nombre": "Martín Gómez", "email": "martin@mail.com"}`.
@@ -372,7 +376,7 @@ Esperás respuestas (1 minuto) y cerrás:
 
 <p style="color:#1a7f37">Ya sabemos qué es una API. Ahora, el idioma en que se le habla: HTTP.</p>
 
-#### Filmina 12 · ¿Qué es HTTP? El protocolo que hablan las APIs (3 min)
+#### Filmina 12 · ¿Qué es HTTP? El protocolo que hablan las APIs (3 min + 2 min de demo)
 
 <p style="color:#1a7f37">HTTP es el idioma que usan casi todas las APIs y también los navegadores. Define cómo se arma un pedido y cómo se arma una respuesta. En el navegador, la respuesta es una página; con una API, son datos, casi siempre en JSON.</p>
 
@@ -398,6 +402,42 @@ Para explicar:
   - *Ejemplo:* Pegá `https://dolarapi.com/v1/dolares/oficial` en el navegador: en vez de una página linda, ves el
     JSON con la cotización. Mostralo en vivo: es la forma más rápida de que lo vean.
 
+**Demo en vivo: dos APIs para jugar (2 min, en el navegador).** Después del dólar, dos APIs gratis, sin clave y
+sin cuenta, que sirven para que vean que pedirle algo a una API es escribir una dirección. Las dos están probadas
+(noviembre 2026). Son buenas para practicar porque se puede pedir cualquier cosa sin miedo a romper nada.
+
+<p style="color:#1a7f37">El dólar es serio. Probemos con algo más divertido, que funciona exactamente igual. Hay una API con los datos de todos los personajes de Rick and Morty, y otra con todos los Pokémon. Escribimos una dirección, y vuelve una ficha.</p>
+
+```text
+DEMO · Dos APIs en el navegador (sin clave)
+1. https://rickandmortyapi.com/api/character/1
+   → la ficha de Rick Sanchez: name, status ("Alive"), species ("Human"), origin, location...
+   → cambiá el 1 por un 2: aparece Morty. Mismo endpoint, otro dato.
+   → el casillero "image" es otra URL: abrila y aparece la foto del personaje.
+2. https://pokeapi.co/api/v2/pokemon/pikachu
+   → la ficha de Pikachu: id 25, height 4, weight 60, types, abilities...
+   → cambiá pikachu por charmander (en minúscula).
+```
+
+Para explicar:
+- **Es lo mismo que el dólar, con otros datos.** Un pedido GET, una dirección, y vuelve JSON. No hay nada especial
+  en que sea un juego: así le habla n8n a cualquier sistema.
+  - *Ejemplo:* `dolarapi.com/v1/dolares/oficial` y `pokeapi.co/api/v2/pokemon/pikachu` tienen la misma forma:
+    servicio, endpoint, y lo que pedís al final.
+- **Cambiar la dirección es cambiar el pedido.** No hay botones: lo que pedís está escrito en la URL.
+  - *Ejemplo:* `/character/1` es Rick, `/character/2` es Morty. `/pokemon/pikachu` es Pikachu, `/pokemon/mew` es
+    Mew. Que prueben su personaje favorito y peguen en el chat lo que les vino.
+- **Los datos vienen crudos: para entenderlos, está la documentación.** La API no explica sus números; el manual sí.
+  - *Ejemplo:* Pikachu tiene `"height": 4` y `"weight": 60`. ¿Mide 4 metros? No: la documentación de la PokeAPI dice
+    que la altura va en decímetros y el peso en hectogramos. Pikachu mide 40 cm y pesa 6 kg.
+- **A veces el JSON es enorme, y no pasa nada.** La ficha de Pikachu trae la lista de todos sus movimientos: más de
+  300 KB de texto. Uno no lee todo; busca el casillero que necesita.
+  - *Ejemplo:* En Chrome, tildá **Dar formato** ("Pretty print") arriba de la respuesta para verla ordenada; en
+    Firefox se ve ordenada sola. Buscá `"name"` y `"types"` y listo.
+
+Si en clase hay poco tiempo, mostrá solo Rick (la ficha es corta) y dejá Pikachu para casa: está en el
+Ejercicio 5 de [ejercicios-alumnos.md](ejercicios-alumnos.md), ya con n8n.
+
 #### Filmina 13 · Request y Response: las dos mitades de toda comunicación (4 min)
 
 <p style="color:#1a7f37">Toda comunicación HTTP tiene dos mitades. El request, lo que mandamos: la URL, el método, los headers y, a veces, el body. Y el response, lo que vuelve: un status code, sus headers y el body con los datos.</p>
@@ -408,6 +448,9 @@ Para explicar:
   `?`: datos extra para el pedido, separados con `&`.
   - *Ejemplo:* `https://newsapi.org/v2/everything?q=Bariloche&language=es`: el endpoint es `/v2/everything` y los
     parámetros dicen "buscá Bariloche, en español".
+  - *Ejemplo:* `https://rickandmortyapi.com/api/character/?name=rick&status=alive`: los parámetros dicen "personajes
+    que se llamen Rick y estén vivos". La respuesta empieza con `"count": 29` (hay 29) y después la lista. Sacás
+    `&status=alive` y son más: cada parámetro es un filtro.
 - **"Request · Método: qué acción querés hacer."** GET, POST, PUT, PATCH o DELETE (filmina 14).
   - *Ejemplo:* GET para pedir el dólar; POST para mandarle una consulta al webhook.
 - **"Request · Headers: información adicional sobre el pedido, como el formato de los datos o las
@@ -539,6 +582,10 @@ Para explicar:
   credencial o está mal. 404: la dirección no existe (un endpoint mal escrito, un cliente que ya no está).
   - *Ejemplo:* Escribir `/v1/dolar/oficial` en vez de `/v1/dolares/oficial`: 404. El famoso "página no encontrada"
     de internet es lo mismo.
+  - *Ejemplo:* Pedí `https://pokeapi.co/api/v2/pokemon/pikachuu` (con una u de más): vuelve 404 y
+    `{"status":404,"message":"Not Found"}`. Pedí `https://rickandmortyapi.com/api/character/99999`: 404 y
+    `{"error":"Character not found"}` ("personaje no encontrado"). El error es nuestro: pedimos algo que no está en
+    la carta.
 - **"500-599 · Error del servidor: falló el sistema al que le pediste. 500 Internal Server Error."** Algo se rompió
   del otro lado. No hay nada que cambiar en nuestro pedido: esperar y reintentar, o avisar.
   - *Ejemplo:* La API del banco está en mantenimiento a las 3 de la mañana y responde 503 ("servicio no
@@ -1209,7 +1256,8 @@ Para explicar:
 - **"Repetilo con otra API: elegí un servicio que uses y hacele un GET simple con su API Key."** Es el Ejercicio 5.
   La mejor forma de perderle el miedo a las APIs es leer la documentación de una que no vimos y hacer el primer GET
   solos.
-  - *Ejemplo:* Open-Meteo (el clima, sin clave), OpenWeatherMap (con clave), la API de películas TMDB.
+  - *Ejemplo:* Open-Meteo (el clima, sin clave), la PokeAPI o la de Rick and Morty (sin clave, las de la demo),
+    OpenWeatherMap (con clave), la API de películas TMDB.
 - **"Guardá las credenciales: configuradas una vez, te sirven para todo lo que viene."** La de Google la vamos a
   usar mucho en el Módulo 5.
   - *Ejemplo:* La credencial de Google Sheets de hoy es la que usa el flujo de la clase que viene.

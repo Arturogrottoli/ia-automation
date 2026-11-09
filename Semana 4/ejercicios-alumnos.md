@@ -116,7 +116,7 @@ noticias      (Array)   {{ $json.articles.map(a => a.title) }}
 
 ## Para casa (antes de la Semana 5)
 
-### Ejercicio 5 · Repetilo con otra API (20 min)
+### Ejercicio 5 · Repetilo con otras APIs (35 min)
 
 1. Hacé un GET a **Open-Meteo**, una API del clima que no pide clave. Para Bariloche:
 
@@ -126,7 +126,28 @@ https://api.open-meteo.com/v1/forecast?latitude=-41.13&longitude=-71.31&current=
 
 2. Encontrá en la respuesta la temperatura actual. ¿En qué casillero está? ¿Adentro de cuál?
 3. Cambiá la ciudad: buscá en internet la latitud y la longitud de tu ciudad y cambiá los parámetros.
-4. **Opcional:** elegí otra API que te interese (películas, fútbol, criptomonedas), leé su documentación y hacé un
+4. Ahora, dos APIs para jugar (tampoco piden clave). En un HTTP Request nuevo, hacé un GET a:
+
+```text
+https://pokeapi.co/api/v2/pokemon/pikachu
+```
+
+   - Cambiá `pikachu` por tu Pokémon favorito (en minúscula). ¿Qué número (`id`) tiene?
+   - ¿De qué tipo es? Está en `types`, que es una lista. Probá esta expresión en un Edit Fields:
+     `{{ $json.types[0].type.name }}`.
+   - Escribilo mal a propósito (`pikachuu`). ¿Qué número de error vuelve? ¿Empieza con 4 o con 5?
+
+5. Hacé un GET a la API de Rick and Morty, con parámetros:
+
+```text
+https://rickandmortyapi.com/api/character/?name=rick&status=alive
+```
+
+   - ¿Cuántos personajes encontró? Está en `info.count`.
+   - Sacá `&status=alive` y volvé a ejecutar. ¿Cuántos son ahora? ¿Por qué cambió?
+   - ¿Cómo se llama el primer personaje de la lista? Escribí la expresión.
+
+6. **Opcional:** elegí otra API que te interese (películas, fútbol, criptomonedas), leé su documentación y hacé un
    GET con su API Key, guardada como credencial.
 
 ### Ejercicio 6 · Leé una respuesta: objetos y listas (10 min)
