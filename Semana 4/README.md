@@ -60,7 +60,7 @@ Fuente: `program-summary.pdf` (Módulo 4). **Una clase de 2 horas.**
 
 | Min | Tramo | Filminas | En clase |
 |---|---|---|---|
-| 0–13 | Apertura y repaso de la Semana 3 | 1–5 | Mini cuestionario (2 min) |
+| 0–13 | Apertura y repaso teórico de la Semana 3 | 1–5 | Ejemplo cortito (1 min) y mini cuestionario (2 min) |
 | 13–25 | **01 · Qué es una API** | 6–10 | Ej. 1 (2 min) |
 | 25–45 | **02 · El protocolo HTTP** | 11–17 | Ej. 2 (3 min) |
 | 45–60 | **03 · Credenciales y HTTP Request** | 18–23 | |
@@ -190,42 +190,35 @@ Si vas justo de tiempo, alcanza con decir los dos textos en verde.
 
 <p style="color:#1a7f37">La clase queda grabada.</p>
 
-**Repaso de la Semana 3** (6 min, sin filmina) — antes de pasar a la filmina 5.
+**Repaso de la Semana 3** (7 min, sin filmina) — antes de pasar a la filmina 5.
 
-Abrís en tu n8n el flujo terminado de la semana pasada, **02 · Consultas con lógica (completo)** (`02-consultas-con-logica.json`) de la carpeta
-[../Semana 3/n8n/](../Semana%203/n8n/), y lo ejecutás una vez para que se vean los números de items en las flechas. El
-repaso se hace señalando ese flujo, nodo por nodo:
+Es un repaso teórico: no abrís n8n. Se cuentan las ideas de la semana pasada en cuatro bloques (items, tipos de
+nodos, nodos de lógica y diagnóstico), después un ejemplo cortito en el chat y el mini cuestionario.
 
-```text
-Arrancar a mano → Consultas de prueba → Separar en items → ¿Qué tipo de consulta? (Switch)
-   ├─ Paquetes → Para área de paquetes ──┐
-   ├─ Vuelos   → Para área de vuelos   ──┤
-   ├─ Hoteles  → Para área de hoteles  ──┼→ Juntar las ramas (Merge) → Todas en una lista (Aggregate)
-   └─ Otra     → Para revisar a mano   ──┘        → Esperar 5 segundos (Wait) → Mail de resumen (simulado)
-```
+<p style="color:#1a7f37">Antes de arrancar, repasemos la semana pasada, porque hoy todo eso se usa. Un workflow es una secuencia de nodos conectados. Lo que viaja por las flechas son items: cada item es un paquete de datos, por ejemplo una consulta de un cliente. Y casi todos los nodos trabajan una vez por cada item que les llega.</p>
 
-<p style="color:#1a7f37">Antes de arrancar, repasemos la semana pasada con el flujo que armamos. Un workflow es una secuencia de nodos conectados, y lo que viaja por las flechas son items: cada consulta es un item. Fíjense en los números arriba de cada flecha: cinco consultas entran, se reparten por las ramas, y al final sale uno solo.</p>
+<p style="color:#1a7f37">Había tres tipos de nodos. El trigger arranca el flujo. Las acciones hacen algo en otra aplicación, como mandar un mail. Y los de transformación trabajan con los datos adentro de n8n, como el Edit Fields, que arma los datos con la forma que queremos.</p>
 
-<p style="color:#1a7f37">Había tres tipos de nodos. El trigger arranca el flujo. Las acciones hacen algo en otra aplicación. Y los de transformación trabajan con los datos adentro de n8n, como el Edit Fields, que arma los datos con la forma que queremos.</p>
-
-<p style="color:#1a7f37">Para decidir: IF cuando hay dos caminos, Switch cuando hay tres o más, siempre con una salida para lo que no encaja. Después, Merge vuelve a juntar las ramas, Aggregate pasa de muchos items a uno, y Wait espera sin perder los datos.</p>
+<p style="color:#1a7f37">Para decidir por dónde va cada item: IF cuando hay dos caminos, Switch cuando hay tres o más, siempre con una salida para lo que no encaja. Para juntar: Merge vuelve a unir las ramas, y Aggregate pasa de muchos items a uno solo. Y Wait espera sin perder los datos.</p>
 
 <p style="color:#1a7f37">Y la regla para cuando algo falla: primero se mira el canvas, los colores y los números de items, y después la entrada del nodo. El problema casi nunca está en el nodo rojo, sino en lo que le llegó.</p>
 
-Para explicar (señalando cada nodo del flujo):
+Para explicar:
 - **Workflow e items.** Un **item** es cada "paquete" de datos que viaja por las flechas. Casi todos los nodos se
-  ejecutan una vez por cada item que les llega.
-  - *Ejemplo:* *Separar en items* convierte la lista de cinco consultas en cinco items. Por eso el Switch decide
-    cinco veces, una por consulta.
-- **Los tres tipos de nodos: trigger, acción y transformación.** Hoy vamos a conocer dos nodos nuevos, y conviene
-  ubicarlos ya: el **HTTP Request** es una acción (habla con algo de afuera), y el **Webhook** es un trigger (arranca
-  el flujo cuando llega algo de afuera).
-  - *Ejemplo:* *Arrancar a mano* es un trigger; *Consultas de prueba* (Edit Fields) es de transformación. Webhook =
-    trigger, como el Gmail Trigger. HTTP Request = acción, como el nodo de Sheets.
+  ejecutan una vez por cada item que les llega. Por eso los números arriba de las flechas son la mejor pista de qué
+  está pasando.
+  - *Ejemplo:* Si entran cinco consultas como cinco items, el Switch decide cinco veces, una por consulta. Si las
+    cinco vinieran juntas en una sola lista (un solo item), decidiría una sola vez.
+- **Los tres tipos de nodos: trigger, acción y transformación.** El **trigger** es el que arranca (a mano, a una
+  hora, cuando llega un mail). La **acción** hace algo afuera de n8n. La **transformación** cambia los datos adentro.
+  Hoy vamos a conocer dos nodos nuevos, y conviene ubicarlos ya: el **HTTP Request** es una acción (habla con algo de
+  afuera) y el **Webhook** es un trigger (arranca el flujo cuando llega algo de afuera).
+  - *Ejemplo:* Gmail Trigger = trigger; mandar un mail o agregar una fila en Sheets = acción; Edit Fields = de
+    transformación. Webhook = trigger, como el Gmail Trigger. HTTP Request = acción, como el nodo de Sheets.
 - **IF y Switch.** El IF tiene dos salidas: *true* y *false*. El Switch tiene una por regla, y la salida por defecto
   (*Fallback Output*) atrapa lo que no encaja en ninguna.
-  - *Ejemplo:* La consulta de categoría "crucero" no es paquete, vuelo ni hotel: sin la salida *Otra* se perdía en
-    silencio; con ella, va a *Para revisar a mano*.
+  - *Ejemplo:* Una consulta de categoría "crucero", cuando las reglas son paquete, vuelo y hotel: sin salida por
+    defecto se pierde en silencio; con ella, va a "revisar a mano".
 - **Merge, Aggregate y Wait.** El **Merge** junta ramas: para volver a juntar lo que separó un IF o un Switch, modo
   *Append*. El **Aggregate** pasa de muchos items a uno (una lista). El **Wait** pausa y después sigue con los mismos
   datos.
@@ -235,6 +228,23 @@ Para explicar (señalando cada nodo del flujo):
   después la pestaña de entrada del nodo que falla. Hoy esto se vuelve más importante: lo que llega viene de afuera y
   no lo controlamos nosotros, así que hay que leer la respuesta con atención para encontrar el casillero que sirve.
   - *Ejemplo:* La respuesta de una API de noticias tiene 20 casilleros; nos sirve uno, el título.
+
+**Ejemplo cortito: seguí los items** (1 min). Pegás en el chat:
+
+```text
+EJEMPLO · Seguí los items
+Llegan 4 consultas. Dos dicen "urgente".
+
+Trigger → IF ¿es urgente? ─ true  → Avisar al dueño ──┐
+                           └ false → Responder normal ─┴→ Merge (Append) → Aggregate → Mail de resumen
+
+¿Cuántos items pasan por cada flecha? ¿Cuántos mails de resumen salen?
+```
+
+<p style="color:#1a7f37">Sigamos los items. Entran cuatro. El IF los mira de a uno: dos van por true y dos por false. El Merge en Append los vuelve a juntar: cuatro otra vez. El Aggregate los convierte en uno solo. Así que sale un único mail de resumen, con las cuatro consultas adentro.</p>
+
+Respuesta: **4 → 2 y 2 → 4 → 1**, y un solo mail. Si alguien dice "cuatro mails", es la confusión típica: sin el
+Aggregate, el mail se manda una vez por item.
 
 **Mini cuestionario** (2 min). Pegás en el chat:
 
@@ -263,20 +273,40 @@ Respuestas: **1a, 2b, 3c, 4a, 5c**. Leés en voz alta cuántos acertaron cada un
 
 Para explicar:
 - **"En el módulo 3: armaste un workflow con lógica de control que corre de punta a punta y decide solo."** El
-  flujo de consultas: Switch por categoría, Merge, Aggregate y un resumen. Funciona, decide, resume.
+  flujo de consultas: Switch por categoría, Merge, Aggregate y un resumen. Funciona, decide, resume. **Lógica de
+  control** son los nodos que deciden el camino (IF, Switch) y los que ordenan el recorrido (Merge, Aggregate,
+  Wait). **De punta a punta** quiere decir que arranca en el trigger y llega hasta el final sin que nadie lo empuje.
+  Y **decide solo**: nadie tuvo que mirar cada consulta para mandarla a su área. Es lo que acabamos de repasar.
   - *Ejemplo:* Cinco consultas entraron, cada una fue a su área, y salió un solo mensaje.
+  - *Ejemplo:* Es lo mismo que el ejemplo cortito del repaso: entraban cuatro, el IF las separaba, el Merge las
+    juntaba y el Aggregate armaba un solo mail. Nadie tocó nada en el medio.
 - **"La trampa: los datos los inventaste vos con un Edit Field. El flujo nunca habló con nadie."** Era un flujo de
   laboratorio. Un flujo útil de verdad recibe datos de afuera (un formulario, un mail, una tienda) y deja el
-  resultado afuera (una planilla, un mensaje).
+  resultado afuera (una planilla, un mensaje). Mientras los datos los escribimos nosotros, todo sale siempre bien:
+  sabemos qué casilleros hay y qué valores tienen. Con datos de afuera aparecen las sorpresas: un casillero con otro
+  nombre, un servicio que no responde, una clave vencida. Para eso nos preparó la semana pasada (mirar lo que llega
+  antes de culpar al nodo).
   - *Ejemplo:* Es como practicar el discurso frente al espejo: sirve, pero el público todavía no lo escuchó.
+  - *Ejemplo:* La consulta de "Lucía" la escribimos nosotros en el Edit Fields. Una consulta real llegaría desde el
+    formulario de la web de la agencia, a cualquier hora, escrita como el cliente quiera.
 - **"Hoy: aprendemos cómo se hablan dos sistemas y conectamos n8n con un servicio real."** **Servicio** es cualquier
-  programa en internet que ofrece algo: una cotización, noticias, el clima, tus planillas de Google.
+  programa en internet que ofrece algo: una cotización, noticias, el clima, tus planillas de Google. Que dos
+  sistemas "se hablen" quiere decir que uno le pide algo al otro y el otro le contesta, sin una persona en el medio.
+  La forma de hacerlo es lo que se llama **API**, y es el tema de toda la primera hora.
   - *Ejemplo:* dolarapi.com es un servicio que da la cotización del dólar. Hoy n8n le va a preguntar.
+  - *Ejemplo:* Hoy, para saber el dólar, alguien de la agencia abre una página y lo copia a mano. Después de esta
+    clase, n8n le pregunta solo, cada vez que llega una consulta.
 - **"Al final de la clase: vas a tener un flujo que recibe datos de afuera y le pide cosas a una API
   autenticada."** **Autenticada** quiere decir "con identificación": la API nos pide una clave antes de
-  responder.
+  responder. Son dos cosas nuevas a la vez: **recibir** (alguien de afuera le avisa a n8n: eso es el webhook) y
+  **pedir** (n8n le pregunta a otro servicio: eso es el HTTP Request). Y a algunos servicios hay que mostrarles una
+  clave, como mostrar la entrada en un recital: eso son las credenciales.
   - *Ejemplo:* Llega una consulta ("Lucía, Mendoza, 800 dólares") → n8n pregunta el dólar → n8n busca noticias de
     Mendoza con su clave → responde "son 1.256.000 pesos, y estas son las noticias de Mendoza".
+  - *Ejemplo:* La API del dólar responde a cualquiera, sin clave. La de noticias, no: si le preguntamos sin clave,
+    contesta un error 401 ("no sé quién sos"). Ese error lo vamos a provocar a propósito en la práctica.
+
+Si vas justo de tiempo, alcanza con el texto en verde y el primer ejemplo de cada punto.
 
 ---
 
