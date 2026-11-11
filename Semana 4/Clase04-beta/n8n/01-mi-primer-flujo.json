@@ -1,0 +1,114 @@
+{
+  "name": "01 · Mi primer flujo: un saludo",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "0a13157f-59cd-4665-9f91-d941e5ec580c",
+      "name": "Cuando hago clic",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "12576dbd-4c91-4eaf-87a6-6c1bf2ef74f1",
+              "name": "nombre",
+              "value": "Ana",
+              "type": "string"
+            },
+            {
+              "id": "bb37c3c6-f847-4095-8c70-845c6d529c46",
+              "name": "ciudad",
+              "value": "Córdoba",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b44cc98d-b136-499d-8d23-83673fe1f2ac",
+      "name": "Datos del cliente",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "00844818-f574-4904-8fea-b1e7b2fb4104",
+              "name": "mensaje",
+              "value": "=Hola {{ $json.nombre }}, gracias por escribirnos desde {{ $json.ciudad }}.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "be902f61-cf5b-455e-85c3-2868f2232aeb",
+      "name": "Armar el saludo",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 01 · Mi primer flujo\n\n1. **Cuando hago clic** (trigger): arranca el flujo cuando apretás **Execute workflow**.\n2. **Datos del cliente** (Edit Fields): escribe a mano dos datos, `nombre` y `ciudad`.\n3. **Armar el saludo** (Edit Fields): usa esos datos para armar una frase.\n\nProbá: cambiá \"Ana\" por tu nombre y volvé a ejecutar.",
+        "height": 300,
+        "width": 520,
+        "color": 4
+      },
+      "id": "f0165617-e090-4572-8ef2-ace117677c51",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -340
+      ]
+    }
+  ],
+  "connections": {
+    "Cuando hago clic": {
+      "main": [
+        [
+          {
+            "node": "Datos del cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Datos del cliente": {
+      "main": [
+        [
+          {
+            "node": "Armar el saludo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "id": "c4b01primerflujo",
+  "active": false
+}

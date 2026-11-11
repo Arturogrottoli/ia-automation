@@ -1,0 +1,98 @@
+{
+  "name": "03 · Formulario: los datos los carga una persona",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Consulta de viaje",
+        "formDescription": "Contanos a dónde querés viajar y te respondemos.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Nombre",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Destino",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Cantidad de personas",
+              "fieldType": "number"
+            }
+          ]
+        },
+        "responseMode": "onReceived",
+        "options": {
+          "path": "consulta-viaje"
+        }
+      },
+      "id": "6415ddb6-8910-44b6-93d9-71b5c594e512",
+      "name": "Formulario de consulta",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "0e903173-9906-46a1-87be-215b29f7ee80"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b6802c91-2e64-4905-a9e5-1bde5d565f58",
+              "name": "resumen",
+              "value": "=Nueva consulta: {{ $json.Nombre }} quiere viajar a {{ $json.Destino }} ({{ $json['Cantidad de personas'] }} personas).",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e671a6e3-855b-48b8-a615-3957a294b7c8",
+      "name": "Armar el resumen",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 03 · Formulario\n\n1. **Formulario de consulta** (n8n Form Trigger): n8n arma una página con un formulario.\n2. **Armar el resumen** (Edit Fields): junta lo que cargó la persona en una frase.\n\nPara probar: **Execute workflow**. Se abre el formulario en otra pestaña: completalo y mandalo.",
+        "height": 300,
+        "width": 520,
+        "color": 4
+      },
+      "id": "16782719-3340-4ee6-8775-ad165ff2f79f",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -340
+      ]
+    }
+  ],
+  "connections": {
+    "Formulario de consulta": {
+      "main": [
+        [
+          {
+            "node": "Armar el resumen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "id": "c4b03formulario0",
+  "active": false
+}
