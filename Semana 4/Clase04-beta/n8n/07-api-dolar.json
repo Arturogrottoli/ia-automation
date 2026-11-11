@@ -1,0 +1,100 @@
+{
+  "name": "07 · API: el precio del dólar",
+  "id": "c4b07apidolar000",
+  "active": false,
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Argentina/Buenos_Aires"
+  },
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "9d4c29d4-066d-49eb-984b-d5bbf543e932",
+      "name": "Cuando hago clic",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://dolarapi.com/v1/dolares/oficial",
+        "options": {}
+      },
+      "id": "57aec89b-a15d-411b-9623-5ac67edd748f",
+      "name": "Preguntarle a la API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cbbc65db-f8c9-4dd5-940a-7f78077b080a",
+              "name": "mensaje",
+              "value": "=Dólar oficial hoy: compra ${{ $json.compra }}, venta ${{ $json.venta }}.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d762a574-9d48-4b43-a4c0-eb008014b9dc",
+      "name": "Armar el aviso",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 07 · API: el precio del dólar\n\n1. **Cuando hago clic** (trigger manual).\n2. **Preguntarle a la API** (HTTP Request, GET): `https://dolarapi.com/v1/dolares/oficial`. No pide clave.\n3. **Armar el aviso** (Edit Fields): arma una frase con `compra` y `venta`, arrastrados desde INPUT.\n\nPara probar: **Execute workflow**.",
+        "height": 320,
+        "width": 620,
+        "color": 4
+      },
+      "id": "209c2dd4-9006-457d-ac23-5a05f69887e9",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -380
+      ]
+    }
+  ],
+  "connections": {
+    "Cuando hago clic": {
+      "main": [
+        [
+          {
+            "node": "Preguntarle a la API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preguntarle a la API": {
+      "main": [
+        [
+          {
+            "node": "Armar el aviso",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

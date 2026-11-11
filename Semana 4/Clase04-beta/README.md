@@ -66,12 +66,13 @@
 | 97–118 | **Bloque 5 · Cómo le llegan los datos a n8n** | Webhook desde el navegador (flujo 02) y formulario que guarda en Google Sheets (flujo 03) |
 | 118–140 | **Bloque 6 · Que el flujo decida** | IF con horario (flujo 04), IF con una cuenta (flujo 05) y Switch con lista desplegable (flujo 06) |
 | 140–143 | Cierre | Mini repaso en el chat |
+| (extra) | **Si llegás · Una probadita de API** | Qué es una API, el dólar con HTTP Request (flujo 07) y un Pokémon (flujo 08). Si no llegás, queda para la clase siguiente. |
 
 **Si el tiempo se aprieta** (para terminar en 120 minutos hay que ahorrar unos 23), recortá en este orden:
 
 | Orden | Qué recortás | Cómo | Ahorrás |
 |---|---|---|---|
-| 0 | Que el navegador muestre solo el saludo (flujo 02b, opcional) | Lo saltás: el saludo ya se vio en JSON | ~4 min |
+| 0 | El tramo 2 del flujo 02 (que conteste solo la frase) | Hacés solo 02-12 a 02-15, sin el `<h1>` (02-16) y sin la tabla del repaso | ~2 min |
 | 1 | IF 2 (flujo 05) | Lo mostrás ya importado y lo probás con los dos montos, sin armarlo | ~4 min |
 | 2 | El formulario con Google Sheets (flujo 03) | Lo mostrás ya armado: completás el formulario y mostrás la fila nueva en la planilla | ~4 min |
 | 3 | El Switch (flujo 06) | Lo mostrás ya importado: elegís dos tipos en el formulario y mostrás por qué salida pasa cada uno | ~4 min |
@@ -94,14 +95,14 @@ La tabla de otras cajas de Docker, el detalle de qué anda en local y Postman ya
 - [ ] Importá los seis flujos de la carpeta [n8n/](n8n/) (los vas a usar de respaldo): workflow nuevo → menú **…**
       (arriba a la derecha) → **Import from File…** → elegís el archivo → **Save**.
   - `01-mi-primer-flujo.json`: trigger manual → *Datos del cliente* → *Armar el saludo*.
-  - `02-webhook-desde-el-navegador.json`: Webhook (GET, dirección `saludo`) → *Armar la respuesta*.
-  - `02b-webhook-saludo-en-el-navegador.json`: el mismo, con *Respond to Webhook* al final, para que el navegador
-    muestre solo el saludo (dirección `saludo-lindo`).
+  - `02-webhook-desde-el-navegador.json`: Webhook (GET, dirección `saludo`) → *Armar la respuesta* → *Contestar al
+    navegador* (Respond to Webhook).
   - `03-formulario.json`: n8n Form Trigger (dirección `consulta-viaje`) → *Ordenar los datos* → *Guardar en la
     planilla* (Google Sheets).
   - `04-if-fin-de-semana.json`: Schedule Trigger → IF → dos mensajes.
   - `05-if-descuento.json`: Webhook (GET, dirección `presupuesto`) → IF → con o sin descuento.
   - `06-switch-por-tipo.json`: n8n Form con lista desplegable (dirección `consulta-tipo`) → Switch → cuatro áreas.
+  - `07-api-dolar.json` y `08-api-pokemon.json` (extra, si llegás): trigger manual → HTTP Request → Edit Fields.
 - [ ] **Para el flujo 03:** creá la planilla "Consultas de la agencia" con los títulos `fecha`, `nombre`, `destino`,
       `personas` en la fila 1. En el nodo *Guardar en la planilla*, elegí tu credencial de Google Sheets y pegá el
       link de la planilla. Probalo una vez y borrá la fila de prueba.
@@ -1476,17 +1477,24 @@ Para explicar:
   - *Ejemplo:* Tocás la dirección desde el navegador, y en la pantalla aparece "Hola Ana, recibimos tu consulta
     para viajar a Mendoza".
 
-### Ejemplo en vivo: el navegador le manda datos a n8n (flujo 02) (8 min)
+### Ejemplo en vivo: el navegador le manda datos a n8n (flujo 02) (14 min)
 
-El flujo que arman:
+El flujo que arman, completo (está en `02-webhook-desde-el-navegador.json`):
 
 ```text
-Llega un pedido  →  Armar la respuesta
-(Webhook, GET)       (Edit Fields)
+Llega un pedido  →  Armar la respuesta  →  Contestar al navegador
+(Webhook, GET)       (Edit Fields)          (Respond to Webhook)
 ```
 
-Lo que tiene que pasar: pegan una dirección en el navegador y la pantalla muestra
-`{"mensaje":"Hola Ana, recibimos tu consulta para viajar a Mendoza."}`.
+Se arma **en un solo flujo, de corrido, en dos tramos**:
+
+| Tramo | Nodos | Qué ve el navegador al final del tramo |
+|---|---|---|
+| **1 · Que llegue el dato y n8n conteste** (pasos 02-1 a 02-10) | *Llega un pedido* → *Armar la respuesta* | La ficha en JSON: `{"mensaje":"Hola Ana, recibimos tu consulta para viajar a Mendoza."}` |
+| **2 · Que conteste solo la frase** (pasos 02-11 a 02-16) | se agrega *Contestar al navegador* al final | Solo la frase, grande, como el título de una página: **Hola Ana, recibimos tu consulta para viajar a Mendoza.** |
+
+Por qué en dos tramos: primero se ve cómo contesta n8n solo (con la ficha entera), y así se entiende para qué sirve
+el nodo del final. No son dos flujos: es el mismo, que se completa.
 
 **¿Anda en local?** ✅ Sí, sin pasos extra, pero **solo desde tu propia computadora**: la dirección empieza con
 `localhost`, y esa dirección solo existe ahí. Sirve para aprender y probar. Si le pasaras esa dirección a un cliente
@@ -1541,6 +1549,7 @@ Path:   viene con letras y números raros, tipo  3f8a2c1e-7b4d-...
 
 ```text
 Respond:   When Last Node Finishes   (que conteste cuando termine el último nodo, con lo que armó)
+           (en el tramo 2, paso 02-12, lo cambiamos: por ahora, este)
 ```
 
 <p style="color:#1a7f37">Respond es cuándo le contesta n8n al que tocó el timbre. Elijo When Last Node Finishes: cuando termine el último nodo. Así el navegador recibe lo que armemos, el saludo. Si lo dejara en Immediately, inmediatamente, contestaría apenas lo tocan, antes de armar nada.</p>
@@ -1814,6 +1823,106 @@ PARA EL CHAT · Tocá el timbre vos (ahora o después con la grabación)
 (Si usás n8n en la nube, cambiá http://localhost:5678 por tu dirección de n8n.)
 ```
 
+**Tramo 2 · Que conteste solo la frase (en el mismo flujo)**
+
+<p style="color:#1a7f37">El saludo llegó, pero miren cómo se ve en el navegador: con llaves, comillas, y la palabra mensaje. Eso es porque n8n le contesta al navegador con la ficha entera, en un formato que se llama JSON. A otro programa le sirve; a una persona, no. Ahora, en este mismo flujo, vamos a hacer que el navegador muestre solo la frase. Para eso agregamos un nodo más al final, que se llama Respond to Webhook: responder al webhook.</p>
+
+```text
+Hasta ahora:   Llega un pedido  →  Armar la respuesta
+Al terminar:   Llega un pedido  →  Armar la respuesta  →  Contestar al navegador
+```
+
+**02-11 · Qué es eso que se ve en el navegador: JSON**
+
+```text
+Mirá la pestaña del navegador:   {"mensaje":"Hola Martín, recibimos tu consulta para viajar a Bariloche."}
+```
+
+<p style="color:#1a7f37">Leamos esto. Las llaves abren y cierran la ficha. Entre comillas, primero el nombre del casillero, mensaje; después dos puntos; y después el valor, la frase. Es la misma ficha que vemos en OUTPUT, escrita en una sola línea.</p>
+
+- **JSON es el formato en que se pasan datos los programas.** `{"mensaje":"Hola…"}` = "casillero mensaje, valor
+  Hola…".
+  - *Ejemplo:* Es como una planilla escrita en un renglón: se puede leer, pero es incómodo.
+- **¿Por qué contesta así?** Porque en el webhook pusimos *Respond: When Last Node Finishes*: "cuando termine el
+  último nodo, contestá con lo que armó". Y lo que armó es una ficha entera.
+  - *Ejemplo:* Es como un contestador automático que lee todo lo que tiene anotado, tal cual.
+
+**02-12 · Decirle al webhook que no conteste solo**
+
+```text
+Doble clic en "Llega un pedido" → en  Respond  abrí la lista y cambiá
+   When Last Node Finishes   por   Using 'Respond to Webhook' Node
+   (contestar con el nodo Respond to Webhook)
+Cerrá la ventana (✕ o Esc)
+```
+
+<p style="color:#1a7f37">Primero, le digo al webhook: no contestes vos solo; va a contestar un nodo que pongo al final. Fíjense que todavía no agregué ese nodo. Si ahora tocara el timbre, el navegador se quedaría esperando una respuesta que nadie da. Por eso el paso siguiente es agregarlo.</p>
+
+- **Respond tiene tres opciones.** *Immediately*: contesta apenas lo tocan, antes de hacer nada. *When Last Node
+  Finishes*: contesta solo, con la ficha del último nodo. *Using 'Respond to Webhook' Node*: contesta el nodo
+  Respond to Webhook, con lo que vos le digas.
+  - *Ejemplo:* La tercera es como una persona que atiende el teléfono y dice solo lo que hace falta.
+
+**02-13 · Agregar el nodo que contesta**
+
+```text
+En "Armar la respuesta", clic en el + de su derecha → buscá  respond  → Respond to Webhook
+```
+
+<p style="color:#1a7f37">Busco respond y elijo Respond to Webhook. Miren: queda al final, unido con una flecha a Armar la respuesta. Este nodo es el que le va a hablar al navegador.</p>
+
+- **Los dos cambios van juntos.** El *Respond* del webhook dice "va a contestar un nodo", y este es ese nodo. Si
+  falta uno de los dos, no anda.
+  - *Ejemplo:* ❌ Mal: cambiar el Respond del webhook y olvidarse del nodo nuevo → el navegador no recibe el saludo.
+    ✅ Bien: las dos cosas.
+
+**02-14 · Qué contesta: solo la frase**
+
+```text
+Se abre la ventana del nodo:
+   Respond With:   Text     (contestar con un texto, no con la ficha entera)
+   Response Body:  desde INPUT, arrastrá  mensaje   → queda  {{ $json.mensaje }}
+Cerrá → renombralo:  Contestar al navegador  → Save
+```
+
+<p style="color:#1a7f37">Respond With, contestar con: Text, un texto. Y en Response Body, el cuerpo de la respuesta, que es exactamente lo que va a ver el navegador, arrastro el casillero mensaje desde la izquierda, como siempre. O sea: "contestá solo con lo que dice mensaje".</p>
+
+- **Lo que escribas en *Response Body* es exactamente lo que ve el navegador.** Se puede mezclar texto fijo con
+  casilleros, igual que en Edit Fields.
+  - *Ejemplo:* `Gracias, {{ $json.mensaje }}` → el navegador muestra "Gracias, Hola Ana, recibimos…".
+
+**02-15 · Probar: ahora se ve solo la frase**
+
+```text
+Execute workflow  → en la otra pestaña, la dirección con datos → Enter (o F5)
+   http://localhost:5678/webhook-test/saludo?nombre=Ana&destino=Mendoza
+→ el navegador muestra solo:   Hola Ana, recibimos tu consulta para viajar a Mendoza.
+```
+
+<p style="color:#1a7f37">¿Ven la diferencia? Antes, el navegador mostraba la ficha, con llaves y comillas. Ahora muestra solo la frase, como una página cualquiera. Lo que cambió es quién contesta: antes contestaba el webhook solo, con todo lo que había; ahora contesta el último nodo, con lo que nosotros le dijimos.</p>
+
+**02-16 · Que se vea como el título de una página**
+
+```text
+Doble clic en "Contestar al navegador" → en Response Body, dejalo así:
+   <h1>{{ $json.mensaje }}</h1>
+Cerrá → Save → Execute workflow → en la otra pestaña, F5
+→ la frase aparece grande, en negrita, como el título de una página
+```
+
+<p style="color:#1a7f37">Y un truco final: si pongo h1 entre los signos de menor y mayor adelante, y lo mismo con una barra atrás, la frase sale grande, como el título de una página. Son marcas de página web; el idioma de las páginas se llama HTML. No hace falta saber HTML: con esta sola marca ya se ve la diferencia.</p>
+
+- **`<h1>` y `</h1>` son marcas de HTML:** "esto es un título grande". `<h1>` abre y `</h1>` cierra.
+  - *Ejemplo:* `<h1>Hola</h1>` se ve como un título grande; `<b>Hola</b>`, en negrita.
+
+<p style="color:#1a7f37">Repasemos el flujo entero, de izquierda a derecha. Llega un pedido: el timbre, recibe los datos en la dirección. Armar la respuesta: arma la frase con esos datos. Contestar al navegador: le devuelve la frase al que tocó el timbre. Tres nodos, una automatización completa: entra un dato, se procesa, y sale una respuesta.</p>
+
+| Nodo | Qué hace | Lo que sale |
+|---|---|---|
+| **Llega un pedido** (Webhook) | Recibe el pedido y los datos de la dirección | `query`: nombre, destino |
+| **Armar la respuesta** (Edit Fields) | Arma la frase con los datos | `mensaje`: Hola Ana, … |
+| **Contestar al navegador** (Respond to Webhook) | Le contesta al navegador solo con la frase | La página con el título |
+
 **Ejemplo: mandar datos en la dirección**
 
 ❌ Mal: datos con espacios y sin el signo de pregunta.
@@ -1851,10 +1960,11 @@ Cerrá → Save
 ```text
 Execute workflow → en la otra pestaña:
    http://localhost:5678/webhook-test/saludo?nombre=Ana&destino=Mendoza&personas=3
-→ {"mensaje":"Hola Ana, recibimos tu consulta…","personas":3}
+→ el navegador muestra la frase, como siempre (personas no se ve: la respuesta es solo el mensaje)
+→ en n8n, en el OUTPUT de "Armar la respuesta":  personas: 3
 ```
 
-<p style="color:#1a7f37">Con un 3, anda: el navegador muestra el mensaje y personas, 3.</p>
+<p style="color:#1a7f37">Con un 3, anda: el navegador muestra la frase, y en n8n, en Armar la respuesta, está personas, 3.</p>
 
 **R-3 · Ahora, con una palabra: se rompe**
 
@@ -1868,8 +1978,9 @@ Execute workflow → ahora con una palabra donde va el número:
 **R-4 · Las dos pantallas**
 
 ```text
-En n8n:        "Llega un pedido" en verde ✓, "Armar la respuesta" en ROJO
-               (doble clic → 'personas' expects a number but we got 'tres' [item 0])
+En n8n:        "Llega un pedido" en verde ✓, "Armar la respuesta" en ROJO,
+               "Contestar al navegador" sin color (no llegó a correr)
+               (doble clic en el rojo → 'personas' expects a number but we got 'tres' [item 0])
 En el navegador:  {"message":"Error in workflow"}   ("error en el flujo")
 ```
 
@@ -1895,82 +2006,6 @@ En "Armar la respuesta", borrá el casillero  personas  (tachito a su derecha) �
 
 <p style="color:#1a7f37">Lo arreglo borrando el casillero, y el flujo queda como antes.</p>
 
-
-#### Que el navegador muestre solo el saludo, como una página (opcional, 4 min)
-
-<p style="color:#1a7f37">El saludo llegó, pero se ve feo: con llaves, comillas, y la palabra mensaje. Eso es porque n8n le contesta al navegador con la ficha entera, en formato JSON, que es como se pasan los datos entre programas. A un programa le sirve; a una persona, no. Vamos a hacer que el navegador muestre solo la frase, como si fuera una página. Para eso hay un nodo que se llama Respond to Webhook: responder al webhook. Con él, nosotros elegimos qué se contesta.</p>
-
-```text
-Llega un pedido  →  Armar la respuesta  →  Contestar al navegador
-(Webhook, GET)       (Edit Fields)          (Respond to Webhook)
-```
-
-**En n8n, paso a paso** (sobre el mismo flujo 02; abajo de cada paso, lo que decís en ese momento):
-
-**L-1 · Cambiar quién contesta**
-
-```text
-Doble clic en "Llega un pedido" → en  Respond  cambiá  When Last Node Finishes  por
-   Using 'Respond to Webhook' Node     (contestar con el nodo Respond to Webhook)
-→ Cerrá la ventana (✕ o Esc)
-```
-
-<p style="color:#1a7f37">Primero le digo al webhook que no conteste solo: que conteste un nodo que voy a poner al final.</p>
-
-- **Respond to Webhook = elegir qué se contesta.** Con *When Last Node Finishes*, el webhook contesta solo, con la
-  ficha del último nodo. Con *Using 'Respond to Webhook' Node*, contesta ese nodo, con lo que le digas.
-  - *Ejemplo:* Un contestador automático que lee todo lo que tiene anotado, contra una persona que contesta solo
-    lo que hace falta.
-
-**L-2 · Agregar el nodo que contesta**
-
-```text
-En "Armar la respuesta", clic en el + de su derecha → buscá  respond  → Respond to Webhook
-```
-
-<p style="color:#1a7f37">Agrego el nodo Respond to Webhook al final. Los dos van juntos: si cambio el Respond del webhook y no pongo este nodo, el navegador no recibe el saludo.</p>
-
-**L-3 · Qué contesta: solo el texto**
-
-```text
-Respond With:   Text          (contestar con un texto, no con la ficha)
-Response Body:  arrastrá  mensaje  desde INPUT  → queda  {{ $json.mensaje }}
-Cerrá → renombralo:  Contestar al navegador  → Save
-```
-
-<p style="color:#1a7f37">Respond With, Text: que conteste con un texto. Y en Response Body, el cuerpo de la respuesta, lo que va a ver el navegador, arrastro el mensaje.</p>
-
-- **Lo que escribas en *Response Body* es exactamente lo que ve el navegador.** Se puede mezclar texto fijo con
-  casilleros, igual que en Edit Fields.
-  - *Ejemplo:* `Gracias, {{ $json.mensaje }}` → "Gracias, Hola Ana, recibimos…".
-
-**L-4 · Probar**
-
-```text
-Execute workflow  → en la otra pestaña, F5
-→ el navegador muestra solo:   Hola Ana, recibimos tu consulta para viajar a Mendoza.
-```
-
-<p style="color:#1a7f37">¿Ven la diferencia? Antes, el navegador mostraba la ficha, con llaves y comillas. Ahora muestra la frase, como una página cualquiera.</p>
-
-- **JSON es el formato en que se pasan datos los programas.** `{"mensaje":"Hola Ana…"}` es "casillero mensaje,
-  valor Hola Ana…": la misma ficha que vemos en n8n, escrita en una línea. A un programa le sirve; a una persona, no.
-  - *Ejemplo:* Es como una planilla escrita en un renglón: se puede leer, pero es incómodo.
-
-**L-5 · Que se vea como título grande**
-
-```text
-Volvé a Response Body y dejalo así:   <h1>{{ $json.mensaje }}</h1>
-→ Execute workflow → F5 → la frase aparece grande, en negrita
-```
-
-<p style="color:#1a7f37">Y un truco: si pongo esto, h1 adelante y barra h1 atrás, la frase sale grande, como el título de una página. Son marcas de página web, que se llaman HTML.</p>
-
-- **`<h1>` y `</h1>` son marcas de HTML** (el idioma de las páginas web): "esto es un título grande".
-  - *Ejemplo:* `<h1>Hola</h1>` se ve como un título grande; `<b>Hola</b>`, en negrita.
-
-**¿Anda en local?** ✅ Sí, sin pasos extra. Está armado en `02b-webhook-saludo-en-el-navegador.json` (con la
-dirección `saludo-lindo`, para que no choque con el flujo 02 si importás los dos).
 
 ### Otra forma: el formulario de n8n, y cada consulta a Google Sheets (flujo 03) (12 min)
 
@@ -2980,6 +3015,35 @@ Switch ─ Vuelos · Hoteles · Paquetes · Otra
 
 Por qué: el Switch se lee de un vistazo, y agregar una opción nueva es agregar una regla, no otro IF.
 
+<p style="color:#1a7f37">Ojo: los IF uno adentro del otro también funcionan. No está mal; da el mismo resultado. La pregunta es cuál es más cómodo, y para eso piensen en lo que pasa después: cuando hay que leerlo, cambiarlo, o cuando llega algo que no esperábamos.</p>
+
+**IF dentro de IF contra Switch: qué gana cada uno**
+
+| Mirando… | Dos o tres IF encadenados | Un Switch |
+|---|---|---|
+| **Cuántos nodos** | Uno por opción: para 3 áreas, 3 IF | Uno solo, para todas |
+| **Leerlo en el canvas** | Hay que seguir las flechas *false* de uno en uno, como una escalera | Todas las salidas una al lado de la otra, con su nombre |
+| **Agregar una opción** (llega "Crucero") | Otro IF más, colgado del último *false*, y reconectar flechas | Una regla más (*Add Routing Rule*), en el mismo nodo |
+| **Lo que no encaja** | Termina en el último *false*, que no tiene nombre y es fácil olvidarse de conectarlo | Va a la salida *Otra* (*Fallback Output*), que se ve y tiene nombre |
+| **Cambiar una regla** | Abrir el IF que corresponde (hay que encontrarlo) | Abrir un solo nodo: están todas las reglas juntas |
+| **Equivocarse** | Si un IF pregunta mal, todos los de abajo reciben lo que no era | Cada regla es independiente: una mal escrita afecta solo a su salida |
+
+Para explicar:
+- **El beneficio del Switch es el orden, no el resultado.** Con IF encadenados o con Switch, la consulta de
+  "Paquete" llega al mismo lugar. La diferencia está en lo fácil que es entenderlo y cambiarlo después.
+  - *Ejemplo:* En tres meses, otra persona (o vos) abre el flujo. Con el Switch ve "Vuelos · Hoteles · Paquetes ·
+    Otra" y entiende en dos segundos. Con la escalera de IF, tiene que abrir cada uno para ver qué pregunta.
+- **Crecer es más fácil con el Switch.** Las opciones casi siempre aumentan: hoy son 3 áreas, mañana 6.
+  - *Ejemplo:* Con IF, para 6 áreas son 6 IF en escalera. Con Switch, son 6 reglas en un nodo.
+- **La salida "Otra" es una red de seguridad que se ve.** En la escalera de IF, lo que no encaja cae en el último
+  *false*; si nadie lo conectó, se pierde en silencio.
+  - *Ejemplo:* Alguien elige "Crucero": con el Switch cae en "Otra" y alguien lo lee; con IF, puede no ir a ningún
+    lado.
+- **¿Entonces el IF nunca?** El IF es mejor cuando la pregunta es de **sí o no**, o cuando cada paso pregunta **por
+  cosas distintas**. El Switch es para cuando se pregunta **una sola cosa** que puede tener **varias respuestas**.
+  - *Ejemplo:* "¿El monto es 1000 o más?" → IF. "¿Es vuelo, hotel o paquete?" → Switch. "¿Es paquete? Y si es
+    paquete, ¿el monto es 1000 o más?" → son dos preguntas distintas: un Switch y, en la salida Paquetes, un IF.
+
 `PARA EL CHAT` (opcional; das las respuestas sin esperar):
 
 ```text
@@ -2990,6 +3054,155 @@ PARA EL CHAT · ¿IF o Switch?
 ```
 
 Respuestas: **1 → IF** (sí o no); **2 → Switch** (cuatro caminos, con "otra" como salida para lo demás); **3 → IF**.
+
+---
+
+## Extra, si llegás · Una probadita de API (10 min)
+
+**Solo si sobra tiempo después del Switch.** Si no llegás, no pasa nada: API es el tema de la clase siguiente, y
+esto queda en el README para leer y en los flujos `07-api-dolar.json` y `08-api-pokemon.json` de la carpeta
+[n8n/](n8n/). Si llegás justo, hacé solo la explicación y el ejemplo 1.
+
+**¿Anda en local?** ✅ Sí, sin pasos extra: es la "dirección 1", n8n sale a buscar algo a internet. Las dos APIs de
+los ejemplos son gratis y **no piden clave**.
+
+### Qué es una API (3 min)
+
+<p style="color:#1a7f37">Hasta ahora, los datos le llegaban a n8n: los escribíamos nosotros, o los mandaba el navegador o un formulario. Ahora vamos al revés: n8n sale a buscar datos a otro lado. Y para eso se usa una API.</p>
+
+<p style="color:#1a7f37">Piensen en un restaurante. Ustedes no entran a la cocina a buscar la comida: le piden al mozo, con lo que dice la carta, y el mozo les trae el plato. La API es el mozo. Otro sistema, por ejemplo una página que sabe el precio del dólar, tiene sus datos en la cocina. Nosotros le pedimos a la API lo que queremos, y la API nos trae la respuesta. En n8n, el que hace el pedido es un nodo que se llama HTTP Request: pedido por internet.</p>
+
+```text
+n8n (HTTP Request)  ── "¿cuánto está el dólar oficial?" ──►  API de dolarapi.com
+n8n                 ◄── { "compra": 1520, "venta": 1570 } ──   (la respuesta, en JSON)
+```
+
+Para explicar:
+- **API = la puerta por donde un programa le pide datos a otro.** Cada API tiene su "carta": qué cosas se le pueden
+  pedir y en qué dirección.
+  - *Ejemplo:* La carta de dolarapi dice: "pidiendo `/v1/dolares/oficial`, te doy el dólar oficial".
+- **Es el webhook al revés.** Con el webhook, alguien de afuera toca el timbre de n8n. Con una API, n8n toca el
+  timbre de otro.
+  - *Ejemplo:* Webhook: el formulario le avisa a n8n. API: n8n le pregunta a dolarapi.
+- **La respuesta viene en JSON, la misma ficha de siempre.** Con llaves, casilleros y valores. n8n la muestra en
+  OUTPUT y se arrastra igual que todo lo demás.
+  - *Ejemplo:* `compra: 1520` se arrastra y queda `{{ $json.compra }}`.
+- **Algunas APIs piden clave y otras no.** Las de hoy son abiertas. Otras (Google, Mercado Pago, la de un clima
+  con más datos) piden una clave o una credencial, como la de Google Sheets.
+  - *Ejemplo:* dolarapi y PokeAPI: sin clave. Gmail: con credencial.
+
+### Ejemplo 1 · El precio del dólar (flujo 07) (4 min)
+
+```text
+Cuando hago clic  →  Preguntarle a la API  →  Armar el aviso
+(trigger manual)     (HTTP Request, GET)       (Edit Fields)
+```
+
+Lo que tiene que salir (probado; el número cambia cada día): `Dólar oficial hoy: compra $1520, venta $1570.`
+
+**En n8n, paso a paso** (cada paso son uno o dos clics; abajo de cada uno, lo que decís y explicás en ese momento):
+
+**API-1 · Un flujo nuevo con el trigger de siempre**
+
+```text
+Overview → Create workflow → nombre:  API dólar
++ (Add first step) → Trigger manually
+```
+
+<p style="color:#1a7f37">Flujo nuevo, y el trigger más simple, el del clic. Lo que nos importa hoy es el nodo que viene.</p>
+
+**API-2 · El nodo que hace el pedido: HTTP Request**
+
+```text
++ a la derecha → buscá  http  → HTTP Request
+   Method:  GET     (pedir: es el que viene)
+   URL:     https://dolarapi.com/v1/dolares/oficial
+→ lo demás, como viene
+```
+
+<p style="color:#1a7f37">HTTP Request es el mozo: el nodo que le hace el pedido a la API. Le digo dos cosas. El método: GET, pedir, el mismo que usaba el navegador. Y la dirección, la URL: es la parte de la carta que dice "dólar oficial". No hay clave, no hay credencial: esta API es abierta.</p>
+
+- **La URL es "qué le pido".** Cambiando el final, se piden otras cosas de la misma carta.
+  - *Ejemplo:* `…/v1/dolares/blue` trae el dólar blue; `…/v1/dolares` trae todos juntos.
+- **Es GET, como el navegador.** De hecho, esa misma dirección se puede pegar en el navegador y se ve la
+  respuesta.
+  - *Ejemplo:* Abrí `https://dolarapi.com/v1/dolares/oficial` en otra pestaña: aparece la ficha en JSON.
+
+**API-3 · Probar el pedido y mirar la respuesta**
+
+```text
+Execute step → OUTPUT:
+   moneda: USD   casa: oficial   nombre: Oficial
+   compra: 1520   venta: 1570   fechaActualizacion: 2026-11-11T18:00:00.000Z
+Cerrá → renombralo:  Preguntarle a la API
+```
+
+<p style="color:#1a7f37">Ejecuto el paso, y miren: la API contestó. Una ficha con la moneda, la casa, el precio de compra, el de venta y cuándo se actualizó. Esto no lo escribí yo: vino de afuera, de internet, recién.</p>
+
+**API-4 · Usar la respuesta, como siempre**
+
+```text
++ → Edit Fields → Add Field →  Name: mensaje   Type: String
+Value:  Dólar oficial hoy: compra $   → arrastrá  compra   → , venta $   → arrastrá  venta   → .
+Queda:  Dólar oficial hoy: compra ${{ $json.compra }}, venta ${{ $json.venta }}.
+Cerrá → renombralo:  Armar el aviso → Save → Execute workflow
+→ mensaje: Dólar oficial hoy: compra $1520, venta $1570.
+```
+
+<p style="color:#1a7f37">Y lo que trajo la API se usa igual que cualquier dato: lo arrastro. Ahora tengo una frase con el dólar de hoy. Si mañana lo ejecuto, dice el dólar de mañana, sin tocar nada. Imagínense esto con el trigger de horario: todos los días a las 9, el dólar del día en un mensaje para los vendedores.</p>
+
+- **Lo que trae la API es un dato más.** Se arrastra, se usa en un IF, se guarda en una planilla.
+  - *Ejemplo:* Juntándolo con el flujo 05: "tu viaje de USD 1350 son hoy $2.119.500" (monto × venta).
+
+### Ejemplo 2 · Los datos de un Pokémon (flujo 08) (3 min)
+
+Para mostrar que con cualquier API es igual, y para que lo prueben ellos en casa cambiando el nombre.
+
+Lo que tiene que salir (probado): `pikachu es el Pokémon número 25 y es de tipo electric.`
+
+**API-5 · El mismo flujo, con otra dirección**
+
+```text
+En el flujo del dólar (o uno nuevo igual): doble clic en "Preguntarle a la API"
+   URL:  https://pokeapi.co/api/v2/pokemon/pikachu
+→ Execute step
+```
+
+<p style="color:#1a7f37">Mismo nodo, otra dirección: ahora le pregunto a la PokeAPI por Pikachu. Y miren el OUTPUT: es enorme. Miles de datos: sus movimientos, sus fotos, sus juegos. Las APIs suelen traer mucho más de lo que necesitamos. Nosotros agarramos solo lo que nos sirve.</p>
+
+- **No hace falta entender toda la respuesta.** Se busca lo que sirve y se arrastra. Para encontrarlo, la vista
+  **Schema** de OUTPUT ayuda: muestra los casilleros ordenados.
+  - *Ejemplo:* De todo lo que trae Pikachu, usamos tres: `name`, `id` y el tipo.
+
+**API-6 · Sacar tres datos de la respuesta**
+
+```text
+Edit Fields → mensaje (String):
+   {{ $json.name }} es el Pokémon número {{ $json.id }} y es de tipo {{ $json.types[0].type.name }}.
+→ Execute step → pikachu es el Pokémon número 25 y es de tipo electric.
+```
+
+<p style="color:#1a7f37">Arrastro el nombre, el número, y el tipo. El tipo está más adentro: en una lista que se llama types, el primero, y adentro su nombre. Arrastrándolo, n8n lo escribe solo.</p>
+
+- **`types[0]` es "el primero de la lista".** Algunos casilleros son listas (un Pokémon puede tener dos tipos).
+  `[0]` es el primero, porque se cuenta desde cero, como los items.
+  - *Ejemplo:* Bulbasaur tiene dos tipos: `types[0]` es grass y `types[1]` es poison.
+- **Si escribís mal el nombre, la API contesta que no existe.** Con `pikachuu` el nodo se pone rojo: la API
+  devuelve un error **404**, "no encontrado", el mismo número que vimos con el webhook.
+  - *Ejemplo:* Es pedirle al mozo un plato que no está en la carta.
+
+`PARA EL CHAT` (para que lo prueben en casa):
+
+```text
+PARA EL CHAT · Probá vos (en casa, con el flujo 08 de la carpeta n8n/)
+1. En "Preguntarle a la API", cambiá pikachu por otro: charmander, bulbasaur, snorlax…
+2. Execute workflow y mirá qué dice el mensaje.
+3. Bonus: la API de Rick and Morty, en la misma URL:
+     https://rickandmortyapi.com/api/character/1
+   y armá un mensaje con {{ $json.name }} y {{ $json.species }}.
+```
+
+<p style="color:#1a7f37">Esto fue una probadita. La clase que viene vemos API con calma: cómo se lee la carta de una API, las que piden clave, y cómo sumarla a los flujos que ya armamos.</p>
 
 ---
 
@@ -3293,4 +3506,7 @@ Al terminar, cada alumno puede:
 | **Respond to Webhook** | Nodo para elegir qué le contesta el webhook a quien lo tocó. | Contestar solo el saludo. |
 | **Response Body** | Lo que se contesta: lo que ve el navegador. | `<h1>{{ $json.mensaje }}</h1>` |
 | **HTML** | El idioma de las páginas web: marcas como `<h1>` (título) o `<b>` (negrita). | `<h1>Hola</h1>` |
+| **API** | La puerta por donde un programa le pide datos a otro: el mozo del restaurante. | dolarapi, PokeAPI |
+| **HTTP Request** | El nodo que le hace un pedido a una API por internet: el mozo. | GET a `dolarapi.com/v1/dolares/oficial` |
+| **URL** | La dirección de internet: qué se le pide a la API. | `https://pokeapi.co/api/v2/pokemon/pikachu` |
 | **Postman** | Aplicación para probar direcciones de internet mandándoles pedidos. No la usamos. | GET + dirección + *Send*. |

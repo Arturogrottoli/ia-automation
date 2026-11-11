@@ -1,14 +1,14 @@
 {
-  "name": "02 · Webhook: el navegador le manda datos",
+  "name": "02 · Webhook: el navegador le manda datos a n8n",
   "nodes": [
     {
       "parameters": {
         "httpMethod": "GET",
         "path": "saludo",
-        "responseMode": "lastNode",
+        "responseMode": "responseNode",
         "options": {}
       },
-      "id": "df654a0d-dbf2-4278-9e66-c13f4069de90",
+      "id": "0ac73d9c-8cc5-43a0-9cf0-b305190db097",
       "name": "Llega un pedido",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
@@ -16,14 +16,14 @@
         0,
         0
       ],
-      "webhookId": "52010123-9687-4c08-a752-078e1d78aea4"
+      "webhookId": "6e1ce3ee-16af-4795-8689-4b5fcda0ef18"
     },
     {
       "parameters": {
         "assignments": {
           "assignments": [
             {
-              "id": "75c7c492-2c2a-4d37-88c8-e4d2823c9491",
+              "id": "e08b2a44-9340-4ea9-8f3a-4c361797e3e6",
               "name": "mensaje",
               "value": "=Hola {{ $json.query.nombre }}, recibimos tu consulta para viajar a {{ $json.query.destino }}.",
               "type": "string"
@@ -32,7 +32,7 @@
         },
         "options": {}
       },
-      "id": "4eda2cbd-45c1-4e82-9eb3-49cd4249d2d7",
+      "id": "4bdb7d8b-33e4-44dd-bbb2-b867a73a7133",
       "name": "Armar la respuesta",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -43,18 +43,33 @@
     },
     {
       "parameters": {
-        "content": "## 02 · Webhook desde el navegador\n\n1. **Llega un pedido** (Webhook, GET): espera que alguien abra su dirección.\n2. **Armar la respuesta** (Edit Fields): arma una frase con los datos que vinieron en la dirección.\n\nPara probar: **Execute workflow** (queda escuchando) y pegá en el navegador:\n\n`http://localhost:5678/webhook-test/saludo?nombre=Ana&destino=Mendoza`",
-        "height": 300,
-        "width": 520,
+        "respondWith": "text",
+        "responseBody": "=<h1>{{ $json.mensaje }}</h1>",
+        "options": {}
+      },
+      "id": "049528c1-256e-4395-8ac5-9e2597f6b1d8",
+      "name": "Contestar al navegador",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 02 · Webhook: el navegador le manda datos a n8n\n\n1. **Llega un pedido** (Webhook, GET, Path `saludo`). *Respond*: **Using 'Respond to Webhook' Node**.\n2. **Armar la respuesta** (Edit Fields): arma la frase con `query.nombre` y `query.destino`.\n3. **Contestar al navegador** (Respond to Webhook): *Respond With* **Text**, *Response Body* `<h1>{{ $json.mensaje }}</h1>`: el navegador muestra solo la frase, como título.\n\nPara probar: **Execute workflow** y en el navegador:\n\n`http://localhost:5678/webhook-test/saludo?nombre=Ana&destino=Mendoza`",
+        "height": 380,
+        "width": 640,
         "color": 4
       },
-      "id": "212f6f99-aff8-4584-b91d-0d70baf74571",
+      "id": "a9fbe8d1-606a-4726-b875-0e00e3cf4aa8",
       "name": "Nota: qué hace",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         -40,
-        -360
+        -440
       ]
     }
   ],
@@ -64,6 +79,17 @@
         [
           {
             "node": "Armar la respuesta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Armar la respuesta": {
+      "main": [
+        [
+          {
+            "node": "Contestar al navegador",
             "type": "main",
             "index": 0
           }

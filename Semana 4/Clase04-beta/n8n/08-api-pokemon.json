@@ -1,0 +1,100 @@
+{
+  "name": "08 · API: datos de un Pokémon",
+  "id": "c4b08apipokemon0",
+  "active": false,
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Argentina/Buenos_Aires"
+  },
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "407aa8b5-41d4-40ea-9be9-e2d6fcb339b6",
+      "name": "Cuando hago clic",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://pokeapi.co/api/v2/pokemon/pikachu",
+        "options": {}
+      },
+      "id": "5dd21a23-0d44-4e50-81a0-d9e0fefde1fa",
+      "name": "Preguntarle a la API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bf8f3c7f-4543-4e8d-81f1-fefefaca2b86",
+              "name": "mensaje",
+              "value": "={{ $json.name }} es el Pokémon número {{ $json.id }} y es de tipo {{ $json.types[0].type.name }}.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "4b88f36d-d759-4f20-b890-e3e1f71fe575",
+      "name": "Armar la ficha",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 08 · API: datos de un Pokémon\n\n1. **Cuando hago clic** (trigger manual).\n2. **Preguntarle a la API** (HTTP Request, GET): `https://pokeapi.co/api/v2/pokemon/pikachu`. No pide clave.\n3. **Armar la ficha** (Edit Fields): nombre, número y tipo.\n\nCambiá `pikachu` por otro (`charmander`, `bulbasaur`) y volvé a ejecutar.",
+        "height": 320,
+        "width": 620,
+        "color": 4
+      },
+      "id": "dfd76dc9-e3b8-400b-8fe4-0ebc147afe5d",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -380
+      ]
+    }
+  ],
+  "connections": {
+    "Cuando hago clic": {
+      "main": [
+        [
+          {
+            "node": "Preguntarle a la API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preguntarle a la API": {
+      "main": [
+        [
+          {
+            "node": "Armar la ficha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
