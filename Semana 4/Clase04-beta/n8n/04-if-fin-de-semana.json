@@ -1,0 +1,158 @@
+{
+  "name": "04 · IF: ¿hoy es fin de semana?",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "id": "6c7c8e36-3c58-4c21-af5d-3fca30d807fc",
+      "name": "Todos los días a las 9",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d3f66631-3b5f-495e-a293-132825da9e2f",
+              "leftValue": "={{ $now.weekday }}",
+              "rightValue": 6,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "77e1f362-6d39-4b1a-8334-53b97dcd0707",
+      "name": "¿Es fin de semana?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "44d2a0cb-b4e7-44ec-93b9-006d41a54912",
+              "name": "mensaje",
+              "value": "=Hoy es {{ $now.setLocale('es').toFormat('cccc') }}: no mandamos el resumen.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8f0e276a-af37-4d38-b5d4-3d5d91cdeb99",
+      "name": "Fin de semana: no mandar",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        500,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5a46b4b6-3314-47c7-a047-9cef9f518547",
+              "name": "mensaje",
+              "value": "=Hoy es {{ $now.setLocale('es').toFormat('cccc') }}: mandamos el resumen del día.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ee48cc84-1776-4907-a87f-049929c7359e",
+      "name": "Día de semana: mandar resumen",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        500,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 04 · IF: ¿hoy es fin de semana?\n\n1. **Todos los días a las 9** (Schedule Trigger): arranca solo, todos los días a las 9 (con n8n prendido y el flujo publicado).\n2. **¿Es fin de semana?** (IF): `{{ $now.weekday }}` es el número del día de hoy (lunes = 1 … domingo = 7). Si es 6 o más → *true*.\n3. Cada camino arma su mensaje.\n\nPara probarlo ahora, sin esperar a las 9: **Execute workflow**.",
+        "height": 300,
+        "width": 560,
+        "color": 4
+      },
+      "id": "8986f53c-793c-4757-b8e4-b3aa74876d39",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -420
+      ]
+    }
+  ],
+  "connections": {
+    "Todos los días a las 9": {
+      "main": [
+        [
+          {
+            "node": "¿Es fin de semana?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Es fin de semana?": {
+      "main": [
+        [
+          {
+            "node": "Fin de semana: no mandar",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Día de semana: mandar resumen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Argentina/Buenos_Aires"
+  },
+  "pinData": {},
+  "id": "c4b04iffinsemana",
+  "active": false
+}

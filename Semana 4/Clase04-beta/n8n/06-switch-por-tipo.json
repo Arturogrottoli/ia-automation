@@ -1,0 +1,305 @@
+{
+  "name": "06 · Switch: cada consulta a su área",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Consulta a la agencia",
+        "formDescription": "Elegí qué tipo de consulta es.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Nombre",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Tipo de consulta",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Vuelo"
+                  },
+                  {
+                    "option": "Hotel"
+                  },
+                  {
+                    "option": "Paquete"
+                  },
+                  {
+                    "option": "Otra cosa"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "responseMode": "onReceived",
+        "options": {
+          "path": "consulta-tipo"
+        }
+      },
+      "id": "6432eb53-d246-454b-a6c8-85252e6b6512",
+      "name": "Formulario con tipo",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "7bdcf409-c745-4301-8ec3-0b04c134e1ec"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "4be910cd-0110-4ca5-ac0e-7d77c0ae8471",
+                    "leftValue": "={{ $json['Tipo de consulta'] }}",
+                    "rightValue": "Vuelo",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Vuelos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "38884050-7d4b-476e-a1d0-92de0a03efb6",
+                    "leftValue": "={{ $json['Tipo de consulta'] }}",
+                    "rightValue": "Hotel",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Hoteles"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b54baa78-6735-488e-b909-af63aa18c8d2",
+                    "leftValue": "={{ $json['Tipo de consulta'] }}",
+                    "rightValue": "Paquete",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Paquetes"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "Otra"
+        }
+      },
+      "id": "792a2890-aa9b-44c8-86b7-0c14f7f044b2",
+      "name": "¿Qué tipo de consulta?",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        260,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "de0abb6e-bac1-46f8-956d-44d16ea1c361",
+              "name": "aviso",
+              "value": "=Vuelos: atender a {{ $json.Nombre }}.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "12bc6924-729d-42e7-87bf-915688ee0a4f",
+      "name": "Para el área de vuelos",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        -240
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0ac1c3bb-622e-4cce-8261-665cceadb1d5",
+              "name": "aviso",
+              "value": "=Hoteles: atender a {{ $json.Nombre }}.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5e984175-737a-4124-a223-fba0f7f5313f",
+      "name": "Para el área de hoteles",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b42f4c3c-3810-4874-9f21-0f04f92f802f",
+              "name": "aviso",
+              "value": "=Paquetes: atender a {{ $json.Nombre }}.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3b1857c4-c5d9-4f39-a0d1-dc367a69517d",
+      "name": "Para el área de paquetes",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "75d513b4-b1b5-44e0-a850-947a8668ff35",
+              "name": "aviso",
+              "value": "=Otra cosa: {{ $json.Nombre }} necesita que alguien lo lea.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7c04d39f-bd37-4b76-9c04-f8660579025e",
+      "name": "Para revisar a mano",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 06 · Switch: cada consulta a su área\n\n1. **Formulario con tipo** (n8n Form): Nombre y una lista desplegable: Vuelo, Hotel, Paquete u Otra cosa.\n2. **¿Qué tipo de consulta?** (Switch): una salida por regla (Vuelos, Hoteles, Paquetes) y una más para lo que no encaja (*Otra*).\n3. Cada salida arma su aviso para el área.\n\nPara probar: **Execute workflow**, completá el formulario y mirá por qué salida pasó.",
+        "height": 300,
+        "width": 560,
+        "color": 4
+      },
+      "id": "4513633d-3f1b-4d8f-a099-9f54da6a805f",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -560
+      ]
+    }
+  ],
+  "connections": {
+    "Formulario con tipo": {
+      "main": [
+        [
+          {
+            "node": "¿Qué tipo de consulta?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Qué tipo de consulta?": {
+      "main": [
+        [
+          {
+            "node": "Para el área de vuelos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Para el área de hoteles",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Para el área de paquetes",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Para revisar a mano",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Argentina/Buenos_Aires"
+  },
+  "pinData": {},
+  "id": "c4b06switchtipo0",
+  "active": false
+}

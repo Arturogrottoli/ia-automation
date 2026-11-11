@@ -1,0 +1,156 @@
+{
+  "name": "05 · IF: ¿le corresponde descuento?",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "presupuesto",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "4771cab3-87cf-4ef1-b25d-c33be176cfd2",
+      "name": "Pedido de presupuesto",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "e76796a0-82f5-415b-a16e-b11d78c1e4cb"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "3e79e707-ee7e-4ce3-9266-49059a694567",
+              "leftValue": "={{ $json.query.monto }}",
+              "rightValue": 1000,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "ce23d730-0033-4a76-a475-6895a14604f0",
+      "name": "¿Monto de 1000 o más?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5b5f955e-51ec-4c94-afb1-04810945323d",
+              "name": "mensaje",
+              "value": "=Hola {{ $json.query.nombre }}: tu viaje de USD {{ $json.query.monto }} tiene 10% de descuento. Pagás USD {{ $json.query.monto * 0.9 }}.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f1385182-9d4e-456f-a55d-b1b76a60c891",
+      "name": "Con descuento",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        500,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a2e76f75-9d58-4d04-a523-c0918c09784c",
+              "name": "mensaje",
+              "value": "=Hola {{ $json.query.nombre }}: tu viaje de USD {{ $json.query.monto }} no llega a USD 1000, así que no tiene descuento.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9a9c522e-6aa6-4326-919d-f0e61553fae5",
+      "name": "Sin descuento",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        500,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 05 · IF: ¿le corresponde descuento?\n\n1. **Pedido de presupuesto** (Webhook, GET): recibe `nombre` y `monto` en la dirección.\n2. **¿Monto de 1000 o más?** (IF, con *Convert types where required* prendido, porque lo que viene en la dirección es texto).\n3. **Con descuento** calcula el 10% (`monto * 0.9`); **Sin descuento** avisa que no llega.\n\nPara probar: **Execute workflow** y en el navegador:\n\n`http://localhost:5678/webhook-test/presupuesto?nombre=Ana&monto=1500`",
+        "height": 340,
+        "width": 560,
+        "color": 4
+      },
+      "id": "ba2a166b-a6d5-4437-9831-70d1c6d5af75",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -420
+      ]
+    }
+  ],
+  "connections": {
+    "Pedido de presupuesto": {
+      "main": [
+        [
+          {
+            "node": "¿Monto de 1000 o más?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Monto de 1000 o más?": {
+      "main": [
+        [
+          {
+            "node": "Con descuento",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sin descuento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Argentina/Buenos_Aires"
+  },
+  "pinData": {},
+  "id": "c4b05ifdescuento",
+  "active": false
+}

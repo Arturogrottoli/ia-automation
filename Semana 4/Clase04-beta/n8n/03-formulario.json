@@ -1,5 +1,5 @@
 {
-  "name": "03 · Formulario: los datos los carga una persona",
+  "name": "03 · Formulario: guardar cada consulta en Google Sheets",
   "nodes": [
     {
       "parameters": {
@@ -26,7 +26,7 @@
           "path": "consulta-viaje"
         }
       },
-      "id": "6415ddb6-8910-44b6-93d9-71b5c594e512",
+      "id": "05584cd0-67c1-4343-9771-07214f263fee",
       "name": "Formulario de consulta",
       "type": "n8n-nodes-base.formTrigger",
       "typeVersion": 2.2,
@@ -34,24 +34,42 @@
         0,
         0
       ],
-      "webhookId": "0e903173-9906-46a1-87be-215b29f7ee80"
+      "webhookId": "2e577ca8-934d-490b-a5b6-788b541a6fe7"
     },
     {
       "parameters": {
         "assignments": {
           "assignments": [
             {
-              "id": "b6802c91-2e64-4905-a9e5-1bde5d565f58",
-              "name": "resumen",
-              "value": "=Nueva consulta: {{ $json.Nombre }} quiere viajar a {{ $json.Destino }} ({{ $json['Cantidad de personas'] }} personas).",
+              "id": "0662cdac-c675-466c-91f9-8b113fdae678",
+              "name": "fecha",
+              "value": "={{ $now.toFormat('dd/MM/yyyy HH:mm') }}",
               "type": "string"
+            },
+            {
+              "id": "dd0ab718-3e94-4ec0-b499-d823ee9c27ec",
+              "name": "nombre",
+              "value": "={{ $json.Nombre }}",
+              "type": "string"
+            },
+            {
+              "id": "d628a61e-7c47-4aa6-9a96-65018b188a82",
+              "name": "destino",
+              "value": "={{ $json.Destino }}",
+              "type": "string"
+            },
+            {
+              "id": "62f85f6d-4899-48a1-9e52-5552bcb1de9c",
+              "name": "personas",
+              "value": "={{ $json['Cantidad de personas'] }}",
+              "type": "number"
             }
           ]
         },
         "options": {}
       },
-      "id": "e671a6e3-855b-48b8-a615-3957a294b7c8",
-      "name": "Armar el resumen",
+      "id": "3da143a5-2d1d-4626-8936-fc374e1e0dce",
+      "name": "Ordenar los datos",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
@@ -61,18 +79,51 @@
     },
     {
       "parameters": {
-        "content": "## 03 · Formulario\n\n1. **Formulario de consulta** (n8n Form Trigger): n8n arma una página con un formulario.\n2. **Armar el resumen** (Edit Fields): junta lo que cargó la persona en una frase.\n\nPara probar: **Execute workflow**. Se abre el formulario en otra pestaña: completalo y mandalo.",
-        "height": 300,
-        "width": 520,
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "ffbcce5e-7fb2-49c6-908c-4845483b28c9",
+      "name": "Guardar en la planilla",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 03 · Formulario → Google Sheets\n\n1. **Formulario de consulta** (n8n Form Trigger): n8n arma la página del formulario.\n2. **Ordenar los datos** (Edit Fields): deja cuatro casilleros con nombres cortos: `fecha`, `nombre`, `destino`, `personas`.\n3. **Guardar en la planilla** (Google Sheets, *Append row*): agrega una fila por cada consulta.\n\n**Antes de usarlo:** una planilla con esos cuatro títulos en la fila 1, y la credencial de Google Sheets elegida en el nodo 3, con el link de tu planilla.",
+        "height": 360,
+        "width": 560,
         "color": 4
       },
-      "id": "16782719-3340-4ee6-8775-ad165ff2f79f",
+      "id": "8a535de9-bc73-446d-9563-8f1163a40714",
       "name": "Nota: qué hace",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         -40,
-        -340
+        -380
       ]
     }
   ],
@@ -81,7 +132,18 @@
       "main": [
         [
           {
-            "node": "Armar el resumen",
+            "node": "Ordenar los datos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ordenar los datos": {
+      "main": [
+        [
+          {
+            "node": "Guardar en la planilla",
             "type": "main",
             "index": 0
           }
@@ -90,7 +152,8 @@
     }
   },
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "timezone": "America/Argentina/Buenos_Aires"
   },
   "pinData": {},
   "id": "c4b03formulario0",
