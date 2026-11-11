@@ -1,0 +1,106 @@
+{
+  "name": "02b · Webhook: que el navegador muestre el saludo",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "saludo-lindo",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "af66d8a7-4b27-49b0-8fd1-23ae7d00fe17",
+      "name": "Llega un pedido",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "b7250028-5926-41c8-893a-d9afa4075b9e"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ac8cbac7-e63b-42bb-86fe-4130f21f0ec7",
+              "name": "mensaje",
+              "value": "=Hola {{ $json.query.nombre }}, recibimos tu consulta para viajar a {{ $json.query.destino }}.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d6b23436-9a2d-4523-a9c6-58ced242b1d5",
+      "name": "Armar la respuesta",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=<h1>{{ $json.mensaje }}</h1>",
+        "options": {}
+      },
+      "id": "6c9fdc6c-3e0f-474d-a4ed-6e29cca8f261",
+      "name": "Contestar al navegador",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 02b · Que el navegador muestre el saludo\n\n1. **Llega un pedido** (Webhook, GET). *Respond*: **Using 'Respond to Webhook' Node**.\n2. **Armar la respuesta** (Edit Fields): el mismo saludo del flujo 02.\n3. **Contestar al navegador** (Respond to Webhook): *Respond With* **Text**, y en *Response Body* el saludo entre `<h1>` y `</h1>`, para que salga como título grande.\n\nPara probar: **Execute workflow** y en el navegador:\n\n`http://localhost:5678/webhook-test/saludo-lindo?nombre=Ana&destino=Mendoza`",
+        "height": 360,
+        "width": 620,
+        "color": 4
+      },
+      "id": "24443077-af90-47a6-a62f-1ddfbe50efd8",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -420
+      ]
+    }
+  ],
+  "connections": {
+    "Llega un pedido": {
+      "main": [
+        [
+          {
+            "node": "Armar la respuesta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Armar la respuesta": {
+      "main": [
+        [
+          {
+            "node": "Contestar al navegador",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "id": "c4b02bsaludolind",
+  "active": false
+}

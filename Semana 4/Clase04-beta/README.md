@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Para qué es esta clase** | Retomar desde cero lo que en la Clase 3 no quedó claro: dónde corre n8n, qué es automatizar, qué es un workflow, cómo se arma y cómo le llegan los datos. |
-| **Duración** | ~134 minutos: **no entra en una clase de 2 horas**. Ver la propuesta de cómo partirla en *A tener en cuenta*. |
+| **Duración** | Una clase de 2 horas. El guion tiene material para ~143 minutos: alcanza de sobra para las 2 horas, y si el tiempo no da, hay una lista de qué recortar (debajo de la Agenda). La parte de API queda para la clase siguiente. |
 | **Qué se lleva cada alumno** | n8n abierto en su computadora (o en la nube), y seis flujos chicos vistos paso a paso: un saludo, un webhook, un formulario que guarda en Google Sheets, dos IF y un Switch. |
 | **Qué necesitás** | Docker Desktop con n8n instalado (el de la Semana 2), el navegador, los seis flujos de la carpeta [n8n/](n8n/), y para el flujo 03 una planilla de Google Sheets y tu credencial de Google ya conectada. |
 | **Probado en** | n8n 2.46.6 en Docker (noviembre 2026). Los flujos 01, 02, 04, 05 y 06 se ejecutaron y dieron el resultado que dice este guion, igual que los mensajes de error del webhook y del formulario. Del 03 se probó el formulario y el armado de los datos; el paso a Google Sheets no (hace falta una cuenta de Google conectada). Los nombres de los botones salen del código de n8n y de las clases anteriores; conviene hacer los clics una vez antes de la clase. |
@@ -47,12 +47,10 @@
   días) y sigue la clase desde ahí. La instalación local se arregla después, con la guía de la Semana 2
   ([../../Semana 2/instalar-n8n-local.md](../../Semana%202/instalar-n8n-local.md)).
 - **Tu n8n de demostración** ya usa el nombre `n8n_local` y el puerto 5678. Mostrá ese.
-- **No entra todo en 2 horas (~134 minutos, y falta la parte de API).** Propuesta para partirla en dos clases,
-  sin apurar nada:
-  - **Clase 4 beta:** Apertura y Bloques 1 a 4 (Docker, automatizar, n8n, el recorrido, el primer flujo), más el
-    cierre: unos 90 minutos, con tiempo para dudas generales.
-  - **Clase 5 beta:** un repaso corto, Bloques 5 y 6 (webhook, formulario con Google Sheets, IF y Switch) y la
-    explicación de API.
+- **Es una sola clase de 2 horas.** El guion tiene material para ~143 minutos, a propósito: mejor que sobre a que
+  falte. Si vas bien de tiempo, se da todo; si no, recortás con la lista de abajo de la Agenda. Lo que no llegues a
+  dar del Bloque 6 queda para empezar la clase siguiente (los flujos 04, 05 y 06 ya están armados en [n8n/](n8n/)).
+  **API no entra en esta clase:** se da en la siguiente.
 
 ---
 
@@ -64,14 +62,26 @@
 | 5–25 | **Bloque 1 · Docker y n8n en tu computadora** | Qué es Docker y cuándo se usa, cómo se trajo n8n, por qué local no sirve para un negocio, la alternativa en la nube |
 | 25–42 | **Bloque 2 · Qué es automatizar y qué es n8n** | Las ideas antes de los clics, qué es un nodo, qué anda en local (resumen), y las palabras de n8n en castellano y en inglés |
 | 42–55 | **Bloque 3 · Recorrido por n8n** | Dónde está cada cosa: workflow, canvas, nodo, botones; y el trigger, explicado desde la vida diaria |
-| 55–88 | **Bloque 4 · Tu primer flujo** | El primer nodo, la ventana de Edit Fields, qué es un dato, dónde quedan los datos, pasar datos: un saludo (flujo 01) |
-| 88–109 | **Bloque 5 · Cómo le llegan los datos a n8n** | Webhook desde el navegador (flujo 02) y formulario que guarda en Google Sheets (flujo 03) |
-| 109–131 | **Bloque 6 · Que el flujo decida** | IF con horario (flujo 04), IF con una cuenta (flujo 05) y Switch con lista desplegable (flujo 06) |
-| 131–134 | Cierre | Mini repaso en el chat |
+| 55–97 | **Bloque 4 · Tu primer flujo** | El primer nodo, la ventana de Edit Fields, qué es un dato, dónde quedan los datos, pasar datos, cambiar los valores, romperlo a propósito, y cómo guardarlo y empezar otro: un saludo (flujo 01) |
+| 97–118 | **Bloque 5 · Cómo le llegan los datos a n8n** | Webhook desde el navegador (flujo 02) y formulario que guarda en Google Sheets (flujo 03) |
+| 118–140 | **Bloque 6 · Que el flujo decida** | IF con horario (flujo 04), IF con una cuenta (flujo 05) y Switch con lista desplegable (flujo 06) |
+| 140–143 | Cierre | Mini repaso en el chat |
 
-**Si el tiempo se aprieta**, recortá en este orden: el IF 2 (flujo 05: se muestra ya importado y se prueba con los
-dos montos), el recorrido por la pestaña Executions, y el formulario con Google Sheets (se muestra ya armado). Lo
-último que se recorta es el Bloque 4: si no ven el primer flujo armado completo y despacio, el resto no se entiende.
+**Si el tiempo se aprieta** (para terminar en 120 minutos hay que ahorrar unos 23), recortá en este orden:
+
+| Orden | Qué recortás | Cómo | Ahorrás |
+|---|---|---|---|
+| 0 | Que el navegador muestre solo el saludo (flujo 02b, opcional) | Lo saltás: el saludo ya se vio en JSON | ~4 min |
+| 1 | IF 2 (flujo 05) | Lo mostrás ya importado y lo probás con los dos montos, sin armarlo | ~4 min |
+| 2 | El formulario con Google Sheets (flujo 03) | Lo mostrás ya armado: completás el formulario y mostrás la fila nueva en la planilla | ~4 min |
+| 3 | El Switch (flujo 06) | Lo mostrás ya importado: elegís dos tipos en el formulario y mostrás por qué salida pasa cada uno | ~4 min |
+| 4 | IF 1 (flujo 04) | Queda para el comienzo de la clase siguiente; hoy solo se explica *Qué es un IF* | ~6 min |
+| 5 | El error 2 del Paso 6 (el silencioso) | Lo contás en una frase: "si escribís mal el casillero, sale vacío, no rojo" | ~2 min |
+| 6 | El recorrido por la pestaña Executions | Se nombra; se ve en la grabación de la clase siguiente | ~1 min |
+| 7 | La tabla de palabras en castellano y en inglés (Bloque 2) | La pegás en el chat y decís "está en el README" | ~2 min |
+
+Con los cortes 1 a 4 ya llegás a ~125 minutos; con los siete, a ~120. Lo último que se recorta es el Bloque 4: si no
+ven el primer flujo armado completo y despacio, el resto no se entiende.
 La tabla de otras cajas de Docker, el detalle de qué anda en local y Postman ya están en
 [Para leer en casa](#para-leer-en-casa-no-se-da-en-clase).
 
@@ -85,6 +95,8 @@ La tabla de otras cajas de Docker, el detalle de qué anda en local y Postman ya
       (arriba a la derecha) → **Import from File…** → elegís el archivo → **Save**.
   - `01-mi-primer-flujo.json`: trigger manual → *Datos del cliente* → *Armar el saludo*.
   - `02-webhook-desde-el-navegador.json`: Webhook (GET, dirección `saludo`) → *Armar la respuesta*.
+  - `02b-webhook-saludo-en-el-navegador.json`: el mismo, con *Respond to Webhook* al final, para que el navegador
+    muestre solo el saludo (dirección `saludo-lindo`).
   - `03-formulario.json`: n8n Form Trigger (dirección `consulta-viaje`) → *Ordenar los datos* → *Guardar en la
     planilla* (Google Sheets).
   - `04-if-fin-de-semana.json`: Schedule Trigger → IF → dos mensajes.
@@ -738,7 +750,7 @@ Respuestas, explicadas:
 
 ---
 
-## 55–88 · Bloque 4 · Tu primer flujo: un saludo
+## 55–97 · Bloque 4 · Tu primer flujo: un saludo
 
 Lo armás en vivo, despacio y completo, este flujo de tres nodos (el que quiera, lo arma a la par):
 
@@ -1138,7 +1150,7 @@ Para explicar:
   de ahora. Si ahí ves un hueco, algo está mal escrito.
   - *Ejemplo:* Ves "Hola Ana, gracias por escribirnos desde ." → falta la ciudad: se te escapó el arrastre.
 
-### Paso 4 · Ejecutar todo, guardar y ver las ejecuciones (5 min)
+### Paso 4 · Ejecutar todo, guardar y ver las ejecuciones (4 min)
 
 <p style="color:#1a7f37">Ahora ejecutemos el flujo entero. Abajo en el medio está el botón Execute workflow. Apriétenlo. Fíjense qué pasa: los tres nodos se ponen verdes, uno después del otro, y arriba de cada flecha aparece un número: es la cantidad de datos que pasaron por ahí. Uno.</p>
 
@@ -1157,26 +1169,10 @@ EN N8N · Paso 4: ejecutar, guardar y mirar
 6. Pestaña  Editor  para volver a armar
 ```
 
-**La prueba que cierra la idea** (lo hacés vos, en tu pantalla): abrís *Datos del cliente*, cambiás "Ana" por
-"Martín" y "Córdoba" por "Rosario", volvés al canvas y apretás **Execute workflow**. Sin tocar *Armar el saludo*,
-abrís su OUTPUT: dice `Hola Martín, gracias por escribirnos desde Rosario.`
-
-`PARA EL CHAT` (opcional, para los que te vienen siguiendo; no esperás las respuestas):
-
-```text
-PARA EL CHAT · Si me venís siguiendo, probá vos (si no, hacelo después con la grabación)
-1. Abrí "Datos del cliente" y cambiá Ana por tu nombre y Córdoba por tu ciudad.
-2. Execute workflow.
-3. Mirá lo que dice el casillero "mensaje" de "Armar el saludo".
-```
-
-Y cerrás la idea:
-
-<p style="color:#1a7f37">¿Vieron? No tocaron el saludo, y cambió solo. Porque el saludo no dice Ana: dice "el nombre que me llegue". Esa es la idea de toda automatización: armo los pasos una vez, y funcionan con cualquier dato.</p>
-
 Para explicar:
 - **Verde, rojo y gris.** Verde con ✓: el nodo funcionó. Rojo: falló (al abrirlo, dice por qué). Gris: no se
-  ejecutó (no le llegó nada, o el flujo se cortó antes).
+  ejecutó (no le llegó nada, o el flujo se cortó antes). El rojo lo vemos en vivo en el Paso 6, rompiendo el flujo a
+  propósito.
   - *Ejemplo:* Si *Armar el saludo* está gris, mirá si la flecha que lo une con *Datos del cliente* está bien
     conectada.
 - **El número arriba de la flecha es la cantidad de items.** Un **item** es una ficha de datos. Hoy pasa uno solo
@@ -1195,9 +1191,156 @@ Para explicar:
   - *Ejemplo:* Un cliente dice "no me llegó la respuesta". Vas a Executions, buscás esa hora, y ves en qué nodo se
     cortó.
 
+### Paso 5 · Cambiar los valores: el flujo sigue andando (3 min)
+
+<p style="color:#1a7f37">El flujo ya anda. Ahora quiero que vean algo que es la idea de toda la clase. Voy a cambiar los datos del cliente, y no voy a tocar nada más. Miren el saludo.</p>
+
+**En n8n, paso a paso** (lo hacés vos, despacio, en tu pantalla):
+
+```text
+EN N8N · Paso 5: cambiar los valores
+1. Doble clic en "Datos del cliente"
+2. En el casillero  nombre , borrá  Ana  y escribí  Martín
+3. En el casillero  ciudad , borrá  Córdoba  y escribí  Rosario
+4. Cerrá la ventana (✕ o Esc). A "Armar el saludo" NO lo abras ni lo toques
+5. Abajo en el medio:  Execute workflow
+6. Doble clic en "Armar el saludo" → OUTPUT:
+   Hola Martín, gracias por escribirnos desde Rosario.
+7. Volvé a poner Ana y Córdoba (o dejalo así: da igual) → Save
+```
+
+<p style="color:#1a7f37">¿Vieron? No toqué el saludo, y cambió solo. Porque en el saludo no dice "Ana": dice "el nombre que me llegue". Si mañana el cliente se llama Lucía y es de Salta, el saludo dice Lucía y Salta. Armo los pasos una vez, y funcionan con cualquier dato. Eso es automatizar.</p>
+
+<p style="color:#1a7f37">Y fíjense una cosa más: hoy los datos los cambio yo a mano. En el Bloque 5 vamos a hacer que lleguen solos, desde el navegador o desde un formulario. El saludo va a ser el mismo; lo único que cambia es de dónde vienen los datos.</p>
+
+Para explicar:
+- **Lo que cambia es el dato; los pasos quedan iguales.** En *Datos del cliente* cambiaste lo que entra. *Armar el
+  saludo* no lo tocaste: tiene la misma expresión `{{ $json.nombre }}`, que ahora encuentra "Martín".
+  - *Ejemplo:* Una plantilla de mail que dice "Hola [nombre]": la escribiste una vez y sirve para mil clientes.
+- **Por eso usamos expresiones y no texto fijo.** Si en el saludo hubieras escrito "Hola Ana" a mano (Fixed), al
+  cambiar el cliente el saludo seguiría diciendo Ana.
+  - *Ejemplo:* ❌ Mal: el saludo dice `Hola Ana, gracias…` escrito a mano → con Martín sale "Hola Ana". ✅ Bien:
+    `Hola {{ $json.nombre }}, gracias…` → con Martín sale "Hola Martín".
+- **Cada ejecución es nueva.** Al apretar Execute workflow otra vez, n8n corre todo de nuevo con los datos de ahora.
+  La ejecución anterior (la de Ana) sigue anotada en Executions, pero no se mezcla con la nueva.
+  - *Ejemplo:* En Executions ahora hay dos: una con Ana y otra con Martín. Clic en cada una para ver qué pasó.
+- **Si el saludo no cambió, casi siempre es que no volviste a ejecutar.** OUTPUT muestra la última prueba; si
+  cambiaste los datos pero no apretaste Execute workflow, todavía muestra la de antes.
+  - *Ejemplo:* Cambiaste a Martín, abriste el saludo y dice Ana → cerrá, Execute workflow, y abrilo de nuevo.
+
+`PARA EL CHAT` (opcional, para los que te vienen siguiendo; no esperás las respuestas):
+
+```text
+PARA EL CHAT · Si me venís siguiendo, probá vos (si no, hacelo después con la grabación)
+1. Abrí "Datos del cliente" y cambiá Ana por tu nombre y Córdoba por tu ciudad.
+2. Execute workflow.
+3. Mirá lo que dice el casillero "mensaje" de "Armar el saludo".
+```
+
+### Paso 6 · Romperlo a propósito: qué pasa cuando algo falla (5 min)
+
+<p style="color:#1a7f37">Ahora vamos a hacer algo que parece raro: vamos a romper el flujo a propósito. ¿Por qué? Porque les va a pasar, a todos, muchas veces, y no pasa nada. Quiero que vean cómo se ve un error, dónde lo leen y cómo lo arreglan, ahora que estamos tranquilos y sabemos qué rompimos.</p>
+
+**Error 1: el nodo se pone rojo.** Le decimos a n8n que el nombre es un número.
+
+```text
+EN N8N · Paso 6, error 1: el rojo
+1. Doble clic en "Datos del cliente"
+2. En el casillero  nombre , a la derecha, cambiá el tipo de  String  a  Number
+   (el valor sigue diciendo  Ana )
+3. Cerrá la ventana (✕ o Esc) → Execute workflow
+4. Miren el canvas:
+   - "Cuando hago clic" en verde ✓ (anduvo)
+   - "Datos del cliente" en ROJO (acá falló)
+   - "Armar el saludo" en gris (no se ejecutó: no le llegó nada)
+   - aparece un aviso de que hubo un problema en ese nodo
+5. Doble clic en el nodo rojo → en OUTPUT, en rojo, dice:
+   'nombre' expects a number but we got 'Ana' [item 0]
+   y abajo, una pista para arreglarlo
+6. Para arreglarlo: volvé el tipo de  nombre  a  String  → ✕ → Execute workflow
+   → los tres nodos en verde otra vez
+```
+
+<p style="color:#1a7f37">Leamos el error juntos, que está en inglés. "Nombre espera un número, pero recibimos Ana". O sea: le dijimos que en ese casillero iba un número, y le pusimos un texto. n8n no adivina: frena y avisa. Y fíjense que nos dice tres cosas: en qué nodo pasó, que es el rojo; qué pasó, que es el mensaje; y en qué ficha, que es el item cero, la primera. Y el nodo de después quedó gris: como el anterior falló, a ese no le llegó nada.</p>
+
+**Error 2: el que NO se pone rojo.** Este es el más traicionero, por eso lo mostramos.
+
+```text
+EN N8N · Paso 6, error 2: el silencioso
+1. Doble clic en "Armar el saludo"
+2. En el Value, cambiá  $json.nombre  por  $json.Nombre   (con N mayúscula)
+3. Miren la vista previa abajo del campo:  Hola , gracias por escribirnos desde Córdoba.
+4. Execute step → todo en verde, pero el saludo salió sin nombre
+5. Para arreglarlo: borrá la expresión y volvé a arrastrar  nombre  desde INPUT
+```
+
+<p style="color:#1a7f37">¿Vieron? Todo verde, y sin embargo está mal. El verde quiere decir "no se rompió", no quiere decir "salió lo que yo quería". n8n buscó un casillero que se llama Nombre con mayúscula, no lo encontró, y puso un hueco. Por eso siempre miramos el resultado, no solo el color.</p>
+
+Para explicar:
+- **Equivocarse es parte del trabajo.** Nadie arma un flujo sin errores. Lo importante es saber leerlos.
+  - *Ejemplo:* Hasta el que da la clase ve nodos rojos todas las semanas. Se lee el mensaje, se arregla, y se vuelve
+    a ejecutar.
+- **El rojo te dice dónde mirar.** El primer nodo rojo es donde se cortó. Los de antes (verdes) anduvieron; los de
+  después (grises) ni se ejecutaron. No hace falta revisar todo el flujo: abrís el rojo.
+  - *Ejemplo:* En un flujo de diez nodos, si el sexto está rojo, el problema está en el sexto (o en lo que le llegó
+    del quinto).
+- **El mensaje de error se lee en tres partes: dónde, qué, y en qué ficha.** Dónde: el nodo rojo. Qué: el texto en
+  rojo (en inglés; si no lo entendés, copialo en un traductor). En qué ficha: `[item 0]` es la primera (n8n cuenta
+  desde cero).
+  - *Ejemplo:* `'nombre' expects a number but we got 'Ana' [item 0]` = "en la primera ficha, `nombre` esperaba un
+    número y le llegó 'Ana'".
+- **Verde no es lo mismo que bien.** Hay errores que no rompen nada: un casillero mal escrito da vacío, no rojo.
+  Por eso, después de ejecutar, siempre se abre el último nodo y se lee el resultado.
+  - *Ejemplo:* ❌ Mal: "Está todo verde, listo". ✅ Bien: "Está todo verde; abro *Armar el saludo* y leo: Hola Ana,
+    gracias por escribirnos desde Córdoba. Ahora sí, listo".
+- **Executions también guarda los errores.** La ejecución que falló queda anotada con un ✗ rojo. Si un flujo falla
+  cuando no lo estás mirando, ahí lo encontrás.
+  - *Ejemplo:* En Executions, la del error 1 dice *Error*; las otras, *Success* (bien).
+- **Antes de pedir ayuda, tres preguntas.** ¿Qué nodo está rojo? ¿Qué dice el mensaje? ¿Qué cambié justo antes?
+  Con eso se resuelve la mayoría. Y si no, al chat, con una captura del nodo rojo abierto.
+  - *Ejemplo:* "Se me puso rojo *Datos del cliente*, dice *expects a number*, y recién cambié el tipo": ya está
+    resuelto antes de preguntar.
+
+### Paso 7 · Guardar, cerrar este flujo y empezar el segundo (2 min)
+
+<p style="color:#1a7f37">Terminamos el primer flujo. Antes de pasar al siguiente, vamos a hacer tres cosas que van a repetir siempre: guardar, salir del flujo, y abrir uno nuevo. Cada automatización va en su propio workflow, separada: no armamos el segundo ejemplo en la misma hoja que el primero.</p>
+
+**En n8n, paso a paso:**
+
+```text
+EN N8N · Paso 7: guardar, cerrar y empezar otro
+1. Guardar: arriba a la derecha,  Save   (o Ctrl + S)
+   → el botón cambia a  Saved  (guardado): ya no hay nada sin guardar
+2. Salir del flujo: en la barra de la izquierda, clic en  Overview
+   (si te olvidaste de guardar, n8n te pregunta antes de salir:
+    Save = guardar y salir · Leave without saving = salir sin guardar → elegí Save)
+3. En la lista de Overview aparece  Mi primer flujo : ahí queda, para abrirlo cuando quieras
+4. Empezar el segundo: arriba a la derecha,  Create workflow
+   → hoja en blanco nueva, con el  +  (Add first step)
+5. Arriba a la izquierda, clic en  My workflow  → escribí el nombre del nuevo:
+   Webhook desde el navegador   → Enter
+```
+
+<p style="color:#1a7f37">Fíjense: el primer flujo no se borró ni se mezcló con nada. Está en la lista, con su nombre. Si mañana lo quieren ver, van a Overview y hacen clic en "Mi primer flujo". Y ahora tenemos una hoja en blanco para el ejemplo que viene.</p>
+
+Para explicar:
+- **Guardar antes de salir, siempre.** n8n no guarda solo mientras armás. Cuando el botón dice **Saved**, está todo
+  guardado; si dice **Save**, hay cambios sin guardar.
+  - *Ejemplo:* Es como un documento de Word: si cerrás sin guardar, perdés lo último que hiciste.
+- **Cerrar un flujo es volver a Overview.** No hay una X para cerrar el flujo: salís yendo a la lista. El flujo
+  queda guardado ahí, como un archivo en una carpeta.
+  - *Ejemplo:* Overview es la carpeta; cada workflow es un archivo adentro.
+- **Un workflow por automatización.** Cada ejemplo de hoy va en su propio workflow, con su nombre. Si pusieras dos
+  triggers en la misma hoja, sería difícil saber qué arranca qué.
+  - *Ejemplo:* ❌ Mal: armar el webhook al lado del saludo, en "Mi primer flujo". ✅ Bien: un workflow nuevo que se
+    llama "Webhook desde el navegador".
+- **Para volver a abrir uno, clic en su nombre.** En Overview, clic en el flujo y se abre tal como lo dejaste.
+  - *Ejemplo:* Al final de la clase, clic en "Mi primer flujo": están los tres nodos y la última ejecución en
+    Executions.
+
 ---
 
-## 88–109 · Bloque 5 · Cómo le llegan los datos a n8n
+## 97–118 · Bloque 5 · Cómo le llegan los datos a n8n
 
 Hasta ahora los datos los escribimos nosotros a mano, en *Datos del cliente*. En la vida real, los datos llegan de
 afuera: alguien completa un formulario, una aplicación avisa algo. En este bloque se ven dos formas muy simples de
@@ -1246,40 +1389,232 @@ dirección `https://tunombre.app.n8n.cloud/...`, y ahí sí se puede abrir desde
 
 <p style="color:#1a7f37">Antes de armarlo, una aclaración: esta dirección va a funcionar solo desde mi computadora, porque es localhost. Para probar, alcanza y sobra. Lo que no puedo hacer es pasársela a un cliente: él no puede llegar a mi computadora.</p>
 
-<p style="color:#1a7f37">Armemos un flujo nuevo. Vuelvan a Overview y creen otro workflow, que se llame "Webhook desde el navegador". Esta vez, el trigger no va a ser manual: va a ser un webhook.</p>
+<p style="color:#1a7f37">Vamos a la hoja en blanco que abrimos recién, la que se llama "Webhook desde el navegador". Si no la crearon, vuelvan a Overview, Create workflow, y le ponen ese nombre. Esta vez, el trigger no va a ser manual: va a ser un webhook.</p>
 
 **En n8n, paso a paso:**
 
 ```text
 EN N8N · El webhook (flujo 02)
- 1. Overview → Create workflow → renombralo:  Webhook desde el navegador
+ 1. Usá el workflow nuevo del Paso 7 (si no lo creaste: Overview → Create workflow → renombralo:
+    Webhook desde el navegador )
  2. Clic en el +  (Add first step) → buscá  webhook  → elegí  Webhook
  3. Se abre el nodo. Completá:
       HTTP Method:   GET        (es el que viene; es "pedir", lo que hace el navegador)
-      Path:          saludo     (borrá lo que viene y escribí "saludo")
+      Path:          saludo     (viene con letras y números raros, tipo  3f8a2c1e-7b4d-...
+                                 borralos y escribí  saludo ; abajo se explica qué son)
       Respond:       When Last Node Finishes
                      (que conteste cuando termine el último nodo, con lo que armó)
  4. Arriba del nodo, en "Webhook URLs", pestaña  Test URL: está la dirección
       http://localhost:5678/webhook-test/saludo
+    (antes de cambiar el Path, terminaba con las letras y números raros)
  5. Cerrá la ventana (✕ o Esc) → renombrá el nodo:  Llega un pedido
  6. + a la derecha → Edit Fields (Set). Todavía no hay nada en INPUT: está bien.
-    Volvé al canvas sin completar nada (lo completamos después de la primera prueba).
+    Cerrá la ventana sin completar nada (lo completamos después de la primera prueba).
  7. Save
 ```
 
-<p style="color:#1a7f37">Ahora probémoslo. Apretamos Execute workflow: fíjense que el webhook se queda esperando, dice que está escuchando. Ahora vamos a tocar el timbre: copiamos la dirección, le agregamos los datos, y la pegamos en otra pestaña del navegador.</p>
+#### ¿Qué es eso que aparece en Path, y qué es esa dirección? (2 min)
+
+<p style="color:#1a7f37">Cuando abren el webhook, en Path no dice "saludo": dice una tira larga de letras y números, algo como 3f8a2c1e-7b4d y sigue. No se asusten, no es un error. Es un nombre que n8n inventa solo, al azar, para que cada webhook tenga una dirección distinta. Funciona igual; el problema es que es imposible de recordar o de dictar. Por eso hoy la cambiamos por una palabra: saludo.</p>
+
+<p style="color:#1a7f37">Y ese Path es el final de la dirección del timbre. Miren arriba, en Webhook URLs: ahí está la dirección completa. Vamos a leerla por partes, porque cada parte quiere decir algo.</p>
 
 ```text
-EN N8N · Primera prueba: tocar el timbre
-1. Execute workflow  → el nodo del webhook dice "Waiting for trigger event" (esperando)
-2. Abrí OTRA pestaña del navegador y pegá esta dirección (con tus datos si querés):
-     http://localhost:5678/webhook-test/saludo?nombre=Ana&destino=Mendoza
-3. Enter. Volvé a la pestaña de n8n: el webhook se puso verde
-4. Doble clic en "Llega un pedido" → OUTPUT: buscá el casillero  query
-     query:  nombre: Ana    destino: Mendoza
+http://localhost:5678  /  webhook-test  /  saludo  ?nombre=Ana&destino=Mendoza
+└──────────┬────────┘    └─────┬─────┘    └──┬──┘  └────────────┬────────────┘
+   dónde está n8n         modo prueba       Path     los datos que le mandamos
+  (tu computadora,       (solo anda          (el      (los agregamos nosotros;
+   puerta 5678)          después de        nombre      no vienen en la
+                         Execute workflow)  del timbre)  dirección que copia n8n)
 ```
 
-<p style="color:#1a7f37">Miren lo que llegó. El webhook recibe muchos casilleros: de dónde vino el pedido, qué navegador usamos, la hora. A nosotros nos importa uno: query. Ahí adentro están los datos que pusimos en la dirección: nombre Ana, destino Mendoza.</p>
+Para explicar:
+- **Lo que viene en Path es un nombre al azar que pone n8n.** Se llama **UUID** (un código único): letras y números
+  al azar, tan largos que es casi imposible que dos webhooks tengan el mismo. Así, aunque tengas cien flujos con
+  webhook, ninguna dirección se pisa con otra, y nadie puede adivinarla.
+  - *Ejemplo:* Es como el número de seguimiento de un envío: largo y feo, pero único. Si lo dejás, el webhook anda
+    igual: la dirección termina en `/webhook-test/3f8a2c1e-7b4d-...` en vez de `/webhook-test/saludo`.
+- **¿Por qué lo cambiamos?** Para la clase, una palabra corta se lee, se dicta y se escribe sin errores. En un flujo
+  de verdad, a veces conviene dejar el código raro, justamente porque nadie lo adivina.
+  - *Ejemplo:* ❌ Mal para la clase: dictar "barra tres f ocho a dos c…". ✅ Bien: "barra saludo".
+- **El Path no puede repetirse.** Si dos flujos usan el mismo Path (`saludo` en los dos), n8n no sabe cuál tiene que
+  arrancar y avisa que esa dirección ya está en uso.
+  - *Ejemplo:* Dos casas con el mismo número en la misma calle: el cartero no sabe a cuál tocar.
+- **`http://localhost:5678` es dónde está n8n.** *localhost* quiere decir "esta misma computadora", y *5678* es la
+  puerta (el **puerto**) por donde se entra a n8n: la misma que pusimos en Docker. Por eso esta dirección solo anda
+  desde tu computadora.
+  - *Ejemplo:* Es la misma dirección que usan para abrir n8n en el navegador, `localhost:5678`. En n8n Cloud, esta
+    parte es `https://tunombre.app.n8n.cloud`.
+- **`webhook-test` quiere decir "modo prueba".** Esta dirección solo escucha después de apretar **Execute
+  workflow**, y una sola vez. Al lado está la pestaña **Production URL**, que dice `webhook` sin `-test`: esa es la
+  que escucha siempre, pero solo con el flujo publicado (**Publish**). Hoy usamos solo la de prueba.
+  - *Ejemplo:* Test URL: `http://localhost:5678/webhook-test/saludo`. Production URL:
+    `http://localhost:5678/webhook/saludo`.
+- **Lo que va después del `?` lo agregamos nosotros.** n8n te da la dirección hasta `saludo`. Los datos
+  (`?nombre=Ana&destino=Mendoza`) los escribimos al final, cada vez que tocamos el timbre.
+  - *Ejemplo:* La misma dirección sirve para Ana y para Martín: lo que cambia es lo que va después del `?`.
+
+#### Antes de probar: el error que les va a salir, a propósito (2 min)
+
+<p style="color:#1a7f37">Antes de probarlo bien, lo voy a probar mal, a propósito, porque este error les va a salir a todos. Copio la dirección, le agrego los datos, la pego en otra pestaña… y todavía no apreté nada en n8n. Miren lo que dice el navegador.</p>
+
+```text
+EN N8N · Probarlo mal, a propósito
+1. NO aprietes Execute workflow todavía
+2. En OTRA pestaña del navegador, pegá:
+     http://localhost:5678/webhook-test/saludo?nombre=Ana&destino=Mendoza
+3. El navegador muestra:
+     {"code":404,"message":"The requested webhook \"saludo\" is not registered.",
+      "hint":"Click the 'Execute workflow' button on the canvas, then try again.
+      (In test mode, the webhook only works for one call after you click this button)"}
+```
+
+<p style="color:#1a7f37">Leamos lo que dice. "El webhook saludo no está registrado": o sea, nadie está escuchando en esa dirección. Y la pista: "apretá el botón Execute workflow y probá de nuevo; en modo prueba, el webhook funciona para una sola llamada después de apretar el botón". Es el timbre desconectado: la dirección de prueba solo atiende si en n8n apretamos Execute workflow justo antes, y atiende una sola vez. Si recargan la página otra vez, vuelve a salir este error, hasta que aprieten de nuevo.</p>
+
+Para explicar:
+- **404 / "not registered" = "en esta dirección no hay nadie escuchando".** No quiere decir que el flujo esté mal
+  armado: quiere decir que la dirección de prueba está apagada en este momento.
+  - *Ejemplo:* Tocás el timbre de una casa y no hay nadie: el timbre existe, pero no atiende.
+- **La dirección de prueba se prende con Execute workflow, y se apaga después de una llamada.** Por eso el orden es
+  siempre el mismo: primero Execute workflow en n8n (el nodo dice *Waiting for trigger event*), después Enter en la
+  otra pestaña. Para probar otra vez: de nuevo Execute workflow, y de nuevo Enter (o F5).
+  - *Ejemplo:* ❌ Mal: pegar la dirección, recargar tres veces, y recién ahí ir a n8n. ✅ Bien: Execute workflow →
+    otra pestaña → Enter → volver a n8n a mirar.
+- **El Path tiene que ser exactamente igual, letra por letra.** `saludo`, `Saludo` y `Saludo!` son tres direcciones
+  distintas: n8n distingue mayúsculas y cualquier signo. Si en la dirección escribís otra cosa que lo que dice
+  *Path*, sale el mismo error, aunque hayas apretado Execute workflow. Mirá bien el texto del error: entre comillas
+  te dice qué dirección pediste (`"Saludo!"`), y la comparás con el Path del nodo (`saludo`).
+  - *Ejemplo:* Path `saludo` y en el navegador `.../webhook-test/Saludo!` → `The requested webhook "Saludo!" is not
+    registered`. Arreglo: escribir `saludo`, en minúscula y sin el signo.
+- **La pestaña de n8n tiene que quedar abierta mientras probás.** El que "escucha" en modo prueba es el editor que
+  tenés abierto. Si cerrás esa pestaña o te vas a otro flujo, deja de escuchar.
+  - *Ejemplo:* Apretás Execute workflow, cerrás n8n, y pegás la dirección: sale el error.
+- **Lo más seguro: copiar la dirección del nodo, no escribirla.** En el nodo del webhook, pestaña *Test URL*, clic
+  en la dirección para copiarla, y al final le agregás `?nombre=Ana&destino=Mendoza`.
+  - *Ejemplo:* Copiando, no se cuela una mayúscula ni un signo de más.
+
+<p style="color:#1a7f37">Ahora sí, probémoslo bien. Primero n8n, después el navegador. Apretamos Execute workflow: fíjense que el webhook se queda esperando, dice que está escuchando. Ahora vamos a tocar el timbre: vamos a la otra pestaña y apretamos Enter.</p>
+
+```text
+EN N8N · Primera prueba: tocar el timbre (ahora sí, en orden)
+1. PRIMERO en n8n:  Execute workflow  → el nodo del webhook dice "Waiting for trigger event"
+   (esperando). No cierres esta pestaña.
+2. DESPUÉS, en la OTRA pestaña del navegador, la dirección (copiada del nodo, con los datos al final):
+     http://localhost:5678/webhook-test/saludo?nombre=Ana&destino=Mendoza
+   → Enter (o F5 si ya estaba pegada)
+3. Volvé a la pestaña de n8n: el webhook se puso verde
+4. Doble clic en "Llega un pedido" → OUTPUT: buscá el casillero  query
+     query:  nombre: Ana    destino: Mendoza
+5. ¿Te salió otra vez "not registered"? Fijate dos cosas: que hayas apretado Execute workflow
+   justo antes, y que lo que está entre comillas en el error sea igual al Path (saludo).
+```
+
+En esta primera prueba, como el Edit Fields todavía está vacío, el navegador no muestra el saludo: lo importante es
+que el webhook se puso verde y que en `query` llegaron los datos.
+
+<p style="color:#1a7f37">Miren lo que llegó. Es un montón de cosas, y la primera vez asusta. Tranquilos: de todo esto, hoy nos importa una sola, que es query. Pero vamos a ver qué es lo demás, para que no les dé miedo.</p>
+
+#### ¿Qué es todo lo que llegó? (3 min)
+
+<p style="color:#1a7f37">Cuando el navegador toca el timbre, no manda solo los datos que escribimos. Manda también una tarjeta de presentación: quién es, desde qué computadora llama, en qué idioma quiere la respuesta. n8n lo anota todo y nos lo muestra. Es como una carta: adentro está el mensaje, pero el sobre también trae datos, el remitente, el sello, la fecha. Nosotros abrimos la carta y leemos el mensaje.</p>
+
+Lo que se ve en OUTPUT es **1 item** (una ficha) con estos casilleros grandes. Conviene mostrarlo en la vista
+**Schema** (arriba de OUTPUT), que lo muestra ordenado, en vez de JSON:
+
+```text
+1 item
+├── headers        ← el "sobre": información que el navegador manda sola, siempre
+├── params         ← vacío: no lo usamos
+├── query          ← ⭐ LO QUE NOS IMPORTA: los datos que pusimos después del ?
+│     ├── nombre:  Ana
+│     └── destino: Mendoza
+├── body           ← vacío: es para datos que viajan "adentro" del pedido; con el navegador no se
+│                     puede (se explica justo abajo, en "¿Por qué body está vacío?")
+├── webhookUrl     ← la dirección que se tocó: http://localhost:5678/webhook-test/saludo
+└── executionMode  ← "test": se usó la dirección de prueba
+```
+
+Qué es cada cosa de **headers** (no hace falta aprenderlo; está para que no asuste):
+
+| Casillero | Qué quiere decir | En el ejemplo |
+|---|---|---|
+| `host` | A qué dirección se llamó. | `localhost:5678`: n8n en tu computadora. |
+| `connection` | Si la conexión queda abierta para más pedidos. | `keep-alive`: "dejala abierta". |
+| `user-agent` | Qué programa llamó: navegador y sistema. | Chrome/Brave en Windows. |
+| `sec-ch-ua`, `sec-ch-ua-mobile`, `sec-ch-ua-platform` | Lo mismo, más detallado: marca del navegador, si es celular (`?0` = no), y el sistema. | Brave 156, no celular, Windows. |
+| `accept` | Qué tipo de respuesta prefiere. | `text/html…`: una página web. |
+| `accept-language` | En qué idioma prefiere la respuesta. | `es-419`: español de Latinoamérica. |
+| `accept-encoding` | Si acepta la respuesta comprimida, para que viaje más rápido. | `gzip, br…` |
+| `sec-fetch-…`, `sec-gpc`, `upgrade-insecure-requests` | Avisos de seguridad y privacidad del navegador: cómo se abrió la página, si pide no ser rastreado, si prefiere https. | Lo abriste escribiendo la dirección (`navigate`). |
+| `cookie` | Datos chiquitos que el navegador guarda de una página y se los devuelve cada vez que la visita. | Son de n8n mismo (sus estadísticas de uso: `rl_…`, `ph_…`), porque n8n y el webhook están en la misma dirección, `localhost:5678`. |
+
+Para explicar:
+- **El navegador siempre manda más de lo que escribimos.** Cada vez que abrís una página, tu navegador se presenta
+  solo: qué navegador es, en qué idioma lo usás, qué acepta. Pasa con cualquier página de internet, no solo con
+  n8n. La diferencia es que acá lo podemos ver.
+  - *Ejemplo:* Por eso una página te aparece en español sin que se lo digas: leyó `accept-language`.
+- **Los headers son el sobre; query es la carta.** `headers` lo arma el navegador; `query` lo armamos nosotros,
+  con lo que va después del `?`. Para el saludo solo usamos la carta.
+  - *Ejemplo:* Si cambiás la dirección a `?nombre=Lucía&destino=Salta`, cambia `query`; los `headers` quedan casi
+    iguales.
+- **Un item con muchos casilleros, algunos con casilleros adentro.** Es la misma ficha de siempre, solo que más
+  grande. `headers` y `query` son "carpetas" con casilleros adentro; para llegar a uno se usa el punto:
+  `$json.query.nombre`.
+  - *Ejemplo:* `$json.headers['accept-language']` daría `es-419` (lleva corchetes porque el nombre tiene guiones).
+- **No hace falta borrar nada de lo que sobra.** Lo que no usamos, no molesta: el Edit Fields que sigue toma solo
+  los casilleros que le pedimos y arma una ficha nueva, limpia.
+  - *Ejemplo:* La respuesta final va a ser solo `{"mensaje": "Hola Ana, …"}`: los headers no aparecen.
+- **Ojo al compartir capturas.** El casillero `cookie` puede tener datos de tu sesión. En n8n local no es grave,
+  pero es un buen hábito no pegar los headers completos en un chat público.
+  - *Ejemplo:* Si piden ayuda, que muestren solo el casillero `query`, no todo el OUTPUT.
+
+<p style="color:#1a7f37">Entonces: de todo esto, vamos a usar solo query, que tiene nombre Ana y destino Mendoza. Lo demás es el sobre de la carta: está, es normal, y no lo tocamos.</p>
+
+#### ¿Por qué body está vacío? Dos formas de mandar datos: GET y POST (3 min)
+
+<p style="color:#1a7f37">Seguro alguno se preguntó: si body es para mandar datos, ¿por qué está vacío? ¿Por qué no mandamos los datos ahí? La respuesta es: porque con la barra del navegador no se puede. Y para entender por qué, hay que saber que hay dos formas de mandarle datos a una dirección.</p>
+
+<p style="color:#1a7f37">La primera se llama GET, que en inglés quiere decir "conseguir", "pedir". Es una postal: los datos van escritos afuera, a la vista, en la misma dirección, después del signo de pregunta. La segunda se llama POST, que quiere decir "enviar", "despachar". Es un paquete cerrado: la dirección va afuera, y los datos van adentro de la caja. Esa caja es el body.</p>
+
+<p style="color:#1a7f37">Y acá está la clave: cuando ustedes escriben una dirección en la barra del navegador y aprietan Enter, el navegador siempre hace un GET. Siempre. Está hecho para pedir páginas, no para mandar paquetes. La barra tiene un solo lugar para escribir, que es la dirección; no tiene un lugar para meter cosas en la caja. Por eso los datos los pusimos en la dirección, y por eso body llegó vacío. Para mandar un POST hace falta otra cosa: un formulario, una aplicación, o un programa como Postman.</p>
+
+```text
+GET  (postal)                              POST  (paquete cerrado)
+─────────────────────────────────          ─────────────────────────────────
+dirección:  .../saludo?nombre=Ana          dirección:  .../saludo
+            └ los datos van ACÁ,           body:       nombre: Ana   ← los datos van
+              a la vista                               destino: Mendoza  ADENTRO
+body:       vacío                                      (no se ven en la dirección)
+
+Lo hace:   la barra del navegador          Lo hace:   un formulario, una aplicación,
+                                                       Postman. La barra del navegador NO.
+En n8n:    llegan en  query                En n8n:    llegan en  body
+```
+
+Para explicar:
+- **GET = postal: los datos van en la dirección.** Todo lo que va después del `?` se ve: en la barra, en el
+  historial del navegador, en una captura de pantalla. Para datos chicos y que no son secretos, alcanza.
+  - *Ejemplo:* Buscar "vuelos a Mendoza" en Google: mirá la barra, dice `google.com/search?q=vuelos+a+mendoza`.
+    Es un GET, y tu búsqueda quedó escrita en la dirección.
+- **POST = paquete: los datos van adentro, en el body.** No se ven en la dirección, y entran muchos más: textos
+  largos, muchos casilleros, archivos.
+  - *Ejemplo:* Cuando iniciás sesión en una página, tu contraseña no aparece en la barra
+    (`...login?clave=1234`): viaja adentro, en un POST.
+- **La barra del navegador solo sabe hacer GET.** No es una limitación de n8n: es así en cualquier página. Por eso,
+  para probar sin instalar nada, configuramos el webhook en **HTTP Method: GET**. Si lo hubiéramos puesto en POST,
+  el navegador no podría tocarlo: daría error, porque el timbre espera un paquete y le llega una postal.
+  - *Ejemplo:* ❌ Webhook en POST + dirección pegada en el navegador → no anda. ✅ Webhook en GET + dirección con
+    `?nombre=Ana` → anda, y los datos llegan en `query`.
+- **¿Por qué no se usa siempre GET, si es tan fácil?** Porque todo queda a la vista, y la dirección tiene un largo
+  máximo. Una consulta con un mensaje largo, un archivo o una contraseña no entra (o no conviene) en una postal.
+  - *Ejemplo:* Un cliente escribe tres párrafos contando su viaje: eso va en un POST, en el body.
+- **Esto se ve enseguida con el formulario.** Cuando alguien aprieta "Enviar" en un formulario, el navegador manda
+  un **POST**: los datos van adentro, no en la dirección. Por eso, en el ejemplo que sigue, la dirección del
+  formulario no cambia, y los datos igual llegan a n8n.
+  - *Ejemplo:* En el flujo 03, después de enviar el formulario, mirá la barra: no dice `?nombre=…`. Los datos
+    viajaron en el paquete.
+
+<p style="color:#1a7f37">Resumiendo: la barra del navegador solo manda postales, GET, con los datos a la vista en la dirección, y n8n los pone en query. Para mandar un paquete cerrado, POST, con los datos en el body, hace falta un formulario. Y eso es justo lo que vamos a hacer en un ratito.</p>
 
 ```text
 EN N8N · Armar la respuesta con lo que llegó
@@ -1320,8 +1655,8 @@ Para explicar:
   adentro, se encadenan los nombres con puntos.
   - *Ejemplo:* Como una carpeta dentro de otra: `query.nombre` es "la carpeta query, el archivo nombre".
 - **GET es "pedir"; es lo que hace el navegador.** Cada vez que escribís una dirección en el navegador, hace un
-  pedido GET. Por eso, con el método GET, podemos probar el webhook sin ningún programa extra. (Hay otros métodos,
-  como POST, para mandar muchos datos: los vemos más adelante.)
+  pedido GET. Por eso, con el método GET, podemos probar el webhook sin ningún programa extra. (El otro método
+  importante es POST, el "paquete cerrado": está explicado arriba, en "¿Por qué body está vacío?".)
   - *Ejemplo:* Abrir `google.com` en el navegador es un GET a Google. Abrir nuestra dirección es un GET a n8n.
 - **"Respond: When Last Node Finishes" hace que el navegador reciba el mensaje.** Si se deja en *Immediately*
   ("inmediatamente"), n8n contesta apenas le llega el pedido, antes de armar nada, con un mensaje genérico.
@@ -1358,9 +1693,68 @@ http://localhost:5678/webhook-test/saludo?nombre=Ana&destino=Mendoza
 Por qué: la dirección tiene reglas fijas. Lo que va después del `?` son los datos, de a pares `casillero=valor`,
 separados con `&`. Con espacios, el navegador corta la dirección o la cambia.
 
+
+#### Que el navegador muestre solo el saludo, como una página (opcional, 4 min)
+
+<p style="color:#1a7f37">El saludo llegó, pero se ve feo: con llaves, comillas, y la palabra mensaje. Eso es porque n8n le contesta al navegador con la ficha entera, en formato JSON, que es como se pasan los datos entre programas. A un programa le sirve; a una persona, no. Vamos a hacer que el navegador muestre solo la frase, como si fuera una página. Para eso hay un nodo que se llama Respond to Webhook: responder al webhook. Con él, nosotros elegimos qué se contesta.</p>
+
+```text
+Llega un pedido  →  Armar la respuesta  →  Contestar al navegador
+(Webhook, GET)       (Edit Fields)          (Respond to Webhook)
+```
+
+**En n8n, paso a paso** (sobre el mismo flujo 02):
+
+```text
+EN N8N · Que el navegador muestre solo el saludo
+1. Doble clic en "Llega un pedido" → en  Respond  cambiá  When Last Node Finishes  por
+      Using 'Respond to Webhook' Node     (contestar con el nodo Respond to Webhook)
+   → Cerrá la ventana (✕ o Esc)
+2. En "Armar la respuesta", clic en el + de su derecha → buscá  respond  → Respond to Webhook
+3. Se abre el nodo. Completá:
+      Respond With:   Text          (contestar con un texto, no con la ficha)
+      Response Body:  arrastrá  mensaje  desde INPUT  → queda  {{ $json.mensaje }}
+4. Cerrá la ventana → renombralo:  Contestar al navegador  → Save
+5. Execute workflow  → en la otra pestaña, F5
+6. El navegador muestra solo:
+      Hola Ana, recibimos tu consulta para viajar a Mendoza.
+7. (Para que se vea como título grande) volvé a Response Body y dejalo así:
+      <h1>{{ $json.mensaje }}</h1>
+   → Execute workflow → F5 → la frase aparece grande, en negrita, como el título de una página
+```
+
+<p style="color:#1a7f37">¿Ven la diferencia? Antes, el navegador mostraba la ficha, con llaves y comillas. Ahora muestra la frase, como una página cualquiera. Lo que cambió es quién contesta: antes contestaba el webhook solo, con todo lo que había; ahora contesta el nodo Respond to Webhook, con lo que nosotros le dijimos.</p>
+
+**¿Anda en local?** ✅ Sí, sin pasos extra. Está armado en `02b-webhook-saludo-en-el-navegador.json` (con la
+dirección `saludo-lindo`, para que no choque con el flujo 02 si importás los dos).
+
+Para explicar:
+- **JSON es el formato en que se pasan datos los programas.** Las llaves `{ }`, las comillas y los dos puntos
+  arman la ficha: `{"mensaje":"Hola Ana…"}` es "casillero mensaje, valor Hola Ana…". Es lo mismo que ven en n8n,
+  pero escrito en una línea.
+  - *Ejemplo:* Es como una planilla escrita en un renglón: sirve para que otro programa la lea, pero para leerla
+    una persona es incómoda.
+- **Respond to Webhook = elegir qué se contesta.** Con *When Last Node Finishes*, el webhook contesta solo, con la
+  ficha del último nodo. Con *Using 'Respond to Webhook' Node*, contesta este nodo, con lo que le digas.
+  - *Ejemplo:* Es la diferencia entre un contestador automático que lee todo lo que tiene anotado, y una persona
+    que contesta solo lo que hace falta.
+- **Respond With: Text = contestar con un texto.** Lo que escribas en *Response Body* ("cuerpo de la respuesta")
+  es exactamente lo que va a ver el navegador. Se puede mezclar texto fijo con casilleros arrastrados, igual que
+  en Edit Fields.
+  - *Ejemplo:* `Gracias, {{ $json.mensaje }}` → el navegador muestra "Gracias, Hola Ana, recibimos…".
+- **`<h1>` y `</h1>` son marcas de página web (HTML).** Le dicen al navegador "esto es un título grande". No hace
+  falta saber HTML: con esta sola marca alcanza para que se vea la diferencia.
+  - *Ejemplo:* `<h1>Hola</h1>` se ve como un título grande; `<b>Hola</b>`, en negrita.
+- **Los dos nodos trabajan juntos.** Si en el Webhook elegís *Using 'Respond to Webhook' Node*, al final tiene que
+  estar el nodo Respond to Webhook; si no, el navegador no recibe el saludo.
+  - *Ejemplo:* ❌ Mal: cambiar el Respond del Webhook y olvidarte del nodo nuevo. ✅ Bien: las dos cosas, el
+    Respond del Webhook y el nodo al final.
+
 ### Otra forma: el formulario de n8n, y cada consulta a Google Sheets (flujo 03) (8 min)
 
 <p style="color:#1a7f37">Escribir datos en una dirección sirve para probar, pero un cliente nunca va a hacer eso. Lo que sí hace un cliente es completar un formulario. Y n8n tiene un trigger que arma el formulario solo: On form submission. Y vamos a hacer algo útil con lo que llega: guardar cada consulta como una fila en una planilla de Google Sheets. Así, al final del día, la agencia tiene todas las consultas anotadas sin copiar nada a mano.</p>
+
+<p style="color:#1a7f37">¿Se acuerdan de la postal y el paquete? Con el webhook mandamos una postal, GET, con los datos en la dirección. El formulario manda un paquete, POST: cuando apretás Enviar, los datos viajan adentro, y la dirección queda limpia. Y hay una ventaja: el nodo del formulario abre el paquete solo. No hay que buscar en body ni en query: los datos aparecen directo, con el nombre de cada pregunta del formulario.</p>
 
 El flujo (está armado en `03-formulario.json`):
 
@@ -1391,34 +1785,110 @@ cuatro títulos en la fila 1, escritos exactamente así:
 |---|---|---|---|
 | fecha | nombre | destino | personas |
 
-**En n8n, paso a paso** (lo mostrás vos; ellos miran):
+**En n8n, paso a paso** (lo armás vos desde cero, en tu pantalla, y vas diciendo cada cosa a medida que la
+hacés; ellos miran). Son cuatro partes: el formulario, probarlo, ordenar los datos, y guardarlos en la planilla.
+
+**Parte A · Poner el formulario (el trigger)**
 
 ```text
-EN N8N · El formulario que guarda en Google Sheets (flujo 03)
- 1. Doble clic en "Formulario de consulta". Se ve:
-      Form Title:        Consulta de viaje
-      Form Description:  Contanos a dónde querés viajar y te respondemos.
-      Form Elements:     Nombre · Destino · Cantidad de personas
-      (cada uno con su Element Type, texto o número, y si es obligatorio: Required Field)
- 2. Doble clic en "Ordenar los datos" (Edit Fields). Arma cuatro casilleros con nombres cortos,
-    IGUALES a los títulos de la planilla:
-      fecha     {{ $now.toFormat('dd/MM/yyyy HH:mm') }}    ← la fecha y la hora de ahora
-      nombre    {{ $json.Nombre }}                          ← arrastrado desde INPUT
-      destino   {{ $json.Destino }}
-      personas  {{ $json['Cantidad de personas'] }}         (tipo Number)
- 3. Doble clic en "Guardar en la planilla" (Google Sheets):
-      Credential to connect with:  tu credencial de Google Sheets
-      Resource: Sheet Within Document     Operation: Append Row  (agregar una fila)
-      Document:  By URL → pegá el link de tu planilla
-      Sheet:     Hoja 1 (o como se llame la pestaña)
+EN N8N · Parte A: el formulario
+ 1. Overview → Create workflow → renombralo:  Formulario a Google Sheets
+ 2. Clic en el +  (Add first step). A la derecha se abre la lista "What triggers this workflow?"
+    (¿qué arranca este flujo?). Hay dos caminos para llegar al formulario; los dos dan el MISMO nodo:
+      Camino 1 (el más corto): en la lista, clic en  On form submission
+      Camino 2 (si buscaste): escribí  form  en el buscador → clic en  n8n Form
+         → se abre un panel con el título "n8n Form" y dos grupos:
+              Triggers (1)  ⚡   On new n8n Form event   ← ESTE
+              Actions (2)        (Next Form Page, Form Ending: no los usamos hoy)
+         → clic en  On new n8n Form event
+ 3. Se abre la ventana del formulario. Arriba está la dirección (Test URL / Production URL),
+    igual que en el webhook. Completá de arriba hacia abajo:
+      Form Title:        Consulta de viaje            (el título grande del formulario)
+      Form Description:  Contanos a dónde querés viajar y te respondemos.   (el texto de abajo)
+ 4. Form Elements (las preguntas). La primera ya viene armada; completala:
+      Field Name:     Nombre        (el texto de la pregunta, si en tu versión dice "Label", es ese)
+      Element Type:   Text          (texto: la persona escribe)
+      Required Field: prendido      (obligatoria: no se puede mandar vacía)
+ 5. Abajo: Add Form Element → segunda pregunta:
+      Field Name: Destino     Element Type: Text     Required Field: prendido
+ 6. Add Form Element → tercera pregunta:
+      Field Name: Cantidad de personas     Element Type: Number   (solo números)
+ 7. Más abajo:  Options → Add option → Path → escribí  consulta-viaje
+    (como en el webhook: cambia los números raros por una palabra que se lee)
+ 8. Cerrá la ventana (✕ o Esc) → renombrá el nodo:  Formulario de consulta  → Save
+```
+
+<p style="color:#1a7f37">Fíjense en esta pantalla, porque les va a aparecer muchas veces. Cuando busco algo, por ejemplo form, n8n me muestra la aplicación, y adentro, dos grupos: Triggers y Actions. Los Triggers, los que tienen el rayito, son los que arrancan el flujo: "cuando pasa esto". Las Actions son las que hacen algo en el medio: "hacé esto". Como este es el primer paso, el que arranca todo, elijo el trigger: On new n8n Form event, que quiere decir "cuando hay un formulario nuevo de n8n", o sea, cuando alguien lo completa. Es lo mismo que On form submission, que estaba en la lista de arriba: dos nombres para el mismo nodo.</p>
+
+<p style="color:#1a7f37">Ahora armo las preguntas. Cada pregunta es un Form Element. Le pongo el texto, el tipo, si es texto o número, y si es obligatoria. Lo que escriba en Field Name es lo que ve la persona en el formulario, y también va a ser el nombre del casillero cuando el dato llegue a n8n.</p>
+
+**Parte B · Probar el formulario antes de seguir**
+
+```text
+EN N8N · Parte B: probarlo
+ 1. Execute workflow  → se abre una pestaña nueva con el formulario
+    (si no se abre sola: doble clic en el nodo → Test URL → copiala y abrila en otra pestaña)
+ 2. Completalo:  Nombre: Ana    Destino: Mendoza    Cantidad de personas: 3  → Submit
+ 3. Volvé a n8n: el nodo se puso verde. Doble clic → OUTPUT:
+      Nombre: Ana     Destino: Mendoza     Cantidad de personas: 3
+    (más un casillero submittedAt, con la hora en que se mandó)
+```
+
+<p style="color:#1a7f37">Miren el OUTPUT. Comparado con el webhook, es mucho más limpio: no hay headers ni query. Cada pregunta del formulario es un casillero, con el nombre de la pregunta. Esto es lo del paquete cerrado: el formulario mandó los datos adentro, y el nodo los abrió solo. Siempre que agrego un trigger, lo pruebo antes de seguir: así, en el próximo nodo, ya tengo datos en INPUT para arrastrar.</p>
+
+**Parte C · Ordenar los datos (Edit Fields)**
+
+```text
+EN N8N · Parte C: ordenar los datos
+ 1. Clic en el + a la derecha del formulario → buscá  edit  → Edit Fields (Set)
+ 2. En INPUT están Nombre, Destino y Cantidad de personas. Armá cuatro casilleros con Add Field,
+    con nombres cortos, en minúscula, IGUALES a los títulos de la planilla:
+      Name: fecha      Type: String   Value: {{ $now.toFormat('dd/MM/yyyy HH:mm') }}
+                       (este se escribe: tocá el Value, escribí  {{  y pegá lo de adentro;
+                        el campo pasa a Expression y abajo se ve la fecha de ahora)
+      Name: nombre     Type: String   Value: arrastrá  Nombre   → {{ $json.Nombre }}
+      Name: destino    Type: String   Value: arrastrá  Destino  → {{ $json.Destino }}
+      Name: personas   Type: Number   Value: arrastrá  Cantidad de personas
+                                             → {{ $json['Cantidad de personas'] }}
+ 3. Execute step → OUTPUT:  fecha: 11/11/2026 12:36   nombre: Ana   destino: Mendoza   personas: 3
+ 4. Cerrá → renombralo:  Ordenar los datos  → Save
+```
+
+<p style="color:#1a7f37">¿Por qué este nodo en el medio? Porque la planilla tiene títulos en minúscula y cortos: fecha, nombre, destino, personas. Y lo que llega del formulario dice Nombre con mayúscula, y Cantidad de personas. Acá los acomodo para que se llamen igual que las columnas, y de paso agrego la fecha. Es como pasar en limpio una ficha antes de archivarla.</p>
+
+**Parte D · Guardar en la planilla (Google Sheets)**
+
+```text
+EN N8N · Parte D: guardar en Google Sheets
+ 1. Clic en el + a la derecha de "Ordenar los datos" → buscá  sheets  → clic en  Google Sheets
+    → se abre el mismo tipo de panel que con el formulario: Triggers y Actions.
+      Ahora NO es el primer paso: elegí una ACCIÓN →  Append row in sheet
+      (agregar una fila a la hoja)
+ 2. Se abre la ventana. De arriba hacia abajo:
+      Credential to connect with:  elegí tu credencial de Google Sheets
+      Resource:   Sheet Within Document     (ya viene)
+      Operation:  Append Row                (ya viene, porque elegiste esa acción)
+      Document:   cambiá "From list" por  By URL  → pegá el link de tu planilla
+      Sheet:      Hoja 1  (o como se llame la pestaña de abajo de la planilla)
       Mapping Column Mode:  Map Each Column Automatically
                             (cada casillero va a la columna que se llama igual)
- 4. Cerrá la ventana → Save → Execute workflow
- 5. Se abre el formulario en otra pestaña. Completalo:
-      Nombre: Ana    Destino: Mendoza    Cantidad de personas: 3   → Submit
- 6. Volvé a n8n: los tres nodos en verde.
- 7. Abrí la planilla: hay una fila nueva →  11/11/2026 12:36 | Ana | Mendoza | 3
+ 3. Cerrá → renombralo:  Guardar en la planilla  → Save
+ 4. Execute workflow  → se abre el formulario → completalo con otros datos → Submit
+ 5. Volvé a n8n: los tres nodos en verde.
+ 6. Abrí la planilla: hay una fila nueva →  11/11/2026 12:40 | Martín | Bariloche | 2
 ```
+
+<p style="color:#1a7f37">Miren que acá aparece otra vez el panel de Triggers y Actions, el mismo que con el formulario. Pero ahora elijo una Action, porque no es el primer paso: el flujo ya arrancó con el formulario, y ahora quiero que haga algo. Agregar una fila. La regla es simple: el primer nodo, un trigger; todos los demás, acciones.</p>
+
+**La pantalla de Triggers y Actions** (la de la captura que aparece al buscar una aplicación):
+
+| Lo que dice | Qué es | Cuándo lo elijo |
+|---|---|---|
+| **Triggers** ⚡ (con el rayito) | Nodos que **arrancan** el flujo: "cuando pasa esto…" | Solo en el **primer** paso |
+| **Actions** | Nodos que **hacen algo** en el medio: "…hacé esto" | En **todos los demás** pasos |
+| *On new n8n Form event* | El trigger del formulario de n8n (= *On form submission*) | Para empezar con un formulario |
+| *Next Form Page*, *Form Ending* | Acciones del formulario: otra página de preguntas, o la pantalla final | Hoy no se usan |
+| *Append row in sheet* | Acción de Google Sheets: agregar una fila | Para guardar cada consulta |
 
 <p style="color:#1a7f37">Miren la planilla: apareció una fila nueva, sola. Esto contesta la pregunta de hace un rato: ¿dónde quedan guardados los datos? Dentro del flujo, viven mientras dura la ejecución. Para que queden para siempre, un nodo los tiene que mandar a algún lado. Acá, a Google Sheets.</p>
 
@@ -1480,7 +1950,7 @@ pedidos a una dirección, como hicimos con el navegador. No la usamos; la explic
 
 ---
 
-## 109–131 · Bloque 6 · Que el flujo decida: IF y Switch
+## 118–140 · Bloque 6 · Que el flujo decida: IF y Switch
 
 Hasta acá, todos los datos seguían el mismo camino. En este bloque el flujo **decide**: según el dato, va por un
 lado o por otro. Son tres ejemplos cortitos, y cada uno trae **una cosa nueva**:
@@ -1686,7 +2156,7 @@ computadora.
 ```text
 EN N8N · Switch: cada consulta a su área (flujo 06)
  1. Overview → Create workflow → nombre:  Switch por tipo
- 2. + → On form submission → n8n Form Trigger:
+ 2. + → On form submission  (o buscá  form  → n8n Form → Triggers → On new n8n Form event):
       Form Title:  Consulta a la agencia
       Form Elements → primer campo:  Nombre  (texto, Required Field prendido)
       Add Form Element → segundo campo:  Tipo de consulta
@@ -1770,7 +2240,7 @@ Respuestas: **1 → IF** (sí o no); **2 → Switch** (cuatro caminos, con "otra
 
 ---
 
-## 131–134 · Cierre
+## 140–143 · Cierre
 
 <p style="color:#1a7f37">Repasemos lo de hoy en una frase cada uno. n8n corre en una caja de Docker, en nuestra computadora, y se abre en localhost dos puntos 5678. Un workflow es una receta: un trigger que la arranca, y nodos que hacen una cosa cada uno, unidos por flechas. Los datos son fichas con casilleros, que pasan por las flechas de un nodo al otro, y se usan arrastrándolos. Los datos pueden llegar de afuera, por un webhook o por un formulario, y si queremos que queden guardados, los mandamos a una planilla. Y el flujo puede decidir: con un IF, cuando hay dos caminos, y con un Switch, cuando hay más.</p>
 
@@ -1945,7 +2415,7 @@ ejemplo, todos ven `not registered`), ahí sí se explica en el momento, para to
 | Entraron a n8n y está vacío, sin sus flujos | Hicieron *Run* desde **Images** y armaron una caja nueva | Apagar esa caja (■) y prender la de siempre desde **Containers**. |
 | En el segundo Edit Fields, INPUT está vacío | El nodo anterior todavía no se ejecutó | Cerrar la ventana y apretar *Execute workflow*; o el botón de INPUT que ejecuta los nodos anteriores. |
 | El saludo sale "Hola , gracias por escribirnos desde ." | La expresión está mal escrita (una letra, una mayúscula) | Borrar lo escrito y arrastrar el casillero desde INPUT. |
-| El navegador dice `The requested webhook "saludo" is not registered` | No apretaron *Execute workflow* antes, o ya usaron esa vez | *Execute workflow* y volver a cargar la dirección. |
+| El navegador dice `The requested webhook "saludo" is not registered` | No apretaron *Execute workflow* antes, o ya usaron esa vez; o la dirección no es igual al Path (`Saludo!` ≠ `saludo`); o cerraron la pestaña de n8n | *Execute workflow*, dejar n8n abierto, y cargar la dirección copiada del nodo. El texto entre comillas del error dice qué dirección se pidió: compararlo con el Path. |
 | El navegador muestra `{"message":"Workflow was started"}` | En el Webhook, *Respond* quedó en *Immediately* | Cambiar *Respond* a **When Last Node Finishes**. |
 | El navegador queda cargando mucho tiempo | El flujo se trabó en un nodo, o falta el Edit Fields | Mirar el canvas: qué nodo quedó gris o rojo. |
 | En el webhook, el mensaje sale con huecos | La dirección no tiene `?nombre=...&destino=...`, o tiene espacios | Copiar la dirección del `PARA EL CHAT` y cambiar solo los valores. |
@@ -1955,6 +2425,7 @@ ejemplo, todos ven `not registered`), ahí sí se explica en el momento, para to
 | La fecha del formulario sale con otra hora | El flujo usa otra zona horaria | Menú **…** del flujo → **Settings** → **Timezone** → *America/Argentina/Buenos Aires*. |
 | El IF 2 se pone rojo con *Wrong type* | Lo que llega en la dirección es texto, y el IF compara números | Prender *Convert types where required* en el IF. |
 | El Switch manda todo a *Otra* | El texto de la regla no es igual al de la lista (mayúscula, tilde, espacio) | Copiar en la regla exactamente la opción de la lista: `Vuelo`, `Hotel`, `Paquete`. |
+| Un nodo en rojo con *expects a number but we got…* | En Edit Fields, el tipo del casillero es Number y el valor es texto | Cambiar el tipo a String (o poner un número de verdad). |
 | Cerraron la pestaña y el flujo desapareció | No guardaron | Rearmarlo (son tres nodos) o importar el archivo de la carpeta. Desde ahora: **Save** siempre. |
 
 ---
@@ -1968,6 +2439,9 @@ Al terminar, cada alumno puede:
 - [ ] Usar Edit Fields para crear casilleros y leer INPUT y OUTPUT.
 - [ ] Pasar un dato de un nodo al otro arrastrando el casillero (`{{ $json.nombre }}`).
 - [ ] Ejecutar con *Execute step* y *Execute workflow*, guardar con *Save*, y mirar *Executions*.
+- [ ] Cambiar los datos y ver que el flujo sigue andando sin tocar los pasos.
+- [ ] Ver un nodo en rojo, leer el mensaje de error (dónde, qué, en qué ficha) y arreglarlo; y saber que verde no
+      siempre quiere decir que salió bien.
 - [ ] Mandarle datos a n8n desde el navegador con un webhook, y saber que un formulario hace lo mismo.
 - [ ] Saber que para guardar los datos hay que mandarlos a algún lado (Google Sheets), y qué paso extra pide Google
       en n8n local.
@@ -2033,9 +2507,15 @@ Al terminar, cada alumno puede:
 | **Webhook** | Una dirección de internet que, al tocarla, arranca el flujo. | `.../webhook-test/saludo` |
 | **Parámetros (en la dirección)** | Datos que van después del `?`, de a pares `casillero=valor`, separados con `&`. | `?nombre=Ana&destino=Mendoza` |
 | **query** | El casillero donde n8n pone los parámetros de la dirección. | `{{ $json.query.nombre }}` |
+| **headers** (encabezados) | El "sobre" del pedido: lo que el navegador manda solo (quién es, idioma, qué acepta). | `user-agent`, `accept-language` |
+| **body** (cuerpo) | Datos que viajan "adentro" del pedido, no en la dirección. Con el navegador (GET) queda vacío. | Lo usan formularios y otras aplicaciones. |
+| **Cookie** | Datito que el navegador guarda de una página y le devuelve en cada visita. | Las de n8n: `rl_…`, `ph_…` |
+| **User-agent** | El casillero que dice qué navegador y qué sistema llamaron. | Chrome en Windows. |
 | **GET** | El pedido de "dame": lo que hace el navegador al abrir una dirección. | Abrir una página. |
 | **POST** | El pedido de "te mando datos": lleva los datos adentro (*body*). | Lo que hace un formulario de una web. |
-| **Respond** | Cuándo contesta el webhook: *Immediately* o *When Last Node Finishes*. | When Last Node Finishes, para ver el mensaje. |
+| **Respond** | Cuándo y quién contesta el webhook: *Immediately*, *When Last Node Finishes* o *Using 'Respond to Webhook' Node*. | When Last Node Finishes, para ver el mensaje. |
+| **Path** (camino) | La última parte de la dirección del webhook: el nombre del timbre. | `saludo` |
+| **UUID** | Código único de letras y números al azar. n8n lo pone solo en Path para que ninguna dirección se repita. | `3f8a2c1e-7b4d-...` |
 | **Test URL / Production URL** | Dirección de prueba (una vez por clic) / dirección de verdad (con Publish). | `webhook-test/...` / `webhook/...` |
 | **On form submission** | Trigger que arma un formulario y arranca cuando alguien lo manda. | El flujo 03. |
 | **Append Row** | Operación de Google Sheets: agregar una fila al final. | Una fila por consulta. |
@@ -2051,4 +2531,7 @@ Al terminar, cada alumno puede:
 | **Routing Rules** | Las reglas del Switch: una por salida. | ¿Es "Vuelo"? → Vuelos |
 | **Fallback Output** | La salida del Switch para lo que no cumple ninguna regla. | "Otra". |
 | **Dropdown List** | Lista desplegable en un formulario de n8n. | Vuelo / Hotel / Paquete / Otra cosa |
+| **Respond to Webhook** | Nodo para elegir qué le contesta el webhook a quien lo tocó. | Contestar solo el saludo. |
+| **Response Body** | Lo que se contesta: lo que ve el navegador. | `<h1>{{ $json.mensaje }}</h1>` |
+| **HTML** | El idioma de las páginas web: marcas como `<h1>` (título) o `<b>` (negrita). | `<h1>Hola</h1>` |
 | **Postman** | Aplicación para probar direcciones de internet mandándoles pedidos. No la usamos. | GET + dirección + *Send*. |
