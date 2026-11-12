@@ -2094,19 +2094,102 @@ The 'Guardar en la planilla' node has issues:
 ```
 
 Es normal: **el archivo no trae tu planilla ni tu credencial** (son tuyas, no viajan en el archivo). n8n avisa
-antes de arrancar que al nodo de Google Sheets le falta a qué planilla escribir. Se arregla así:
+antes de arrancar que al nodo de Google Sheets le falta a qué planilla escribir.
+
+**Qué nodo hay que tocar:** solo el tercero, *Guardar en la planilla*. El *Formulario de consulta* y *Ordenar los
+datos* ya vienen completos en el archivo: no se tocan. Y el orden es: **primero la planilla en Google, después
+n8n**, porque n8n te va a pedir el link de una planilla que ya exista.
 
 ```text
-EN N8N · Completar el nodo de Google Sheets de un flujo importado
-1. Doble clic en "Guardar en la planilla"
-2. Credential to connect with:  elegí tu credencial de Google Sheets
-   (si la lista está vacía: todavía no la creaste; ver abajo)
-3. Document:  By URL  → pegá el link COMPLETO de tu planilla, copiado de la barra del navegador:
-      https://docs.google.com/spreadsheets/d/1AbC…XyZ/edit
-   (si pegás solo el nombre de la planilla, o un pedazo del link, sale "Not a valid Google Drive File URL")
-4. Sheet:  elegí la hoja (Hoja 1)
-5. Cerrá → Save → Execute workflow
+Formulario de consulta  →  Ordenar los datos  →  Guardar en la planilla
+     (no se toca)             (no se toca)          ← ESTE: credencial + link de la planilla
 ```
+
+Se arregla así, de a un paso:
+
+**I-1 · Crear la planilla en Google (fuera de n8n)**
+
+```text
+Pestaña nueva del navegador → escribí  sheets.new  → Enter
+(con la misma cuenta de Google de tu credencial; si no estás logueado, te pide entrar)
+→ se abre una planilla vacía, "Hoja de cálculo sin título"
+```
+
+- **`sheets.new` es un atajo de Google:** crea una planilla nueva sin pasar por Drive. Es lo mismo que Google Drive
+  → **+ Nuevo** → **Hojas de cálculo de Google**.
+- **Es una planilla (Google Sheets), no un documento de texto (Google Docs).** n8n escribe filas y columnas: tiene
+  que ser una hoja de cálculo.
+  - *Ejemplo:* Si creás un Google Docs y pegás su link, n8n no lo encuentra como planilla.
+- **Tiene que ser la misma cuenta de Google que la credencial.** La credencial le da permiso a n8n para entrar a
+  *esa* cuenta: una planilla de otra cuenta no la ve.
+
+**I-2 · Ponerle nombre y los títulos de las columnas**
+
+```text
+Arriba a la izquierda, clic en "Hoja de cálculo sin título" → escribí  Consultas de la agencia  → Enter
+Fila 1:   A1  fecha     B1  nombre     C1  destino     D1  personas
+(en minúscula, sin tildes de más, sin espacios: igual que los casilleros de "Ordenar los datos")
+```
+
+- **La fila 1 son los títulos.** n8n lee la fila 1 para saber qué columnas hay, y pone cada consulta de la fila 2
+  para abajo.
+- **Los títulos tienen que ser iguales a los casilleros.** *Ordenar los datos* entrega `fecha`, `nombre`,
+  `destino`, `personas`. Si la planilla dice "Nombre" con mayúscula, esa columna queda vacía.
+  - *Ejemplo:* `personas` ✅ · `Personas` ❌ · `cantidad de personas` ❌.
+- **El nombre de la pestaña de abajo (Hoja 1) no hace falta cambiarlo.** Es la que vas a elegir en I-6.
+
+**I-3 · Copiar el link de la planilla**
+
+```text
+Clic en la barra de direcciones del navegador (arriba) → Ctrl + A (seleccionar todo) → Ctrl + C (copiar)
+El link se ve así:  https://docs.google.com/spreadsheets/d/1AbC…XyZ/edit#gid=0
+```
+
+- **El link entero, de `https` hasta el final.** El pedazo largo de letras y números del medio es el
+  "documento" que n8n necesita; si falta un pedazo, no lo encuentra.
+  - *Ejemplo:* Pegar solo "Consultas de la agencia" (el nombre) da *Not a valid Google Drive File URL*.
+- **No uses el botón Compartir.** No hace falta compartir la planilla con nadie: n8n entra con tu cuenta, por la
+  credencial.
+
+**I-4 · En n8n: abrir el tercer nodo y elegir la credencial**
+
+```text
+Volvé a la pestaña de n8n → doble clic en  Guardar en la planilla
+Credential to connect with → elegí  Google Sheets account
+(si la lista está vacía: todavía no la creaste → la guía está al final de este ejemplo)
+```
+
+- **El archivo importado no trae credencial.** Es tuya, vive en tu n8n: se elige de la lista, no se crea de nuevo
+  si ya la tenés.
+
+**I-5 · Document: pegar el link**
+
+```text
+Fila "Document":  a la derecha dice  From list ▾  → cambialo a  By URL
+→ en la caja que aparece:  Ctrl + V  (pegá el link de I-3)
+→ el cartel rojo "Parameter Document is required" desaparece
+```
+
+- **Tres formas de elegir la planilla, misma planilla.** *From list* (la buscás por nombre en una lista), *By URL*
+  (pegás el link) o *By ID* (solo el pedazo del medio). Usamos *By URL* porque es la que menos falla.
+  - *Ejemplo:* Con *From list* también anda: abrís la lista y aparece "Consultas de la agencia". Si no aparece,
+    es que la planilla está en otra cuenta.
+
+**I-6 · Sheet: elegir la hoja, y probar**
+
+```text
+Fila "Sheet":  clic en  Choose…  → elegí  Hoja 1
+Mapping Column Mode:  Map Automatically   (si dice otra cosa, cambialo)
+Cerrá (✕) → Save → Execute workflow → completá el formulario → Submit
+→ los tres nodos en verde, y en la planilla aparece la fila 2
+```
+
+- **Document es el archivo; Sheet es la pestaña de adentro.** Una planilla puede tener varias pestañas (Hoja 1,
+  Hoja 2…): n8n necesita saber en cuál escribir.
+  - *Ejemplo:* Como un cuaderno (Document) con separadores (Sheet): le decís el cuaderno y el separador.
+- **Si aparece "Values to Send" con cajas vacías,** el modo quedó en manual: volvé a elegir *Map Automatically*.
+
+<p style="color:#1a7f37">Si importaron el flujo, solo hay que completar el último nodo. Pero el orden importa: primero la planilla, en Google, con sus cuatro títulos; después n8n. Me copio el link de la planilla, vuelvo a n8n, abro Guardar en la planilla, elijo mi credencial, en Document cambio a By URL y pego el link, y en Sheet elijo Hoja 1. Guardo, ejecuto, y la fila aparece.</p>
 
 **¿Y la credencial en n8n local?** Es el paso más largo y se hace una sola vez. En n8n local, Google no deja
 entrar a n8n sin un permiso que se crea en **Google Cloud Console** (la página de Google para programadores): un
