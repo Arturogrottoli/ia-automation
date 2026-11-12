@@ -50,7 +50,8 @@
 - **Es una sola clase de 2 horas.** El guion tiene material para ~143 minutos, a propósito: mejor que sobre a que
   falte. Si vas bien de tiempo, se da todo; si no, recortás con la lista de abajo de la Agenda. Lo que no llegues a
   dar del Bloque 6 queda para empezar la clase siguiente (los flujos 04, 05 y 06 ya están armados en [n8n/](n8n/)).
-  **API no entra en esta clase:** se da en la siguiente.
+  **API, hasta donde llegues:** al final está la teoría de la filmina del Módulo 4 y dos ejemplos. Lo que no
+  llegues, se retoma en la clase siguiente.
 
 ---
 
@@ -66,7 +67,7 @@
 | 97–118 | **Bloque 5 · Cómo le llegan los datos a n8n** | Webhook desde el navegador (flujo 02) y formulario que guarda en Google Sheets (flujo 03) |
 | 118–140 | **Bloque 6 · Que el flujo decida** | IF con horario (flujo 04), IF con una cuenta (flujo 05) y Switch con lista desplegable (flujo 06) |
 | 140–143 | Cierre | Mini repaso en el chat |
-| (extra) | **Si llegás · Una probadita de API** | Qué es una API, el dólar con HTTP Request (flujo 07) y un Pokémon (flujo 08). Si no llegás, queda para la clase siguiente. |
+| (extra) | **Si llegás · API, hasta donde llegues (~30 min)** | La filmina del Módulo 4 (diapositivas 7 a 23: qué es una API, HTTP, request y response, métodos, status codes, credenciales, HTTP Request) y dos ejemplos: el dólar (flujo 07) y un Pokémon (flujo 08). Lo que no llegues, se retoma en la clase siguiente. |
 | (extra 2) | **Si sobra tiempo · Dos ejemplos completos** | Consulta con presupuesto (Switch + IF, flujo 09) y alerta del dólar (horario + API + IF, flujo 10) |
 
 **Si el tiempo se aprieta** (para terminar en 120 minutos hay que ahorrar unos 23), recortá en este orden:
@@ -3048,41 +3049,263 @@ Respuestas: **1 → IF** (sí o no); **2 → Switch** (cuatro caminos, con "otra
 
 ---
 
-## Extra, si llegás · Una probadita de API (10 min)
+## Extra, si llegás · API: la teoría de la filmina y dos ejemplos (hasta donde llegues, ~30 min)
 
-**Solo si sobra tiempo después del Switch.** Si no llegás, no pasa nada: API es el tema de la clase siguiente, y
-esto queda en el README para leer y en los flujos `07-api-dolar.json` y `08-api-pokemon.json` de la carpeta
-[n8n/](n8n/). Si llegás justo, hacé solo la explicación y el ejemplo 1.
+**Hasta donde llegues.** Sigue la filmina del Módulo 4 (`Modulo_4_AI_Automation.pptx`, diapositivas 7 a 23), en
+orden. Cortá donde se termine el tiempo: lo que no llegues, se retoma la clase que viene. Si tenés poco tiempo, el
+orden de prioridad es: **T1 (qué es) → Ejemplo 1 (dólar) → T5 (pedido y respuesta) → T7 (status codes) → el
+resto**. Los ejemplos están en `07-api-dolar.json` y `08-api-pokemon.json` de la carpeta [n8n/](n8n/), de respaldo.
+
+| Tramo | Diapositiva | Tema | Min |
+|---|---|---|---|
+| T1 | 7 | Qué es una API: el mozo | 3 |
+| T2 | 8 | La API en n8n: lo que hay detrás de cada nodo | 2 |
+| T3 | 9 y 10 | Qué viaja en un pedido | 3 |
+| T4 | 12 | Qué es HTTP | 2 |
+| T5 | 13 y 16 | Request y Response: las dos mitades | 3 |
+| T6 | 14 | Los métodos: GET, POST, PUT, PATCH, DELETE | 2 |
+| T7 | 15 y 17 | Los status codes: el número que dice qué pasó | 3 |
+| T8 | 19, 20 y 21 | Autenticación y credenciales | 3 |
+| T9 | 22 y 23 | El nodo HTTP Request | 2 |
+| Ej. 1 | 27 (paso 1) | El dólar: el primer GET | 7 |
+| Ej. 2 | — | Un Pokémon: otra API, la misma receta | 5 |
 
 **¿Anda en local?** ✅ Sí, sin pasos extra: es la "dirección 1", n8n sale a buscar algo a internet. Las dos APIs de
 los ejemplos son gratis y **no piden clave**.
 
-### Qué es una API (3 min)
+<p style="color:#1a7f37">Hasta ahora, los datos le llegaban a n8n: los escribíamos nosotros, o los mandaba el navegador, o un formulario. Ahora vamos al revés: n8n sale a buscar datos a otro sistema. Y para eso hay que entender una palabra que van a escuchar todo el tiempo en automatización: API.</p>
 
-<p style="color:#1a7f37">Hasta ahora, los datos le llegaban a n8n: los escribíamos nosotros, o los mandaba el navegador o un formulario. Ahora vamos al revés: n8n sale a buscar datos a otro lado. Y para eso se usa una API.</p>
+### T1 · Qué es una API (diapositiva 7) (3 min)
 
-<p style="color:#1a7f37">Piensen en un restaurante. Ustedes no entran a la cocina a buscar la comida: le piden al mozo, con lo que dice la carta, y el mozo les trae el plato. La API es el mozo. Otro sistema, por ejemplo una página que sabe el precio del dólar, tiene sus datos en la cocina. Nosotros le pedimos a la API lo que queremos, y la API nos trae la respuesta. En n8n, el que hace el pedido es un nodo que se llama HTTP Request: pedido por internet.</p>
+<p style="color:#1a7f37">API es una sigla en inglés: Application Programming Interface. Traducido, "interfaz de programación de aplicaciones", que no dice mucho. En criollo: es la forma en que dos programas se hablan entre sí.</p>
+
+<p style="color:#1a7f37">¿Por qué hace falta? Porque nosotros, las personas, usamos los programas tocando botones y mirando pantallas. Pero un programa no tiene dedos ni ojos: no puede tocar el botón de "ver saldo" ni leer la pantalla. Necesita otra vía, una puerta hecha para programas. Esa puerta es la API.</p>
+
+<p style="color:#1a7f37">La analogía más conocida es la del mozo. En un restaurante, ustedes no entran a la cocina a cocinar. Miran la carta, le piden al mozo, el mozo lleva el pedido a la cocina, y les trae el plato. No saben cómo se cocinó, ni les importa: pidieron con las reglas de la carta, y les trajeron lo que pidieron. La API es el mozo: un intermediario con reglas claras de cómo pedir, que responde sin que sepamos cómo funciona la cocina por dentro.</p>
 
 ```text
-n8n (HTTP Request)  ── "¿cuánto está el dólar oficial?" ──►  API de dolarapi.com
-n8n                 ◄── { "compra": 1520, "venta": 1570 } ──   (la respuesta, en JSON)
+   Vos (n8n)                El mozo (la API)                 La cocina (el otro sistema)
+   ─────────                ────────────────                 ───────────────────────────
+   "Quiero el dólar  ───►   lleva el pedido      ───►        busca el dato en su base
+    oficial"                                                  de datos
+                    ◄───    trae la respuesta    ◄───
+   { compra: 1520,
+     venta: 1570 }
 ```
 
 Para explicar:
-- **API = la puerta por donde un programa le pide datos a otro.** Cada API tiene su "carta": qué cosas se le pueden
-  pedir y en qué dirección.
-  - *Ejemplo:* La carta de dolarapi dice: "pidiendo `/v1/dolares/oficial`, te doy el dólar oficial".
+- **La sigla: Application Programming Interface.** *Interface* es "la parte que se toca": la interfaz de una
+  persona son botones y pantallas; la de un programa es la API.
+  - *Ejemplo:* La app del banco te muestra el saldo con una pantalla linda. Por detrás, la app le pidió el saldo a
+    la API del banco.
+- **El problema que resuelve: un programa no puede tocar botones.** Necesita una forma de pedir las cosas
+  escrita, con reglas fijas.
+  - *Ejemplo:* n8n no puede "entrar" a la página de dolarapi y leer el número; le pide el dato a su API.
+- **El mozo: vos no entrás a la cocina.** Pedís con la carta (las reglas de la API) y te traen el plato (los
+  datos). La cocina es del otro sistema; no la ves ni la tocás.
+  - *Ejemplo:* La "carta" de dolarapi dice: "si pedís `/v1/dolares/oficial`, te doy el dólar oficial".
+- **Qué es, entonces: un intermediario con reglas claras.** Si pedís bien, te contesta. Si pedís algo que no está
+  en la carta, te dice que no existe.
+  - *Ejemplo:* Pedirle al mozo "un plato de la carta" funciona; pedirle "lo que cocinó tu abuela" no.
 - **Es el webhook al revés.** Con el webhook, alguien de afuera toca el timbre de n8n. Con una API, n8n toca el
   timbre de otro.
   - *Ejemplo:* Webhook: el formulario le avisa a n8n. API: n8n le pregunta a dolarapi.
-- **La respuesta viene en JSON, la misma ficha de siempre.** Con llaves, casilleros y valores. n8n la muestra en
-  OUTPUT y se arrastra igual que todo lo demás.
-  - *Ejemplo:* `compra: 1520` se arrastra y queda `{{ $json.compra }}`.
-- **Algunas APIs piden clave y otras no.** Las de hoy son abiertas. Otras (Google, Mercado Pago, la de un clima
-  con más datos) piden una clave o una credencial, como la de Google Sheets.
-  - *Ejemplo:* dolarapi y PokeAPI: sin clave. Gmail: con credencial.
 
-### Ejemplo 1 · El precio del dólar (flujo 07) (4 min)
+### T2 · La API en n8n: lo que hay detrás de cada nodo (diapositiva 8) (2 min)
+
+<p style="color:#1a7f37">Y acá viene algo que les va a cambiar cómo miran n8n. ¿Se acuerdan del nodo de Google Sheets? Por dentro, ese nodo está usando la API de Google Sheets. Lo mismo el de Gmail, el de Slack, el de WhatsApp. Lo que hace n8n es ponerle botones y casilleros lindos a algo que, en el fondo, es pedirle cosas a una API.</p>
+
+<p style="color:#1a7f37">¿Y si un servicio no tiene nodo en n8n? Igual se puede usar. Hay un nodo genérico, HTTP Request, que le habla directo a cualquier API. Por eso entender qué es una API es la base: con eso, pueden conectar cualquier cosa, tenga o no su nodo.</p>
+
+Para explicar:
+- **Los nodos de marca usan la API de su servicio.** Cuando "Guardar en la planilla" agregó una fila, por dentro le
+  mandó un pedido a la API de Google Sheets.
+  - *Ejemplo:* Append Row = "API de Google, agregá esta fila en esta planilla".
+- **n8n le pone interfaz visual a la API.** En vez de escribir el pedido a mano, completás casilleros (Document,
+  Sheet) y n8n arma el pedido.
+  - *Ejemplo:* Elegir "Hoja 1" en una lista es más fácil que escribir el pedido con el código de la hoja.
+- **Si el servicio no tiene nodo: HTTP Request.** Es el nodo comodín, el que vamos a usar hoy.
+  - *Ejemplo:* dolarapi no tiene nodo propio en n8n. Con HTTP Request le hablamos igual.
+- **Por eso importa.** Entender la API es entender todos los nodos a la vez.
+
+### T3 · Qué viaja en un pedido (diapositivas 9 y 10) (3 min)
+
+<p style="color:#1a7f37">Cada vez que un programa le pide algo a una API, el pedido lleva siempre las mismas cosas. Como cuando llaman a un delivery: qué quieren, a dónde, con qué detalles, y quiénes son.</p>
+
+| Qué lleva el pedido | En el delivery | En una API |
+|---|---|---|
+| **Qué queremos hacer** | Pedir, cambiar o cancelar un pedido | Leer datos, crear algo, borrar algo |
+| **A dónde** | El teléfono de la pizzería | Una dirección, parecida a la de una página web |
+| **Con qué datos** | "Una muzzarella grande" | Para crear un contacto: el nombre y el email |
+| **Quiénes somos** | Tu nombre y dirección, para que sepan que sos cliente | Una clave o credencial: la **autenticación** |
+| **La respuesta** | "Sale en 30 minutos" o "no tenemos más" | Si funcionó o no, y los datos, o un mensaje de error |
+
+<p style="color:#1a7f37">Y la API siempre responde. Si salió bien, con los datos que pedimos. Si salió mal, con un mensaje que explica qué falló. Nunca se queda callada.</p>
+
+Para explicar:
+- **Qué queremos hacer: leer, crear, borrar.** Es la acción. En un rato vemos que cada acción tiene su nombre
+  (GET, POST…).
+  - *Ejemplo:* Leer el dólar de hoy. Crear una fila en una planilla. Borrar un contacto.
+- **A dónde: una dirección.** Igual a la de una página web; cada cosa que se puede pedir tiene la suya.
+  - *Ejemplo:* `https://dolarapi.com/v1/dolares/oficial` para el oficial; `…/blue` para el blue.
+- **Con qué datos: lo que la API necesita para hacer lo que pedimos.** Para leer, a veces nada. Para crear,
+  los datos de lo que creamos.
+  - *Ejemplo:* Para leer el dólar no mandamos nada. Para agregar una fila mandamos fecha, nombre, destino.
+- **Quiénes somos: la autenticación.** Para que el servicio sepa que tenemos permiso.
+  - *Ejemplo:* La credencial de Google Sheets que armamos: eso es decirle a Google "soy yo, y tengo permiso".
+
+**Para pensar (diapositiva 10):**
+
+<p style="color:#1a7f37">Piensen en una app que usan todos los días. Cuando les muestra el clima, el saldo, o los mensajes nuevos, ¿de dónde saca esos datos? Casi siempre, se los está pidiendo a la API de otro sistema. La app del clima no tiene su propio satélite: le pregunta a la API de un servicio meteorológico.</p>
+
+> **Para vos:** dejá que contesten por el chat un par de ejemplos (Mercado Pago, el home banking, la app del
+> colectivo) y seguí. No hace falta esperar a todos.
+
+### T4 · Qué es HTTP (diapositiva 12) (2 min)
+
+<p style="color:#1a7f37">Para que el mozo y la cocina se entiendan, tienen que hablar el mismo idioma. En internet, ese idioma se llama HTTP. Es otra sigla: HyperText Transfer Protocol, protocolo de transferencia de hipertexto. Protocolo quiere decir "reglas de cómo se habla". Es el idioma que usan casi todas las APIs, y también los navegadores.</p>
+
+<p style="color:#1a7f37">¿Se acuerdan de las direcciones que empiezan con http? Ese es el idioma. Cuando ustedes abren una página, el navegador le hace un pedido HTTP a un servidor, y el servidor le devuelve la página, que el navegador dibuja lindo. Con una API pasa exactamente lo mismo, con una diferencia: en vez de devolver una página para mirar, devuelve datos crudos, casi siempre en JSON, la ficha con llaves que ya conocen.</p>
+
+Para explicar:
+- **HTTP = las reglas de cómo se arma un pedido y una respuesta.** Así se entienden dos sistemas, aunque estén
+  hechos en lenguajes distintos.
+  - *Ejemplo:* Como el formato de una carta: remitente, destinatario, contenido. No importa el idioma en que la
+    escribas: el correo sabe dónde mirar.
+- **En el navegador: pedís una página, te la devuelven y la ves linda.**
+  - *Ejemplo:* Abrís `google.com`: el navegador hizo un pedido HTTP y dibujó la respuesta.
+- **Con una API: lo mismo, pero devuelve datos crudos, en JSON.**
+  - *Ejemplo:* Abrí `https://dolarapi.com/v1/dolares/oficial` en el navegador: no se ve una página linda, se ve la
+    ficha en JSON. Es la API contestando.
+- **Ya lo usamos hoy.** El webhook es HTTP: el navegador le hizo un pedido HTTP a n8n.
+
+### T5 · Request y Response: las dos mitades (diapositivas 13 y 16) (3 min)
+
+<p style="color:#1a7f37">Toda comunicación por HTTP tiene dos mitades. El pedido, que en inglés se llama request. Y la respuesta, que se llama response. El que pide se llama cliente; el que responde, servidor. Hoy, el cliente es n8n.</p>
+
+```text
+REQUEST (el pedido)                               RESPONSE (la respuesta)
+─────────────────────────────────                 ─────────────────────────────────
+URL:      a dónde le hablo                         Status code:  qué pasó (200 = bien)
+          https://dolarapi.com/v1/dolares/oficial
+Método:   qué quiero hacer   (GET = leer)          Headers:  información sobre la respuesta
+Headers:  información extra: formato,              Body:     los datos, casi siempre en JSON
+          y las credenciales (el pasaporte)                  { "compra": 1520, "venta": 1570 }
+Body:     los datos que mando (si hace falta;
+          para leer, vacío)
+```
+
+<p style="color:#1a7f37">Fíjense que son las mismas partes que vimos en el webhook: headers y body. En el webhook, nosotros éramos el servidor: nos llegaba el pedido del navegador, con sus headers y su body vacío. Ahora n8n es el cliente: arma el pedido y recibe la respuesta.</p>
+
+<p style="color:#1a7f37">Y una frase para que se la lleven: en los headers va el pasaporte; en el body, la maleta. Los headers dicen quiénes somos y cómo viene la cosa; el body lleva lo que transportamos.</p>
+
+Para explicar:
+- **Request · URL: la dirección exacta.** A quién le hablo y qué le pido.
+- **Request · Método: qué acción.** Leer, crear, cambiar, borrar (lo vemos ya).
+- **Request · Headers: información adicional.** El formato de los datos, y sobre todo **las credenciales**: es el
+  pasaporte.
+  - *Ejemplo:* En el webhook vimos los headers que manda el navegador: idioma, navegador. Una API con clave lleva
+    ahí la clave.
+- **Request · Body: los datos que mando, cuando hace falta.** Para leer, vacío. Para crear un cliente, el nombre y
+  el email.
+  - *Ejemplo:* Es la maleta: si solo pedís información, viajás sin maleta.
+- **Response: status code, headers y body.** El status code es un número que dice qué pasó; el body trae los datos.
+- **"El cliente pide, el servidor responde. Todo lo demás es detalle"** (diapositiva 16).
+
+### T6 · Los métodos: qué acción quiero hacer (diapositiva 14) (2 min)
+
+<p style="color:#1a7f37">El método es el verbo del pedido: qué quiero hacer. Hay cinco que van a ver siempre. Usemos el ejemplo de una lista de clientes.</p>
+
+| Método | Qué hace | Ejemplo con clientes |
+|---|---|---|
+| **GET** | Pedir o leer, sin cambiar nada | Traer la lista de clientes |
+| **POST** | Crear algo nuevo | Crear un cliente nuevo |
+| **PUT** | Reemplazar todo un registro | Actualizar **todos** los datos de un cliente |
+| **PATCH** | Cambiar una parte | Cambiar **solo** el teléfono de un cliente |
+| **DELETE** | Borrar | Borrar un cliente |
+
+<p style="color:#1a7f37">GET ya lo conocen: es el de la postal, el del navegador, el del webhook. POST también: es el del paquete, el del formulario. Los otros tres son para cambiar y borrar. Hoy, para preguntar el dólar, usamos GET: solo queremos leer.</p>
+
+Para explicar:
+- **GET = leer, sin tocar nada.** Es el más seguro: por más veces que lo hagas, no cambia nada del otro lado.
+  - *Ejemplo:* Preguntar el dólar cien veces no cambia el dólar.
+- **POST = crear.** Cada vez que lo hacés, se crea algo nuevo.
+  - *Ejemplo:* Append Row de Google Sheets, por dentro, es un pedido que crea una fila.
+- **PUT y PATCH = cambiar.** PUT reemplaza todo; PATCH cambia solo una parte.
+  - *Ejemplo:* PUT es volver a llenar la ficha entera del cliente; PATCH es tachar el teléfono y escribir el nuevo.
+- **DELETE = borrar.** Con cuidado: no hay papelera.
+- **El método lo dice la "carta" de la API.** Cada API avisa qué método usar en cada dirección.
+
+### T7 · Los status codes: el número que dice qué pasó (diapositivas 15 y 17) (3 min)
+
+<p style="color:#1a7f37">Toda respuesta trae un número de tres cifras, el status code, el código de estado. Es lo primero que hay que mirar cuando algo falla, porque dice qué pasó. Y no hay que aprenderse todos: alcanza con mirar el primer número.</p>
+
+| Empieza con | Quiere decir | Los que más van a ver |
+|---|---|---|
+| **2** (200–299) | ✅ Salió bien | **200** OK ("todo bien") · **201** Created ("lo creé") |
+| **3** (300–399) | Redirección: "eso está en otro lado" | Poco frecuente en el uso diario |
+| **4** (400–499) | ❌ Error **tuyo**: pediste algo mal | **400** pedido mal armado · **401** no sé quién sos · **403** sé quién sos, pero no tenés permiso · **404** no existe · **429** pediste demasiado rápido |
+| **5** (500–599) | ❌ Error **del otro lado** | **500** "se rompió algo en el servidor" |
+
+<p style="color:#1a7f37">La regla mental es una sola: si empieza con 4, revisá tu pedido. Si empieza con 5, no es tu culpa: falló el sistema al que le pediste, y lo único que podés hacer es esperar y volver a probar.</p>
+
+<p style="color:#1a7f37">Ya vimos dos hoy. El 404 del webhook, cuando la dirección no estaba escuchando: no encontrado. Y el 500 cuando rompimos el flujo con "tres": error del lado del que contesta, que ahí éramos nosotros.</p>
+
+Para explicar:
+- **2xx = éxito.** 200 es "todo bien, acá tenés". 201 es "listo, lo creé" (después de un POST).
+- **4xx = error del cliente: revisá tu pedido.** La dirección mal escrita, falta un dato, falta la clave.
+  - *Ejemplo:* `pikachuu` con dos u → 404: no existe. Lo vamos a ver en el ejemplo 2.
+- **401 y 403 se parecen, pero no son lo mismo** (diapositiva 17). **401** = "no sé quién sos": falta la
+  credencial, o está mal. **403** = "sé quién sos, pero no tenés permiso para esto".
+  - *Ejemplo:* 401 es llegar a un edificio sin credencial: el de seguridad no te deja pasar porque no sabe quién
+    sos. 403 es tener credencial de empleado, pero querer entrar a la oficina del gerente.
+- **429 = pediste demasiado rápido.** Muchas APIs ponen un límite de pedidos por minuto.
+  - *Ejemplo:* Un flujo que le pregunta el dólar cada segundo puede recibir un 429.
+- **5xx = error del servidor: no es tu culpa.** Esperás y volvés a probar.
+
+### T8 · Autenticación y credenciales (diapositivas 19, 20 y 21) (3 min)
+
+<p style="color:#1a7f37">Ahora, el pasaporte. Si cualquiera pudiera pedirle datos a cualquier API sin identificarse, podría leer o cambiar información ajena: tu planilla, tus mails, tu cuenta del banco. Por eso casi todas las APIs, antes de darte nada, preguntan lo mismo: ¿quién sos, y tenés permiso para hacer esto? Eso se llama autenticación.</p>
+
+<p style="color:#1a7f37">Y no todas lo preguntan igual: cada servicio elige su forma. Las tres que más van a ver son estas.</p>
+
+| Tipo | Qué es | Como… |
+|---|---|---|
+| **API Key** | Un código único que te da la plataforma al crear tu cuenta. Va en los headers o en la dirección. | Una tarjeta de acceso: quien la tiene, entra. |
+| **Bearer Token** | Parecido a la API Key, pero **temporal**: puede vencer. Va en el header *Authorization*. | La pulserita de un recital: sirve esa noche. |
+| **OAuth2** | Iniciás sesión con tu cuenta real y te da un permiso temporal y renovable. El más seguro: lo usan Google, Microsoft, Meta. | Darle a alguien una copia de la llave, que podés quitarle cuando quieras. |
+| *Basic Auth* | Usuario y contraseña. De las más viejas y simples; poco usada hoy. | Decir tu usuario y tu clave en la puerta. |
+
+<p style="color:#1a7f37">¿Les suena OAuth2? Es lo que hicimos con Google Sheets: Client ID, Client Secret, iniciar sesión con Google, y Google le dio permiso a n8n sin que le diéramos nuestra contraseña. Y el aviso de que vence a los 7 días: eso es el "temporal y renovable".</p>
+
+<p style="color:#1a7f37">Y en n8n, las credenciales se guardan en un solo lugar, la sección Credentials, no adentro de cada flujo. Se guardan encriptadas, o sea, en un código que no se puede leer. Y se reusan: la misma credencial sirve para muchos flujos y muchos nodos. Cada nodo pide el tipo que necesita su servicio.</p>
+
+Para explicar:
+- **Por qué existe: para que nadie use datos ajenos.** La API necesita saber quién pide.
+- **API Key: un código fijo.** Te la da la página cuando te registrás; se copia y se pega en n8n.
+  - *Ejemplo:* Una API de noticias o del clima con más datos te da una clave tipo `a8f3…`. Sin ella: 401.
+- **Bearer Token: una clave que vence.** Se usa igual, pero cada tanto hay que renovarla.
+- **OAuth2: entrás con tu cuenta y das permiso.** Es lo que hicimos con Google. No se comparte la contraseña.
+- **En n8n: Overview → Credentials.** Se crean una vez, quedan encriptadas, y se eligen de la lista en cada nodo.
+  - *Ejemplo:* La credencial *Google Sheets account* aparece en cualquier flujo nuevo.
+- **Las claves no se comparten.** Ni en el chat, ni en una captura, ni en un flujo exportado.
+
+### T9 · El nodo HTTP Request (diapositivas 22 y 23) (2 min)
+
+<p style="color:#1a7f37">Y llegamos al nodo de hoy: HTTP Request, pedido HTTP. Es un nodo genérico: no está atado a ningún servicio. En él armamos a mano el pedido completo, con las partes que vimos: método, dirección, headers, body y autenticación.</p>
+
+<p style="color:#1a7f37">¿Cuándo se usa? Cuando el servicio no tiene nodo propio en n8n. Cuando tiene nodo, pero ese nodo no hace algo que la API sí permite. Y cuando estamos probando una API por primera vez, para ver qué contesta. Y algo para que se lleven: todos los nodos de marca, Gmail, Slack, Notion, son pedidos HTTP armados de antemano por la gente de n8n. El HTTP Request les muestra la maquinaria que esos nodos esconden.</p>
+
+Para explicar:
+- **Genérico: le habla a cualquier API.** Vos completás las partes del pedido.
+- **Cuándo: el servicio no tiene nodo.** *Ejemplo:* dolarapi, PokeAPI.
+- **Cuándo: el nodo existe pero no hace lo que necesitás.** La API puede más que el nodo.
+- **Cuándo: para explorar una API nueva.** Probás un pedido y mirás la respuesta antes de armar algo grande.
+- **Los nodos de marca son HTTP Request "armados".** Por eso, si entendés este, entendés todos.
+
+<p style="color:#1a7f37">Basta de teoría: vamos a hacer nuestro primer pedido a una API de verdad.</p>
+
+### Ejemplo 1 · El precio del dólar: el primer GET (flujo 07) (7 min)
 
 ```text
 Cuando hago clic  →  Preguntarle a la API  →  Armar el aviso
@@ -3091,96 +3314,203 @@ Cuando hago clic  →  Preguntarle a la API  →  Armar el aviso
 
 Lo que tiene que salir (probado; el número cambia cada día): `Dólar oficial hoy: compra $1520, venta $1570.`
 
-**En n8n, paso a paso** (cada paso son uno o dos clics; abajo de cada uno, lo que decís y explicás en ese momento):
+**Objetivo (diapositiva 27):** el primer pedido, sin clave; leer la respuesta y encontrar el dato que sirve.
 
-**API-1 · Un flujo nuevo con el trigger de siempre**
+**API-1 · Antes de n8n: mirar la respuesta en el navegador**
 
 ```text
-Overview → Create workflow → nombre:  API dólar
-+ (Add first step) → Trigger manually
+Pestaña nueva del navegador → pegá  https://dolarapi.com/v1/dolares/oficial  → Enter
+→ aparece una ficha en JSON:  { "moneda": "USD", "casa": "oficial", "nombre": "Oficial",
+                                "compra": 1520, "venta": 1570, "fechaActualizacion": "…" }
 ```
 
-<p style="color:#1a7f37">Flujo nuevo, y el trigger más simple, el del clic. Lo que nos importa hoy es el nodo que viene.</p>
+<p style="color:#1a7f37">Antes de abrir n8n, le pregunto a la API desde el navegador. Pego la dirección y miren: no es una página linda, es la ficha cruda, en JSON. El navegador le hizo un GET a la API, y la API contestó con el dólar de hoy. Esto mismo es lo que va a hacer n8n.</p>
 
-**API-2 · El nodo que hace el pedido: HTTP Request**
+- **Probar en el navegador es el primer paso con cualquier API que se pide con GET.** Si acá contesta, en n8n
+  también.
+
+**API-2 · Flujo nuevo con el trigger del clic**
 
 ```text
-+ a la derecha → buscá  http  → HTTP Request
-   Method:  GET     (pedir: es el que viene)
-   URL:     https://dolarapi.com/v1/dolares/oficial
-→ lo demás, como viene
+Volvé a n8n → Overview → Create workflow → clic en "My workflow" → escribí  API dólar  → Enter
+Clic en el +  (Add first step) → Trigger manually
 ```
 
-<p style="color:#1a7f37">HTTP Request es el mozo: el nodo que le hace el pedido a la API. Le digo dos cosas. El método: GET, pedir, el mismo que usaba el navegador. Y la dirección, la URL: es la parte de la carta que dice "dólar oficial". No hay clave, no hay credencial: esta API es abierta.</p>
+<p style="color:#1a7f37">Flujo nuevo, y el trigger más simple, el del clic. Lo importante hoy es el nodo que sigue.</p>
 
-- **La URL es "qué le pido".** Cambiando el final, se piden otras cosas de la misma carta.
-  - *Ejemplo:* `…/v1/dolares/blue` trae el dólar blue; `…/v1/dolares` trae todos juntos.
-- **Es GET, como el navegador.** De hecho, esa misma dirección se puede pegar en el navegador y se ve la
-  respuesta.
-  - *Ejemplo:* Abrí `https://dolarapi.com/v1/dolares/oficial` en otra pestaña: aparece la ficha en JSON.
-
-**API-3 · Probar el pedido y mirar la respuesta**
+**API-3 · Agregar el HTTP Request**
 
 ```text
-Execute step → OUTPUT:
+Clic en el + a la derecha del trigger → buscá  http  → clic en  HTTP Request
+→ se abre la ventana del nodo
+```
+
+<p style="color:#1a7f37">Busco http y elijo HTTP Request. Es el mozo: el nodo que le lleva el pedido a la API.</p>
+
+**API-4 · La ventana: las partes del pedido**
+
+```text
+En Parameters, de arriba hacia abajo:
+   Method          GET ▾            ← el método: qué quiero hacer
+   URL             (vacío)          ← la dirección: a dónde le hablo
+   Authentication  None             ← quiénes somos: hoy, nadie (la API es abierta)
+   Send Query Parameters   ○        ← datos en la dirección (después del ?)
+   Send Headers            ○        ← el pasaporte
+   Send Body               ○        ← la maleta
+(todo apagado, como viene)
+```
+
+<p style="color:#1a7f37">Miren la ventana: son exactamente las partes del pedido que vimos. Method, el método. URL, la dirección. Authentication, quiénes somos. Y tres interruptores: datos en la dirección, headers y body. Para preguntar el dólar no hace falta ninguno: es un pedido de leer, sin clave y sin maleta.</p>
+
+- **Cada casillero es una parte del request.** El nodo no inventa nada: es el pedido de la filmina, en casilleros.
+- **Authentication en *None* = sin clave.** Si la API pidiera una, acá se elegiría la credencial.
+
+**API-5 · Completar el pedido**
+
+```text
+Method:  GET   (ya viene)
+URL:     pegá  https://dolarapi.com/v1/dolares/oficial
+```
+
+<p style="color:#1a7f37">El método: GET, porque solo quiero leer. Y la URL, la misma que probé en el navegador. Nada más.</p>
+
+- **Cambiando el final de la URL, se piden otras cosas de la misma carta.**
+  - *Ejemplo:* `…/v1/dolares/blue` trae el blue; `…/v1/dolares` trae todos juntos.
+
+**API-6 · Mandar el pedido y leer la respuesta**
+
+```text
+Execute step → OUTPUT (vista Schema o Table):
    moneda: USD   casa: oficial   nombre: Oficial
-   compra: 1520   venta: 1570   fechaActualizacion: 2026-11-11T18:00:00.000Z
-Cerrá → renombralo:  Preguntarle a la API
+   compra: 1520   venta: 1570   fechaActualizacion: 2026-11-12T17:00:00.000Z
 ```
 
-<p style="color:#1a7f37">Ejecuto el paso, y miren: la API contestó. Una ficha con la moneda, la casa, el precio de compra, el de venta y cuándo se actualizó. Esto no lo escribí yo: vino de afuera, de internet, recién.</p>
+<p style="color:#1a7f37">Execute step, y la API contestó. La misma ficha que vi en el navegador, ahora en n8n. Esto no lo escribí yo: vino de internet, recién. Si el nodo está verde, la respuesta fue un 200: todo bien.</p>
 
-**API-4 · Usar la respuesta, como siempre**
+- **Verde = la respuesta empezó con 2.** Si hubiera sido un 4 o un 5, el nodo estaría rojo, con el número.
+- **n8n muestra solo el body.** Los headers y el status code los guarda aparte (abajo, cómo verlos).
+
+**API-7 · (opcional) Ver el status code y los headers**
 
 ```text
-+ → Edit Fields → Add Field →  Name: mensaje   Type: String
-Value:  Dólar oficial hoy: compra $   → arrastrá  compra   → , venta $   → arrastrá  venta   → .
+En el nodo, abajo de todo:  Options → Add option → Response
+   → prendé  Include Response Headers and Status
+Execute step → OUTPUT ahora tiene:
+   statusCode: 200    statusMessage: OK    headers: {…}    body: { compra: 1520, … }
+Después volvé a apagarlo (si no, los datos quedan adentro de "body")
+```
+
+<p style="color:#1a7f37">Si quiero ver la respuesta completa, le pido a n8n que me muestre todo. Miren: statusCode 200, OK. Los headers de la respuesta. Y el body, con los datos. Las tres partes de la response que vimos en la filmina. Lo vuelvo a apagar, para que los datos queden a mano.</p>
+
+**API-8 · Encontrar el dato que sirve y usarlo**
+
+```text
+Cerrá → renombralo:  Preguntarle a la API
++ a la derecha → buscá  edit  → Edit Fields (Set) → Add Field →  Name: mensaje   Type: String
+Value: escribí  Dólar oficial hoy: compra $   → arrastrá  compra   → escribí  , venta $
+       → arrastrá  venta   → escribí  .
 Queda:  Dólar oficial hoy: compra ${{ $json.compra }}, venta ${{ $json.venta }}.
-Cerrá → renombralo:  Armar el aviso → Save → Execute workflow
+```
+
+<p style="color:#1a7f37">De todo lo que trajo, me sirven dos: compra y venta. Lo que trae una API es un dato más: se arrastra como cualquier otro. Armo la frase.</p>
+
+**API-9 · Probar el flujo entero**
+
+```text
+Cerrá → renombralo:  Armar el aviso  → Save → Execute workflow
 → mensaje: Dólar oficial hoy: compra $1520, venta $1570.
 ```
 
-<p style="color:#1a7f37">Y lo que trajo la API se usa igual que cualquier dato: lo arrastro. Ahora tengo una frase con el dólar de hoy. Si mañana lo ejecuto, dice el dólar de mañana, sin tocar nada. Imagínense esto con el trigger de horario: todos los días a las 9, el dólar del día en un mensaje para los vendedores.</p>
+<p style="color:#1a7f37">Ahí está: una frase con el dólar de hoy. Si lo ejecuto mañana, dice el de mañana, sin tocar nada. Imagínense esto con el trigger de horario: todos los días a las 9, el dólar del día para los vendedores. Es el ejemplo B del final.</p>
 
-- **Lo que trae la API es un dato más.** Se arrastra, se usa en un IF, se guarda en una planilla.
-  - *Ejemplo:* Juntándolo con el flujo 05: "tu viaje de USD 1350 son hoy $2.119.500" (monto × venta).
+**API-10 · Romperlo a propósito: un 404**
 
-### Ejemplo 2 · Los datos de un Pokémon (flujo 08) (3 min)
+```text
+En "Preguntarle a la API", cambiá la URL a  https://dolarapi.com/v1/dolares/oficialx  → Execute step
+→ el nodo en ROJO, con un error que menciona  404  (no encontrado)
+Volvé a poner  …/oficial  → Save
+```
 
-Para mostrar que con cualquier API es igual, y para que lo prueben ellos en casa cambiando el nombre.
+<p style="color:#1a7f37">Y lo rompo: agrego una x al final. Le pedí al mozo un plato que no está en la carta. Nodo rojo, y el número: 404, no existe. Empieza con 4: el error es mío, revisé mi pedido. Lo arreglo y vuelve a andar.</p>
+
+- **4 = revisá tu pedido.** En la URL, una letra de más alcanza para un 404.
+
+### Ejemplo 2 · Los datos de un Pokémon: otra API, la misma receta (flujo 08) (5 min)
+
+```text
+Cuando hago clic  →  Preguntarle a la API  →  Armar la ficha
+(trigger manual)     (HTTP Request, GET)       (Edit Fields)
+```
 
 Lo que tiene que salir (probado): `pikachu es el Pokémon número 25 y es de tipo electric.`
 
-**API-5 · El mismo flujo, con otra dirección**
+Para mostrar que con cualquier API es lo mismo, y para que lo prueben en casa cambiando el nombre.
+
+**API-11 · Mirarla en el navegador**
 
 ```text
-En el flujo del dólar (o uno nuevo igual): doble clic en "Preguntarle a la API"
-   URL:  https://pokeapi.co/api/v2/pokemon/pikachu
-→ Execute step
+Pestaña nueva → https://pokeapi.co/api/v2/pokemon/pikachu → Enter
+→ un JSON enorme, que no entra en la pantalla
 ```
 
-<p style="color:#1a7f37">Mismo nodo, otra dirección: ahora le pregunto a la PokeAPI por Pikachu. Y miren el OUTPUT: es enorme. Miles de datos: sus movimientos, sus fotos, sus juegos. Las APIs suelen traer mucho más de lo que necesitamos. Nosotros agarramos solo lo que nos sirve.</p>
+<p style="color:#1a7f37">Otra API, gratis y sin clave: la PokeAPI. Le pregunto por Pikachu en el navegador, y miren: es enorme. Sus movimientos, sus fotos, sus juegos. Las APIs suelen traer mucho más de lo que necesitamos. Nosotros vamos a agarrar solo tres datos.</p>
 
-- **No hace falta entender toda la respuesta.** Se busca lo que sirve y se arrastra. Para encontrarlo, la vista
-  **Schema** de OUTPUT ayuda: muestra los casilleros ordenados.
-  - *Ejemplo:* De todo lo que trae Pikachu, usamos tres: `name`, `id` y el tipo.
-
-**API-6 · Sacar tres datos de la respuesta**
+**API-12 · Flujo nuevo, mismo armado**
 
 ```text
-Edit Fields → mensaje (String):
-   {{ $json.name }} es el Pokémon número {{ $json.id }} y es de tipo {{ $json.types[0].type.name }}.
-→ Execute step → pikachu es el Pokémon número 25 y es de tipo electric.
+En n8n: Overview → Create workflow → nombre:  API Pokémon
++ (Add first step) → Trigger manually
++ a la derecha → http → HTTP Request
+   Method:  GET
+   URL:     https://pokeapi.co/api/v2/pokemon/pikachu
 ```
 
-<p style="color:#1a7f37">Arrastro el nombre, el número, y el tipo. El tipo está más adentro: en una lista que se llama types, el primero, y adentro su nombre. Arrastrándolo, n8n lo escribe solo.</p>
+<p style="color:#1a7f37">La misma receta que con el dólar: trigger del clic, HTTP Request, GET, y la dirección. Lo único que cambia es la URL.</p>
 
-- **`types[0]` es "el primero de la lista".** Algunos casilleros son listas (un Pokémon puede tener dos tipos).
-  `[0]` es el primero, porque se cuenta desde cero, como los items.
-  - *Ejemplo:* Bulbasaur tiene dos tipos: `types[0]` es grass y `types[1]` es poison.
-- **Si escribís mal el nombre, la API contesta que no existe.** Con `pikachuu` el nodo se pone rojo: la API
-  devuelve un error **404**, "no encontrado", el mismo número que vimos con el webhook.
-  - *Ejemplo:* Es pedirle al mozo un plato que no está en la carta.
+- **Otra forma más rápida:** en el flujo del dólar, menú **…** → **Duplicate**, y en el HTTP Request cambiás solo
+  la URL.
+
+**API-13 · Leer una respuesta grande**
+
+```text
+Execute step → OUTPUT → vista  Schema
+Buscá, entre todo:
+   id:    25
+   name:  pikachu
+   types  ▸ abrí la flechita → 0 ▸ → type ▸ → name: electric
+Cerrá → renombralo:  Preguntarle a la API
+```
+
+<p style="color:#1a7f37">En el OUTPUT, elijo la vista Schema, que ordena los casilleros. Busco tres: id, el número, 25; name, el nombre, pikachu; y el tipo, que está más adentro: en types, que es una lista, abro el primero, el cero, después type, y ahí está name: electric.</p>
+
+- **No hace falta entender toda la respuesta.** Se busca lo que sirve. Schema ayuda a encontrarlo.
+- **`types` es una lista.** Un Pokémon puede tener uno o dos tipos. El primero es el `0`, porque se cuenta
+  desde cero.
+  - *Ejemplo:* Bulbasaur tiene dos: `types[0]` es grass y `types[1]` es poison.
+
+**API-14 · Armar la ficha arrastrando**
+
+```text
++ a la derecha → Edit Fields (Set) → Add Field →  Name: mensaje   Type: String
+Value: arrastrá  name  → escribí  es el Pokémon número  → arrastrá  id
+       → escribí  y es de tipo  → arrastrá el  name  de adentro de  types → 0 → type  → escribí  .
+Queda:  {{ $json.name }} es el Pokémon número {{ $json.id }} y es de tipo {{ $json.types[0].type.name }}.
+Cerrá → renombralo:  Armar la ficha → Save → Execute workflow
+→ mensaje: pikachu es el Pokémon número 25 y es de tipo electric.
+```
+
+<p style="color:#1a7f37">Arrastro el nombre, el número y el tipo. Miren cómo escribió n8n el tipo: types, corchete cero, punto type, punto name. Es el camino para llegar: la lista types, el primero, type, name. No hace falta escribirlo: lo arma solo al arrastrar.</p>
+
+**API-15 · Cambiar el Pokémon, y romperlo**
+
+```text
+En la URL, cambiá  pikachu  por  charmander  → Execute workflow
+→ charmander es el Pokémon número 4 y es de tipo fire.
+Ahora escribí mal:  pikachuu  → Execute workflow
+→ "Preguntarle a la API" en ROJO, con un 404  (la API contesta {"status":404,"message":"Not Found"})
+```
+
+<p style="color:#1a7f37">Cambio pikachu por charmander, y el mismo flujo me trae otro. Y si escribo mal, pikachu con dos u: 404, no encontrado. Como en el dólar: empieza con 4, el error está en mi pedido.</p>
 
 `PARA EL CHAT` (para que lo prueben en casa):
 
@@ -3188,12 +3518,12 @@ Edit Fields → mensaje (String):
 PARA EL CHAT · Probá vos (en casa, con el flujo 08 de la carpeta n8n/)
 1. En "Preguntarle a la API", cambiá pikachu por otro: charmander, bulbasaur, snorlax…
 2. Execute workflow y mirá qué dice el mensaje.
-3. Bonus: la API de Rick and Morty, en la misma URL:
+3. Bonus: la API de Rick and Morty:
      https://rickandmortyapi.com/api/character/1
    y armá un mensaje con {{ $json.name }} y {{ $json.species }}.
 ```
 
-<p style="color:#1a7f37">Esto fue una probadita. La clase que viene vemos API con calma: cómo se lee la carta de una API, las que piden clave, y cómo sumarla a los flujos que ya armamos.</p>
+<p style="color:#1a7f37">Para llevarse: toda integración que parezca mágica es, por dentro, un método, una dirección, unos headers y un body. La clase que viene seguimos con las APIs que piden clave, y las sumamos a los flujos que ya armamos.</p>
 
 ---
 
@@ -3754,4 +4084,12 @@ Al terminar, cada alumno puede:
 | **API** | La puerta por donde un programa le pide datos a otro: el mozo del restaurante. | dolarapi, PokeAPI |
 | **HTTP Request** | El nodo que le hace un pedido a una API por internet: el mozo. | GET a `dolarapi.com/v1/dolares/oficial` |
 | **URL** | La dirección de internet: qué se le pide a la API. | `https://pokeapi.co/api/v2/pokemon/pikachu` |
+| **HTTP** | El idioma (las reglas) con que se hablan los navegadores y las APIs. | Las direcciones que empiezan con `http` |
+| **Request / Response** | El pedido y la respuesta. El que pide es el cliente; el que responde, el servidor. | n8n pide el dólar; dolarapi responde |
+| **Método** | El verbo del pedido: qué quiero hacer. GET leer, POST crear, PUT/PATCH cambiar, DELETE borrar. | GET para leer el dólar |
+| **Status code** | El número de tres cifras que dice qué pasó. 2 = bien; 4 = revisá tu pedido; 5 = falló el otro. | 200 OK · 404 no existe · 500 error del servidor |
+| **401 / 403 / 429** | 401: no sé quién sos. 403: sé quién sos, pero no tenés permiso. 429: pediste demasiado rápido. | Falta la clave → 401 |
+| **Autenticación** | Decirle a la API quién sos y que tenés permiso. | La credencial de Google Sheets |
+| **Bearer Token** | Una clave temporal, que vence. Va en el header *Authorization*. | La pulserita de un recital |
+| **OAuth2** | Entrar con tu cuenta real y darle permiso a una app, sin darle tu contraseña. | Lo que hicimos con Google Sheets |
 | **Postman** | Aplicación para probar direcciones de internet mandándoles pedidos. No la usamos. | GET + dirección + *Send*. |
