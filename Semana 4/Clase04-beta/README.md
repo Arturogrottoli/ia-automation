@@ -73,7 +73,7 @@
 
 | Orden | Qué recortás | Cómo | Ahorrás |
 |---|---|---|---|
-| 0 | El tramo 2 del flujo 02 (que conteste solo la frase) | Hacés solo 02-12 a 02-15, sin el `<h1>` (02-16) y sin la tabla del repaso | ~2 min |
+| 0 | El tramo 2 del flujo 02 (que conteste solo la frase) | Hacés solo 02-9 a 02-11, sin el `<h1>` (02-12) | ~2 min |
 | 1 | IF 2 (flujo 05) | Lo mostrás ya importado y lo probás con los dos montos, sin armarlo | ~4 min |
 | 2 | El formulario con Google Sheets (flujo 03) | Lo mostrás ya armado: completás el formulario y mostrás la fila nueva en la planilla | ~4 min |
 | 3 | El Switch (flujo 06) | Lo mostrás ya importado: elegís dos tipos en el formulario y mostrás por qué salida pasa cada uno | ~4 min |
@@ -1526,535 +1526,213 @@ Para explicar:
   - *Ejemplo:* Tocás la dirección desde el navegador, y en la pantalla aparece "Hola Ana, recibimos tu consulta
     para viajar a Mendoza".
 
-### Ejemplo en vivo: el navegador le manda datos a n8n (flujo 02) (14 min)
-
-El flujo que arman, completo (está en `02-webhook-desde-el-navegador.json`):
+### Ejemplo en vivo: el navegador le manda datos a n8n (flujo 02) (12 min)
 
 ```text
 Llega un pedido  →  Armar la respuesta  →  Contestar al navegador
-(Webhook, GET)       (Edit Fields)          (Respond to Webhook)
+(Webhook)            (Edit Fields)          (Respond to Webhook)
 ```
 
-Se arma **en un solo flujo, de corrido, en dos tramos**:
+Dos tramos en el mismo flujo: **tramo 1** (02-1 a 02-8), que llegue el dato y n8n conteste; **tramo 2** (02-9 a
+02-12), que el navegador muestre solo la frase. El flujo armado está en `02-webhook-desde-el-navegador.json`, de
+respaldo.
 
-| Tramo | Nodos | Qué ve el navegador al final del tramo |
-|---|---|---|
-| **1 · Que llegue el dato y n8n conteste** (pasos 02-1 a 02-10) | *Llega un pedido* → *Armar la respuesta* | La ficha en JSON: `{"mensaje":"Hola Ana, recibimos tu consulta para viajar a Mendoza."}` |
-| **2 · Que conteste solo la frase** (pasos 02-11 a 02-16) | se agrega *Contestar al navegador* al final | Solo la frase, grande, como el título de una página: **Hola Ana, recibimos tu consulta para viajar a Mendoza.** |
+**¿Anda en local?** ✅ Sí, sin pasos extra, pero la dirección (`localhost`) solo anda desde tu computadora. Para que
+la toque un cliente hace falta n8n Cloud.
 
-Por qué en dos tramos: primero se ve cómo contesta n8n solo (con la ficha entera), y así se entiende para qué sirve
-el nodo del final. No son dos flujos: es el mismo, que se completa.
+<p style="color:#1a7f37">Vamos al workflow que creamos recién, "Webhook desde el navegador". Esta vez el trigger no es manual: es un webhook, el timbre.</p>
 
-**¿Anda en local?** ✅ Sí, sin pasos extra, pero **solo desde tu propia computadora**: la dirección empieza con
-`localhost`, y esa dirección solo existe ahí. Sirve para aprender y probar. Si le pasaras esa dirección a un cliente
-o a una página web, no les funcionaría: para eso hace falta n8n Cloud (o un túnel). En n8n Cloud anda igual, con tu
-dirección `https://tunombre.app.n8n.cloud/...`, y ahí sí se puede abrir desde cualquier lado.
-
-<p style="color:#1a7f37">Antes de armarlo, una aclaración: esta dirección va a funcionar solo desde mi computadora, porque es localhost. Para probar, alcanza y sobra. Lo que no puedo hacer es pasársela a un cliente: él no puede llegar a mi computadora.</p>
-
-<p style="color:#1a7f37">Vamos a la hoja en blanco que abrimos recién, la que se llama "Webhook desde el navegador". Si no la crearon, vuelvan a Overview, Create workflow, y le ponen ese nombre. Esta vez, el trigger no va a ser manual: va a ser un webhook.</p>
-
-**En n8n, paso a paso** (cada paso son uno o dos clics; abajo de cada uno, lo que decís y explicás en ese momento):
+#### Tramo 1 · Que llegue el dato y n8n conteste
 
 **02-1 · Poner el webhook**
 
 ```text
-En el workflow nuevo del Paso 7 (si no lo creaste: Overview → Create workflow → Webhook desde el navegador)
-Clic en el +  (Add first step) → buscá  webhook  → elegí  Webhook
+En el workflow "Webhook desde el navegador" (si no lo creaste: Overview → Create workflow)
+Clic en el +  (Add first step) → buscá  webhook  → clic en  Webhook
 ```
 
-<p style="color:#1a7f37">Primer nodo, el trigger. Busco webhook y lo elijo. Este es el timbre: el flujo va a arrancar cuando alguien toque su dirección.</p>
+<p style="color:#1a7f37">Primer nodo, el trigger. Busco webhook y lo elijo. El flujo va a arrancar cuando alguien toque su dirección.</p>
 
-**02-2 · El método: GET**
+**02-2 · Completar tres cosas**
 
 ```text
-HTTP Method:   GET     (es el que viene; no lo toques)
+HTTP Method:  GET                      (ya viene)
+Path:         borrá el código raro (3f8a2c1e-…) y escribí  saludo
+Respond:      When Last Node Finishes  (contestar cuando termine el último nodo)
 ```
 
-<p style="color:#1a7f37">Lo primero que pregunta es el método: cómo le van a mandar los datos. Dejo GET, que es "pedir", lo que hace el navegador cuando escribimos una dirección. Así lo podemos probar desde el navegador, sin instalar nada. Un poco más adelante vamos a ver por qué esto importa.</p>
+<p style="color:#1a7f37">Tres cosas. El método, GET, que es lo que hace el navegador cuando escribimos una dirección: así lo probamos sin instalar nada. El Path, el nombre del timbre: viene con un código al azar; lo cambio por saludo, que se lee fácil. Y Respond, cuándo contesta: cuando termine el último nodo, así nos devuelve lo que armemos.</p>
 
-- **GET es "pedir"; es lo que hace el navegador.** Cada vez que escribís una dirección en el navegador, hace un
-  pedido GET.
-  - *Ejemplo:* Abrir `google.com` es un GET a Google. Abrir nuestra dirección es un GET a n8n.
+- **El código raro del Path no es un error.** n8n inventa uno al azar para que no se repita. Lo cambiamos por una
+  palabra para poder dictarlo.
+- **El Path va letra por letra.** `saludo`, `Saludo` y `Saludo!` son tres direcciones distintas.
 
-**02-3 · El Path: el nombre del timbre**
+**02-3 · Copiar la dirección y agregarle los datos**
 
 ```text
-Path:   viene con letras y números raros, tipo  3f8a2c1e-7b4d-...
-        → borralos y escribí  saludo
+Arriba, en "Webhook URLs", pestaña  Test URL  → clic en la dirección (se copia)
+Pegala en OTRA pestaña del navegador y agregale al final:  ?nombre=Ana&destino=Mendoza
+   http://localhost:5678/webhook-test/saludo?nombre=Ana&destino=Mendoza
+   └──── dónde está n8n ──┘└─ prueba ─┘└Path┘└──────── los datos ─────────┘
+No aprietes Enter todavía
 ```
 
-<p style="color:#1a7f37">Miren el Path: no dice saludo, dice una tira larga de letras y números. No se asusten, no es un error. Es un nombre que n8n inventa solo, al azar, para que cada webhook tenga una dirección distinta. Funciona igual, pero es imposible de dictar. Lo borro y escribo una palabra: saludo.</p>
+<p style="color:#1a7f37">Copio la dirección del timbre y la pego en otra pestaña. Al final le agrego los datos: signo de pregunta, nombre igual Ana, y, destino igual Mendoza. Lo que va después del signo de pregunta son los datos que le mandamos.</p>
 
-- **Lo que viene en Path es un código al azar (UUID).** Tan largo que es casi imposible que dos webhooks tengan el
-  mismo, y nadie lo puede adivinar.
-  - *Ejemplo:* Como el número de seguimiento de un envío: largo y feo, pero único. Si lo dejás, el webhook anda
-    igual: la dirección termina en `/webhook-test/3f8a2c1e-…` en vez de `/webhook-test/saludo`.
-- **El Path no puede repetirse, y va letra por letra.** Dos flujos con `saludo` chocan. Y `saludo`, `Saludo` y
-  `Saludo!` son tres direcciones distintas.
-  - *Ejemplo:* Dos casas con el mismo número en la misma calle: el cartero no sabe a cuál tocar.
+- **Después del `?`, de a pares `casillero=valor`, separados con `&`.** Sin espacios.
 
-**02-4 · Respond: cuándo contesta**
+**02-4 · Probarlo mal, a propósito**
 
 ```text
-Respond:   When Last Node Finishes   (que conteste cuando termine el último nodo, con lo que armó)
-           (en el tramo 2, paso 02-12, lo cambiamos: por ahora, este)
+Sin tocar nada en n8n, en la otra pestaña: Enter
+→ {"code":404,"message":"The requested webhook \"saludo\" is not registered." …}
 ```
 
-<p style="color:#1a7f37">Respond es cuándo le contesta n8n al que tocó el timbre. Elijo When Last Node Finishes: cuando termine el último nodo. Así el navegador recibe lo que armemos, el saludo. Si lo dejara en Immediately, inmediatamente, contestaría apenas lo tocan, antes de armar nada.</p>
+<p style="color:#1a7f37">Aprieto Enter sin preparar n8n, y sale este error. Dice: el webhook saludo no está registrado, no hay nadie escuchando. La dirección de prueba solo atiende si apreté Execute workflow justo antes, y atiende una sola vez. Este error les va a salir a todos: ahora saben qué es.</p>
 
-- **Con *Immediately*, el navegador no ve el saludo.** Muestra `{"message":"Workflow was started"}` ("el flujo
-  arrancó").
-  - *Ejemplo:* Es como un mozo que dice "ya le traigo" y se va, en vez de traerte el plato.
+- **404 = nadie escucha en esa dirección.** Dos causas: no apretaste *Execute workflow* antes, o la dirección no
+  coincide con el Path (mirá lo que dice entre comillas en el error).
 
-**02-5 · La dirección completa, leída por partes**
+**02-5 · Probarlo bien: primero n8n, después el navegador**
 
 ```text
-Arriba del nodo, en "Webhook URLs", pestaña  Test URL:
-   http://localhost:5678/webhook-test/saludo
+En n8n:  Execute workflow  → el webhook dice "Waiting for trigger event" (esperando)
+En la otra pestaña:  F5 (recargar)
+Volvé a n8n: el webhook está en verde
 ```
 
-<p style="color:#1a7f37">Ahora miren arriba, en Webhook URLs: está la dirección completa del timbre, y ya termina en saludo. Vamos a leerla por partes, porque cada parte quiere decir algo.</p>
+<p style="color:#1a7f37">Ahora en orden: Execute workflow, el timbre queda esperando; voy a la otra pestaña y recargo. Vuelvo a n8n: verde. Llegó. El navegador muestra un montón de texto: es todo lo que recibió n8n. Lo miramos mejor desde acá.</p>
+
+**02-6 · Mirar lo que llegó**
 
 ```text
-http://localhost:5678  /  webhook-test  /  saludo  ?nombre=Ana&destino=Mendoza
-└──────────┬────────┘    └─────┬─────┘    └──┬──┘  └────────────┬────────────┘
-   dónde está n8n         modo prueba       Path     los datos que le mandamos
-  (tu computadora,       (solo anda          (el      (los agregamos nosotros;
-   puerta 5678)          después de        nombre      no vienen en la
-                         Execute workflow)  del timbre)  dirección que copia n8n)
+Doble clic en el webhook → OUTPUT, vista  Schema
+   headers  …          ← el "sobre": lo manda el navegador solo
+   query                ← ⭐ los datos que escribimos después del ?
+     nombre:  Ana
+     destino: Mendoza
+   body     (vacío)
+Cerrá → renombrá el nodo:  Llega un pedido
 ```
 
-- **`http://localhost:5678` es dónde está n8n.** *localhost* = "esta misma computadora"; *5678* es la puerta (el
-  **puerto**), la misma que pusimos en Docker. Por eso esta dirección solo anda desde tu computadora.
-  - *Ejemplo:* En n8n Cloud, esta parte es `https://tunombre.app.n8n.cloud`.
-- **`webhook-test` = modo prueba.** Escucha solo después de apretar **Execute workflow**, y una vez. La pestaña
-  **Production URL** dice `webhook` sin `-test`: escucha siempre, pero solo con el flujo publicado (**Publish**).
-  - *Ejemplo:* Test: `…/webhook-test/saludo`. Production: `…/webhook/saludo`.
-- **Lo que va después del `?` lo agregamos nosotros**, cada vez que tocamos el timbre.
-  - *Ejemplo:* La misma dirección sirve para Ana y para Martín: cambia lo que va después del `?`.
+<p style="color:#1a7f37">Llegan muchas cosas, pero nos importa una sola: query, que tiene nombre Ana y destino Mendoza. Headers es como el sobre de una carta: información que el navegador manda siempre, qué navegador es, en qué idioma. Y body está vacío porque el navegador manda los datos en la dirección, como una postal. Cuando veamos el formulario, los datos van a viajar adentro, como un paquete.</p>
 
-**02-6 · Cerrar y dejar listo el segundo nodo**
+- **query = lo que va después del `?`.** Es lo único que usamos hoy. Lo demás no molesta y no hay que borrarlo.
+
+**02-7 · Armar la respuesta con lo que llegó**
 
 ```text
-Cerrá la ventana (✕ o Esc) → renombrá el nodo:  Llega un pedido
-+ a la derecha → Edit Fields (Set). Todavía no hay nada en INPUT: está bien.
-Cerrá la ventana sin completar nada → Save
-```
-
-<p style="color:#1a7f37">Le pongo nombre al nodo y agrego el Edit Fields que va a armar la respuesta. Lo dejo vacío por ahora: todavía no le llegó nada, así que no tengo qué arrastrar. Primero vamos a tocar el timbre, y después lo completamos.</p>
-
-#### Antes de probar: el error que les va a salir, a propósito (2 min)
-
-<p style="color:#1a7f37">Antes de probarlo bien, lo voy a probar mal, a propósito, porque este error les va a salir a todos. Copio la dirección, le agrego los datos, la pego en otra pestaña… y todavía no apreté nada en n8n. Miren lo que dice el navegador.</p>
-
-```text
-EN N8N · Probarlo mal, a propósito
-1. NO aprietes Execute workflow todavía
-2. En OTRA pestaña del navegador, pegá:
-     http://localhost:5678/webhook-test/saludo?nombre=Ana&destino=Mendoza
-3. El navegador muestra:
-     {"code":404,"message":"The requested webhook \"saludo\" is not registered.",
-      "hint":"Click the 'Execute workflow' button on the canvas, then try again.
-      (In test mode, the webhook only works for one call after you click this button)"}
-```
-
-<p style="color:#1a7f37">Leamos lo que dice. "El webhook saludo no está registrado": o sea, nadie está escuchando en esa dirección. Y la pista: "apretá el botón Execute workflow y probá de nuevo; en modo prueba, el webhook funciona para una sola llamada después de apretar el botón". Es el timbre desconectado: la dirección de prueba solo atiende si en n8n apretamos Execute workflow justo antes, y atiende una sola vez. Si recargan la página otra vez, vuelve a salir este error, hasta que aprieten de nuevo.</p>
-
-Para explicar:
-- **404 / "not registered" = "en esta dirección no hay nadie escuchando".** No quiere decir que el flujo esté mal
-  armado: quiere decir que la dirección de prueba está apagada en este momento.
-  - *Ejemplo:* Tocás el timbre de una casa y no hay nadie: el timbre existe, pero no atiende.
-- **La dirección de prueba se prende con Execute workflow, y se apaga después de una llamada.** Por eso el orden es
-  siempre el mismo: primero Execute workflow en n8n (el nodo dice *Waiting for trigger event*), después Enter en la
-  otra pestaña. Para probar otra vez: de nuevo Execute workflow, y de nuevo Enter (o F5).
-  - *Ejemplo:* ❌ Mal: pegar la dirección, recargar tres veces, y recién ahí ir a n8n. ✅ Bien: Execute workflow →
-    otra pestaña → Enter → volver a n8n a mirar.
-- **El Path tiene que ser exactamente igual, letra por letra.** `saludo`, `Saludo` y `Saludo!` son tres direcciones
-  distintas: n8n distingue mayúsculas y cualquier signo. Si en la dirección escribís otra cosa que lo que dice
-  *Path*, sale el mismo error, aunque hayas apretado Execute workflow. Mirá bien el texto del error: entre comillas
-  te dice qué dirección pediste (`"Saludo!"`), y la comparás con el Path del nodo (`saludo`).
-  - *Ejemplo:* Path `saludo` y en el navegador `.../webhook-test/Saludo!` → `The requested webhook "Saludo!" is not
-    registered`. Arreglo: escribir `saludo`, en minúscula y sin el signo.
-- **La pestaña de n8n tiene que quedar abierta mientras probás.** El que "escucha" en modo prueba es el editor que
-  tenés abierto. Si cerrás esa pestaña o te vas a otro flujo, deja de escuchar.
-  - *Ejemplo:* Apretás Execute workflow, cerrás n8n, y pegás la dirección: sale el error.
-- **Lo más seguro: copiar la dirección del nodo, no escribirla.** En el nodo del webhook, pestaña *Test URL*, clic
-  en la dirección para copiarla, y al final le agregás `?nombre=Ana&destino=Mendoza`.
-  - *Ejemplo:* Copiando, no se cuela una mayúscula ni un signo de más.
-
-<p style="color:#1a7f37">Ahora sí, probémoslo bien. Primero n8n, después el navegador. Apretamos Execute workflow: fíjense que el webhook se queda esperando, dice que está escuchando. Ahora vamos a tocar el timbre: vamos a la otra pestaña y apretamos Enter.</p>
-
-```text
-EN N8N · Primera prueba: tocar el timbre (ahora sí, en orden)
-1. PRIMERO en n8n:  Execute workflow  → el nodo del webhook dice "Waiting for trigger event"
-   (esperando). No cierres esta pestaña.
-2. DESPUÉS, en la OTRA pestaña del navegador, la dirección (copiada del nodo, con los datos al final):
-     http://localhost:5678/webhook-test/saludo?nombre=Ana&destino=Mendoza
-   → Enter (o F5 si ya estaba pegada)
-3. Volvé a la pestaña de n8n: el webhook se puso verde
-4. Doble clic en "Llega un pedido" → OUTPUT: buscá el casillero  query
-     query:  nombre: Ana    destino: Mendoza
-5. ¿Te salió otra vez "not registered"? Fijate dos cosas: que hayas apretado Execute workflow
-   justo antes, y que lo que está entre comillas en el error sea igual al Path (saludo).
-```
-
-En esta primera prueba, como el Edit Fields todavía está vacío, el navegador no muestra el saludo: lo importante es
-que el webhook se puso verde y que en `query` llegaron los datos.
-
-<p style="color:#1a7f37">Miren lo que llegó. Es un montón de cosas, y la primera vez asusta. Tranquilos: de todo esto, hoy nos importa una sola, que es query. Pero vamos a ver qué es lo demás, para que no les dé miedo.</p>
-
-#### ¿Qué es todo lo que llegó? (3 min)
-
-<p style="color:#1a7f37">Cuando el navegador toca el timbre, no manda solo los datos que escribimos. Manda también una tarjeta de presentación: quién es, desde qué computadora llama, en qué idioma quiere la respuesta. n8n lo anota todo y nos lo muestra. Es como una carta: adentro está el mensaje, pero el sobre también trae datos, el remitente, el sello, la fecha. Nosotros abrimos la carta y leemos el mensaje.</p>
-
-Lo que se ve en OUTPUT es **1 item** (una ficha) con estos casilleros grandes. Conviene mostrarlo en la vista
-**Schema** (arriba de OUTPUT), que lo muestra ordenado, en vez de JSON:
-
-```text
-1 item
-├── headers        ← el "sobre": información que el navegador manda sola, siempre
-├── params         ← vacío: no lo usamos
-├── query          ← ⭐ LO QUE NOS IMPORTA: los datos que pusimos después del ?
-│     ├── nombre:  Ana
-│     └── destino: Mendoza
-├── body           ← vacío: es para datos que viajan "adentro" del pedido; con el navegador no se
-│                     puede (se explica justo abajo, en "¿Por qué body está vacío?")
-├── webhookUrl     ← la dirección que se tocó: http://localhost:5678/webhook-test/saludo
-└── executionMode  ← "test": se usó la dirección de prueba
-```
-
-Qué es cada cosa de **headers** (no hace falta aprenderlo; está para que no asuste):
-
-| Casillero | Qué quiere decir | En el ejemplo |
-|---|---|---|
-| `host` | A qué dirección se llamó. | `localhost:5678`: n8n en tu computadora. |
-| `connection` | Si la conexión queda abierta para más pedidos. | `keep-alive`: "dejala abierta". |
-| `user-agent` | Qué programa llamó: navegador y sistema. | Chrome/Brave en Windows. |
-| `sec-ch-ua`, `sec-ch-ua-mobile`, `sec-ch-ua-platform` | Lo mismo, más detallado: marca del navegador, si es celular (`?0` = no), y el sistema. | Brave 156, no celular, Windows. |
-| `accept` | Qué tipo de respuesta prefiere. | `text/html…`: una página web. |
-| `accept-language` | En qué idioma prefiere la respuesta. | `es-419`: español de Latinoamérica. |
-| `accept-encoding` | Si acepta la respuesta comprimida, para que viaje más rápido. | `gzip, br…` |
-| `sec-fetch-…`, `sec-gpc`, `upgrade-insecure-requests` | Avisos de seguridad y privacidad del navegador: cómo se abrió la página, si pide no ser rastreado, si prefiere https. | Lo abriste escribiendo la dirección (`navigate`). |
-| `cookie` | Datos chiquitos que el navegador guarda de una página y se los devuelve cada vez que la visita. | Son de n8n mismo (sus estadísticas de uso: `rl_…`, `ph_…`), porque n8n y el webhook están en la misma dirección, `localhost:5678`. |
-
-Para explicar:
-- **El navegador siempre manda más de lo que escribimos.** Cada vez que abrís una página, tu navegador se presenta
-  solo: qué navegador es, en qué idioma lo usás, qué acepta. Pasa con cualquier página de internet, no solo con
-  n8n. La diferencia es que acá lo podemos ver.
-  - *Ejemplo:* Por eso una página te aparece en español sin que se lo digas: leyó `accept-language`.
-- **Los headers son el sobre; query es la carta.** `headers` lo arma el navegador; `query` lo armamos nosotros,
-  con lo que va después del `?`. Para el saludo solo usamos la carta.
-  - *Ejemplo:* Si cambiás la dirección a `?nombre=Lucía&destino=Salta`, cambia `query`; los `headers` quedan casi
-    iguales.
-- **Un item con muchos casilleros, algunos con casilleros adentro.** Es la misma ficha de siempre, solo que más
-  grande. `headers` y `query` son "carpetas" con casilleros adentro; para llegar a uno se usa el punto:
-  `$json.query.nombre`.
-  - *Ejemplo:* `$json.headers['accept-language']` daría `es-419` (lleva corchetes porque el nombre tiene guiones).
-- **No hace falta borrar nada de lo que sobra.** Lo que no usamos, no molesta: el Edit Fields que sigue toma solo
-  los casilleros que le pedimos y arma una ficha nueva, limpia.
-  - *Ejemplo:* La respuesta final va a ser solo `{"mensaje": "Hola Ana, …"}`: los headers no aparecen.
-- **Ojo al compartir capturas.** El casillero `cookie` puede tener datos de tu sesión. En n8n local no es grave,
-  pero es un buen hábito no pegar los headers completos en un chat público.
-  - *Ejemplo:* Si piden ayuda, que muestren solo el casillero `query`, no todo el OUTPUT.
-
-<p style="color:#1a7f37">Entonces: de todo esto, vamos a usar solo query, que tiene nombre Ana y destino Mendoza. Lo demás es el sobre de la carta: está, es normal, y no lo tocamos.</p>
-
-#### ¿Por qué body está vacío? Dos formas de mandar datos: GET y POST (3 min)
-
-<p style="color:#1a7f37">Seguro alguno se preguntó: si body es para mandar datos, ¿por qué está vacío? ¿Por qué no mandamos los datos ahí? La respuesta es: porque con la barra del navegador no se puede. Y para entender por qué, hay que saber que hay dos formas de mandarle datos a una dirección.</p>
-
-<p style="color:#1a7f37">La primera se llama GET, que en inglés quiere decir "conseguir", "pedir". Es una postal: los datos van escritos afuera, a la vista, en la misma dirección, después del signo de pregunta. La segunda se llama POST, que quiere decir "enviar", "despachar". Es un paquete cerrado: la dirección va afuera, y los datos van adentro de la caja. Esa caja es el body.</p>
-
-<p style="color:#1a7f37">Y acá está la clave: cuando ustedes escriben una dirección en la barra del navegador y aprietan Enter, el navegador siempre hace un GET. Siempre. Está hecho para pedir páginas, no para mandar paquetes. La barra tiene un solo lugar para escribir, que es la dirección; no tiene un lugar para meter cosas en la caja. Por eso los datos los pusimos en la dirección, y por eso body llegó vacío. Para mandar un POST hace falta otra cosa: un formulario, una aplicación, o un programa como Postman.</p>
-
-```text
-GET  (postal)                              POST  (paquete cerrado)
-─────────────────────────────────          ─────────────────────────────────
-dirección:  .../saludo?nombre=Ana          dirección:  .../saludo
-            └ los datos van ACÁ,           body:       nombre: Ana   ← los datos van
-              a la vista                               destino: Mendoza  ADENTRO
-body:       vacío                                      (no se ven en la dirección)
-
-Lo hace:   la barra del navegador          Lo hace:   un formulario, una aplicación,
-                                                       Postman. La barra del navegador NO.
-En n8n:    llegan en  query                En n8n:    llegan en  body
-```
-
-Para explicar:
-- **GET = postal: los datos van en la dirección.** Todo lo que va después del `?` se ve: en la barra, en el
-  historial del navegador, en una captura de pantalla. Para datos chicos y que no son secretos, alcanza.
-  - *Ejemplo:* Buscar "vuelos a Mendoza" en Google: mirá la barra, dice `google.com/search?q=vuelos+a+mendoza`.
-    Es un GET, y tu búsqueda quedó escrita en la dirección.
-- **POST = paquete: los datos van adentro, en el body.** No se ven en la dirección, y entran muchos más: textos
-  largos, muchos casilleros, archivos.
-  - *Ejemplo:* Cuando iniciás sesión en una página, tu contraseña no aparece en la barra
-    (`...login?clave=1234`): viaja adentro, en un POST.
-- **La barra del navegador solo sabe hacer GET.** No es una limitación de n8n: es así en cualquier página. Por eso,
-  para probar sin instalar nada, configuramos el webhook en **HTTP Method: GET**. Si lo hubiéramos puesto en POST,
-  el navegador no podría tocarlo: daría error, porque el timbre espera un paquete y le llega una postal.
-  - *Ejemplo:* ❌ Webhook en POST + dirección pegada en el navegador → no anda. ✅ Webhook en GET + dirección con
-    `?nombre=Ana` → anda, y los datos llegan en `query`.
-- **¿Por qué no se usa siempre GET, si es tan fácil?** Porque todo queda a la vista, y la dirección tiene un largo
-  máximo. Una consulta con un mensaje largo, un archivo o una contraseña no entra (o no conviene) en una postal.
-  - *Ejemplo:* Un cliente escribe tres párrafos contando su viaje: eso va en un POST, en el body.
-- **Esto se ve enseguida con el formulario.** Cuando alguien aprieta "Enviar" en un formulario, el navegador manda
-  un **POST**: los datos van adentro, no en la dirección. Por eso, en el ejemplo que sigue, la dirección del
-  formulario no cambia, y los datos igual llegan a n8n.
-  - *Ejemplo:* En el flujo 03, después de enviar el formulario, mirá la barra: no dice `?nombre=…`. Los datos
-    viajaron en el paquete.
-
-<p style="color:#1a7f37">Resumiendo: la barra del navegador solo manda postales, GET, con los datos a la vista en la dirección, y n8n los pone en query. Para mandar un paquete cerrado, POST, con los datos en el body, hace falta un formulario. Y eso es justo lo que vamos a hacer en un ratito.</p>
-
-**Ahora sí: armar la respuesta con lo que llegó**
-
-**02-7 · Abrir el Edit Fields y encontrar query**
-
-```text
-Doble clic en el Edit Fields → en INPUT, abrí  query  (clic en la flechita)
-→ adentro:  nombre: Ana    destino: Mendoza
-```
-
-<p style="color:#1a7f37">Ahora que tocamos el timbre, el Edit Fields tiene datos en INPUT. Abro query, la carta, y adentro están nombre y destino.</p>
-
-- **Un casillero puede tener casilleros adentro.** `query` es una ficha dentro de la ficha. Para llegar al de
-  adentro, se encadenan los nombres con puntos.
-  - *Ejemplo:* Como una carpeta dentro de otra: `query.nombre` es "la carpeta query, el archivo nombre".
-
-**02-8 · Armar el mensaje arrastrando**
-
-```text
-Add Field  →  Name:  mensaje    Type: String
-Value: escribí  Hola   y arrastrá  nombre  (el de adentro de query)  → aparece  {{ $json.query.nombre }}
-Seguí:  , recibimos tu consulta para viajar a   y arrastrá  destino   y un punto.
++ a la derecha de "Llega un pedido" → buscá  edit  → Edit Fields (Set)
+Add Field →  Name: mensaje    Type: String
+Value: escribí  Hola  y arrastrá desde INPUT  query → nombre
+       seguí con  , recibimos tu consulta para viajar a  y arrastrá  query → destino  y un punto
 Queda:  Hola {{ $json.query.nombre }}, recibimos tu consulta para viajar a {{ $json.query.destino }}.
+Cerrá → renombralo:  Armar la respuesta  → Save
 ```
 
-<p style="color:#1a7f37">Igual que en el saludo: escribo Hola y arrastro el nombre. Pero miren la expresión: ahora dice $json.query.nombre. Es "adentro de query, el casillero nombre". Sigo la frase y arrastro el destino.</p>
+<p style="color:#1a7f37">Ahora sí, el segundo nodo, igual que en el saludo del primer flujo. Escribo Hola y arrastro el nombre, que está adentro de query. Por eso la expresión dice query punto nombre: adentro de query, el casillero nombre. Sigo la frase y arrastro el destino.</p>
 
-- **`query` es "lo que vino en la dirección".** Por eso la expresión es `{{ $json.query.nombre }}`.
-  - *Ejemplo:* Si la dirección dice `?nombre=Lucía&personas=3`, en n8n aparece `query` con `nombre: Lucía` y
-    `personas: 3`.
-
-**02-9 · Guardar y tocar el timbre otra vez**
+**02-8 · Tocar el timbre otra vez, y con otros datos**
 
 ```text
-Cerrá la ventana (✕ o Esc) → renombralo:  Armar la respuesta  → Save
-Execute workflow  → en la otra pestaña, recargá la dirección (F5)
-El navegador muestra:
-   {"mensaje":"Hola Ana, recibimos tu consulta para viajar a Mendoza."}
+Execute workflow → en la otra pestaña: F5
+→ {"mensaje":"Hola Ana, recibimos tu consulta para viajar a Mendoza."}
+Execute workflow → cambiá los datos en la dirección:  ?nombre=Martín&destino=Bariloche  → Enter
+→ {"mensaje":"Hola Martín, recibimos tu consulta para viajar a Bariloche."}
 ```
 
-<p style="color:#1a7f37">Guardo, Execute workflow, y recargo la otra pestaña. ¡Ahí está! Le mandamos datos a n8n desde el navegador, n8n los recibió, armó un mensaje, y nos contestó. Eso mismo es lo que hace un formulario de una página web, o una aplicación: tocar el timbre de n8n con datos.</p>
+<p style="color:#1a7f37">¡Ahí está! Le mandamos datos desde el navegador, n8n armó un mensaje y nos contestó. Y si cambio los datos, cambia la respuesta. Eso mismo hace un formulario de una página web: tocar el timbre de n8n con datos.</p>
 
-**02-10 · Otra vez, con otros datos**
+`PARA EL CHAT`:
 
 ```text
-Execute workflow → en la otra pestaña, cambiá los datos:
-   http://localhost:5678/webhook-test/saludo?nombre=Martín&destino=Bariloche
-→ Hola Martín, recibimos tu consulta para viajar a Bariloche.
+PARA EL CHAT · Tocá el timbre vos
+1. En n8n: Execute workflow
+2. En otra pestaña:  http://localhost:5678/webhook-test/saludo?nombre=TU_NOMBRE&destino=A_DONDE_QUIERAS
+3. Mirá lo que te contesta el navegador
 ```
 
-<p style="color:#1a7f37">Y otra vez, con otros datos, para que vean que cambia solo. Y presten atención al orden, que es siempre el mismo: primero Execute workflow, después la dirección.</p>
+#### Tramo 2 · Que el navegador muestre solo la frase
 
-- **Si falta un dato, no da error: queda vacío.** Sin `?nombre=...`, el flujo corre igual, pero el mensaje sale
-  con huecos: "Hola , recibimos tu consulta para viajar a ." (lo probamos).
-  - *Ejemplo:* Es como un formulario de papel que alguien entrega en blanco: llega, pero no sirve.
+<p style="color:#1a7f37">Funciona, pero miren cómo se ve: con llaves y comillas. Eso es JSON, la ficha escrita en una línea, el formato en que se hablan los programas. A una persona no le sirve. Vamos a agregar un nodo al final que conteste solo la frase.</p>
 
-`PARA EL CHAT` (para que lo tengan; lo prueban ahora si te vienen siguiendo, o después con la grabación):
+**02-9 · Decirle al webhook que va a contestar otro nodo**
 
 ```text
-PARA EL CHAT · Tocá el timbre vos (ahora o después con la grabación)
-1. En n8n: Execute workflow (que quede esperando).
-2. En otra pestaña, pegá la dirección cambiando los datos:
-     http://localhost:5678/webhook-test/saludo?nombre=TU_NOMBRE&destino=A_DONDE_QUIERAS
-3. Mirá lo que te contesta el navegador.
-(Si usás n8n en la nube, cambiá http://localhost:5678 por tu dirección de n8n.)
+Doble clic en "Llega un pedido" → Respond: cambiá a  Using 'Respond to Webhook' Node
+Cerrá
 ```
 
-**Tramo 2 · Que conteste solo la frase (en el mismo flujo)**
+<p style="color:#1a7f37">Primero le digo al webhook: no contestes vos; va a contestar un nodo que pongo al final.</p>
 
-<p style="color:#1a7f37">El saludo llegó, pero miren cómo se ve en el navegador: con llaves, comillas, y la palabra mensaje. Eso es porque n8n le contesta al navegador con la ficha entera, en un formato que se llama JSON. A otro programa le sirve; a una persona, no. Ahora, en este mismo flujo, vamos a hacer que el navegador muestre solo la frase. Para eso agregamos un nodo más al final, que se llama Respond to Webhook: responder al webhook.</p>
-
-```text
-Hasta ahora:   Llega un pedido  →  Armar la respuesta
-Al terminar:   Llega un pedido  →  Armar la respuesta  →  Contestar al navegador
-```
-
-**02-11 · Qué es eso que se ve en el navegador: JSON**
+**02-10 · Agregar el nodo que contesta**
 
 ```text
-Mirá la pestaña del navegador:   {"mensaje":"Hola Martín, recibimos tu consulta para viajar a Bariloche."}
-```
-
-<p style="color:#1a7f37">Leamos esto. Las llaves abren y cierran la ficha. Entre comillas, primero el nombre del casillero, mensaje; después dos puntos; y después el valor, la frase. Es la misma ficha que vemos en OUTPUT, escrita en una sola línea.</p>
-
-- **JSON es el formato en que se pasan datos los programas.** `{"mensaje":"Hola…"}` = "casillero mensaje, valor
-  Hola…".
-  - *Ejemplo:* Es como una planilla escrita en un renglón: se puede leer, pero es incómodo.
-- **¿Por qué contesta así?** Porque en el webhook pusimos *Respond: When Last Node Finishes*: "cuando termine el
-  último nodo, contestá con lo que armó". Y lo que armó es una ficha entera.
-  - *Ejemplo:* Es como un contestador automático que lee todo lo que tiene anotado, tal cual.
-
-**02-12 · Decirle al webhook que no conteste solo**
-
-```text
-Doble clic en "Llega un pedido" → en  Respond  abrí la lista y cambiá
-   When Last Node Finishes   por   Using 'Respond to Webhook' Node
-   (contestar con el nodo Respond to Webhook)
-Cerrá la ventana (✕ o Esc)
-```
-
-<p style="color:#1a7f37">Primero, le digo al webhook: no contestes vos solo; va a contestar un nodo que pongo al final. Fíjense que todavía no agregué ese nodo. Si ahora tocara el timbre, el navegador se quedaría esperando una respuesta que nadie da. Por eso el paso siguiente es agregarlo.</p>
-
-- **Respond tiene tres opciones.** *Immediately*: contesta apenas lo tocan, antes de hacer nada. *When Last Node
-  Finishes*: contesta solo, con la ficha del último nodo. *Using 'Respond to Webhook' Node*: contesta el nodo
-  Respond to Webhook, con lo que vos le digas.
-  - *Ejemplo:* La tercera es como una persona que atiende el teléfono y dice solo lo que hace falta.
-
-**02-13 · Agregar el nodo que contesta**
-
-```text
-En "Armar la respuesta", clic en el + de su derecha → buscá  respond  → Respond to Webhook
-```
-
-<p style="color:#1a7f37">Busco respond y elijo Respond to Webhook. Miren: queda al final, unido con una flecha a Armar la respuesta. Este nodo es el que le va a hablar al navegador.</p>
-
-- **Los dos cambios van juntos.** El *Respond* del webhook dice "va a contestar un nodo", y este es ese nodo. Si
-  falta uno de los dos, no anda.
-  - *Ejemplo:* ❌ Mal: cambiar el Respond del webhook y olvidarse del nodo nuevo → el navegador no recibe el saludo.
-    ✅ Bien: las dos cosas.
-
-**02-14 · Qué contesta: solo la frase**
-
-```text
-Se abre la ventana del nodo:
-   Respond With:   Text     (contestar con un texto, no con la ficha entera)
-   Response Body:  desde INPUT, arrastrá  mensaje   → queda  {{ $json.mensaje }}
++ a la derecha de "Armar la respuesta" → buscá  respond  → Respond to Webhook
+   Respond With:   Text
+   Response Body:  arrastrá  mensaje  desde INPUT  → {{ $json.mensaje }}
 Cerrá → renombralo:  Contestar al navegador  → Save
 ```
 
-<p style="color:#1a7f37">Respond With, contestar con: Text, un texto. Y en Response Body, el cuerpo de la respuesta, que es exactamente lo que va a ver el navegador, arrastro el casillero mensaje desde la izquierda, como siempre. O sea: "contestá solo con lo que dice mensaje".</p>
+<p style="color:#1a7f37">Agrego Respond to Webhook. Le digo que conteste con un texto, y en Response Body, que es exactamente lo que va a ver el navegador, arrastro el mensaje.</p>
 
-- **Lo que escribas en *Response Body* es exactamente lo que ve el navegador.** Se puede mezclar texto fijo con
-  casilleros, igual que en Edit Fields.
-  - *Ejemplo:* `Gracias, {{ $json.mensaje }}` → el navegador muestra "Gracias, Hola Ana, recibimos…".
+- **Los dos cambios van juntos.** Si cambiás el Respond del webhook y no agregás este nodo, el navegador se queda
+  esperando.
 
-**02-15 · Probar: ahora se ve solo la frase**
-
-```text
-Execute workflow  → en la otra pestaña, la dirección con datos → Enter (o F5)
-   http://localhost:5678/webhook-test/saludo?nombre=Ana&destino=Mendoza
-→ el navegador muestra solo:   Hola Ana, recibimos tu consulta para viajar a Mendoza.
-```
-
-<p style="color:#1a7f37">¿Ven la diferencia? Antes, el navegador mostraba la ficha, con llaves y comillas. Ahora muestra solo la frase, como una página cualquiera. Lo que cambió es quién contesta: antes contestaba el webhook solo, con todo lo que había; ahora contesta el último nodo, con lo que nosotros le dijimos.</p>
-
-**02-16 · Que se vea como el título de una página**
+**02-11 · Probar: solo la frase**
 
 ```text
-Doble clic en "Contestar al navegador" → en Response Body, dejalo así:
-   <h1>{{ $json.mensaje }}</h1>
-Cerrá → Save → Execute workflow → en la otra pestaña, F5
-→ la frase aparece grande, en negrita, como el título de una página
+Execute workflow → en la otra pestaña: F5
+→ Hola Ana, recibimos tu consulta para viajar a Mendoza.
 ```
 
-<p style="color:#1a7f37">Y un truco final: si pongo h1 entre los signos de menor y mayor adelante, y lo mismo con una barra atrás, la frase sale grande, como el título de una página. Son marcas de página web; el idioma de las páginas se llama HTML. No hace falta saber HTML: con esta sola marca ya se ve la diferencia.</p>
+<p style="color:#1a7f37">Ahora el navegador muestra solo la frase, como una página cualquiera.</p>
 
-- **`<h1>` y `</h1>` son marcas de HTML:** "esto es un título grande". `<h1>` abre y `</h1>` cierra.
-  - *Ejemplo:* `<h1>Hola</h1>` se ve como un título grande; `<b>Hola</b>`, en negrita.
-
-<p style="color:#1a7f37">Repasemos el flujo entero, de izquierda a derecha. Llega un pedido: el timbre, recibe los datos en la dirección. Armar la respuesta: arma la frase con esos datos. Contestar al navegador: le devuelve la frase al que tocó el timbre. Tres nodos, una automatización completa: entra un dato, se procesa, y sale una respuesta.</p>
-
-| Nodo | Qué hace | Lo que sale |
-|---|---|---|
-| **Llega un pedido** (Webhook) | Recibe el pedido y los datos de la dirección | `query`: nombre, destino |
-| **Armar la respuesta** (Edit Fields) | Arma la frase con los datos | `mensaje`: Hola Ana, … |
-| **Contestar al navegador** (Respond to Webhook) | Le contesta al navegador solo con la frase | La página con el título |
-
-**Ejemplo: mandar datos en la dirección**
-
-❌ Mal: datos con espacios y sin el signo de pregunta.
+**02-12 · (si hay tiempo) Que se vea como título**
 
 ```text
-http://localhost:5678/webhook-test/saludo nombre=Ana destino=Mendoza
+En "Contestar al navegador", Response Body:  <h1>{{ $json.mensaje }}</h1>  → Save → Execute workflow → F5
 ```
 
-✅ Bien: un `?` antes del primero, y `&` entre uno y otro.
+<p style="color:#1a7f37">Y si le pongo h1 adelante y atrás, sale grande, como el título de una página. Es una marca de HTML, el idioma de las páginas web.</p>
 
-```text
-http://localhost:5678/webhook-test/saludo?nombre=Ana&destino=Mendoza
-```
-
-Por qué: la dirección tiene reglas fijas. Lo que va después del `?` son los datos, de a pares `casillero=valor`,
-separados con `&`. Con espacios, el navegador corta la dirección o la cambia.
-
+| Nodo | Qué hace |
+|---|---|
+| **Llega un pedido** (Webhook) | Recibe el pedido y los datos de la dirección (`query`) |
+| **Armar la respuesta** (Edit Fields) | Arma la frase con esos datos (`mensaje`) |
+| **Contestar al navegador** (Respond to Webhook) | Le devuelve solo la frase al navegador |
 
 #### Romperlo a propósito: un dato que no es lo que esperaba (3 min)
 
-<p style="color:#1a7f37">Como hicimos con el saludo, vamos a romper este también. Pero acá pasa algo nuevo: el que tocó el timbre está esperando una respuesta. ¿Qué ve él cuando algo se rompe? Vamos a agregar un dato más, la cantidad de personas, y le vamos a decir a n8n que tiene que ser un número.</p>
-
-**R-1 · Agregar un casillero de número**
+**R-1 · Un casillero que tiene que ser número**
 
 ```text
 Doble clic en "Armar la respuesta" → Add Field:
-   Name: personas     Type: Number     Value: escribí  {{ $json.query.personas }}
+   Name: personas     Type: Number     Value:  {{ $json.query.personas }}
 Cerrá → Save
 ```
 
-<p style="color:#1a7f37">Agrego un casillero, personas, y le digo que es un número: Number.</p>
+<p style="color:#1a7f37">Agrego un casillero, personas, y le digo que es un número.</p>
 
-**R-2 · Primero, con un número: anda**
+**R-2 · Mandar una palabra donde va un número**
 
 ```text
 Execute workflow → en la otra pestaña:
-   http://localhost:5678/webhook-test/saludo?nombre=Ana&destino=Mendoza&personas=3
-→ el navegador muestra la frase, como siempre (personas no se ve: la respuesta es solo el mensaje)
-→ en n8n, en el OUTPUT de "Armar la respuesta":  personas: 3
-```
-
-<p style="color:#1a7f37">Con un 3, anda: el navegador muestra la frase, y en n8n, en Armar la respuesta, está personas, 3.</p>
-
-**R-3 · Ahora, con una palabra: se rompe**
-
-```text
-Execute workflow → ahora con una palabra donde va el número:
    http://localhost:5678/webhook-test/saludo?nombre=Ana&destino=Mendoza&personas=tres
+En n8n:          "Armar la respuesta" en ROJO → 'personas' expects a number but we got 'tres'
+En el navegador: {"message":"Error in workflow"}
 ```
 
-<p style="color:#1a7f37">Ahora escribo "tres", con letras. Y miremos las dos pantallas, la de n8n y la del navegador.</p>
+<p style="color:#1a7f37">Mando "tres" con letras. En n8n vemos todo: qué nodo falló y por qué. El que tocó el timbre solo ve "Error in workflow": sabe que algo salió mal, pero no qué. Al cliente no le mostramos las tripas del flujo; el detalle lo buscamos nosotros.</p>
 
-**R-4 · Las dos pantallas**
+- **Los datos de afuera no siempre vienen bien.** En el formulario que sigue, el campo de número no deja escribir
+  letras.
 
-```text
-En n8n:        "Llega un pedido" en verde ✓, "Armar la respuesta" en ROJO,
-               "Contestar al navegador" sin color (no llegó a correr)
-               (doble clic en el rojo → 'personas' expects a number but we got 'tres' [item 0])
-En el navegador:  {"message":"Error in workflow"}   ("error en el flujo")
-```
-
-<p style="color:#1a7f37">Nosotros, en n8n, vemos todo: qué nodo falló, por qué, con qué dato. El que tocó el timbre, en cambio, solo ve "Error in workflow": sabe que algo salió mal, pero no qué. Está bien que sea así: al cliente no le mostramos las tripas del flujo. Pero quiere decir que, cuando un cliente diga "me salió un error", el detalle lo vamos a buscar nosotros, en Executions.</p>
-
-- **El error se ve distinto de cada lado.** En n8n: el nodo rojo con el mensaje completo. Del otro lado: un mensaje
-  corto y general.
-  - *Ejemplo:* Como un restaurante: si se quema la comida, el cocinero sabe qué pasó; al cliente el mozo le dice
-    "hubo un problema en la cocina".
-- **El 500 es un número de error.** **500** = "hubo un error del lado del que contesta". Ya vimos el **404** = "no
-  hay nada en esta dirección".
-  - *Ejemplo:* 404 = tocaste un timbre que no existe. 500 = el timbre existe, atendieron, pero adentro algo se
-    rompió.
-- **Los datos de afuera no siempre vienen bien.** Alguien puede escribir "tres" en vez de 3. En un formulario de
-  verdad, el campo de número no deja escribir letras: lo vemos en el formulario que sigue.
-  - *Ejemplo:* Executions guarda la ejecución con ✗ y, al abrirla, en `query` se ve el "tres".
-
-**R-5 · Arreglarlo**
+**R-3 · Arreglarlo**
 
 ```text
 En "Armar la respuesta", borrá el casillero  personas  (tachito a su derecha) → Save
 ```
-
-<p style="color:#1a7f37">Lo arreglo borrando el casillero, y el flujo queda como antes.</p>
-
 
 ### Otra forma: el formulario de n8n, y cada consulta a Google Sheets (flujo 03) (12 min)
 
@@ -2842,7 +2520,7 @@ Todos los días a las 9  →  ¿Es fin de semana?  ─ true  → Fin de semana: 
 (Schedule Trigger)          (IF)                └ false → Día de semana: mandar resumen
 ```
 
-Lo que tiene que salir hoy (miércoles): `Hoy es miércoles: mandamos el resumen del día.`
+Lo que tiene que salir un día de semana (por ejemplo, hoy jueves): `Hoy es jueves: mandamos el resumen del día.`
 
 **Lo nuevo:** el disparador con horario (*Schedule Trigger*) y `$now`, que es "ahora".
 
@@ -2889,20 +2567,47 @@ Cerrá → renombralo:  Todos los días a las 9
 
 **4 · Escribir la pregunta: qué miro**
 
+<p style="color:#1a7f37">La condición del IF tiene tres partes, de izquierda a derecha: qué miro, cómo comparo, y contra qué. Empecemos por qué miro: el día de hoy.</p>
+
+**4a · Dónde se escribe**
+
 ```text
-En Conditions, el casillero de la izquierda (value1): escribí  {{ $now.weekday }}
+Se abrió la ventana del IF. En el medio, "Conditions", hay una fila con tres partes:
+   [ value1 ]   [ is equal to ▾ ]   [ value2 ]
+     qué miro      cómo comparo       contra qué
+Clic en el primer casillero, el de la izquierda (dice  value1  en gris)
 ```
 
-<p style="color:#1a7f37">La condición tiene tres partes: qué miro, cómo comparo, y contra qué. Qué miro: el día de hoy. n8n sabe qué día es: $now es "ahora", y weekday es el número del día de la semana. Lunes es 1, martes 2, y así hasta el domingo, que es 7.</p>
+<p style="color:#1a7f37">Miren la fila de Conditions: tres casilleros. El de la izquierda es qué miro; el del medio, cómo comparo; el de la derecha, contra qué. Hago clic en el de la izquierda.</p>
 
-- **`$now.weekday` es el número del día.** Lunes = 1 … sábado = 6, domingo = 7.
-  - *Ejemplo:* Hoy, miércoles, vale `3`.
+**4b · Escribir `{{ $now.weekday }}`**
+
+```text
+En ese casillero escribí exactamente (con las llaves dobles y el punto):
+   {{ $now.weekday }}
+→ al escribir las primeras llaves  {{  el casillero pasa solo a modo  Expression
+→ abajo del casillero aparece el resultado: hoy, jueves,  4
+```
+
+<p style="color:#1a7f37">Y escribo esto. Las llaves dobles le dicen a n8n: esto no es un texto, es algo que tenés que calcular. Adentro, $now quiere decir "ahora", y weekday, "el día de la semana", en número. Miren abajo del casillero: n8n ya lo calculó, y dice 4, porque hoy es jueves.</p>
+
+- **Los números de los días:** lunes = 1, martes = 2, miércoles = 3, jueves = 4, viernes = 5, sábado = 6,
+  domingo = 7.
+- **Las llaves `{{ }}` = "calculá esto".** Sin llaves, n8n compararía la palabra "$now.weekday", no el día. Es lo
+  mismo que pasaba en Edit Fields cuando arrastrábamos un casillero.
+  - *Ejemplo:* Con llaves, abajo dice `4`. Sin llaves, dice el texto tal cual: está mal.
+- **Esta vez no se arrastra: se escribe.** `$now` no viene del nodo anterior; n8n lo sabe siempre, como la fecha
+  del reloj de la computadora.
+- **Si abajo no aparece un número:** revisá que sean dos llaves de cada lado, `$now` con el signo `$`, y el punto
+  antes de `weekday`, todo en minúscula.
+  - *Ejemplo:* ❌ `{ $now.weekday }` (una sola llave) · ❌ `{{ now.weekday }}` (sin `$`) · ✅ `{{ $now.weekday }}`.
 
 **5 · Cómo comparo y contra qué**
 
 ```text
-medio:    Number → is greater than or equal to   (es mayor o igual a)
-derecha:  6
+medio:    clic en  is equal to ▾  → Number → is greater than or equal to   (es mayor o igual a)
+          (Number, porque comparamos números; "is equal to" es "es igual a", el que viene)
+derecha:  escribí  6   (sin llaves: es un número fijo)
 Cerrá → renombralo:  ¿Es fin de semana?
 ```
 
@@ -2917,11 +2622,11 @@ En el + de  true  → Edit Fields → campo  mensaje  (String):
 → renombralo:  Fin de semana: no mandar
 ```
 
-<p style="color:#1a7f37">Miren que el IF tiene dos salidas: true, verdadero, cuando la respuesta es sí; y false, falso, cuando es no. En la de true, si es fin de semana, armo un mensaje que dice "no mandamos el resumen". Y ese pedazo raro escribe el nombre del día en castellano: miércoles, sábado.</p>
+<p style="color:#1a7f37">Miren que el IF tiene dos salidas: true, verdadero, cuando la respuesta es sí; y false, falso, cuando es no. En la de true, si es fin de semana, armo un mensaje que dice "no mandamos el resumen". Y ese pedazo raro escribe el nombre del día en castellano: jueves, sábado.</p>
 
 - **`$now.setLocale('es').toFormat('cccc')` es el nombre del día, en castellano.** `setLocale('es')` = "en
   español"; `cccc` = "el nombre del día completo".
-  - *Ejemplo:* Un miércoles da "miércoles".
+  - *Ejemplo:* Un jueves da "jueves".
 
 **7 · El otro camino**
 
@@ -2945,8 +2650,8 @@ Menú … del flujo (arriba, al lado del nombre) → Settings → Timezone:
 **9 · Probarlo sin esperar a las 9**
 
 ```text
-Execute workflow  → se pone verde el camino de  false  (hoy es miércoles):
-   mensaje: Hoy es miércoles: mandamos el resumen del día.
+Execute workflow  → se pone verde el camino de  false  (hoy es jueves, 4: no es 6 ni más):
+   mensaje: Hoy es jueves: mandamos el resumen del día.
 ```
 
 <p style="color:#1a7f37">No hace falta esperar a mañana a las 9: Execute workflow lo dispara ahora. Miren el canvas: el dato fue por false, porque hoy no es fin de semana, y el camino de true quedó gris, sin ejecutar. Si lo corriéramos un sábado, sería al revés. El IF eligió solo por dónde ir.</p>
@@ -2960,11 +2665,11 @@ Execute workflow  → se pone verde el camino de  false  (hoy es miércoles):
 **10 · Probar el otro camino sin esperar al sábado**
 
 ```text
-Abrí el IF → cambiá el 6 por un 3 → Execute workflow → ahora va por  true
+Abrí el IF → cambiá el 6 por un 1 → Execute workflow → ahora va por  true
 Después volvé a poner el 6 → Save
 ```
 
-<p style="color:#1a7f37">¿Y cómo sé que el otro camino anda, si hoy es miércoles? Hago trampa: cambio el 6 por un 3. Ahora la pregunta es "¿el día es 3 o más?", y hoy es 3: va por true. Listo, los dos caminos andan. Vuelvo a poner el 6.</p>
+<p style="color:#1a7f37">¿Y cómo sé que el otro camino anda, si hoy no es fin de semana? Hago trampa: cambio el 6 por un 1. Ahora la pregunta es "¿el día es 1 o más?", y todos los días son 1 o más: va por true. Listo, los dos caminos andan. Vuelvo a poner el 6.</p>
 
 ### IF, ejemplo 2: ¿le corresponde descuento? (flujo 05) (6 min)
 
@@ -2986,97 +2691,131 @@ flujo 02).
 
 <p style="color:#1a7f37">Segundo ejemplo, ahora con una cuenta. La agencia hace 10% de descuento a los viajes de mil dólares o más. Le mandamos al flujo el nombre y el monto por la dirección, como en el webhook de antes, y el IF decide si corresponde el descuento. Si corresponde, n8n hace la cuenta solo.</p>
 
-**En n8n, paso a paso** (cada paso son uno o dos clics; abajo de cada uno, lo que decís y explicás en ese momento):
+**En n8n, paso a paso** (cada paso son uno o dos clics; abajo de cada uno, lo que decís en ese momento):
 
-**1 · El webhook que recibe el pedido**
-
-```text
-Overview → Create workflow → nombre:  IF descuento
-+ → On webhook call → Webhook:
-   HTTP Method: GET     Path: presupuesto     Respond: When Last Node Finishes
-→ renombralo:  Pedido de presupuesto
-```
-
-<p style="color:#1a7f37">Esto ya lo conocen: un webhook, como el del saludo. Ahora se llama presupuesto, y le vamos a mandar dos datos en la dirección: el nombre y el monto del viaje.</p>
-
-**2 · Probarlo para tener datos**
+**1 · Crear el workflow**
 
 ```text
-Execute workflow, y en otra pestaña:
-   http://localhost:5678/webhook-test/presupuesto?nombre=Ana&monto=1500
+Overview → Create workflow → clic en "My workflow" → escribí  IF descuento  → Enter
 ```
 
-<p style="color:#1a7f37">Antes de seguir, toco el timbre una vez. Así, en el IF, ya tengo los datos en INPUT para arrastrar: Ana, 1500.</p>
+<p style="color:#1a7f37">Flujo nuevo, hoja en blanco, como siempre.</p>
 
-**3 · El IF: qué miro, cómo comparo, contra qué**
+**2 · Poner el webhook**
 
 ```text
-+ → If. En Conditions:
-   izquierda:  arrastrá  monto  (adentro de query) → {{ $json.query.monto }}
-   medio:      Number → is greater than or equal to
-   derecha:    1000
+Clic en el +  (Add first step) → buscá  webhook  → clic en  Webhook
 ```
 
-<p style="color:#1a7f37">La pregunta: ¿el monto es mil o más? Qué miro: el monto, lo arrastro desde query. Cómo comparo: mayor o igual. Contra qué: mil.</p>
+<p style="color:#1a7f37">El trigger es un webhook, como el del saludo: el flujo arranca cuando tocan su dirección.</p>
 
-- **El 1000 justo, ¿qué hace?** *Greater than or equal to* es "mayor **o igual**": 1000 va por *true*. Si fuera
-  *is greater than* ("mayor que"), 1000 iría por *false*.
-  - *Ejemplo:* Elegir bien la comparación es decidir qué pasa con el caso del borde.
-
-**4 · El interruptor para convertir texto en número**
+**3 · Completar el webhook**
 
 ```text
-Abajo, prendé el interruptor:  Convert types where required   (convertir tipos cuando haga falta)
-→ renombralo:  ¿Monto de 1000 o más?
+HTTP Method:  GET                       (ya viene)
+Path:         borrá el código raro y escribí  presupuesto
+Respond:      When Last Node Finishes
+Cerrá → renombralo:  Pedido de presupuesto  → Save
 ```
 
-<p style="color:#1a7f37">Y acá un detalle que en la clase 3 nos hizo renegar. Lo que llega en la dirección, 1500, parece un número, pero llega como texto. Y el IF, para decir si es más que mil, necesita un número. Este interruptor le dice: "si hace falta, convertilo". Sin él, el IF se pone rojo.</p>
+<p style="color:#1a7f37">Lo mismo que en el saludo: GET para poder probarlo desde el navegador, el Path con una palabra que se lee, presupuesto, y que conteste cuando termine el último nodo.</p>
 
-- **Lo que llega en la dirección siempre es texto.** `monto=1500` llega como el texto "1500". Con el interruptor,
-  n8n lo convierte en el número 1500 antes de comparar.
-  - *Ejemplo:* Con el interruptor apagado, el IF se pone rojo con *Wrong type* ("tipo equivocado"): está comparando
-    texto contra número. Es el mismo error de la Clase 3.
-
-**5 · El camino con descuento: una cuenta**
+**4 · Tocar el timbre una vez, para tener datos**
 
 ```text
-+ de  true  → Edit Fields → campo  mensaje :
-   Hola {{ $json.query.nombre }}: tu viaje de USD {{ $json.query.monto }} tiene 10% de descuento.
-   Pagás USD {{ $json.query.monto * 0.9 }}.
-→ renombralo:  Con descuento
+Execute workflow → en otra pestaña:
+   http://localhost:5678/webhook-test/presupuesto?nombre=Ana&monto=1500   → Enter
+Volvé a n8n: el webhook en verde. Doble clic → OUTPUT → query:  nombre: Ana   monto: 1500
 ```
 
-<p style="color:#1a7f37">Si es mil o más, armo el mensaje con el descuento. Y miren el final: monto por cero coma nueve. Dentro de las llaves se pueden hacer cuentas. Monto por 0,9 es el monto con 10% menos. Miren abajo, en la vista previa: mil quinientos por cero coma nueve, mil trescientos cincuenta. La cuenta la hizo n8n.</p>
+<p style="color:#1a7f37">Antes de seguir, toco el timbre una vez con Ana y 1500. Así, cuando ponga el IF, ya tengo los datos a la izquierda para arrastrar.</p>
 
-- **Dentro de `{{ }}` se pueden hacer cuentas.** Sumar (`+`), restar (`-`), multiplicar (`*`) y dividir (`/`).
-  - *Ejemplo:* `{{ $json.query.monto * 0.9 }}` es "el monto por 0,9". Ojo: el decimal se escribe con **punto**
-    (`0.9`), no con coma.
-
-**6 · El camino sin descuento**
+**5 · Agregar el IF**
 
 ```text
-+ de  false  → Edit Fields → campo  mensaje :
-   Hola {{ $json.query.nombre }}: tu viaje de USD {{ $json.query.monto }} no llega a USD 1000,
-   así que no tiene descuento.
-→ renombralo:  Sin descuento → Save
+Cerrá → clic en el + a la derecha de "Pedido de presupuesto" → buscá  if  → clic en  If
+→ en Conditions, la fila de tres partes:   [ value1 ]  [ is equal to ▾ ]  [ value2 ]
 ```
 
-<p style="color:#1a7f37">Y si no llega a mil, otro mensaje: no tiene descuento.</p>
+<p style="color:#1a7f37">Ahora el IF. La misma fila de tres partes que en el ejemplo anterior: qué miro, cómo comparo, contra qué. La pregunta es: ¿el monto es mil o más?</p>
 
-**7 · Probar los dos montos**
+**6 · Qué miro: arrastrar el monto**
 
 ```text
-Execute workflow → en el navegador, la dirección con  monto=1500  → con descuento:
-   Hola Ana: tu viaje de USD 1500 tiene 10% de descuento. Pagás USD 1350.
-Execute workflow otra vez → la dirección con  nombre=Luis&monto=800  → sin descuento:
-   Hola Luis: tu viaje de USD 800 no llega a USD 1000, así que no tiene descuento.
+En INPUT (izquierda), abrí  query  → arrastrá  monto  al primer casillero (value1)
+→ queda  {{ $json.query.monto }}   y abajo se ve  1500
 ```
 
-<p style="color:#1a7f37">Pruebo con 1500: el navegador dice "pagás 1350". Ahora con 800: "no tiene descuento". Es el mismo flujo, con dos respuestas posibles: el navegador recibe la del camino que corrió.</p>
+<p style="color:#1a7f37">Qué miro: el monto. Esta vez no lo escribo, lo arrastro desde la izquierda, porque viene del webhook. Abajo ya me muestra 1500.</p>
 
-- **El webhook contesta con lo que armó el último nodo que corrió.** Como corre un solo camino, el navegador recibe
-  el mensaje de *Con descuento* o el de *Sin descuento*, según el monto.
-  - *Ejemplo:* Con 1500 contesta el de arriba; con 800, el de abajo.
+**7 · Cómo comparo y contra qué**
+
+```text
+Medio:    clic en  is equal to ▾  → Number → is greater than or equal to   (es mayor o igual a)
+Derecha:  escribí  1000
+```
+
+<p style="color:#1a7f37">Cómo comparo: mayor o igual. Contra qué: mil. O sea, ¿el monto es mil o más?</p>
+
+- **"Mayor o igual" decide qué pasa con el 1000 justo:** va por *true*. Con *is greater than* ("mayor que") iría
+  por *false*.
+
+**8 · El interruptor para convertir texto en número**
+
+```text
+Abajo de la condición, prendé:  Convert types where required   (convertir tipos cuando haga falta)
+Cerrá → renombralo:  ¿Monto de 1000 o más?
+```
+
+<p style="color:#1a7f37">Y este interruptor es importante. Lo que llega en la dirección, 1500, parece un número, pero llega como texto. El IF necesita un número para comparar. Este interruptor le dice: si hace falta, convertilo. Sin él, el IF se pone rojo, como nos pasó en la clase 3.</p>
+
+- **Lo que llega en la dirección siempre es texto.** Apagado, el IF da *Wrong type* ("tipo equivocado").
+
+**9 · El camino true: con descuento**
+
+```text
+En la salida  true  del IF, clic en su + → buscá  edit  → Edit Fields (Set)
+Add Field →  Name: mensaje    Type: String
+Value: escribí y arrastrá desde INPUT (query → nombre, query → monto) hasta que quede:
+   Hola {{ $json.query.nombre }}: tu viaje de USD {{ $json.query.monto }} tiene 10% de descuento. Pagás USD {{ $json.query.monto * 0.9 }}.
+Cerrá → renombralo:  Con descuento
+```
+
+<p style="color:#1a7f37">Si es mil o más, va por true. Ahí armo el mensaje con el descuento, arrastrando el nombre y el monto. Y al final, una cuenta: arrastro el monto otra vez y, antes de cerrar las llaves, escribo por cero punto nueve. Miren abajo: 1350. La cuenta la hizo n8n.</p>
+
+- **Dentro de `{{ }}` se pueden hacer cuentas:** `+`, `-`, `*` (por) y `/` (dividido). El decimal va con
+  **punto**: `0.9`, no `0,9`.
+
+**10 · El camino false: sin descuento**
+
+```text
+En la salida  false  del IF, clic en su + → Edit Fields (Set)
+Add Field →  Name: mensaje    Type: String
+   Hola {{ $json.query.nombre }}: tu viaje de USD {{ $json.query.monto }} no llega a USD 1000, así que no tiene descuento.
+Cerrá → renombralo:  Sin descuento → Save
+```
+
+<p style="color:#1a7f37">Y en false, cuando no llega a mil, otro mensaje: no tiene descuento.</p>
+
+**11 · Probar con 1500**
+
+```text
+Execute workflow → en la otra pestaña, la misma dirección (monto=1500) → F5
+Navegador: {"mensaje":"Hola Ana: tu viaje de USD 1500 tiene 10% de descuento. Pagás USD 1350."}
+Canvas:    verde el camino de arriba (true); "Sin descuento" queda gris
+```
+
+<p style="color:#1a7f37">Pruebo con 1500: el navegador dice "pagás 1350", y en el canvas se ve por dónde pasó: por true.</p>
+
+**12 · Probar con 800**
+
+```text
+Execute workflow → en la otra pestaña cambiá a  ?nombre=Luis&monto=800  → Enter
+Navegador: {"mensaje":"Hola Luis: tu viaje de USD 800 no llega a USD 1000, así que no tiene descuento."}
+Canvas:    verde el camino de abajo (false)
+```
+
+<p style="color:#1a7f37">Y con 800, va por false: no tiene descuento. Mismo flujo, dos respuestas: el navegador recibe la del camino que corrió.</p>
 
 ### Qué es un Switch, y el ejemplo (flujo 06) (10 min)
 
@@ -3820,6 +3559,57 @@ Para explicar:
     hacer lo mismo pegando la dirección en el navegador.
 
 ---
+
+### D · Todo lo que llega en un webhook, y GET vs POST (del flujo 02)
+
+En clase solo se usa `query`. Esto es para quien quiera saber qué es lo demás.
+
+Lo que se ve en OUTPUT es **1 item** (una ficha) con estos casilleros grandes. Conviene mostrarlo en la vista
+**Schema** (arriba de OUTPUT), que lo muestra ordenado, en vez de JSON:
+
+```text
+1 item
+├── headers        ← el "sobre": información que el navegador manda sola, siempre
+├── params         ← vacío: no lo usamos
+├── query          ← ⭐ LO QUE NOS IMPORTA: los datos que pusimos después del ?
+│     ├── nombre:  Ana
+│     └── destino: Mendoza
+├── body           ← vacío: es para datos que viajan "adentro" del pedido; con el navegador no se
+│                     puede (se explica justo abajo, en "¿Por qué body está vacío?")
+├── webhookUrl     ← la dirección que se tocó: http://localhost:5678/webhook-test/saludo
+└── executionMode  ← "test": se usó la dirección de prueba
+```
+
+Qué es cada cosa de **headers** (no hace falta aprenderlo; está para que no asuste):
+
+| Casillero | Qué quiere decir | En el ejemplo |
+|---|---|---|
+| `host` | A qué dirección se llamó. | `localhost:5678`: n8n en tu computadora. |
+| `connection` | Si la conexión queda abierta para más pedidos. | `keep-alive`: "dejala abierta". |
+| `user-agent` | Qué programa llamó: navegador y sistema. | Chrome/Brave en Windows. |
+| `sec-ch-ua`, `sec-ch-ua-mobile`, `sec-ch-ua-platform` | Lo mismo, más detallado: marca del navegador, si es celular (`?0` = no), y el sistema. | Brave 156, no celular, Windows. |
+| `accept` | Qué tipo de respuesta prefiere. | `text/html…`: una página web. |
+| `accept-language` | En qué idioma prefiere la respuesta. | `es-419`: español de Latinoamérica. |
+| `accept-encoding` | Si acepta la respuesta comprimida, para que viaje más rápido. | `gzip, br…` |
+| `sec-fetch-…`, `sec-gpc`, `upgrade-insecure-requests` | Avisos de seguridad y privacidad del navegador: cómo se abrió la página, si pide no ser rastreado, si prefiere https. | Lo abriste escribiendo la dirección (`navigate`). |
+| `cookie` | Datos chiquitos que el navegador guarda de una página y se los devuelve cada vez que la visita. | Son de n8n mismo (sus estadísticas de uso: `rl_…`, `ph_…`), porque n8n y el webhook están en la misma dirección, `localhost:5678`. |
+
+
+**GET y POST:** la barra del navegador siempre hace GET (una postal: los datos van a la vista, en la dirección).
+Un formulario o una aplicación pueden hacer POST (un paquete: los datos van adentro, en el *body*).
+
+```text
+GET  (postal)                              POST  (paquete cerrado)
+─────────────────────────────────          ─────────────────────────────────
+dirección:  .../saludo?nombre=Ana          dirección:  .../saludo
+            └ los datos van ACÁ,           body:       nombre: Ana   ← los datos van
+              a la vista                               destino: Mendoza  ADENTRO
+body:       vacío                                      (no se ven en la dirección)
+
+Lo hace:   la barra del navegador          Lo hace:   un formulario, una aplicación,
+                                                       Postman. La barra del navegador NO.
+En n8n:    llegan en  query                En n8n:    llegan en  body
+```
 
 ## Las trabas más comunes
 
