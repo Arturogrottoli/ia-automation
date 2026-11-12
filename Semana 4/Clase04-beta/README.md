@@ -796,6 +796,52 @@ EN N8N · Paso 1a: poner el primer nodo
    (otra forma: hacé un clic en el nodo para seleccionarlo y apretá F2)
 ```
 
+**Paso 1a-bis · Los botones de arriba del nodo (2 min)**
+
+```text
+EN N8N · Paso 1a-bis: los botones de arriba del nodo
+1. Pasá el mouse por encima del nodo, sin hacer clic
+2. Arriba del nodo aparece una barrita con cuatro iconos:
+     ▶  play           → Execute step (ejecutar este paso)
+     ⏻  encendido      → Deactivate (desactivar, "apagar" el nodo)
+     🗑  tacho          → Delete (borrar el nodo)
+     ⋯  tres puntitos  → más opciones (el mismo menú del clic derecho)
+3. Dejá el mouse quieto sobre cada icono: aparece un cartelito con su nombre
+```
+
+<p style="color:#1a7f37">Antes de seguir, miren esto. Paso el mouse por arriba del nodo, sin hacer clic, y aparece una barrita con cuatro dibujitos. Son los controles de ese nodo. Si dejo el mouse quieto encima de cada uno, aparece un cartelito que dice qué hace. Vamos uno por uno.</p>
+
+- **▶ El play: *Execute step*, ejecutar este paso.** Corre solo este nodo, no todo el flujo. En el trigger hace lo
+  mismo que el botón grande de abajo, porque el trigger es el primero. Cuando el flujo sea más largo, sirve para
+  probar un nodo solo, sin correr todo.
+  - *Ejemplo:* Es como probar solo la salsa de la receta, sin cocinar el plato entero.
+  - *Ejemplo:* El botón grande, *Execute workflow*, corre todo el flujo. El play chiquito corre un solo paso.
+
+<p style="color:#1a7f37">El segundo, el de encendido, el mismo dibujito del botón de la tele, apaga el nodo. No lo borra: lo deja ahí, pero en gris, y n8n hace de cuenta que no está. Lo vuelvo a apretar y se prende de nuevo.</p>
+
+- **⏻ El de encendido: *Deactivate*, desactivar.** El nodo queda en el canvas, pero gris, y n8n lo saltea al
+  ejecutar. Se vuelve a prender con el mismo botón (ahí dice *Activate*, activar).
+  - *Ejemplo:* Es como desenchufar un electrodoméstico sin tirarlo: sigue en la cocina, pero no anda.
+  - *Ejemplo:* Tenés un nodo que manda un mail y querés probar el flujo sin mandar mails de verdad: lo apagás,
+    probás, y después lo prendés.
+- **Ojo con apagar el trigger.** Si apagás el nodo que arranca el flujo, el flujo no tiene por dónde empezar.
+  Mostralo un segundo y volvé a prenderlo.
+
+<p style="color:#1a7f37">El tercero, el tachito, borra el nodo. Si lo borran sin querer, no pasa nada: Control Z lo trae de vuelta. Y los tres puntitos abren un menú con más opciones, el mismo que sale con el clic derecho: renombrar, duplicar, copiar, abrir.</p>
+
+- **🗑 El tacho: *Delete*, borrar.** Saca el nodo del canvas, con sus flechas. Si fue sin querer: **Ctrl + Z**
+  (deshacer) lo trae de vuelta.
+  - *Ejemplo:* Es la diferencia con el de encendido: apagar es guardar en el placard; borrar es tirar a la basura
+    (aunque con Ctrl + Z la sacás del tacho).
+- **⋯ Los tres puntitos: más opciones.** Es el mismo menú del clic derecho: *Rename* (renombrar), *Duplicate*
+  (duplicar), *Copy* (copiar), *Open* (abrir), y también *Deactivate* y *Delete*.
+  - *Ejemplo:* Recién le cambiamos el nombre con clic derecho → *Rename*: también se puede desde los tres puntitos.
+- **La barrita aparece en todos los nodos, no solo en el trigger.** Cada nodo que agreguemos va a tener los
+  mismos cuatro botones.
+
+> **Para vos:** si en tu versión de n8n los iconos o los textos del cartelito cambian un poco, vale lo que dice el
+> cartelito. Los cuatro de siempre son: ejecutar, apagar, borrar y más opciones.
+
 #### 1b · Qué hace y para qué sirve
 
 <p style="color:#1a7f37">¿Qué hace este nodo? Una sola cosa: cuando aprieto el botón Execute workflow, de abajo, arranca el flujo. Nada más. No manda mails, no lee planillas, no trae datos. Es el botón de encendido. Pruébenlo: aprieto Execute workflow, y el nodo se pone verde. Funcionó. No hizo nada visible, porque todavía no tiene a quién pasarle la posta.</p>
@@ -2030,7 +2076,7 @@ nombre, el destino y la cantidad de personas.
 "dirección 1": n8n sale a hacer algo):
 - **La credencial de Google Sheets.** En n8n local hay que crear antes el permiso en Google Cloud Console
   (*Client ID* y *Client Secret*): unos 20 minutos, una sola vez. El paso a paso, desde cero y con cada pantalla
-  explicada, está antes de la Parte D: [Conectar Google Sheets en n8n local](#antes-de-la-parte-d--conectar-google-sheets-en-n8n-local-la-credencial). En n8n Cloud alcanza con **Sign in
+  explicada, está en el anexo, al final de este ejemplo: [Conectar Google Sheets en n8n local](#anexo-del-flujo-03--conectar-google-sheets-por-primera-vez-n8n-local). En n8n Cloud alcanza con **Sign in
   with Google**.
 - **El formulario se abre solo en tu computadora** (`http://localhost:5678/form/...`), como el webhook. Para que lo
   completen clientes desde su celular, hace falta n8n Cloud.
@@ -2067,10 +2113,10 @@ entrar a n8n sin un permiso que se crea en **Google Cloud Console** (la página 
 proyecto, la API de Google Sheets encendida, y un *Client ID* y *Client Secret* que se pegan en n8n. Al crearla, la
 dirección de regreso (*redirect URL*) que pide Google es `http://localhost:5678/rest/oauth2-credential/callback`.
 El paso a paso completo, desde la ventana *Google Sheets account* que pide *Client ID* y *Client Secret*, está en
-[Conectar Google Sheets en n8n local](#antes-de-la-parte-d--conectar-google-sheets-en-n8n-local-la-credencial). En **n8n Cloud** no hace falta nada de eso: al
+[Conectar Google Sheets en n8n local](#anexo-del-flujo-03--conectar-google-sheets-por-primera-vez-n8n-local). En **n8n Cloud** no hace falta nada de eso: al
 crear la credencial aparece **Sign in with Google**, y listo.
 
-<p style="color:#1a7f37">Si alguno importó el flujo y le salió un error de que falta el Document, no se asusten: es que el archivo no trae su planilla. Cada uno tiene que elegir su credencial y pegar el link de su planilla en el último nodo. Y en n8n local, la credencial de Google lleva un trámite aparte, que está explicado paso a paso en este README, justo antes de la Parte D. Eso lo hacen en casa, con calma.</p>
+<p style="color:#1a7f37">Si alguno importó el flujo y le salió un error de que falta el Document, no se asusten: es que el archivo no trae su planilla. Cada uno tiene que elegir su credencial y pegar el link de su planilla en el último nodo. Y en n8n local, la credencial de Google lleva un trámite aparte, que está explicado paso a paso en este README, al final de este ejemplo. Eso lo hacen en casa, con calma.</p>
 
 **Antes de la clase (vos):** una planilla de Google Sheets nueva, llamada "Consultas de la agencia", con estos
 cuatro títulos en la fila 1, escritos exactamente así:
@@ -2082,6 +2128,16 @@ cuatro títulos en la fila 1, escritos exactamente así:
 **En n8n, paso a paso** (lo armás vos desde cero, en tu pantalla; ellos miran). Cada paso son uno o dos clics, y
 justo abajo está lo que decís y lo que explicás **en ese momento**, antes de pasar al clic siguiente. Son cuatro
 partes: el formulario, probarlo, ordenar los datos y guardarlos en la planilla.
+
+**Los tres nodos, y dónde se agrega cada uno:**
+
+| Nodo | Qué es | Cómo se agrega | Dónde está el paso a paso |
+|---|---|---|---|
+| 1 · *Formulario de consulta* | Trigger: n8n Form | El **+** del canvas vacío (*Add first step*) → `form` → **n8n Form** → *On new n8n Form event* | Parte A (A1 a A7), y se prueba en la Parte B |
+| 2 · *Ordenar los datos* | Acción: Edit Fields (Set) | El **+** a la derecha del nodo 1 → `edit` → **Edit Fields (Set)** | Parte C (C1 a C4) |
+| 3 · *Guardar en la planilla* | Acción: Google Sheets | El **+** a la derecha del nodo 2 → `sheets` → **Google Sheets** → *Append row in sheet* | Parte D (D0 a D5). En D2 elegís: primera vez o ya conectada |
+
+<p style="color:#1a7f37">Son tres nodos, uno detrás del otro. Primero, el formulario, que arranca todo. Segundo, un nodo que pasa en limpio los datos. Tercero, Google Sheets, que los guarda. Los voy agregando de a uno, siempre con el más de la derecha del último nodo, y pruebo cada uno antes de poner el siguiente.</p>
 
 #### Parte A · Poner el formulario (el trigger)
 
@@ -2266,14 +2322,181 @@ Cerrá → renombralo:  Ordenar los datos  → Save
 
 <p style="color:#1a7f37">Ejecuto solo este paso y miro: cuatro casilleros, con los mismos nombres que la planilla. Listo para archivar.</p>
 
-#### Antes de la Parte D · Conectar Google Sheets en n8n local (la credencial)
+#### Parte D · Guardar en la planilla (Google Sheets)
 
-<p style="color:#1a7f37">Antes de guardar en la planilla, hay que darle permiso a n8n para entrar a nuestro Google. Si están en n8n Cloud, es un botón. Si están en n8n local, como yo, hay que hacer un trámite una sola vez, en una página de Google. Se los muestro ahora para que vean dónde está cada cosa; ustedes lo hacen en casa, con calma, siguiendo esta parte del README o la grabación.</p>
+**D0 · La planilla, lista antes de poner el nodo**
+
+```text
+En otra pestaña: sheets.new   (crea una planilla nueva de Google Sheets)
+Nombre arriba a la izquierda:  Consultas de la agencia
+Fila 1:   A1 fecha   B1 nombre   C1 destino   D1 personas
+Copiá el link de la barra del navegador: lo vas a pegar en D3
+```
+
+<p style="color:#1a7f37">Antes de poner el tercer nodo, la planilla tiene que existir. En la fila 1 van los títulos de las columnas, exactamente iguales a los casilleros que armamos recién: fecha, nombre, destino, personas. Y me copio el link de arriba, porque n8n me lo va a pedir.</p>
+
+- **La fila 1 son los títulos; las consultas van de la fila 2 para abajo.** n8n lee la fila 1 para saber qué
+  columnas hay.
+  - *Ejemplo:* Si la fila 1 está vacía, n8n no tiene dónde poner nada.
+
+**D1 · Elegir Google Sheets, y esta vez una acción**
+
+```text
+Clic en el + a la derecha de "Ordenar los datos" → buscá  sheets  → clic en  Google Sheets
+→ aparece otra vez el panel de Triggers y Actions
+→ en Actions: clic en  Append row in sheet   (agregar una fila a la hoja)
+```
+
+<p style="color:#1a7f37">Miren: otra vez la misma pantalla de Triggers y Actions, ahora de Google Sheets. Pero esta vez no es el primer paso: el flujo ya arrancó con el formulario. Así que elijo una Action, una acción: Append row in sheet, agregar una fila. La regla es simple: el primer nodo, un trigger; todos los demás, acciones.</p>
+
+- **Append Row = agregar una fila al final.** Cada consulta es una fila nueva; las de antes no se tocan. Hay otras
+  acciones (leer filas, actualizar una fila) que vemos más adelante.
+  - *Ejemplo:* Diez clientes completan el formulario en el día: la planilla termina con diez filas.
+
+**D2 · La credencial: el permiso para entrar a tu Google**
+
+```text
+Se abrió la ventana del nodo. Arriba de todo:  Credential to connect with  → clic en la lista
+¿Qué aparece?
+   🅰 La lista está vacía (o solo dice "+ Create new credential")  → es la PRIMERA VEZ: camino 🅰
+   🅱 Aparece  Google Sheets account                                → YA ESTÁ CONECTADA: camino 🅱
+```
+
+<p style="color:#1a7f37">Para escribir en mi planilla, n8n necesita permiso para entrar a mi cuenta de Google. Ese permiso se llama credencial. Abro la lista de Credential y me fijo: si ya tengo una, la elijo y listo. Si está vacía, es la primera vez, y hay que crearla. Se hace una sola vez.</p>
+
+- **Credencial = la llave para entrar a otra aplicación.** Se crea una vez y se reusa en todos los flujos.
+  - *Ejemplo:* Como darle a alguien una copia de la llave de tu casa: no le das tu contraseña, le das una llave
+    que podés quitarle cuando quieras.
+
+**D2 · Camino 🅰 · Primera vez: crear la credencial**
+
+```text
+Credential to connect with → + Create new credential
+→ se abre la ventana  Google Sheets account
+   n8n Cloud:  botón  Sign in with Google  → elegís tu cuenta → Allow → Save     (listo, seguí en D3)
+   n8n local:  pide  Client ID  y  Client Secret  (cartel rojo: Please check the errors below)
+               → hacé el trámite en Google Cloud con la guía completa (link abajo), y volvé a D3
+```
+
+**Guía completa de la primera conexión (n8n local):**
+- En este README: [Anexo del flujo 03 · Conectar Google Sheets por primera vez](#anexo-del-flujo-03--conectar-google-sheets-por-primera-vez-n8n-local)
+- Archivo aparte, para los alumnos: [google-sheet-conection.md](google-sheet-conection.md) (Partes 0 a 3, pasos 0 a 17)
+
+<p style="color:#1a7f37">Si están en n8n Cloud, es un botón: Sign in with Google, elijo mi cuenta, acepto, y listo. En n8n local, como yo, me pide dos datos, Client ID y Client Secret, que se sacan de una página de Google. Ese trámite lleva unos veinte minutos y se hace una sola vez; está paso a paso en la guía. Ustedes lo hacen en casa, con calma. Yo ya lo hice, así que sigo por el otro camino.</p>
+
+- **El cartel rojo no es un error tuyo.** En n8n local, la ventana nueva siempre arranca así: le faltan los dos datos
+  de Google.
+  - *Ejemplo:* Un alumno ve *Please check the errors below*: no rompió nada, le falta hacer la guía.
+- **El Client Secret no se comparte.** No se pega en ningún chat ni en el grupo de la clase.
+
+**D2 · Camino 🅱 · Ya está conectada: elegirla de la lista**
+
+```text
+Credential to connect with → elegí  Google Sheets account   (la que ya creaste)
+→ no aparece ningún cartel rojo: seguí en D3
+```
+
+<p style="color:#1a7f37">Como yo ya la tengo, la elijo de la lista: Google Sheets account. Y nada más. No vuelvo a Google, no pego nada. Es la llave que ya hicimos: se usa en todas las puertas.</p>
+
+**D2-bis · Más sobre la credencial ya vinculada** (para leer en casa, no hace falta en clase)
+
+```text
+En cualquier nodo de Google Sheets (de este flujo o de otro):
+   Credential to connect with  → abrí la lista → elegí  Google Sheets account   (la que ya creaste)
+   → listo: no se vuelve a hacer nada en Google Cloud
+```
+
+<p style="color:#1a7f37">Y una vez que la credencial existe, el trámite no se repite nunca más. En cualquier flujo nuevo, en cualquier nodo de Google Sheets, abro la lista de Credential y elijo la que ya tengo: Google Sheets account. Es la llave que ya hicimos: se usa en todas las puertas.</p>
+
+- **La credencial queda guardada en tu n8n, no en el flujo.** Por eso aparece en la lista de cualquier flujo. Para
+  verlas todas: **Overview** → pestaña **Credentials** (credenciales).
+  - *Ejemplo:* Mañana armás otro flujo que lee una planilla: nodo Google Sheets → Credential → *Google Sheets
+    account*. Nada más.
+- **Al importar un flujo, la credencial no viene con el archivo.** El nodo aparece sin credencial (o con un aviso):
+  se elige de la lista, igual que acá.
+  - *Ejemplo:* Importás `03-formulario.json` → *Guardar en la planilla* → Credential → *Google Sheets account* →
+    pegás el link de tu planilla en *Document*.
+- **Si tenés más de una, ponele nombre.** Clic en el lápiz al lado de la credencial → arriba, clic en el nombre
+  *Google Sheets account* → por ejemplo *Sheets · mi Gmail*.
+  - *Ejemplo:* Una para tu Gmail personal y otra para el de la agencia: con nombre, no las confundís.
+- **Si un día deja de andar** (en modo de prueba, Google vence el permiso cada 7 días): lápiz al lado de la
+  credencial → **Reconnect** (o *Sign in with Google*) → elegís tu cuenta → **Save**. No hace falta volver a Google
+  Cloud.
+  - *Ejemplo:* El nodo se pone rojo con un error de permiso, aunque la semana pasada andaba: Reconnect y listo.
+- **Sirve también para otros productos de Google**, si al crear el proyecto encendiste su API. Gmail, Drive o
+  Calendar tienen su propia credencial en n8n, pero usan el mismo Client ID y Client Secret.
+  - *Ejemplo:* Para Gmail: encendés la Gmail API en Google Cloud, creás la credencial *Gmail OAuth2* en n8n y pegás
+    los mismos dos datos.
+
+**D3 · Qué planilla y qué hoja**
+
+```text
+Resource:   Sheet Within Document     (ya viene)
+Operation:  Append Row                (ya viene, porque elegiste esa acción)
+Document:   cambiá "From list" por  By URL  → pegá el link que copiaste en D0
+            (el link entero: https://docs.google.com/spreadsheets/d/…/edit)
+Sheet:      Hoja 1  (el nombre de la pestaña de abajo de la planilla)
+```
+
+<p style="color:#1a7f37">Ahora le digo en qué planilla escribir. Copio el link de la planilla del navegador y lo pego acá. Y abajo, en qué hoja, que es la pestañita de abajo de la planilla: Hoja 1.</p>
+
+**D4 · Cómo se reparten los datos en las columnas**
+
+```text
+Mapping Column Mode:  Map Automatically
+                      (cada casillero va a la columna que se llama igual)
+(si abajo aparece "Values to Send" con una caja vacía por columna, quedó en el modo a mano:
+ volvé a elegir  Map Automatically )
+Cerrá → renombralo:  Guardar en la planilla  → Save
+```
+
+<p style="color:#1a7f37">Y acá se ve por qué ordenamos los datos antes. Elijo Map Automatically: que cada casillero vaya solo a la columna que se llama igual. fecha a fecha, nombre a nombre. Si no hubiéramos acomodado los nombres, esto no funcionaría.</p>
+
+**Ejemplo: los nombres de los casilleros y de las columnas**
+
+❌ Mal: casilleros con un nombre y columnas con otro.
+
+```text
+Ordenar los datos:   Nombre · Destino del viaje · Cantidad de personas
+Planilla (fila 1):   nombre | destino | personas
+→ la fila se agrega, pero con columnas vacías
+```
+
+✅ Bien: los mismos nombres de los dos lados.
+
+```text
+Ordenar los datos:   fecha · nombre · destino · personas
+Planilla (fila 1):   fecha | nombre | destino | personas
+```
+
+Por qué: con *Map Automatically*, n8n busca para cada casillero la columna que se llama exactamente
+igual. Si no la encuentra, ese dato no va a ningún lado.
+
+**D5 · La prueba completa**
+
+```text
+Execute workflow  → se abre el formulario → completalo:  Martín · Bariloche · 2  → Submit
+Volvé a n8n: los tres nodos en verde.
+Abrí la planilla: hay una fila nueva →  11/11/2026 12:40 | Martín | Bariloche | 2
+```
+
+<p style="color:#1a7f37">Ahora todo junto. Completo el formulario como si fuera otro cliente, Martín, que va a Bariloche con dos personas. Los tres nodos en verde. Y miren la planilla: apareció una fila nueva, sola.</p>
+
+<p style="color:#1a7f37">Esto contesta la pregunta de hace un rato: ¿dónde quedan guardados los datos? Dentro del flujo, viven mientras dura la ejecución. Para que queden para siempre, un nodo los tiene que mandar a algún lado. Acá, a Google Sheets.</p>
+
+<p style="color:#1a7f37">Fíjense que las dos formas hacen lo mismo: entran datos de afuera, n8n los recibe, y los usa en los nodos siguientes. Con el webhook los mandamos en la dirección; con el formulario los carga una persona. Para n8n, en los dos casos, es una ficha con casilleros. Y si queremos que quede guardado, lo mandamos a una planilla.</p>
+
+#### Anexo del flujo 03 · Conectar Google Sheets por primera vez (n8n local)
+
+> **Desde dónde se llega:** desde el paso **D2** (camino 🅰, primera vez). Cuando termines, volvé a
+> [D3](#parte-d--guardar-en-la-planilla-google-sheets) y seguí con la planilla.
+
+<p style="color:#1a7f37">Para guardar en la planilla, hay que darle permiso a n8n para entrar a nuestro Google. Si están en n8n Cloud, es un botón. Si están en n8n local, como yo, hay que hacer un trámite una sola vez, en una página de Google. Se los muestro ahora para que vean dónde está cada cosa; ustedes lo hacen en casa, con calma, siguiendo esta parte del README o la grabación.</p>
 
 > **Guía aparte para los alumnos:** el mismo camino, un paso por vez, con los nombres de Google Cloud en castellano
 > y los errores que aparecieron al probarlo: [google-sheet-conection.md](google-sheet-conection.md).
 >
-> **Para vos:** si ya tenés la credencial creada, mostrá solo la ventana de n8n y los pasos 5 a 8 en Google (unos 4 minutos), y seguí con la Parte D. Si no la tenés, hacela antes de la clase con estos mismos pasos.
+> **Para vos:** si ya tenés la credencial creada, mostrá solo la ventana de n8n y los pasos 5 a 8 en Google (unos 4 minutos), y volvé a D3. Si no la tenés, hacela antes de la clase con estos mismos pasos.
 
 Esto es para cuando, en n8n **en tu computadora** (`localhost:5678`), abrís un nodo de Google Sheets, elegís
 crear una credencial, y aparece esta ventana:
@@ -2490,126 +2713,8 @@ Si la fila aparece en la planilla, está todo bien. Desde ahora, en cualquier fl
 | **OAuth Redirect URL** | La dirección a la que Google te devuelve después de dar permiso: la puerta de tu n8n. |
 | **Sign in with Google** | El botón que abre la pantalla de Google para dar permiso. |
 
-#### Parte D · Guardar en la planilla (Google Sheets)
-
-**D1 · Elegir Google Sheets, y esta vez una acción**
-
-```text
-Clic en el + a la derecha de "Ordenar los datos" → buscá  sheets  → clic en  Google Sheets
-→ aparece otra vez el panel de Triggers y Actions
-→ en Actions: clic en  Append row in sheet   (agregar una fila a la hoja)
-```
-
-<p style="color:#1a7f37">Miren: otra vez la misma pantalla de Triggers y Actions, ahora de Google Sheets. Pero esta vez no es el primer paso: el flujo ya arrancó con el formulario. Así que elijo una Action, una acción: Append row in sheet, agregar una fila. La regla es simple: el primer nodo, un trigger; todos los demás, acciones.</p>
-
-- **Append Row = agregar una fila al final.** Cada consulta es una fila nueva; las de antes no se tocan. Hay otras
-  acciones (leer filas, actualizar una fila) que vemos más adelante.
-  - *Ejemplo:* Diez clientes completan el formulario en el día: la planilla termina con diez filas.
-
-**D2 · La credencial: el permiso para entrar a tu Google**
-
-```text
-Credential to connect with:  elegí tu credencial de Google Sheets
-```
-
-<p style="color:#1a7f37">Para escribir en mi planilla, n8n necesita permiso para entrar a mi cuenta de Google. Ese permiso se llama credencial. Yo ya la tengo creada, así que la elijo de la lista. En n8n local, crearla lleva un trámite en Google, de unos quince minutos, una sola vez; en n8n Cloud es un botón: Sign in with Google.</p>
-
-- **Credencial = la llave para entrar a otra aplicación.** Se crea una vez y se reusa en todos los flujos.
-  - *Ejemplo:* Como darle a alguien una copia de la llave de tu casa: no le das tu contraseña, le das una llave
-    que podés quitarle cuando quieras.
-- **Si todavía no hay credencial:** en *Credential to connect with* → **Create new credential**. Se abre la ventana
-  *Google Sheets account*. En n8n Cloud tiene el botón **Sign in with Google**. En n8n local, en cambio, pide
-  **Client ID** y **Client Secret**, con el cartel rojo *Please check the errors below*. Esos dos datos se sacan de
-  Google Cloud Console: [Conectar Google Sheets en n8n local](#antes-de-la-parte-d--conectar-google-sheets-en-n8n-local-la-credencial).
-  - *Ejemplo:* Si un alumno ve el cartel rojo, no rompió nada: le faltan los dos datos de Google. Lo hace en casa
-    con la guía.
-
-**D2-bis · Si ya tenés la credencial vinculada: cómo la usás en un nodo nuevo**
-
-```text
-En cualquier nodo de Google Sheets (de este flujo o de otro):
-   Credential to connect with  → abrí la lista → elegí  Google Sheets account   (la que ya creaste)
-   → listo: no se vuelve a hacer nada en Google Cloud
-```
-
-<p style="color:#1a7f37">Y una vez que la credencial existe, el trámite no se repite nunca más. En cualquier flujo nuevo, en cualquier nodo de Google Sheets, abro la lista de Credential y elijo la que ya tengo: Google Sheets account. Es la llave que ya hicimos: se usa en todas las puertas.</p>
-
-- **La credencial queda guardada en tu n8n, no en el flujo.** Por eso aparece en la lista de cualquier flujo. Para
-  verlas todas: **Overview** → pestaña **Credentials** (credenciales).
-  - *Ejemplo:* Mañana armás otro flujo que lee una planilla: nodo Google Sheets → Credential → *Google Sheets
-    account*. Nada más.
-- **Al importar un flujo, la credencial no viene con el archivo.** El nodo aparece sin credencial (o con un aviso):
-  se elige de la lista, igual que acá.
-  - *Ejemplo:* Importás `03-formulario.json` → *Guardar en la planilla* → Credential → *Google Sheets account* →
-    pegás el link de tu planilla en *Document*.
-- **Si tenés más de una, ponele nombre.** Clic en el lápiz al lado de la credencial → arriba, clic en el nombre
-  *Google Sheets account* → por ejemplo *Sheets · mi Gmail*.
-  - *Ejemplo:* Una para tu Gmail personal y otra para el de la agencia: con nombre, no las confundís.
-- **Si un día deja de andar** (en modo de prueba, Google vence el permiso cada 7 días): lápiz al lado de la
-  credencial → **Reconnect** (o *Sign in with Google*) → elegís tu cuenta → **Save**. No hace falta volver a Google
-  Cloud.
-  - *Ejemplo:* El nodo se pone rojo con un error de permiso, aunque la semana pasada andaba: Reconnect y listo.
-- **Sirve también para otros productos de Google**, si al crear el proyecto encendiste su API. Gmail, Drive o
-  Calendar tienen su propia credencial en n8n, pero usan el mismo Client ID y Client Secret.
-  - *Ejemplo:* Para Gmail: encendés la Gmail API en Google Cloud, creás la credencial *Gmail OAuth2* en n8n y pegás
-    los mismos dos datos.
-
-**D3 · Qué planilla y qué hoja**
-
-```text
-Resource:   Sheet Within Document     (ya viene)
-Operation:  Append Row                (ya viene, porque elegiste esa acción)
-Document:   cambiá "From list" por  By URL  → pegá el link de tu planilla
-Sheet:      Hoja 1  (el nombre de la pestaña de abajo de la planilla)
-```
-
-<p style="color:#1a7f37">Ahora le digo en qué planilla escribir. Copio el link de la planilla del navegador y lo pego acá. Y abajo, en qué hoja, que es la pestañita de abajo de la planilla: Hoja 1.</p>
-
-**D4 · Cómo se reparten los datos en las columnas**
-
-```text
-Mapping Column Mode:  Map Automatically
-                      (cada casillero va a la columna que se llama igual)
-(si abajo aparece "Values to Send" con una caja vacía por columna, quedó en el modo a mano:
- volvé a elegir  Map Automatically )
-Cerrá → renombralo:  Guardar en la planilla  → Save
-```
-
-<p style="color:#1a7f37">Y acá se ve por qué ordenamos los datos antes. Elijo Map Automatically: que cada casillero vaya solo a la columna que se llama igual. fecha a fecha, nombre a nombre. Si no hubiéramos acomodado los nombres, esto no funcionaría.</p>
-
-**Ejemplo: los nombres de los casilleros y de las columnas**
-
-❌ Mal: casilleros con un nombre y columnas con otro.
-
-```text
-Ordenar los datos:   Nombre · Destino del viaje · Cantidad de personas
-Planilla (fila 1):   nombre | destino | personas
-→ la fila se agrega, pero con columnas vacías
-```
-
-✅ Bien: los mismos nombres de los dos lados.
-
-```text
-Ordenar los datos:   fecha · nombre · destino · personas
-Planilla (fila 1):   fecha | nombre | destino | personas
-```
-
-Por qué: con *Map Automatically*, n8n busca para cada casillero la columna que se llama exactamente
-igual. Si no la encuentra, ese dato no va a ningún lado.
-
-**D5 · La prueba completa**
-
-```text
-Execute workflow  → se abre el formulario → completalo:  Martín · Bariloche · 2  → Submit
-Volvé a n8n: los tres nodos en verde.
-Abrí la planilla: hay una fila nueva →  11/11/2026 12:40 | Martín | Bariloche | 2
-```
-
-<p style="color:#1a7f37">Ahora todo junto. Completo el formulario como si fuera otro cliente, Martín, que va a Bariloche con dos personas. Los tres nodos en verde. Y miren la planilla: apareció una fila nueva, sola.</p>
-
-<p style="color:#1a7f37">Esto contesta la pregunta de hace un rato: ¿dónde quedan guardados los datos? Dentro del flujo, viven mientras dura la ejecución. Para que queden para siempre, un nodo los tiene que mandar a algún lado. Acá, a Google Sheets.</p>
-
-<p style="color:#1a7f37">Fíjense que las dos formas hacen lo mismo: entran datos de afuera, n8n los recibe, y los usa en los nodos siguientes. Con el webhook los mandamos en la dirección; con el formulario los carga una persona. Para n8n, en los dos casos, es una ficha con casilleros. Y si queremos que quede guardado, lo mandamos a una planilla.</p>
+> **⏪ Credencial lista:** volvé a [D3 · Qué planilla y qué hoja](#parte-d--guardar-en-la-planilla-google-sheets)
+> y seguí desde ahí.
 
 **Postman (solo se nombra):** si alguna vez ven un tutorial que usa Postman, es una aplicación para mandarle
 pedidos a una dirección, como hicimos con el navegador. No la usamos; la explicación está en
@@ -3692,7 +3797,7 @@ ejemplo, todos ven `not registered`), ahí sí se explica en el momento, para to
 | En Google Sheets, la fila se agrega pero con columnas vacías | Los nombres de los casilleros no son iguales a los títulos de la planilla | Que *Ordenar los datos* use exactamente `fecha`, `nombre`, `destino`, `personas`, igual que la fila 1. |
 | *Workflow execution cannot start* · *Parameter "Document" is required* · *Not a valid Google Drive File URL* | Importaron el flujo 03: el archivo no trae la planilla ni la credencial; o pegaron un link incompleto | En *Guardar en la planilla*: elegir la credencial y en *Document → By URL* pegar el link completo (`https://docs.google.com/spreadsheets/d/…/edit`). |
 | *At least one value has to be added under 'Values to Send'* (y abajo, los títulos de la planilla con casilleros vacíos) | *Mapping Column Mode* quedó en *Map Each Column Manually* (a mano) | Subir hasta *Mapping Column Mode* y elegir **Map Automatically**. (O, a mano: arrastrar cada casillero desde INPUT a su columna.) |
-| Google Sheets pide credencial o da error de permiso | En n8n local falta crear el permiso en Google Cloud | [Conectar Google Sheets en n8n local](#antes-de-la-parte-d--conectar-google-sheets-en-n8n-local-la-credencial). En n8n Cloud: *Sign in with Google*. |
+| Google Sheets pide credencial o da error de permiso | En n8n local falta crear el permiso en Google Cloud | [Conectar Google Sheets en n8n local](#anexo-del-flujo-03--conectar-google-sheets-por-primera-vez-n8n-local). En n8n Cloud: *Sign in with Google*. |
 | La fecha del formulario sale con otra hora | El flujo usa otra zona horaria | Menú **…** del flujo → **Settings** → **Timezone** → *America/Argentina/Buenos Aires*. |
 | El IF 2 se pone rojo con *Wrong type* | Lo que llega en la dirección es texto, y el IF compara números | Prender *Convert types where required* en el IF. |
 | El Switch manda todo a *Otra* | El texto de la regla no es igual al de la lista (mayúscula, tilde, espacio) | Copiar en la regla exactamente la opción de la lista: `Vuelo`, `Hotel`, `Paquete`. |
@@ -3774,7 +3879,9 @@ Al terminar, cada alumno puede:
 | **Fixed / Expression** | Texto fijo / texto que mezcla casilleros que vienen de antes. | `Hola {{ $json.nombre }}` |
 | **Expresión** | Lo que va entre `{{ }}`: "acá va el valor de este casillero". | `{{ $json.ciudad }}` |
 | **`$json`** | "El dato que le llegó a este nodo". | `$json.nombre` = el nombre que llegó. |
-| **Execute step** | Ejecutar solo un nodo, para probarlo. | Botón arriba en la ventana del nodo. |
+| **Execute step** | Ejecutar solo un nodo, para probarlo. | Botón arriba en la ventana del nodo, o el ▶ de la barrita que aparece al pasar el mouse por el nodo. |
+| **Deactivate / Activate** | Apagar / prender un nodo. Apagado queda gris y n8n lo saltea. | El ⏻ de la barrita de arriba del nodo. |
+| **Delete** | Borrar. Se deshace con Ctrl + Z. | El 🗑 de la barrita de arriba del nodo. |
 | **Execute workflow** | Ejecutar el flujo entero. | Botón abajo en el medio del canvas. |
 | **Save** | Guardar el flujo. | Ctrl + S. |
 | **Publish** | Publicar: dejar el flujo funcionando solo, siempre atento. | Necesario para la Production URL. |
