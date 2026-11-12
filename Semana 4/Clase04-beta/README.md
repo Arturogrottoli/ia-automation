@@ -2062,7 +2062,7 @@ En "Armar la respuesta", borrá el casillero  personas  (tachito a su derecha) �
 
 <p style="color:#1a7f37">¿Se acuerdan de la postal y el paquete? Con el webhook mandamos una postal, GET, con los datos en la dirección. El formulario manda un paquete, POST: cuando apretás Enviar, los datos viajan adentro, y la dirección queda limpia. Y hay una ventaja: el nodo del formulario abre el paquete solo. No hay que buscar en body ni en query: los datos aparecen directo, con el nombre de cada pregunta del formulario.</p>
 
-El flujo (está armado en `03-formulario.json`):
+El flujo (en clase **lo armamos desde cero**; el archivo `03-formulario.json` es el mismo flujo ya armado, para casa):
 
 ```text
 Formulario de consulta   →   Ordenar los datos   →   Guardar en la planilla
@@ -2084,125 +2084,9 @@ nombre, el destino y la cantidad de personas.
 Por eso, en clase, **este ejemplo lo mostrás vos** con tu credencial ya creada. Ellos lo arman en casa cuando
 tengan la credencial (o en n8n Cloud, donde es un botón).
 
-**Si importaste `03-formulario.json` (en local o en la nube), al ejecutarlo sale este error:**
-
-```text
-Workflow execution cannot start
-The 'Guardar en la planilla' node has issues:
-- Parameter "Document" is required.
-- Not a valid Google Drive File URL
-```
-
-Es normal: **el archivo no trae tu planilla ni tu credencial** (son tuyas, no viajan en el archivo). n8n avisa
-antes de arrancar que al nodo de Google Sheets le falta a qué planilla escribir.
-
-**Qué nodo hay que tocar:** solo el tercero, *Guardar en la planilla*. El *Formulario de consulta* y *Ordenar los
-datos* ya vienen completos en el archivo: no se tocan. Y el orden es: **primero la planilla en Google, después
-n8n**, porque n8n te va a pedir el link de una planilla que ya exista.
-
-```text
-Formulario de consulta  →  Ordenar los datos  →  Guardar en la planilla
-     (no se toca)             (no se toca)          ← ESTE: credencial + link de la planilla
-```
-
-Se arregla así, de a un paso:
-
-**I-1 · Crear la planilla en Google (fuera de n8n)**
-
-```text
-Pestaña nueva del navegador → escribí  sheets.new  → Enter
-(con la misma cuenta de Google de tu credencial; si no estás logueado, te pide entrar)
-→ se abre una planilla vacía, "Hoja de cálculo sin título"
-```
-
-- **`sheets.new` es un atajo de Google:** crea una planilla nueva sin pasar por Drive. Es lo mismo que Google Drive
-  → **+ Nuevo** → **Hojas de cálculo de Google**.
-- **Es una planilla (Google Sheets), no un documento de texto (Google Docs).** n8n escribe filas y columnas: tiene
-  que ser una hoja de cálculo.
-  - *Ejemplo:* Si creás un Google Docs y pegás su link, n8n no lo encuentra como planilla.
-- **Tiene que ser la misma cuenta de Google que la credencial.** La credencial le da permiso a n8n para entrar a
-  *esa* cuenta: una planilla de otra cuenta no la ve.
-
-**I-2 · Ponerle nombre y los títulos de las columnas**
-
-```text
-Arriba a la izquierda, clic en "Hoja de cálculo sin título" → escribí  Consultas de la agencia  → Enter
-Fila 1:   A1  fecha     B1  nombre     C1  destino     D1  personas
-(en minúscula, sin tildes de más, sin espacios: igual que los casilleros de "Ordenar los datos")
-```
-
-- **La fila 1 son los títulos.** n8n lee la fila 1 para saber qué columnas hay, y pone cada consulta de la fila 2
-  para abajo.
-- **Los títulos tienen que ser iguales a los casilleros.** *Ordenar los datos* entrega `fecha`, `nombre`,
-  `destino`, `personas`. Si la planilla dice "Nombre" con mayúscula, esa columna queda vacía.
-  - *Ejemplo:* `personas` ✅ · `Personas` ❌ · `cantidad de personas` ❌.
-- **El nombre de la pestaña de abajo (Hoja 1) no hace falta cambiarlo.** Es la que vas a elegir en I-6.
-
-**I-3 · Copiar el link de la planilla**
-
-```text
-Clic en la barra de direcciones del navegador (arriba) → Ctrl + A (seleccionar todo) → Ctrl + C (copiar)
-El link se ve así:  https://docs.google.com/spreadsheets/d/1AbC…XyZ/edit#gid=0
-```
-
-- **El link entero, de `https` hasta el final.** El pedazo largo de letras y números del medio es el
-  "documento" que n8n necesita; si falta un pedazo, no lo encuentra.
-  - *Ejemplo:* Pegar solo "Consultas de la agencia" (el nombre) da *Not a valid Google Drive File URL*.
-- **No uses el botón Compartir.** No hace falta compartir la planilla con nadie: n8n entra con tu cuenta, por la
-  credencial.
-
-**I-4 · En n8n: abrir el tercer nodo y elegir la credencial**
-
-```text
-Volvé a la pestaña de n8n → doble clic en  Guardar en la planilla
-Credential to connect with → elegí  Google Sheets account
-(si la lista está vacía: todavía no la creaste → la guía está al final de este ejemplo)
-```
-
-- **El archivo importado no trae credencial.** Es tuya, vive en tu n8n: se elige de la lista, no se crea de nuevo
-  si ya la tenés.
-
-**I-5 · Document: pegar el link**
-
-```text
-Fila "Document":  a la derecha dice  From list ▾  → cambialo a  By URL
-→ en la caja que aparece:  Ctrl + V  (pegá el link de I-3)
-→ el cartel rojo "Parameter Document is required" desaparece
-```
-
-- **Tres formas de elegir la planilla, misma planilla.** *From list* (la buscás por nombre en una lista), *By URL*
-  (pegás el link) o *By ID* (solo el pedazo del medio). Usamos *By URL* porque es la que menos falla.
-  - *Ejemplo:* Con *From list* también anda: abrís la lista y aparece "Consultas de la agencia". Si no aparece,
-    es que la planilla está en otra cuenta.
-
-**I-6 · Sheet: elegir la hoja, y probar**
-
-```text
-Fila "Sheet":  clic en  Choose…  → elegí  Hoja 1
-Mapping Column Mode:  Map Automatically   (si dice otra cosa, cambialo)
-Cerrá (✕) → Save → Execute workflow → completá el formulario → Submit
-→ los tres nodos en verde, y en la planilla aparece la fila 2
-```
-
-- **Document es el archivo; Sheet es la pestaña de adentro.** Una planilla puede tener varias pestañas (Hoja 1,
-  Hoja 2…): n8n necesita saber en cuál escribir.
-  - *Ejemplo:* Como un cuaderno (Document) con separadores (Sheet): le decís el cuaderno y el separador.
-- **Si aparece "Values to Send" con cajas vacías,** el modo quedó en manual: volvé a elegir *Map Automatically*.
-
-<p style="color:#1a7f37">Si importaron el flujo, solo hay que completar el último nodo. Pero el orden importa: primero la planilla, en Google, con sus cuatro títulos; después n8n. Me copio el link de la planilla, vuelvo a n8n, abro Guardar en la planilla, elijo mi credencial, en Document cambio a By URL y pego el link, y en Sheet elijo Hoja 1. Guardo, ejecuto, y la fila aparece.</p>
-
-**¿Y la credencial en n8n local?** Es el paso más largo y se hace una sola vez. En n8n local, Google no deja
-entrar a n8n sin un permiso que se crea en **Google Cloud Console** (la página de Google para programadores): un
-proyecto, la API de Google Sheets encendida, y un *Client ID* y *Client Secret* que se pegan en n8n. Al crearla, la
-dirección de regreso (*redirect URL*) que pide Google es `http://localhost:5678/rest/oauth2-credential/callback`.
-El paso a paso completo, desde la ventana *Google Sheets account* que pide *Client ID* y *Client Secret*, está en
-[Conectar Google Sheets en n8n local](#anexo-del-flujo-03--conectar-google-sheets-por-primera-vez-n8n-local). En **n8n Cloud** no hace falta nada de eso: al
-crear la credencial aparece **Sign in with Google**, y listo.
-
-<p style="color:#1a7f37">Si alguno importó el flujo y le salió un error de que falta el Document, no se asusten: es que el archivo no trae su planilla. Cada uno tiene que elegir su credencial y pegar el link de su planilla en el último nodo. Y en n8n local, la credencial de Google lleva un trámite aparte, que está explicado paso a paso en este README, al final de este ejemplo. Eso lo hacen en casa, con calma.</p>
-
-**Antes de la clase (vos):** una planilla de Google Sheets nueva, llamada "Consultas de la agencia", con estos
-cuatro títulos en la fila 1, escritos exactamente así:
+**Antes de la clase (vos):** tener la **credencial de Google Sheets ya creada** en tu n8n (la guía está en el
+anexo, al final de este ejemplo). La planilla **la creás en vivo**, en el paso D0, con estos cuatro títulos en la
+fila 1:
 
 | A | B | C | D |
 |---|---|---|---|
@@ -2409,18 +2293,51 @@ Cerrá → renombralo:  Ordenar los datos  → Save
 
 **D0 · La planilla, lista antes de poner el nodo**
 
+<p style="color:#1a7f37">Antes de poner el tercer nodo, dejo n8n un momento y voy a Google. ¿Por qué primero Google? Porque n8n me va a preguntar en qué planilla escribir, y esa planilla tiene que existir. Así que la creo ahora.</p>
+
+**D0-1 · Crear la planilla**
+
 ```text
-En otra pestaña: sheets.new   (crea una planilla nueva de Google Sheets)
-Nombre arriba a la izquierda:  Consultas de la agencia
-Fila 1:   A1 fecha   B1 nombre   C1 destino   D1 personas
-Copiá el link de la barra del navegador: lo vas a pegar en D3
+Pestaña nueva del navegador → escribí  sheets.new  → Enter
+(con la misma cuenta de Google que vas a usar en n8n)
+→ se abre una planilla vacía: "Hoja de cálculo sin título"
 ```
 
-<p style="color:#1a7f37">Antes de poner el tercer nodo, la planilla tiene que existir. En la fila 1 van los títulos de las columnas, exactamente iguales a los casilleros que armamos recién: fecha, nombre, destino, personas. Y me copio el link de arriba, porque n8n me lo va a pedir.</p>
+<p style="color:#1a7f37">Escribo sheets punto new en el navegador, y Google me crea una planilla nueva, vacía. Es un atajo: es lo mismo que entrar a Drive y apretar Nuevo, Hojas de cálculo.</p>
+
+- **Es una planilla (Google Sheets), no un documento (Google Docs).** n8n escribe filas y columnas: tiene que ser
+  una hoja de cálculo.
+  - *Ejemplo:* Si creás un Google Docs y pegás su link, n8n no lo reconoce como planilla.
+- **La misma cuenta de Google que la credencial.** n8n va a entrar a *esa* cuenta: una planilla de otra cuenta no
+  la ve.
+
+**D0-2 · El nombre y los títulos de las columnas**
+
+```text
+Arriba a la izquierda: clic en "Hoja de cálculo sin título" → escribí  Consultas de la agencia  → Enter
+Fila 1:   A1  fecha     B1  nombre     C1  destino     D1  personas
+```
+
+<p style="color:#1a7f37">Le pongo nombre: Consultas de la agencia. Y en la fila 1, los títulos de las columnas: fecha, nombre, destino, personas. Fíjense que son exactamente los mismos nombres de los casilleros que armamos en Ordenar los datos. En minúscula, igualitos. Eso es lo que va a hacer que cada dato caiga en su columna.</p>
 
 - **La fila 1 son los títulos; las consultas van de la fila 2 para abajo.** n8n lee la fila 1 para saber qué
   columnas hay.
   - *Ejemplo:* Si la fila 1 está vacía, n8n no tiene dónde poner nada.
+- **Los títulos, letra por letra iguales a los casilleros.**
+  - *Ejemplo:* `personas` ✅ · `Personas` ❌ · `cantidad de personas` ❌.
+
+**D0-3 · Copiar el link**
+
+```text
+Clic en la barra de direcciones (arriba) → Ctrl + A → Ctrl + C
+El link se ve así:  https://docs.google.com/spreadsheets/d/1AbC…XyZ/edit#gid=0
+Volvé a la pestaña de n8n
+```
+
+<p style="color:#1a7f37">Y me copio el link de la planilla, el de la barra de arriba, entero. Lo voy a pegar en n8n en un ratito. No hace falta compartirla con nadie: n8n entra con mi cuenta.</p>
+
+- **El link entero, de `https` hasta el final.** El pedazo largo del medio es lo que identifica la planilla.
+  - *Ejemplo:* Si pegás solo el nombre, "Consultas de la agencia", sale *Not a valid Google Drive File URL*.
 
 **D1 · Elegir Google Sheets, y esta vez una acción**
 
@@ -2513,15 +2430,38 @@ En cualquier nodo de Google Sheets (de este flujo o de otro):
 
 **D3 · Qué planilla y qué hoja**
 
+**D3-1 · Resource y Operation: ya vienen**
+
 ```text
-Resource:   Sheet Within Document     (ya viene)
-Operation:  Append Row                (ya viene, porque elegiste esa acción)
-Document:   cambiá "From list" por  By URL  → pegá el link que copiaste en D0
-            (el link entero: https://docs.google.com/spreadsheets/d/…/edit)
-Sheet:      Hoja 1  (el nombre de la pestaña de abajo de la planilla)
+Resource:   Sheet Within Document     (ya viene: "una hoja dentro de una planilla")
+Operation:  Append Row                (ya viene, porque elegiste esa acción en D1)
 ```
 
-<p style="color:#1a7f37">Ahora le digo en qué planilla escribir. Copio el link de la planilla del navegador y lo pego acá. Y abajo, en qué hoja, que es la pestañita de abajo de la planilla: Hoja 1.</p>
+<p style="color:#1a7f37">Estas dos ya vienen bien, porque elegí Append row en el panel: trabajo con una hoja de una planilla, y agrego una fila. No las toco.</p>
+
+**D3-2 · Document: pegar el link**
+
+```text
+Fila "Document": a la derecha dice  From list ▾  → cambialo a  By URL
+→ en la caja:  Ctrl + V  (el link que copiaste en D0-3)
+```
+
+<p style="color:#1a7f37">Document es el archivo, la planilla. A la derecha dice From list, elegir de una lista; lo cambio por By URL, por link, y pego el link que me copié. Es la forma que menos falla.</p>
+
+- **Tres formas de elegir la misma planilla.** *From list* (la buscás por nombre), *By URL* (pegás el link) o
+  *By ID* (solo el pedazo del medio del link).
+  - *Ejemplo:* Con *From list* también anda: aparece "Consultas de la agencia". Si no aparece, la planilla está en
+    otra cuenta.
+
+**D3-3 · Sheet: la pestaña de adentro**
+
+```text
+Fila "Sheet": clic en  Choose…  → elegí  Hoja 1
+```
+
+<p style="color:#1a7f37">Y Sheet es la hoja, la pestañita de abajo de la planilla. Una planilla puede tener varias; le digo cuál: Hoja 1.</p>
+
+- **Document es el cuaderno; Sheet es el separador.** n8n necesita los dos para saber dónde escribir.
 
 **D4 · Cómo se reparten los datos en las columnas**
 
@@ -2798,6 +2738,28 @@ Si la fila aparece en la planilla, está todo bien. Desde ahora, en cualquier fl
 
 > **⏪ Credencial lista:** volvé a [D3 · Qué planilla y qué hoja](#parte-d--guardar-en-la-planilla-google-sheets)
 > y seguí desde ahí.
+
+#### Para casa (no se da en clase) · Si en vez de armarlo importás `03-formulario.json`
+
+En clase el flujo se arma desde cero. Si un alumno después importa el archivo, al ejecutarlo le sale:
+
+```text
+Workflow execution cannot start
+The 'Guardar en la planilla' node has issues:
+- Parameter "Document" is required.
+- Not a valid Google Drive File URL
+```
+
+Es normal: el archivo no trae ni tu planilla ni tu credencial. Los dos primeros nodos vienen completos; solo hay
+que completar **Guardar en la planilla**, con los mismos pasos de la Parte D:
+
+```text
+1. Crear la planilla con sus títulos y copiar el link          → D0-1 a D0-3
+2. Doble clic en "Guardar en la planilla" → Credential → Google Sheets account
+   (si la lista está vacía: es la primera vez → el anexo de arriba)   → D2
+3. Document → By URL → pegar el link · Sheet → Hoja 1            → D3-2 y D3-3
+4. Save → Execute workflow
+```
 
 **Postman (solo se nombra):** si alguna vez ven un tutorial que usa Postman, es una aplicación para mandarle
 pedidos a una dirección, como hicimos con el navegador. No la usamos; la explicación está en
