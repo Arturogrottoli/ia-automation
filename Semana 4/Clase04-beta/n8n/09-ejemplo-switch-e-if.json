@@ -1,0 +1,382 @@
+{
+  "name": "09 · Ejemplo completo: Switch y después IF",
+  "id": "c4b09switchif000",
+  "active": false,
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Argentina/Buenos_Aires"
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Pedí tu presupuesto",
+        "formDescription": "Contanos qué buscás y cuánto querés gastar.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Nombre",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Tipo de consulta",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Vuelo"
+                  },
+                  {
+                    "option": "Hotel"
+                  },
+                  {
+                    "option": "Paquete"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Presupuesto en USD",
+              "fieldType": "number",
+              "requiredField": true
+            }
+          ]
+        },
+        "responseMode": "onReceived",
+        "options": {
+          "path": "pedir-presupuesto"
+        }
+      },
+      "id": "34b14f8f-dcc2-491c-9acb-5f244eaa0b34",
+      "name": "Formulario de consulta",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "62d166a2-14e9-44b7-aff2-134110278698"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "51f01062-3c6d-4d4f-a9e1-37c6f42bcf62",
+                    "leftValue": "={{ $json['Tipo de consulta'] }}",
+                    "rightValue": "Vuelo",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Vuelos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "37d6a6ab-4917-4429-82f9-1b03f0263e62",
+                    "leftValue": "={{ $json['Tipo de consulta'] }}",
+                    "rightValue": "Hotel",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Hoteles"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "81334474-4193-4ac0-8b41-daf6a1c27788",
+                    "leftValue": "={{ $json['Tipo de consulta'] }}",
+                    "rightValue": "Paquete",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Paquetes"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "Otra"
+        }
+      },
+      "id": "cb34b6ed-607b-4be3-9d6e-7af7942d6002",
+      "name": "¿Qué tipo de consulta?",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        260,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "09d5fc02-c0df-4a06-aab0-fc0af8a9b2f9",
+              "name": "aviso",
+              "value": "=Vuelos: {{ $json.Nombre }} busca un vuelo de hasta USD {{ $json['Presupuesto en USD'] }}.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "38f18195-4460-467b-b0ff-701b591a435b",
+      "name": "Aviso a vuelos",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        -260
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1f67bdf3-dee8-4679-9a03-621781f9b7e4",
+              "name": "aviso",
+              "value": "=Hoteles: {{ $json.Nombre }} busca un hotel de hasta USD {{ $json['Presupuesto en USD'] }}.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "98699072-d2c3-474a-a6ec-5a8a7f61b1a8",
+      "name": "Aviso a hoteles",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ea2454a0-841d-4139-b714-b3ce7e2946d9",
+              "leftValue": "={{ $json['Presupuesto en USD'] }}",
+              "rightValue": 1000,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "f55326d6-0a15-49cf-8017-949011162fb4",
+      "name": "¿Paquete de 1000 o más?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        560,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c6af4721-50ce-4baf-949e-15bef28a1785",
+              "name": "aviso",
+              "value": "=Paquetes: {{ $json.Nombre }} tiene 10% de descuento. Paga USD {{ $json['Presupuesto en USD'] * 0.9 }} en vez de USD {{ $json['Presupuesto en USD'] }}.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1a901d76-6952-4d4b-a6a4-784c321c0576",
+      "name": "Paquete con descuento",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        860,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d8bf7a20-489a-4f6f-acf5-eb6532b7f154",
+              "name": "aviso",
+              "value": "=Paquetes: {{ $json.Nombre }}, paquete de USD {{ $json['Presupuesto en USD'] }}, sin descuento.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "764bc93f-30a9-4958-946e-655a85bf0a4d",
+      "name": "Paquete sin descuento",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        860,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "89701c94-7f1f-4104-823b-d83f36786cbd",
+              "name": "aviso",
+              "value": "=Otra: revisar la consulta de {{ $json.Nombre }}.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8ee7283b-78f7-4a38-a46d-6b24b4848afa",
+      "name": "Para revisar a mano",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 09 · Ejemplo completo: consulta con presupuesto\n\n1. **Formulario de consulta**: Nombre, Tipo de consulta (lista) y Presupuesto en USD (número).\n2. **¿Qué tipo de consulta?** (Switch): Vuelos · Hoteles · Paquetes · Otra.\n3. En **Paquetes**, un **IF**: ¿1000 o más? → con 10% de descuento / sin descuento.\n\nPara probar: **Execute workflow**, completá el formulario y mirá por dónde pasó.",
+        "height": 340,
+        "width": 640,
+        "color": 4
+      },
+      "id": "9a57a8fa-baab-4d15-8fe5-25f025a792b0",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -700
+      ]
+    }
+  ],
+  "connections": {
+    "Formulario de consulta": {
+      "main": [
+        [
+          {
+            "node": "¿Qué tipo de consulta?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Qué tipo de consulta?": {
+      "main": [
+        [
+          {
+            "node": "Aviso a vuelos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Aviso a hoteles",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "¿Paquete de 1000 o más?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Para revisar a mano",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Paquete de 1000 o más?": {
+      "main": [
+        [
+          {
+            "node": "Paquete con descuento",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Paquete sin descuento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

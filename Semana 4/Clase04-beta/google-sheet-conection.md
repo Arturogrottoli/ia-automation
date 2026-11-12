@@ -204,6 +204,37 @@ nueva debajo de los títulos. 🎉
 
 ---
 
+## Parte 4 · La próxima vez: si ya tenés la credencial vinculada
+
+Los pasos 0 a 14 se hacen **una sola vez**. Después, la credencial queda guardada en tu n8n y se reusa.
+
+**Paso 18 · Usarla en cualquier nodo nuevo de Google Sheets** (en este flujo o en otro):
+1. Doble clic en el nodo de Google Sheets.
+2. **Credential to connect with** → abrí la lista → elegí **Google Sheets account** (la que ya creaste).
+3. Completá **Document**, **Sheet** y **Mapping Column Mode** como en el paso 16.
+
+No se vuelve a entrar a Google Cloud, ni se pegan otra vez el Client ID y el Client Secret.
+
+**Paso 19 · Al importar un flujo que usa Google Sheets** (por ejemplo, `03-formulario.json`): el archivo no trae
+tu credencial ni tu planilla. Abrí el nodo de Google Sheets → **Credential** → elegí **Google Sheets account** →
+pegá el link de tu planilla en **Document** → elegí la hoja.
+
+**Dónde están guardadas:** **Overview** → pestaña **Credentials** (credenciales). Ahí ves todas las que creaste.
+
+**Si tenés más de una:** ponele nombre a cada una, para no confundirlas. Clic en el lápiz al lado de la credencial
+→ arriba, clic en el nombre *Google Sheets account* → por ejemplo *Sheets · mi Gmail* → **Save**.
+
+**Si un día deja de andar** (el nodo se pone rojo con un error de permiso, aunque antes andaba): en modo de prueba,
+Google vence el permiso cada 7 días. Lápiz al lado de la credencial → **Reconnect** (o **Sign in with Google**) →
+elegís tu cuenta → **Continuar** → **Save**. No hace falta volver a Google Cloud.
+
+**Para Gmail, Drive o Calendar:** se usa el mismo proyecto y los mismos dos datos.
+1. En Google Cloud, encendé la API que corresponda (por ejemplo, **Gmail API**), como en el paso 5.
+2. En n8n, creá la credencial de ese producto (por ejemplo, **Gmail OAuth2 API**).
+3. Pegá el mismo Client ID y el mismo Client Secret → **Sign in with Google**.
+
+---
+
 ## Lo que nos pasó en el camino (y cómo se arregló)
 
 | Lo que apareció | Qué era | Qué hicimos |

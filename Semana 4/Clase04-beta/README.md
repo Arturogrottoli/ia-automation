@@ -67,6 +67,7 @@
 | 118–140 | **Bloque 6 · Que el flujo decida** | IF con horario (flujo 04), IF con una cuenta (flujo 05) y Switch con lista desplegable (flujo 06) |
 | 140–143 | Cierre | Mini repaso en el chat |
 | (extra) | **Si llegás · Una probadita de API** | Qué es una API, el dólar con HTTP Request (flujo 07) y un Pokémon (flujo 08). Si no llegás, queda para la clase siguiente. |
+| (extra 2) | **Si sobra tiempo · Dos ejemplos completos** | Consulta con presupuesto (Switch + IF, flujo 09) y alerta del dólar (horario + API + IF, flujo 10) |
 
 **Si el tiempo se aprieta** (para terminar en 120 minutos hay que ahorrar unos 23), recortá en este orden:
 
@@ -103,6 +104,8 @@ La tabla de otras cajas de Docker, el detalle de qué anda en local y Postman ya
   - `05-if-descuento.json`: Webhook (GET, dirección `presupuesto`) → IF → con o sin descuento.
   - `06-switch-por-tipo.json`: n8n Form con lista desplegable (dirección `consulta-tipo`) → Switch → cuatro áreas.
   - `07-api-dolar.json` y `08-api-pokemon.json` (extra, si llegás): trigger manual → HTTP Request → Edit Fields.
+  - `09-ejemplo-switch-e-if.json` y `10-ejemplo-alerta-dolar.json` (extra 2, si sobra tiempo): los dos ejemplos
+    completos del final.
 - [ ] **Para el flujo 03:** creá la planilla "Consultas de la agencia" con los títulos `fecha`, `nombre`, `destino`,
       `personas` en la fila 1. En el nodo *Guardar en la planilla*, elegí tu credencial de Google Sheets y pegá el
       link de la planilla. Probalo una vez y borrá la fila de prueba.
@@ -2521,6 +2524,36 @@ Credential to connect with:  elegí tu credencial de Google Sheets
   - *Ejemplo:* Si un alumno ve el cartel rojo, no rompió nada: le faltan los dos datos de Google. Lo hace en casa
     con la guía.
 
+**D2-bis · Si ya tenés la credencial vinculada: cómo la usás en un nodo nuevo**
+
+```text
+En cualquier nodo de Google Sheets (de este flujo o de otro):
+   Credential to connect with  → abrí la lista → elegí  Google Sheets account   (la que ya creaste)
+   → listo: no se vuelve a hacer nada en Google Cloud
+```
+
+<p style="color:#1a7f37">Y una vez que la credencial existe, el trámite no se repite nunca más. En cualquier flujo nuevo, en cualquier nodo de Google Sheets, abro la lista de Credential y elijo la que ya tengo: Google Sheets account. Es la llave que ya hicimos: se usa en todas las puertas.</p>
+
+- **La credencial queda guardada en tu n8n, no en el flujo.** Por eso aparece en la lista de cualquier flujo. Para
+  verlas todas: **Overview** → pestaña **Credentials** (credenciales).
+  - *Ejemplo:* Mañana armás otro flujo que lee una planilla: nodo Google Sheets → Credential → *Google Sheets
+    account*. Nada más.
+- **Al importar un flujo, la credencial no viene con el archivo.** El nodo aparece sin credencial (o con un aviso):
+  se elige de la lista, igual que acá.
+  - *Ejemplo:* Importás `03-formulario.json` → *Guardar en la planilla* → Credential → *Google Sheets account* →
+    pegás el link de tu planilla en *Document*.
+- **Si tenés más de una, ponele nombre.** Clic en el lápiz al lado de la credencial → arriba, clic en el nombre
+  *Google Sheets account* → por ejemplo *Sheets · mi Gmail*.
+  - *Ejemplo:* Una para tu Gmail personal y otra para el de la agencia: con nombre, no las confundís.
+- **Si un día deja de andar** (en modo de prueba, Google vence el permiso cada 7 días): lápiz al lado de la
+  credencial → **Reconnect** (o *Sign in with Google*) → elegís tu cuenta → **Save**. No hace falta volver a Google
+  Cloud.
+  - *Ejemplo:* El nodo se pone rojo con un error de permiso, aunque la semana pasada andaba: Reconnect y listo.
+- **Sirve también para otros productos de Google**, si al crear el proyecto encendiste su API. Gmail, Drive o
+  Calendar tienen su propia credencial en n8n, pero usan el mismo Client ID y Client Secret.
+  - *Ejemplo:* Para Gmail: encendés la Gmail API en Google Cloud, creás la credencial *Gmail OAuth2* en n8n y pegás
+    los mismos dos datos.
+
 **D3 · Qué planilla y qué hoja**
 
 ```text
@@ -2624,6 +2657,31 @@ Para explicar:
 - **Cada dato se pregunta por separado.** Si llegan cinco consultas, el IF pregunta cinco veces: algunas pueden ir
   por true y otras por false en la misma ejecución.
   - *Ejemplo:* Tres presupuestos de USD 500, 1200 y 3000: el de 500 va por false, los otros dos por true.
+
+#### ¿Para qué se usa un IF en la vida real? (2 min)
+
+<p style="color:#1a7f37">¿Y esto para qué sirve en un negocio? Para casi todo. Cada vez que en un trabajo alguien dice "si pasa tal cosa, hago esto; si no, hago lo otro", ahí hay un IF. Y lo bueno es que el IF no se cansa ni se olvida: pregunta lo mismo, igual, todas las veces.</p>
+
+| Negocio | La pregunta del IF | Si es sí (true) | Si es no (false) |
+|---|---|---|---|
+| Agencia de viajes | ¿El presupuesto es de USD 1000 o más? | Aplicar 10% de descuento | Precio normal |
+| Agencia de viajes | ¿Hoy es sábado o domingo? | No mandar el resumen | Mandar el resumen del día |
+| Tienda online | ¿Hay stock del producto? | Confirmar la compra | Avisar "sin stock" y ofrecer otro |
+| Tienda online | ¿El pago se acreditó? | Mandar la confirmación | Mandar un recordatorio de pago |
+| Consultorio | ¿El turno es mañana? | Mandar recordatorio por WhatsApp | No hacer nada |
+| Cualquier negocio | ¿El mail dice "urgente"? | Avisarle al dueño al celular | Dejarlo en la bandeja |
+| Cualquier negocio | ¿El formulario vino con el email completo? | Guardarlo en la planilla | Pedirle que lo complete |
+
+Para explicar:
+- **El IF reemplaza a la persona que revisa y decide.** Lo que antes hacía alguien mirando uno por uno ("este
+  pagó, este no"), el IF lo hace solo con cada dato que llega.
+  - *Ejemplo:* Cien pedidos en el día: el IF separa en segundos los que pagaron de los que no.
+- **Casi siempre el IF está en el medio de un flujo más grande.** Antes hay un trigger que trae el dato (un
+  formulario, un mail, un horario); después de cada salida hay acciones (mandar un mensaje, guardar una fila).
+  - *Ejemplo:* Formulario → IF ¿email completo? → true: Google Sheets; false: mail pidiendo que lo complete.
+- **También sirve para frenar el flujo.** Una de las dos salidas puede no tener nada conectado: ahí el flujo
+  termina, a propósito.
+  - *Ejemplo:* "¿Es fin de semana?" → true: nada (no se manda nada); false: mandar el resumen.
 
 ### IF, ejemplo 1: ¿hoy es fin de semana? (flujo 04) (6 min)
 
@@ -2870,11 +2928,55 @@ Execute workflow otra vez → la dirección con  nombre=Luis&monto=800  → sin 
   el mensaje de *Con descuento* o el de *Sin descuento*, según el monto.
   - *Ejemplo:* Con 1500 contesta el de arriba; con 800, el de abajo.
 
-### Qué es un Switch, y el ejemplo (flujo 06) (7 min)
+### Qué es un Switch, y el ejemplo (flujo 06) (10 min)
 
 <p style="color:#1a7f37">El IF tiene un límite: solo dos caminos, sí o no. ¿Y si hay más opciones? Por ejemplo, la consulta puede ser de un vuelo, de un hotel, de un paquete, o de otra cosa. Para eso está el Switch, que en inglés quiere decir "interruptor" o "selector": como la perilla de un lavarropas, que según dónde la pongas elige un programa distinto. El Switch mira el dato y lo manda por una de varias salidas.</p>
 
 <p style="color:#1a7f37">Y tiene algo muy importante: una salida para lo que no encaja en ninguna regla. Así ninguna consulta se pierde en el camino.</p>
+
+```text
+                          ┌─ regla 1 ¿es Vuelo?    → salida Vuelos
+                          ├─ regla 2 ¿es Hotel?    → salida Hoteles
+dato  →  Switch ¿qué es? ─┼─ regla 3 ¿es Paquete?  → salida Paquetes
+                          └─ ninguna de las tres   → salida Otra (Fallback Output)
+```
+
+Para explicar (antes del ejemplo):
+- **Switch (selector) = una pregunta con varias respuestas posibles, y una salida por respuesta.** El IF pregunta
+  "¿sí o no?"; el Switch pregunta "¿cuál de todas?".
+  - *Ejemplo:* IF: "¿es un vuelo?". Switch: "¿es un vuelo, un hotel, un paquete, u otra cosa?".
+- **Cada salida tiene su regla.** Una regla es una condición, igual a la del IF: qué miro, cómo comparo, contra
+  qué. El dato sale por la primera regla que se cumple.
+  - *Ejemplo:* Regla 1: `Tipo de consulta` · *is equal to* · `Vuelo` → salida Vuelos.
+- **La salida para lo demás (*Fallback Output*) es opcional, pero conviene siempre.** Si no está, lo que no
+  cumple ninguna regla se pierde sin avisar.
+  - *Ejemplo:* Llega "Crucero", que no tiene regla: con la salida Otra, alguien lo lee; sin ella, desaparece.
+
+#### ¿Para qué se usa un Switch en la vida real? (2 min)
+
+<p style="color:#1a7f37">El Switch es el que reparte. En cualquier negocio donde llegan cosas de distinto tipo y cada tipo lo atiende alguien distinto, o se trata distinto, hay un Switch. Es como la persona de la mesa de entradas que mira cada papel y dice: esto va a contaduría, esto a ventas, esto a reclamos.</p>
+
+| Negocio | Qué mira el Switch | Las salidas |
+|---|---|---|
+| Agencia de viajes | El tipo de consulta | Vuelos · Hoteles · Paquetes · Otra |
+| Agencia de viajes | La provincia del cliente | Vendedor de Córdoba · de Mendoza · de Salta · Otra |
+| Tienda online | El estado del pedido | Pagado → preparar · Enviado → avisar · Entregado → pedir reseña · Otro |
+| Tienda online | El medio de pago | Tarjeta · Transferencia · Efectivo · Otro |
+| Soporte / atención | El tema del mensaje | Facturación · Técnico · Ventas · Otro |
+| Inmobiliaria | El tipo de operación | Alquiler · Venta · Tasación · Otra |
+| Cualquier negocio | El día de la semana | Lunes: informe semanal · Viernes: cierre · Otros días: nada |
+
+Para explicar:
+- **El Switch reemplaza a la persona que clasifica.** Lo que llega mezclado (mails, formularios, pedidos) sale
+  ordenado, cada cosa por su camino.
+  - *Ejemplo:* Cien consultas en el día: cada vendedor recibe solo las suyas, sin que nadie las reparta a mano.
+- **Funciona mejor cuando las respuestas son fijas.** Por eso en el ejemplo usamos una lista desplegable: la
+  persona elige entre opciones, y el texto llega siempre igual.
+  - *Ejemplo:* Con texto libre, alguien escribe "pasaje" en vez de "Vuelo", y la regla no lo reconoce (va a Otra).
+- **Después de cada salida puede haber un flujo distinto.** Cada camino puede tener sus propios nodos: uno manda
+  un mail, otro guarda en una planilla, otro avisa por WhatsApp.
+  - *Ejemplo:* Vuelos → mail al vendedor de vuelos. Paquetes → fila en la planilla de paquetes. Otra → aviso al
+    dueño.
 
 El flujo:
 
@@ -3203,6 +3305,207 @@ PARA EL CHAT · Probá vos (en casa, con el flujo 08 de la carpeta n8n/)
 ```
 
 <p style="color:#1a7f37">Esto fue una probadita. La clase que viene vemos API con calma: cómo se lee la carta de una API, las que piden clave, y cómo sumarla a los flujos que ya armamos.</p>
+
+---
+
+## Extra, si sobra tiempo · Dos ejemplos completos (15 min)
+
+**Solo si sobra tiempo.** Son dos flujos que juntan lo que se vio en la clase, para que vean que las piezas se
+combinan. Si no llegás, quedan armados en la carpeta [n8n/](n8n/) (`09-ejemplo-switch-e-if.json` y
+`10-ejemplo-alerta-dolar.json`) y en este README, para verlos en casa.
+
+**Si vas justo de tiempo:** importalos ya armados (menú **…** → **Import from File…**), explicá el canvas de izquierda
+a derecha y probalos. Unos 3 minutos cada uno.
+
+| Ejemplo | Qué junta | ¿Anda en local? |
+|---|---|---|
+| **A · Consulta con presupuesto** (flujo 09) | Formulario + Switch + IF + una cuenta | ✅ Sí, sin pasos extra (el formulario se abre en tu computadora) |
+| **B · Alerta del dólar** (flujo 10) | Horario + API (HTTP Request) + IF | ✅ Sí, sin pasos extra (para que arranque solo a las 9: Publish y la computadora prendida) |
+
+<p style="color:#1a7f37">Nos sobró un poquito de tiempo, así que vamos a hacer dos ejemplos completos. No hay nada nuevo: son las mismas piezas de hoy, juntas. Fíjense que así se arman las automatizaciones de verdad: no con un nodo mágico, sino combinando estos ladrillos.</p>
+
+### Ejemplo A · Consulta con presupuesto: Switch y después IF (flujo 09) (8 min)
+
+La agencia recibe consultas por un formulario. Cada una va al área que corresponde, y los paquetes de USD 1000 o
+más tienen 10% de descuento.
+
+```text
+                                              ┌─ Vuelos   → Aviso a vuelos
+Formulario de   →  ¿Qué tipo de consulta?  ───┼─ Hoteles  → Aviso a hoteles
+consulta           (Switch)                   ├─ Paquetes → ¿Paquete de 1000 o más? ─ true  → Paquete con descuento
+                                              │             (IF)                     └ false → Paquete sin descuento
+                                              └─ Otra     → Para revisar a mano
+```
+
+Lo que tiene que salir (probado):
+
+| Formulario | Camino | Aviso |
+|---|---|---|
+| Ana · Paquete · 1500 | Paquetes → true | `Paquetes: Ana tiene 10% de descuento. Paga USD 1350 en vez de USD 1500.` |
+| Luis · Paquete · 800 | Paquetes → false | `Paquetes: Luis, paquete de USD 800, sin descuento.` |
+| Sofi · Vuelo · 600 | Vuelos | `Vuelos: Sofi busca un vuelo de hasta USD 600.` |
+| Leo · Hotel · 300 | Hoteles | `Hoteles: Leo busca un hotel de hasta USD 300.` |
+
+**En n8n, paso a paso** (cada paso son uno o dos clics; abajo de cada uno, lo que decís y explicás en ese momento):
+
+**A-1 · El formulario, con tres preguntas**
+
+```text
+Overview → Create workflow → nombre:  Consulta con presupuesto
++ → On form submission  (o buscá  form  → n8n Form → Triggers → On new n8n Form event)
+   Form Title:  Pedí tu presupuesto
+   Form Elements:
+      Nombre               (Text, Required Field prendido)
+      Tipo de consulta     (Dropdown List: Vuelo · Hotel · Paquete; Required Field prendido)
+      Presupuesto en USD   (Number, Required Field prendido)
+   Options → Add option → Path:  pedir-presupuesto
+→ renombralo:  Formulario de consulta → Save
+```
+
+<p style="color:#1a7f37">Arranca con un formulario, como el de la planilla, pero con tres preguntas: el nombre, el tipo de consulta en una lista, y el presupuesto, que es de tipo número. Lista para el tipo, así el Switch lo reconoce; número para el presupuesto, así nadie escribe "mil".</p>
+
+**A-2 · Probar el formulario para tener datos**
+
+```text
+Execute workflow → completalo:  Ana · Paquete · 1500  → Submit
+```
+
+<p style="color:#1a7f37">Como siempre, pruebo el trigger antes de seguir, así tengo datos para arrastrar en el Switch.</p>
+
+**A-3 · El Switch reparte por tipo**
+
+```text
++ → Switch → Mode: Rules
+   Regla 1:  {{ $json['Tipo de consulta'] }}  · String → is equal to ·  Vuelo    → Rename Output: Vuelos
+   Regla 2:  igual, con  Hotel    → Hoteles
+   Regla 3:  igual, con  Paquete  → Paquetes
+   Options → Fallback Output: Extra Output → Rename Fallback Output: Otra
+→ renombralo:  ¿Qué tipo de consulta?
+```
+
+<p style="color:#1a7f37">El Switch, igual que el de recién: una regla por tipo y la salida Otra para lo que no encaje. Primera pregunta del flujo: ¿qué tipo de consulta es?</p>
+
+**A-4 · Vuelos y hoteles: un aviso cada uno**
+
+```text
++ de  Vuelos   → Edit Fields → aviso:  Vuelos: {{ $json.Nombre }} busca un vuelo de hasta USD {{ $json['Presupuesto en USD'] }}.
++ de  Hoteles  → Edit Fields → aviso:  Hoteles: {{ $json.Nombre }} busca un hotel de hasta USD {{ $json['Presupuesto en USD'] }}.
++ de  Otra     → Edit Fields → aviso:  Otra: revisar la consulta de {{ $json.Nombre }}.
+```
+
+<p style="color:#1a7f37">Para vuelos, hoteles y lo demás, un aviso al área. En la vida real, acá iría un mail al vendedor de cada área.</p>
+
+**A-5 · En Paquetes, una segunda pregunta: el IF**
+
+```text
++ de  Paquetes  → If:
+   {{ $json['Presupuesto en USD'] }}  · Number → is greater than or equal to ·  1000
+   Convert types where required:  prendido
+→ renombralo:  ¿Paquete de 1000 o más?
+```
+
+<p style="color:#1a7f37">Y acá está lo interesante. Los paquetes tienen una regla más: si son de mil dólares o más, tienen descuento. Esa es otra pregunta, de sí o no, así que en la salida de Paquetes pongo un IF. Primero el Switch pregunta "¿qué es?", y después, solo para los paquetes, el IF pregunta "¿es de mil o más?".</p>
+
+- **Switch e IF se combinan.** El Switch para la pregunta con varias respuestas; el IF, después, para una pregunta
+  de sí o no que solo importa en un camino.
+  - *Ejemplo:* A un vuelo no le preguntamos por el descuento: el IF está solo en Paquetes.
+
+**A-6 · Con y sin descuento**
+
+```text
++ de  true   → Edit Fields → aviso:
+   Paquetes: {{ $json.Nombre }} tiene 10% de descuento. Paga USD {{ $json['Presupuesto en USD'] * 0.9 }}
+   en vez de USD {{ $json['Presupuesto en USD'] }}.
++ de  false  → Edit Fields → aviso:
+   Paquetes: {{ $json.Nombre }}, paquete de USD {{ $json['Presupuesto en USD'] }}, sin descuento.
+→ Save
+```
+
+<p style="color:#1a7f37">En true, el descuento con la cuenta de por cero coma nueve, como en el flujo del presupuesto. En false, sin descuento.</p>
+
+**A-7 · Probar tres casos**
+
+```text
+Execute workflow → Ana · Paquete · 1500  → Paquetes → true  → Paga USD 1350 en vez de USD 1500.
+Execute workflow → Luis · Paquete · 800  → Paquetes → false → sin descuento.
+Execute workflow → Sofi · Vuelo · 600    → Vuelos           → busca un vuelo de hasta USD 600.
+```
+
+<p style="color:#1a7f37">Miren el canvas en cada prueba: se prende un solo camino. Ana, paquete de 1500: pasa por Paquetes y después por true, con descuento. Luis, 800: Paquetes y false. Sofi, un vuelo: va directo a Vuelos, y el IF ni se entera. Un formulario, cinco caminos posibles, y cada consulta encuentra el suyo sola.</p>
+
+### Ejemplo B · Alerta del dólar: horario, API e IF (flujo 10) (7 min)
+
+Todos los días a las 9, n8n pregunta el dólar oficial. Si pasó los $1600, avisa que hay que revisar los precios en
+pesos; si no, avisa que está todo tranquilo.
+
+```text
+Todos los días a las 9  →  Preguntar el dólar  →  ¿Pasó los $1600?  ─ true  → Alerta: subió
+(Schedule Trigger)         (HTTP Request)         (IF)               └ false → Todo tranquilo
+```
+
+Lo que tiene que salir (probado hoy, con el dólar a $1570):
+- tal cual → `El dólar oficial está a $1570: no pasó los $1600. No hace falta cambiar precios.`
+- cambiando el límite a 1000 → `⚠️ Atención: el dólar oficial está a $1570. Revisar los precios en pesos de hoy.`
+
+(El valor del dólar cambia cada día: puede que te salga otro número, y otro camino.)
+
+**En n8n, paso a paso** (cada paso son uno o dos clics; abajo de cada uno, lo que decís y explicás en ese momento):
+
+**B-1 · El horario**
+
+```text
+Overview → Create workflow → nombre:  Alerta del dólar
++ → On a schedule →  Trigger Interval: Days · Days Between Triggers: 1 · Trigger at Hour: 9am · Minute: 0
+→ renombralo:  Todos los días a las 9
+Menú … → Settings → Timezone: America/Argentina/Buenos Aires → Save
+```
+
+<p style="color:#1a7f37">Arranca con el reloj, como el del fin de semana: todos los días a las 9, con la hora de Argentina.</p>
+
+**B-2 · Preguntarle a la API**
+
+```text
++ → HTTP Request →  Method: GET ·  URL: https://dolarapi.com/v1/dolares/oficial
+→ Execute step → OUTPUT: compra, venta, fechaActualizacion…
+→ renombralo:  Preguntar el dólar
+```
+
+<p style="color:#1a7f37">Después, el mozo: le pregunto a la API del dólar, igual que en el ejemplo de API. Ejecuto el paso y ya tengo el precio de hoy, venta incluida.</p>
+
+**B-3 · La pregunta: ¿pasó los $1600?**
+
+```text
++ → If:   arrastrá  venta  → {{ $json.venta }}  · Number → is greater than ·  1600
+→ renombralo:  ¿Pasó los $1600?
+```
+
+<p style="color:#1a7f37">Y el IF: ¿el precio de venta es mayor que 1600? Fíjense que el dato que compara no lo escribió nadie: lo trajo la API recién.</p>
+
+- **El IF puede preguntar por cualquier dato, venga de donde venga.** De un formulario, de la dirección, de la
+  fecha o de una API: para el IF es un casillero más.
+  - *Ejemplo:* Acá, `venta` viene de dolarapi.
+
+**B-4 · Los dos mensajes**
+
+```text
++ de  true   → Edit Fields → mensaje:
+   ⚠️ Atención: el dólar oficial está a ${{ $json.venta }}. Revisar los precios en pesos de hoy.
++ de  false  → Edit Fields → mensaje:
+   El dólar oficial está a ${{ $json.venta }}: no pasó los $1600. No hace falta cambiar precios.
+→ Save
+```
+
+<p style="color:#1a7f37">Un mensaje para cada camino. En la vida real, el de true podría ser un mail o un WhatsApp al dueño, y el de false, nada: si está tranquilo, no hace falta molestar a nadie.</p>
+
+**B-5 · Probarlo sin esperar a las 9, y ver los dos caminos**
+
+```text
+Execute workflow → hoy va por  false  (el dólar está a $1570)
+Abrí el IF → cambiá 1600 por 1000 → Execute workflow → ahora va por  true  (la alerta)
+Volvé a poner 1600 → Save
+```
+
+<p style="color:#1a7f37">Lo pruebo ahora: el dólar está a 1570, no pasó los 1600, va por false. Y para ver el otro camino, hago la trampa de siempre: bajo el límite a mil, y ahora va por true, con la alerta. Vuelvo a poner 1600. Si lo publico, mañana a las 9 lo hace solo, sin que yo toque nada. Eso es una automatización completa: arranca sola, busca un dato afuera, decide, y avisa.</p>
 
 ---
 
