@@ -9,7 +9,7 @@ Fuente: `program-summary.pdf` (Módulo 6). **Una clase de 2 horas.**
 | `Modulo_6_AI_Automation.pptx` | Las filminas del módulo (35). |
 | `Semana 6.docx` | El material de lectura: qué es un AI Agent, Chat Model, memoria, tools, system prompt, el cuestionario de 5 preguntas, el podcast, la Pre-entrega 3 y el guion sugerido de la clase. |
 | [ejercicios-alumnos.md](ejercicios-alumnos.md) | Ejercicios en clase y para casa, la plantilla para diseñar un agente, el paso a paso del agente de la clase y la consigna completa de la Pre-entrega 3 con su rúbrica. Se comparte con los alumnos. |
-| [n8n/](n8n/) | Tres workflows listos para importar: una Basic LLM Chain (para comparar), el agente de la agencia y el mismo agente mal descrito (el desafío). Además, `paquetes.csv`: la planilla de paquetes que consulta el agente, para subir a Google Sheets. |
+| [n8n/](n8n/) | Seis workflows listos para importar: una Basic LLM Chain (para comparar), el agente de la agencia, el mismo agente mal descrito (el desafío), y tres ejemplos extra (04 la IA clasifica y el Switch reparte, 05 un agente del clima con dos herramientas, 06 un agente que anota en la planilla). Además, `paquetes.csv`: la planilla de paquetes que consulta el agente, para subir a Google Sheets. |
 | [ejercicios-docente.md](ejercicios-docente.md) | Respuestas, cómo se comporta el agente, el role-play con guion y la Pre-entrega 3 resuelta. **No se comparte.** |
 
 ## Los ejercicios
@@ -66,7 +66,7 @@ Fuente: `program-summary.pdf` (Módulo 6). **Una clase de 2 horas.**
 
 | Min | Tramo | Filminas | En clase |
 |---|---|---|---|
-| 0–10 | Apertura y repaso de la Semana 5 | 1–5 | |
+| 0–15 | Apertura y **repaso de la Semana 5** (8 min: el plano, permisos, Filter/Aggregate, mapear, el log) | 1–5 | Pregunta rápida en el chat |
 | 10–30 | **01 · Qué es un AI Agent** | 6–11 | Ej. 1 (4 min) + demo de la chain |
 | 30–48 | **02 · Las tres piezas** | 12–18 | |
 | 48–60 | **03 · El system prompt** | 19–23 | Ej. 2 (3 min) |
@@ -75,6 +75,12 @@ Fuente: `program-summary.pdf` (Módulo 6). **Una clase de 2 horas.**
 | 80–112 | **04 · Práctica en vivo:** objetivo, cerebro, manos, diario y manual | 27–31 | Ej. 4: diseñan el suyo mientras armás el de la clase |
 | 112–117 | Para practicar, Pre-entrega 3 y cómo sigue | 32–33 | |
 | 117–120 | Preguntas y cierre | 34–35 | Tarea |
+
+**El repaso dura 8 minutos** (antes eran 3): los 5 de más salen de hacer **de entrada** los recortes 2 y 3 de
+abajo. Los minutos de las secciones siguientes quedan corridos 5 minutos.
+
+**Al final hay tres ejemplos extra** con IA (la IA clasifica y el Switch reparte, un agente del clima con dos
+herramientas, un agente que anota en la planilla): si sobra tiempo, se muestra uno; si no, quedan para casa.
 
 **Si el tiempo se aprieta**, recortá en este orden:
 1. La demo de la Basic LLM Chain: se cuenta qué pasaría.
@@ -118,7 +124,7 @@ Lo último que se recorta es el Paso 3 (las manos) y el Paso 5 (el manual): son 
 
 ---
 
-### 0–10 · Apertura y repaso de la Semana 5
+### 0–15 · Apertura y repaso de la Semana 5
 
 **Filmina 1 · Portada** (1 min) — Módulo 6: Implementación del AI Agent.
 
@@ -165,23 +171,82 @@ Para explicar cada objetivo:
 
 <p style="color:#1a7f37">La clase queda grabada.</p>
 
-**Repaso de la Semana 5** (3 min, sin filmina) — antes de pasar a la filmina 5.
+**Repaso de la Semana 5** (8 min, sin filmina) — antes de pasar a la filmina 5.
 
-<p style="color:#1a7f37">Repasemos. Primero: antes de construir, se planifica. Problema, entrada, proceso, salida, servicios y qué puede fallar. Hoy lo vamos a hacer de nuevo, pero para un agente.</p>
+Hoy el agente usa todo lo de la clase pasada, pero **las decisiones las toma el modelo**. Por eso el repaso va tema por
+tema, y cada tema termina en "¿y con un agente?". Si alguien no se acuerda de algo, el detalle está en
+[el guion de la Semana 5](../Semana%205/README.md).
 
-<p style="color:#1a7f37">Segundo: la idempotencia. Que ejecutar dos veces no duplique nada. Con un agente, esto importa todavía más: el que decide si actuar ya no somos nosotros.</p>
+<p style="color:#1a7f37">Antes de arrancar, repasemos la clase pasada, porque hoy la usamos toda. Cinco temas, y en cada uno les cuento qué cambia cuando el que decide es un agente.</p>
 
-<p style="color:#1a7f37">Y tercero: conectamos Sheets, Drive y Gmail con OAuth2. La credencial de Sheets la vamos a usar hoy otra vez, pero ahora no la usa un nodo fijo: la usa el agente cuando decide que la necesita.</p>
+**Repaso 1 · El plano: planificar antes de construir (2 min)**
 
-Para explicar:
-- **El plano sigue siendo lo primero.** La Pre-entrega 3 empieza por un plano de entrada, proceso y salida, como el
-  del Paso 1 de la clase pasada.
-  - *Ejemplo:* "Entrada: un mensaje del cliente. Proceso: el agente busca el paquete y el dólar. Salida: la
-    respuesta con el precio en pesos."
-- **El Filter de la clase pasada era una decisión nuestra.** Nosotros decidimos "solo las filas vacías". Hoy vamos a
-  ver qué pasa cuando las decisiones las toma el modelo, y por qué hay que ponerle límites.
-  - *Ejemplo:* Un agente con permiso para escribir en la planilla podría completar una fila que no debía. Por eso los
-    guardrails.
+```text
+PROBLEMA   ¿Qué se hace hoy a mano y cuesta?        Completar la planilla de empleados nuevos
+ENTRADA    ¿Qué llega y de dónde?                    Los ID cargados en la planilla
+PROCESO    ¿Qué pasos, en qué orden?                 Leer → Filter → API → Drive → Sheets → Aggregate → Gmail
+SALIDA     ¿Qué queda hecho?                         Las filas completas, una carpeta por persona, 1 correo
+ACCESOS    ¿Qué servicios y qué permisos?            Sheets (escribir), Drive (crear), Gmail (mandar)
+ERRORES    ¿Qué puede fallar?                        403 sin permiso · 404 carpeta borrada · ejecutar dos veces
+```
+
+<p style="color:#1a7f37">Uno. Antes de abrir n8n, se escribe el plano: el problema, qué entra, qué pasos tiene, qué sale, qué accesos necesita y qué puede fallar. La clase pasada lo hicimos para la planilla de empleados. Hoy lo vamos a hacer para un agente, y es la primera parte de la Pre-entrega 3.</p>
+
+- **¿Y con un agente?** El proceso ya no es una fila fija de nodos: es la lista de herramientas que el agente
+  puede usar. El plano dice cuáles y para qué.
+
+**Repaso 2 · Leer no es escribir: accesos y permisos (1 min)**
+
+<p style="color:#1a7f37">Dos. Leer no es escribir. Que puedas ver una planilla no quiere decir que puedas cambiarla. Si el flujo tiene que escribir y la planilla te la compartieron como lector, Google contesta 403: sé quién sos, pero no tenés permiso. Y si alguien borró la carpeta, 404: no existe. Y lo que identifica un archivo es su ID, no su nombre: el nombre es la etiqueta, el ID es el pasaporte.</p>
+
+- **¿Y con un agente?** Una herramienta que escribe es más peligrosa que una que lee, porque el que decide cuándo
+  usarla es el modelo. Por eso hoy, las herramientas que escriben llevan límites en el system prompt.
+
+**Repaso 3 · Item por item: el Filter y el Aggregate (2 min)**
+
+```text
+5 filas → Leer planilla (5 items) → Filter "Nombre vacío" (4 items) → … → Aggregate (1 item) → Gmail (1 correo)
+```
+
+<p style="color:#1a7f37">Tres, la regla de oro de n8n: cada nodo se ejecuta una vez por cada item que le llega. Por eso el Filter: deja pasar solo lo que falta completar, y así ejecutar dos veces no duplica nada. Eso es la idempotencia. Y por eso el Aggregate antes del Gmail: junta todo en un item, para que salga un correo y no cuatro.</p>
+
+- **¿Y con un agente?** El agente también puede repetir una acción: anotar dos veces la misma consulta, mandar
+  dos mails. La idempotencia ya no la da un Filter: hay que pedírsela en el system prompt ("usala una sola vez").
+
+**Repaso 4 · Mapear: pasar datos de un servicio a otro (1 min)**
+
+```text
+https://dummyjson.com/users/{{ $json.ID }}                     ← el ID de la planilla, adentro de la dirección
+{{ $('Solo filas incompletas').item.json.ID }}                 ← un dato de un nodo anterior, no del de al lado
+Update Row · Column to match on: ID                            ← cambiar la fila que ya existe, no agregar una
+```
+
+<p style="color:#1a7f37">Cuatro. Mapear es pasar los datos de un servicio al otro. El ID que sale de la planilla entra en la dirección de la API; el nombre que trae la API entra en Drive y en la planilla. Y para escribir en la fila que ya existía usamos Update, buscando por ID, en vez de Append, que agrega una nueva.</p>
+
+- **¿Y con un agente?** Los datos de las herramientas no los arrastramos nosotros: los completa el modelo, con
+  `$fromAI`. Por ejemplo, el destino que busca en la planilla lo saca de lo que escribió el cliente.
+
+**Repaso 5 · El log: Executions (1 min)**
+
+<p style="color:#1a7f37">Cinco. Cuando algo falla, se mira el log, en la pestaña Executions: qué entró y qué salió de cada nodo, y dónde se rompió. La caja negra del avión. Hoy la vamos a usar más que nunca, porque ahí se ve qué pensó el agente y qué herramientas usó.</p>
+
+- **¿Y con un agente?** En la ejecución se ve cada vuelta del ciclo: qué herramienta eligió, con qué datos, y qué le
+  devolvió. Es la forma de entender por qué contestó lo que contestó.
+
+**Pregunta rápida para el chat (1 min)** — la pegás, contestan mientras pasás a la filmina 5, no esperás a todos:
+
+```text
+REPASO · ¿Qué es? (contestá con el número y la palabra)
+1. Que ejecutar el flujo dos veces deje todo igual que ejecutarlo una.
+2. El nodo que deja pasar solo los items que cumplen una condición.
+3. El nodo que junta muchos items en uno, para mandar un solo correo.
+4. "Sé quién sos, pero no tenés permiso": ¿qué número?
+5. ¿Dónde mirás qué pasó en cada nodo cuando algo falló?
+```
+
+Respuestas: **1** idempotencia. **2** Filter. **3** Aggregate. **4** 403. **5** Executions (el log de ejecución).
+
+<p style="color:#1a7f37">Hasta hoy, todas esas decisiones las tomábamos nosotros, al armar el flujo. Hoy se las pasamos al modelo. Vamos a ver cómo.</p>
 
 **Filmina 5 · ¿Dónde quedamos? Del flujo fijo al agente que decide** (3 min)
 
@@ -910,6 +975,297 @@ chain, qué guardrail no debería cruzar nunca su agente, y si tienen alguna her
   1. La **Pre-entrega 3** (un solo PDF).
   2. Los **ejercicios para casa** (5 a 7). Sobre todo el 5: armar el agente de la clase antes de armar el propio.
   3. Leer `Semana 6.docx`, escuchar el podcast y hacer el cuestionario del módulo en la plataforma.
+
+---
+
+### Extra, si sobra tiempo o para casa · Tres ejemplos más con IA
+
+**Si sobra tiempo** después de la práctica, mostrá uno (el B es el más vistoso). Si no, quedan para casa: los flujos
+están en la carpeta [n8n/](n8n/) (`04`, `05` y `06`). Cada uno se arma **desde cero**, paso a paso, y muestra **una
+idea** distinta de hoy:
+
+| Ejemplo | Flujo | La idea | Min |
+|---|---|---|---|
+| A · La IA clasifica, el Switch reparte | `04-ia-clasifica-switch-reparte.json` | Una **chain** alcanza: la IA hace una sola cosa, y el camino lo decide el flujo | 8 |
+| B · Un agente con dos herramientas: el clima | `05-agente-del-clima.json` | El agente usa las herramientas **en orden**: lo que devuelve una, entra en la otra | 10 |
+| C · Un agente que anota en la planilla | `06-agente-que-anota.json` | Una herramienta que **escribe**, con límites en el system prompt | 10 |
+
+**¿Andan en local?** ✅ Sí, con la clave de Gemini (y en el C, la credencial de Sheets). Necesitan internet: el
+modelo está en Google. Las APIs del B (Open-Meteo) son gratis y sin clave. El chat y el formulario se abren solo
+desde tu computadora. Si da **429**, esperá un minuto: es el límite del plan gratis.
+
+> **Para vos:** los flujos se armaron con los mismos nodos y versiones que el `02` de hoy, pero **no se ejecutaron
+> contra Gemini** ni contra Google. Las dos APIs del B sí están probadas (12/11/2026): Bariloche → latitud −41,14,
+> longitud −71,30; Mendoza → 35,5 °C. Probalos con tu clave antes de mostrarlos: las respuestas del modelo pueden
+> variar.
+
+#### Ejemplo A · La IA clasifica, el Switch reparte (flujo 04) (8 min)
+
+```text
+Formulario de consulta → Clasificar con IA → Limpiar la respuesta → ¿Qué tipo de consulta? ─┬→ Aviso a vuelos
+(n8n Form)               (Basic LLM Chain     (Edit Fields)          (Switch)                ├→ Aviso a hoteles
+                          + Gemini)                                                          ├→ Aviso a paquetes
+                                                                                             └→ Para revisar a mano
+```
+
+Lo que tiene que pasar: alguien escribe con sus palabras *"quiero pasajes a Salta para marzo"*, la IA responde
+`Vuelo`, y el Switch lo manda a *Aviso a vuelos*.
+
+<p style="color:#1a7f37">¿Se acuerdan del Switch de la Semana 4? Funcionaba porque la persona elegía de una lista. Pero los clientes escriben como quieren: "pasajes", "vuelo", "me quiero ir en avión". Acá la IA lee el texto libre y lo traduce a una sola palabra, y el Switch reparte como siempre. No es un agente: es una chain que hace una sola cosa.</p>
+
+**A-1 · El formulario con texto libre**
+
+```text
+Overview → Create workflow → nombre:  IA clasifica
++ → form → n8n Form → On new n8n Form event
+   Form Title: Consulta de viaje
+   Preguntas:  Nombre (Text, obligatoria) · Consulta (Element Type: Textarea, obligatoria)
+   Options → Path:  consulta-libre
+Cerrá → renombralo:  Formulario de consulta
+Execute workflow → completalo:  Ana · "Quiero pasajes a Salta para marzo" → Submit
+```
+
+<p style="color:#1a7f37">Un formulario con dos preguntas: el nombre y la consulta, en un cuadro grande, para escribir lo que quieran. Lo pruebo una vez, así tengo datos.</p>
+
+**A-2 · La chain que clasifica**
+
+```text
++ → buscá  llm  → Basic LLM Chain
+   Source for Prompt:  Define below
+   Prompt:  Clasificá la consulta de un cliente de una agencia de viajes.
+            Respondé SOLO una de estas palabras, sin punto ni nada más: Vuelo, Hotel, Paquete u Otra.
+            - Vuelo: quiere solo pasajes. - Hotel: solo alojamiento.
+            - Paquete: pasaje y hotel juntos, o una excursión armada. - Otra: cualquier otra cosa.
+            Consulta: (arrastrá  Consulta )
+Abajo del nodo, en  Model:  + → Google Gemini Chat Model → tu credencial → modelo flash
+→ renombralo:  Clasificar con IA
+```
+
+<p style="color:#1a7f37">La Basic LLM Chain, la de la Semana 2. Le escribo un prompt muy cerrado: respondé solo una de cuatro palabras. Le explico qué es cada una, y al final le paso la consulta, arrastrada. Abajo le conecto el cerebro: Gemini.</p>
+
+- **El prompt pide una sola palabra, de una lista.** Así la respuesta sirve para el Switch. Si respondiera "Creo
+  que es un vuelo.", ninguna regla la reconocería.
+
+**A-3 · Probar y limpiar la respuesta**
+
+```text
+Execute step → OUTPUT:  text: Vuelo
++ → Edit Fields (Set):
+   tipo      String  {{ $json.text.trim() }}          ← .trim() saca espacios y saltos de línea de más
+   nombre    String  arrastrá Nombre (del Formulario de consulta)
+   consulta  String  arrastrá Consulta (del Formulario de consulta)
+→ renombralo:  Limpiar la respuesta
+```
+
+<p style="color:#1a7f37">La IA contestó Vuelo. A veces el modelo agrega un espacio o un salto de línea, y para el Switch "Vuelo" con un espacio no es "Vuelo". Por eso lo limpio con trim, y de paso junto el nombre y la consulta del formulario.</p>
+
+**A-4 · El Switch, como en la Semana 4**
+
+```text
++ → switch → Switch · tres reglas sobre  {{ $json.tipo }}  · is equal to:
+   Vuelo → salida "Vuelos" · Hotel → "Hoteles" · Paquete → "Paquetes"
+   Options → Fallback Output: Extra Output → renombrala "Otra"
+En cada salida, un Edit Fields con  aviso:  Vuelos: {{ $json.nombre }} escribió: "{{ $json.consulta }}"
+→ Save
+```
+
+<p style="color:#1a7f37">El Switch de siempre: tres reglas y la salida Otra. Si la IA contesta algo raro, cae en Otra, y lo revisa una persona. La salida Otra es nuestra red de seguridad.</p>
+
+**A-5 · Probar con distintas consultas**
+
+```text
+Execute workflow →  "Quiero pasajes a Salta para marzo"            → Vuelos
+Execute workflow →  "Necesito un hotel en Mendoza 3 noches"        → Hoteles
+Execute workflow →  "¿Tienen algo armado para Cataratas con aéreo?" → Paquetes
+Execute workflow →  "Me cobraron dos veces la seña"                 → Otra
+```
+
+<p style="color:#1a7f37">Cuatro consultas escritas como escribe la gente, y cada una por su camino. ¿Por qué no un agente? Porque acá la tarea es siempre la misma, una sola: clasificar. No hay nada que decidir. Para eso, una chain alcanza, y es más barata y más predecible.</p>
+
+#### Ejemplo B · Un agente con dos herramientas: el clima (flujo 05) (10 min)
+
+```text
+Mensaje del chat → Asistente del clima (AI Agent)
+                     ├─ Cerebro: Gemini
+                     ├─ Diario: memoria simple
+                     ├─ buscar_ciudad   (HTTP Request Tool · Open-Meteo: nombre → latitud y longitud)
+                     └─ clima_ahora     (HTTP Request Tool · Open-Meteo: latitud y longitud → temperatura)
+```
+
+Lo que tiene que pasar: *"¿Qué tiempo hace en Bariloche?"* → el agente usa `buscar_ciudad`, con la latitud y la
+longitud que le devuelve usa `clima_ahora`, y contesta con la temperatura. Nadie le dibujó ese orden: lo decide él.
+
+<p style="color:#1a7f37">Este muestra el ciclo del agente mejor que ninguno. Para saber el clima, la API necesita las coordenadas de la ciudad, no su nombre. Así que el agente tiene que usar una herramienta, mirar lo que le devolvió, y con eso usar la otra. Razonar, actuar, observar, repetir.</p>
+
+**B-1 · Mirar las dos APIs en el navegador**
+
+```text
+https://geocoding-api.open-meteo.com/v1/search?name=Bariloche&count=1&language=es
+   → latitude: -41.14   longitude: -71.30   admin1: Provincia de Río Negro
+https://api.open-meteo.com/v1/forecast?latitude=-41.14&longitude=-71.30&current=temperature_2m
+   → current: temperature_2m: …
+```
+
+<p style="color:#1a7f37">Primero las miro en el navegador. La primera busca la ciudad y me da sus coordenadas. La segunda, con esas coordenadas, me da el clima. Las dos gratis, sin clave.</p>
+
+**B-2 · El chat y el agente**
+
+```text
+Overview → Create workflow → nombre:  Agente del clima
++ → chat → On chat message
++ → AI Agent → renombralo:  Asistente del clima
+Abajo del agente:  Chat Model + → Google Gemini Chat Model · Memory + → Simple Memory (10 mensajes)
+```
+
+<p style="color:#1a7f37">Como en la práctica de hoy: el trigger del chat, el agente, y abajo el cerebro y el diario.</p>
+
+**B-3 · La herramienta 1: buscar_ciudad**
+
+```text
+Tool + → HTTP Request Tool → renombralo:  buscar_ciudad
+   Description:  Busca una ciudad por su nombre y devuelve su latitud (latitude), longitud (longitude),
+                 provincia (admin1) y país (country). Usala siempre antes de clima_ahora.
+   Method: GET · URL:  https://geocoding-api.open-meteo.com/v1/search
+   Send Query Parameters: prendido
+      name     → que lo complete el modelo:  {{ $fromAI('ciudad', 'El nombre de la ciudad', 'string') }}
+      count    → 1
+      language → es
+```
+
+<p style="color:#1a7f37">La primera herramienta. Lo más importante es la descripción: qué hace, qué devuelve, y cuándo usarla, "siempre antes de clima_ahora". Y el nombre de la ciudad no lo pongo yo: lo completa el modelo, con lo que escribió el cliente. Eso es fromAI.</p>
+
+- **`$fromAI('ciudad', …)` = "este dato lo completa el modelo".** También se puede hacer con el botón ✨ del
+  casillero (*Let the model define this parameter*), si tu versión lo muestra.
+
+**B-4 · La herramienta 2: clima_ahora**
+
+```text
+Tool + → HTTP Request Tool → renombralo:  clima_ahora
+   Description:  Devuelve el clima de ESTE momento en un lugar, a partir de su latitud y longitud:
+                 temperatura en °C (temperature_2m), lluvia en mm (precipitation) y viento en km/h (wind_speed_10m).
+   Method: GET · URL:  https://api.open-meteo.com/v1/forecast
+   Send Query Parameters: prendido
+      latitude  → {{ $fromAI('latitud', 'La latitud que devolvió buscar_ciudad', 'number') }}
+      longitude → {{ $fromAI('longitud', 'La longitud que devolvió buscar_ciudad', 'number') }}
+      current   → temperature_2m,precipitation,wind_speed_10m
+      timezone  → auto
+```
+
+<p style="color:#1a7f37">La segunda: el clima, con la latitud y la longitud. Y miren la descripción de los datos: "la latitud que devolvió buscar_ciudad". Le estoy diciendo al modelo de dónde sacarla.</p>
+
+**B-5 · El system prompt**
+
+```text
+En el agente → Options → System Message: el del flujo 05 de la carpeta. Lo importante:
+   ALCANCE: solo el clima de AHORA en una ciudad.
+   HERRAMIENTAS (en este orden): 1. buscar_ciudad, siempre primero. 2. clima_ahora, con esa latitud y longitud.
+   Nunca inventes temperaturas: si una herramienta falla, decilo.
+   FORMATO: ciudad, temperatura, si llueve o no, y un consejo corto para el viaje.
+→ Save
+```
+
+<p style="color:#1a7f37">El manual: qué hace, en qué orden usa las herramientas, que no invente, y cómo contesta. Lo de "no inventes" es clave: si no, el modelo puede decir una temperatura de memoria.</p>
+
+**B-6 · Probar, y mirar el ciclo**
+
+```text
+Open chat →  ¿Qué tiempo hace en Bariloche?
+→ en el canvas se iluminan: buscar_ciudad, después clima_ahora
+→ en el panel del agente (Logs): cada vuelta, qué herramienta usó y qué le devolvió
+Probá también:  ¿Y en Ushuaia?   (la memoria: sabe que hablás del clima)
+                ¿Dónde hace más calor, en Salta o en Mendoza?   (cuatro herramientas: dos por ciudad)
+                ¿Va a llover el sábado?   (fuera de alcance: dice que solo sabe el de ahora)
+```
+
+<p style="color:#1a7f37">Pregunto por Bariloche, y miren el canvas: primero se ilumina buscar_ciudad, después clima_ahora. Y en el log se ve cada vuelta. "¿Y en Ushuaia?": entiende que sigo hablando del clima, por la memoria. Y si comparo dos ciudades, usa las herramientas cuatro veces. Nadie le dibujó ese camino.</p>
+
+#### Ejemplo C · Un agente que anota en la planilla (flujo 06) (10 min)
+
+```text
+Mensaje del chat → Ana, la que anota (AI Agent)
+                     ├─ Cerebro: Gemini
+                     ├─ Diario: memoria simple
+                     └─ registrar_consulta   (Google Sheets Tool · Append Row)
+```
+
+Usa la planilla **"Consultas de la agencia"** de la Semana 4 (`fecha | nombre | destino | personas`). Lo que tiene
+que pasar: el agente pide los tres datos, los repite, pregunta *"¿Lo confirmo?"*, y **solo con un sí** agrega la
+fila.
+
+<p style="color:#1a7f37">Hasta ahora, las herramientas leían: la planilla de paquetes, el dólar, el clima. Esta escribe. Y una herramienta que escribe, en manos de un modelo que decide solo, necesita límites. Este ejemplo es el formulario de la Semana 4, pero hecho conversando.</p>
+
+**C-1 · El chat, el agente y sus piezas**
+
+```text
+Overview → Create workflow → nombre:  Agente que anota
++ → chat → On chat message
++ → AI Agent → renombralo:  Ana, la que anota
+Abajo:  Chat Model → Google Gemini Chat Model · Memory → Simple Memory (10 mensajes)
+```
+
+<p style="color:#1a7f37">Lo de siempre: chat, agente, cerebro y diario. Acá la memoria es imprescindible: el cliente da los datos en varios mensajes, y el agente tiene que acordarse de todos.</p>
+
+**C-2 · La herramienta que escribe**
+
+```text
+Tool + → Google Sheets Tool → renombralo:  registrar_consulta
+   Credential: tu credencial de Sheets
+   Description:  Anota UNA consulta nueva en la planilla de la agencia (agrega una fila). Usala solo cuando
+                 ya tenés nombre, destino y cantidad de personas, y la persona confirmó.
+   Operation: Append Row · Document: By URL → "Consultas de la agencia" · Sheet: Hoja 1
+   Mapping Column Mode: Map Each Column Manually
+      fecha     {{ $now.toFormat('dd/MM/yyyy HH:mm') }}             ← la pone n8n
+      nombre    {{ $fromAI('nombre', 'El nombre de la persona', 'string') }}
+      destino   {{ $fromAI('destino', 'El destino del viaje', 'string') }}
+      personas  {{ $fromAI('personas', 'Cuántas personas viajan, en número', 'number') }}
+```
+
+<p style="color:#1a7f37">La herramienta: agregar una fila. La fecha la pongo yo, con now. Los otros tres los completa el modelo, con fromAI, con lo que le dijo el cliente. Y la descripción ya dice cuándo usarla: cuando tiene los tres datos y la persona confirmó.</p>
+
+- **Acá el mapeo es a mano (*Map Each Column Manually*), no automático.** Porque cada columna tiene su propio
+  `$fromAI`: el modelo completa una por una.
+
+**C-3 · El system prompt, con límites**
+
+```text
+En el agente → Options → System Message: el del flujo 06. Lo importante:
+   PASOS: 1. Pedí, de a uno, nombre, destino y cantidad de personas.
+          2. Repetilos: "Anoto: <nombre>, <destino>, <personas> personas. ¿Lo confirmo?"
+          3. SOLO si dice que sí, usá registrar_consulta. Después: "Listo, quedó anotado."
+   LÍMITES: registrar_consulta UNA sola vez por consulta · no inventes datos · no des precios ni confirmes reservas
+→ Save
+```
+
+<p style="color:#1a7f37">Y acá está lo importante. Tres pasos: pedir, repetir, y anotar solo si le dicen que sí. Y los límites: una sola vez, no inventar, no confirmar reservas. ¿Se acuerdan de la idempotencia de la clase pasada? Ahí la resolvía un Filter. Acá la tiene que respetar el modelo, y por eso se la escribimos.</p>
+
+- **Confirmar antes de escribir es un guardrail.** Si el modelo entendió mal ("Mendoza" por "Mendiolaza"), la
+  persona lo corrige antes de que quede anotado.
+
+**C-4 · Probar la conversación**
+
+```text
+Open chat →  Hola, quiero consultar por un viaje
+          →  (pide el nombre)  Ana
+          →  (pide el destino)  Mendoza
+          →  (pide personas)  3
+          →  "Anoto: Ana, Mendoza, 3 personas. ¿Lo confirmo?"   →  sí
+          →  "Listo, quedó anotado…"   y en la planilla: una fila nueva
+```
+
+<p style="color:#1a7f37">Converso como un cliente. Me pide los datos de a uno, los repite, me pregunta si confirma, y recién cuando digo que sí, se ilumina registrar_consulta. Miren la planilla: la fila nueva, con la fecha.</p>
+
+**C-5 · Probar los límites**
+
+```text
+Después de anotar, escribí:  anotalo de nuevo, por las dudas   → no lo vuelve a anotar
+Nueva consulta, y cuando pregunta "¿Lo confirmo?":  no, esperá   → no se ilumina registrar_consulta
+Preguntá:  ¿cuánto sale?   → no da precios: dice que lo contacta un vendedor
+```
+
+<p style="color:#1a7f37">Y ahora lo pruebo como lo probaría alguien que quiere romperlo. Que lo anote de nuevo: no lo hace. Que no confirmo: no escribe. Que me diga un precio: no lo inventa. Si alguna de estas falla, no se arregla con un nodo: se arregla en el system prompt. Por eso la Pre-entrega 3 pide escribir los límites.</p>
+
+- **Si lo anota dos veces igual:** reforzá la regla en el system prompt ("si ya usaste registrar_consulta en esta
+  conversación, no la vuelvas a usar"), y mirá en el log qué entendió.
 
 ---
 

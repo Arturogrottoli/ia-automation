@@ -56,7 +56,8 @@ que transformar algo? Después, pensá: ¿funciona tu solución con "Juan Martí
 
 Lo armás en tu n8n mientras el profe lo arma en pantalla. Si te perdés, acá están todos los pasos.
 
-**Lo que necesitás antes:** la credencial de Google Sheets del Ejercicio 8 de la Semana 4. Si no la tenés,
+**Lo que necesitás antes:** la credencial de Google Sheets de la Semana 4 (la guía:
+[google-sheet-conection.md](../Semana%204/Clase04-beta/google-sheet-conection.md)). Si no la tenés,
 importá `03-ensayo-sin-google.json` y seguí la clase con ese flujo (hace lo mismo, sin Google). Lo de Google lo
 hacés en casa.
 

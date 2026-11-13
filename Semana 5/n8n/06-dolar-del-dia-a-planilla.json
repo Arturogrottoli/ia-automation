@@ -1,0 +1,194 @@
+{
+  "name": "06 · Ejemplo: el dólar de cada día en una planilla",
+  "id": "s5e06dolarplan01",
+  "active": false,
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Argentina/Buenos_Aires"
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "id": "c05c9b74-97b7-4734-bfab-68cef7ea3dca",
+      "name": "Todos los días a las 9",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://dolarapi.com/v1/dolares/oficial",
+        "options": {}
+      },
+      "id": "6e2c327c-d008-4c08-804c-3b9464f6c06c",
+      "name": "Preguntar el dólar",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "109610db-9c80-40e6-96bd-f86720406804",
+              "name": "fecha",
+              "value": "={{ $now.toFormat('dd/MM/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "e6467799-9934-456d-bfde-fb8eba10d688",
+              "name": "compra",
+              "value": "={{ $json.compra }}",
+              "type": "number"
+            },
+            {
+              "id": "6e35bf24-3f50-4e4e-843a-a7fdb8d5a2eb",
+              "name": "venta",
+              "value": "={{ $json.venta }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7bb91f7b-ad6f-433e-aed5-0c2ba1651919",
+      "name": "Armar la fila",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "fecha"
+          ],
+          "schema": [
+            {
+              "id": "fecha",
+              "displayName": "fecha",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "compra",
+              "displayName": "compra",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "venta",
+              "displayName": "venta",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "c6c4bd89-0fc0-4323-9ea9-8d172cf1d45e",
+      "name": "Guardar el dólar del día",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        720,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 06 · El dólar de cada día en una planilla\n\n1. **Todos los días a las 9** (Schedule Trigger).\n2. **Preguntar el dólar** (HTTP Request a dolarapi).\n3. **Armar la fila**: fecha, compra, venta.\n4. **Guardar el dólar del día**: *Append or Update Row*, buscando por **fecha**. Si se ejecuta dos veces el mismo día, **no duplica**: actualiza la fila de hoy.\n\n**Antes de ejecutar:** credencial de Sheets y el link de una planilla con `fecha | compra | venta` en la fila 1.",
+        "height": 340,
+        "width": 640,
+        "color": 4
+      },
+      "id": "bf863eeb-5d32-4ca1-84e6-d1fe61751463",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -460
+      ]
+    }
+  ],
+  "connections": {
+    "Todos los días a las 9": {
+      "main": [
+        [
+          {
+            "node": "Preguntar el dólar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preguntar el dólar": {
+      "main": [
+        [
+          {
+            "node": "Armar la fila",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Armar la fila": {
+      "main": [
+        [
+          {
+            "node": "Guardar el dólar del día",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

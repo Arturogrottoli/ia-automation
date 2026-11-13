@@ -1,0 +1,388 @@
+{
+  "name": "04 · Ejemplo: la IA clasifica y el Switch reparte",
+  "id": "s6e04clasifica01",
+  "active": false,
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Argentina/Buenos_Aires"
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Consulta de viaje",
+        "formDescription": "Contanos qué necesitás.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Nombre",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Consulta",
+              "fieldType": "textarea",
+              "requiredField": true
+            }
+          ]
+        },
+        "responseMode": "onReceived",
+        "options": {
+          "path": "consulta-libre"
+        }
+      },
+      "id": "bdb50437-7e79-4f13-8818-b0b25be11380",
+      "name": "Formulario de consulta",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "f7a35f30-2104-4f22-942e-b7875bbb997a"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Clasificá la consulta de un cliente de una agencia de viajes.\nRespondé SOLO una de estas palabras, sin punto ni nada más: Vuelo, Hotel, Paquete u Otra.\n\n- Vuelo: quiere solo pasajes.\n- Hotel: quiere solo alojamiento.\n- Paquete: quiere viaje con pasaje y hotel juntos, o una excursión armada.\n- Otra: cualquier otra cosa (reclamos, preguntas generales).\n\nConsulta: {{ $json.Consulta }}",
+        "batching": {}
+      },
+      "id": "751383ff-db3e-4515-9f06-7a47d9cc913e",
+      "name": "Clasificar con IA",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3-flash-preview",
+        "options": {
+          "temperature": 0.2
+        }
+      },
+      "id": "20e78712-1542-4f5e-a80e-20cde2bf2a53",
+      "name": "Modelo: Gemini",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fae4db4e-9bf7-41ae-b146-b40e5d873cc7",
+              "name": "tipo",
+              "value": "={{ $json.text.trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "a1fb839e-ed17-4346-a141-d737555aacaf",
+              "name": "nombre",
+              "value": "={{ $('Formulario de consulta').item.json.Nombre }}",
+              "type": "string"
+            },
+            {
+              "id": "6843e63a-17eb-4078-a507-3f7abcb9477b",
+              "name": "consulta",
+              "value": "={{ $('Formulario de consulta').item.json.Consulta }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "37ec427b-45b0-4da8-88ca-ea80a2b09ebf",
+      "name": "Limpiar la respuesta",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "873c470c-36f9-4cd3-a2c7-e844ace2abee",
+                    "leftValue": "={{ $json.tipo }}",
+                    "rightValue": "Vuelo",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Vuelos"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "641ddddf-8be9-4391-8edf-b474cb1cfa18",
+                    "leftValue": "={{ $json.tipo }}",
+                    "rightValue": "Hotel",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Hoteles"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "af0701cf-ab91-4bdf-9e56-108dcc744e09",
+                    "leftValue": "={{ $json.tipo }}",
+                    "rightValue": "Paquete",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Paquetes"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "Otra"
+        }
+      },
+      "id": "c48aa9cc-969c-408c-8d8c-34a2b4f8d676",
+      "name": "¿Qué tipo de consulta?",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        720,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e9a2b92b-6a2d-4f52-9c4d-4fe0553f2d8f",
+              "name": "aviso",
+              "value": "=Vuelos: {{ $json.nombre }} escribió: \"{{ $json.consulta }}\"",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "212d17da-11e9-4be0-9f41-a66aee1904b6",
+      "name": "Aviso a vuelos",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1000,
+        -240
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "aaf1021c-c4b8-45c7-8054-9ef9bc3f0473",
+              "name": "aviso",
+              "value": "=Hoteles: {{ $json.nombre }} escribió: \"{{ $json.consulta }}\"",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d00b16ef-9252-4316-b8a1-1c541b0cf918",
+      "name": "Aviso a hoteles",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1000,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9b29f79e-4c1e-453e-a9e8-3a8ea3598a65",
+              "name": "aviso",
+              "value": "=Paquetes: {{ $json.nombre }} escribió: \"{{ $json.consulta }}\"",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e948ec34-d2a7-4aa7-9f02-3bc313de91a5",
+      "name": "Aviso a paquetes",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1000,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d4b2840f-5380-44e9-b8bd-242b265d9dd2",
+              "name": "aviso",
+              "value": "=Otra: {{ $json.nombre }} escribió: \"{{ $json.consulta }}\"",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "60bca58e-8f62-4b0c-aa67-fc864ae54d5e",
+      "name": "Para revisar a mano",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1000,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 04 · La IA clasifica y el Switch reparte\n\n1. **Formulario de consulta**: Nombre y Consulta (texto libre).\n2. **Clasificar con IA** (Basic LLM Chain + Gemini): responde una sola palabra: Vuelo, Hotel, Paquete u Otra.\n3. **Limpiar la respuesta**: saca espacios y junta el nombre y la consulta.\n4. **¿Qué tipo de consulta?** (Switch): un aviso por área, y *Otra* para lo que no encaja.\n\nNo es un agente: la IA hace **una** cosa, siempre la misma. El camino lo decide el Switch.",
+        "height": 360,
+        "width": 640,
+        "color": 4
+      },
+      "id": "e74bd550-a70c-47f3-b093-efcce97b2d7a",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -520
+      ]
+    }
+  ],
+  "connections": {
+    "Formulario de consulta": {
+      "main": [
+        [
+          {
+            "node": "Clasificar con IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Modelo: Gemini": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Clasificar con IA",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clasificar con IA": {
+      "main": [
+        [
+          {
+            "node": "Limpiar la respuesta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limpiar la respuesta": {
+      "main": [
+        [
+          {
+            "node": "¿Qué tipo de consulta?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Qué tipo de consulta?": {
+      "main": [
+        [
+          {
+            "node": "Aviso a vuelos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Aviso a hoteles",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Aviso a paquetes",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Para revisar a mano",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

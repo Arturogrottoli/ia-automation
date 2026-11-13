@@ -10,7 +10,7 @@ Google) se importa y n8n acepta todos sus parámetros (solo pide las credenciale
 
 ## Preparar Google (antes de la clase)
 
-Partís del proyecto `n8n curso` de la Semana 4 (Ejercicio 8), con la credencial de Google Sheets ya conectada.
+Partís del proyecto de Google Cloud de la Semana 4 (el de `Clase04-beta/google-sheet-conection.md`), con la credencial de Google Sheets ya conectada.
 
 1. **Habilitar las APIs.** En **console.cloud.google.com**, con el proyecto seleccionado: ☰ → **APIs & Services** →
    **Library**. Habilitá (**Enable**) las que falten:

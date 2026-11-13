@@ -1,0 +1,186 @@
+{
+  "name": "07 · Ejemplo: el resumen del día por mail",
+  "id": "s5e07resumendia1",
+  "active": false,
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Argentina/Buenos_Aires"
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 18
+            }
+          ]
+        }
+      },
+      "id": "e3a99390-003e-4a56-b0b1-5de7d39a743f",
+      "name": "Todos los días a las 18",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1"
+        },
+        "options": {}
+      },
+      "id": "5cab8dcf-84c6-4df3-a28f-fa552e60a6c1",
+      "name": "Leer la planilla",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "523146a9-5625-4f15-b5aa-b7fb489d51ed",
+              "leftValue": "={{ $json.fecha }}",
+              "rightValue": "={{ $now.toFormat('dd/MM/yyyy') }}",
+              "operator": {
+                "type": "string",
+                "operation": "startsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "890c3770-9a7f-419a-8a71-33c188c5ed00",
+      "name": "Solo las de hoy",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "consultas",
+        "options": {}
+      },
+      "id": "2d80100e-33c4-444b-a21f-f9d925790468",
+      "name": "Juntar en un solo item",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        720,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "",
+        "subject": "=Resumen del día: {{ $json.consultas.length }} consultas",
+        "emailType": "text",
+        "message": "=Hola:\n\nHoy llegaron {{ $json.consultas.length }} consultas:\n\n{{ $json.consultas.map(c => '- ' + c.nombre + ' quiere ir a ' + c.destino + ' (' + c.personas + ' personas)').join('\\n') }}\n\nEnviado por n8n.",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "de91b622-e715-467c-baaf-63321e6f7b2a",
+      "name": "Mail con el resumen",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        960,
+        0
+      ],
+      "webhookId": "1640bf10-d6c0-400e-ae55-cce7fa73292c"
+    },
+    {
+      "parameters": {
+        "content": "## 07 · El resumen del día\n\n1. **Todos los días a las 18**.\n2. **Leer la planilla** \"Consultas de la agencia\" (la de la Semana 4: `fecha | nombre | destino | personas`).\n3. **Solo las de hoy** (Filter): la fecha empieza con la de hoy.\n4. **Juntar en un solo item** (Aggregate): para mandar **un** mail, no uno por consulta.\n5. **Mail con el resumen** (Gmail): cuántas llegaron y de quién.\n\nSi hoy no llegó ninguna, el Filter deja 0 items y **no sale mail**.\n\n**Antes de ejecutar:** credenciales de Sheets y Gmail, el link de la planilla y tu correo en el Gmail.",
+        "height": 380,
+        "width": 640,
+        "color": 4
+      },
+      "id": "6c336ee3-063b-46ee-996b-42a96f73c788",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -480
+      ]
+    }
+  ],
+  "connections": {
+    "Todos los días a las 18": {
+      "main": [
+        [
+          {
+            "node": "Leer la planilla",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer la planilla": {
+      "main": [
+        [
+          {
+            "node": "Solo las de hoy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Solo las de hoy": {
+      "main": [
+        [
+          {
+            "node": "Juntar en un solo item",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Juntar en un solo item": {
+      "main": [
+        [
+          {
+            "node": "Mail con el resumen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

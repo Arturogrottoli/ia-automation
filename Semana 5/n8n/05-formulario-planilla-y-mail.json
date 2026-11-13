@@ -1,0 +1,193 @@
+{
+  "name": "05 · Ejemplo: formulario, planilla y mail al cliente",
+  "id": "s5e05formmail001",
+  "active": false,
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Argentina/Buenos_Aires"
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Consulta de viaje",
+        "formDescription": "Contanos a dónde querés viajar y te respondemos por mail.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Nombre",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Destino",
+              "requiredField": true
+            }
+          ]
+        },
+        "responseMode": "onReceived",
+        "options": {
+          "path": "consulta-con-mail"
+        }
+      },
+      "id": "dbec340d-67fd-41b9-b574-f50b30aebbda",
+      "name": "Formulario de consulta",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "52537184-d1d1-4e3e-8b47-e3561ee0fcc0"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "17eb9270-7cd4-450d-a239-1f4f03087d7f",
+              "name": "fecha",
+              "value": "={{ $now.toFormat('dd/MM/yyyy HH:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "f6dbe6b0-f27f-4d83-87d9-a9faa63a4de7",
+              "name": "nombre",
+              "value": "={{ $json.Nombre }}",
+              "type": "string"
+            },
+            {
+              "id": "9d9e6832-c99e-4b6a-9101-6fb064d2657d",
+              "name": "email",
+              "value": "={{ $json.Email }}",
+              "type": "string"
+            },
+            {
+              "id": "26e04e22-5807-4715-8c06-c873c7595ded",
+              "name": "destino",
+              "value": "={{ $json.Destino }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "61f288c7-a035-4649-b899-189fb4567249",
+      "name": "Ordenar los datos",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "72664157-13a4-444f-852d-a6cf3f69212a",
+      "name": "Guardar en la planilla",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Ordenar los datos').item.json.email }}",
+        "subject": "=Recibimos tu consulta para {{ $('Ordenar los datos').item.json.destino }}",
+        "emailType": "text",
+        "message": "=Hola {{ $('Ordenar los datos').item.json.nombre }}:\n\nRecibimos tu consulta para viajar a {{ $('Ordenar los datos').item.json.destino }}. Un vendedor te escribe en las próximas 24 horas.\n\nGracias,\nAgencia Rumbo Sur",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "6476a2c5-59c8-478d-bde4-81039ad53a4e",
+      "name": "Mail al cliente",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        720,
+        0
+      ],
+      "webhookId": "45597b71-b144-4f75-a172-3625f8c482a5"
+    },
+    {
+      "parameters": {
+        "content": "## 05 · Formulario → planilla → mail al cliente\n\n1. **Formulario de consulta**: Nombre, Email y Destino.\n2. **Ordenar los datos**: fecha, nombre, email, destino (iguales a los títulos de la planilla).\n3. **Guardar en la planilla**: Append Row, *Map Automatically*.\n4. **Mail al cliente**: Gmail, al email que escribió la persona.\n\n**Antes de ejecutar:** credenciales de Sheets y Gmail, y el link de tu planilla (columnas `fecha | nombre | email | destino`).",
+        "height": 320,
+        "width": 640,
+        "color": 4
+      },
+      "id": "d5aa3ffb-4089-4332-a140-2032008e8243",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -460
+      ]
+    }
+  ],
+  "connections": {
+    "Formulario de consulta": {
+      "main": [
+        [
+          {
+            "node": "Ordenar los datos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ordenar los datos": {
+      "main": [
+        [
+          {
+            "node": "Guardar en la planilla",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Guardar en la planilla": {
+      "main": [
+        [
+          {
+            "node": "Mail al cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

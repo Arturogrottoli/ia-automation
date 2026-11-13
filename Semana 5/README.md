@@ -9,7 +9,7 @@ Fuente: `program-summary.pdf` (Módulo 5). **Una clase de 2 horas.**
 | `Modulo_5_AI_Automation.pptx` | Las filminas del módulo (32). |
 | `Semana 5.docx` | El material de lectura: planificar un workflow, el caso de la planilla con Google, el cuestionario de 5 preguntas, el podcast y el guion sugerido de la clase. |
 | [ejercicios-alumnos.md](ejercicios-alumnos.md) | Ejercicios en clase y para casa, la plantilla para planificar un flujo y el paso a paso completo de la práctica. Se comparte con los alumnos. |
-| [n8n/](n8n/) | Cuatro workflows listos para importar: el mapeo relámpago, el caso del módulo con Google, el mismo caso sin Google (para ensayar) y la clínica de errores. Además, `planilla-empleados.csv`: la planilla de la práctica, para subir a Google Sheets. |
+| [n8n/](n8n/) | Siete workflows listos para importar: el mapeo relámpago, el caso del módulo con Google, el mismo caso sin Google (para ensayar), la clínica de errores, y tres ejemplos extra (05 formulario + planilla + mail, 06 el dólar del día sin duplicar, 07 el resumen del día). Además, `planilla-empleados.csv`: la planilla de la práctica, para subir a Google Sheets. |
 | [ejercicios-docente.md](ejercicios-docente.md) | Respuestas, qué pasa en cada flujo, cómo romper el flujo a propósito para la clínica y el plano resuelto del caso. **No se comparte.** |
 
 ## Los ejercicios
@@ -52,8 +52,8 @@ Fuente: `program-summary.pdf` (Módulo 5). **Una clase de 2 horas.**
   Google) se importa bien y n8n acepta todos sus parámetros, pero **no se probó contra Google**, porque hace falta
   una cuenta con credenciales: probalo vos antes de la clase con tu cuenta. Los mensajes de error de Google que
   aparecen en la clínica (403, 404) son los que da Google normalmente, pero tampoco se probaron en este n8n.
-- **El paso de los accesos (Paso 2) depende de que hayan hecho el Ejercicio 8 de la Semana 4** (el proyecto en
-  Google Cloud y la credencial de Sheets). Al que no lo hizo, no le alcanza el tiempo de la clase para armar todo:
+- **El paso de los accesos (Paso 2) depende de que tengan la credencial de Google de la Semana 4** (el proyecto en
+  Google Cloud y la credencial de Sheets; la guía: [google-sheet-conection.md](../Semana%204/Clase04-beta/google-sheet-conection.md)). Al que no lo hizo, no le alcanza el tiempo de la clase para armar todo:
   que siga la lógica con el flujo **03 · Ensayo sin Google**, que hace lo mismo sin credenciales, y que haga lo de
   Google en casa.
 - **El material de lectura sugiere herramientas "preferidas" (Zapier, Make, n8n)** y tres actividades de 15, 45 y 30
@@ -68,7 +68,7 @@ Fuente: `program-summary.pdf` (Módulo 5). **Una clase de 2 horas.**
 
 | Min | Tramo | Filminas | En clase |
 |---|---|---|---|
-| 0–10 | Apertura y repaso de la Semana 4 | 1–5 | |
+| 0–15 | Apertura y **repaso de la Semana 4** (8 min: nodos, triggers, Sheets, IF/Switch, API) | 1–5 | Pregunta rápida en el chat |
 | 10–35 | **01 · Planificar antes de construir** | 6–13 | Ej. 1 (3 min) |
 | 35–55 | **02 · El caso del módulo** | 14–20 | Ej. 2 (2 min) |
 | 55–65 | Break | 21 | |
@@ -76,6 +76,12 @@ Fuente: `program-summary.pdf` (Módulo 5). **Una clase de 2 horas.**
 | 72–110 | **03 · Práctica en vivo:** el plano, los accesos, la entrada, proceso y salida, y la clínica | 24–28 | Ej. 4: lo arman a la par |
 | 110–115 | Para practicar y cómo sigue | 29–30 | |
 | 115–120 | Preguntas y cierre | 31–32 | Tarea |
+
+**El repaso dura 8 minutos** (antes eran 3): los 5 de más salen de hacer **de entrada** los recortes 1 y 2 de
+abajo. Los minutos de las secciones siguientes quedan corridos 5 minutos.
+
+**Al final hay tres ejemplos extra** con servicios de Google (formulario + mail, el dólar diario sin duplicar, el
+resumen del día): si sobra tiempo, se muestra uno; si no, quedan para casa.
 
 **Si el tiempo se aprieta**, recortá en este orden:
 1. Logging y mantenimiento (filmina 12): se nombran los cinco puntos.
@@ -90,8 +96,8 @@ Lo último que se recorta es el Filter y el Aggregate, en los Pasos 3 y 4: son l
 ### Preparación (antes de la clase)
 
 - [ ] **Tu n8n prendido y logueado.** Probá antes la práctica entera.
-- [ ] **Tus credenciales de Google en n8n**, las tres conectadas y probadas: **Google Sheets OAuth2 API** (la del
-  Ejercicio 8 de la Semana 4), **Google Drive OAuth2 API** y **Gmail OAuth2**. Las tres usan el mismo *Client ID* y
+- [ ] **Tus credenciales de Google en n8n**, las tres conectadas y probadas: **Google Sheets OAuth2 API** (la de
+  la Semana 4), **Google Drive OAuth2 API** y **Gmail OAuth2**. Las tres usan el mismo *Client ID* y
   *Client Secret*. En Google Cloud, habilitá además la **Gmail API** (☰ → *APIs & Services* → *Library*). En
   clase creás en vivo la de Gmail. El paso a paso está en `ejercicios-docente.md`.
 - [ ] **La planilla de la práctica.** En Google Drive: **Nuevo** → **Hoja de cálculo de Google**. Ponele de nombre
@@ -118,7 +124,7 @@ Lo último que se recorta es el Filter y el Aggregate, en los Pasos 3 y 4: son l
 - [ ] **El boceto del Módulo 2.** Tené a mano el de algún alumno, o uno tuyo, para el Ejercicio 1.
 - [ ] **El día anterior**, avisales a los alumnos:
   - que entren con la computadora y con n8n prendido;
-  - que tengan hecho el Ejercicio 8 de la Semana 4 (la credencial de Google Sheets);
+  - que tengan la credencial de Google Sheets de la Semana 4 (si no: la guía de la credencial de Google de la Semana 4 ([google-sheet-conection.md](../Semana%204/Clase04-beta/google-sheet-conection.md)));
   - que traigan una planilla de Google con las columnas **ID, Nombre, Edad, Cargo, Carpeta** y los ID 1 a 5, o que
     descarguen `planilla-empleados.csv`.
 - [ ] [ejercicios-alumnos.md](ejercicios-alumnos.md) y `planilla-empleados.csv` listos para compartir.
@@ -126,11 +132,11 @@ Lo último que se recorta es el Filter y el Aggregate, en los Pasos 3 y 4: son l
 
 ---
 
-### 0–10 · Apertura y repaso de la Semana 4
+### 0–15 · Apertura y repaso de la Semana 4
 
 **Filmina 1 · Portada** (1 min) — Módulo 5: Creando workflows con servicios externos.
 
-<p style="color:#1a7f37">Bienvenidos al Módulo 5. La clase pasada aprendimos a hablarle a una API: una pieza. Hoy armamos el sistema completo: una planilla de Google que se completa sola, con una carpeta en Drive por cada persona y un correo que avisa que terminó. Y antes de tocar un nodo, vamos a aprender a planificarlo.</p>
+<p style="color:#1a7f37">Bienvenidos al Módulo 5. La clase pasada armamos flujos que reciben datos de afuera, los guardan en una planilla y deciden con IF y Switch, y vimos qué es una API. Eran piezas. Hoy armamos el sistema completo: una planilla de Google que se completa sola, con una carpeta en Drive por cada persona y un correo que avisa que terminó. Y antes de tocar un nodo, vamos a aprender a planificarlo.</p>
 
 Para explicar:
 - **"Servicios externos".** Son los programas que no son n8n y con los que n8n trabaja: Google Sheets (las
@@ -175,21 +181,106 @@ Para explicar cada objetivo:
 
 <p style="color:#1a7f37">La clase queda grabada.</p>
 
-**Repaso de la Semana 4** (3 min, sin filmina) — antes de pasar a la filmina 5.
+**Repaso de la Semana 4** (8 min, sin filmina) — antes de pasar a la filmina 5.
 
-<p style="color:#1a7f37">Repasemos. Primero: todo pedido a una API lleva un método, una URL, headers y, a veces, un body. Y vuelve con un status code: 200 salió bien, 4 algo es error nuestro, 5 algo es del servidor.</p>
+La Semana 4 se dio como la **Clase04-beta** (volver a las bases): nodos e items, webhook, formulario, Google Sheets,
+IF y Switch, y API como extra, hasta donde se llegó. Hoy se usa todo eso junto, así que el repaso va tema por tema.
+No es para volver a explicar: es para que lo reconozcan. Si alguien no se acuerda de algo, el detalle está en
+[el guion de la Clase04-beta](../Semana%204/Clase04-beta/README.md).
 
-<p style="color:#1a7f37">Segundo: 401 es "no sé quién sos", se arregla con la credencial. 403 es "sé quién sos, pero no tenés permiso", y la credencial no lo arregla. Hoy los dos nos van a aparecer con Google.</p>
+<p style="color:#1a7f37">Antes de arrancar, repasemos la clase pasada, porque hoy usamos todo, junto. Son cinco temas, rapidito.</p>
 
-<p style="color:#1a7f37">Y tercero: las credenciales se configuran una vez y se reutilizan. La de Google Sheets que algunos armaron en casa con OAuth2 es la que vamos a usar hoy.</p>
+**Repaso 1 · El nodo y la ficha (1 min)**
 
-Para explicar:
-- **El 403 y el 404, hoy en Google.** Con Google, el 403 suele ser un permiso: la planilla es de otro y te la
-  compartieron para ver, no para editar. El 404 suele ser un ID que ya no existe: la carpeta la borraron.
+```text
+Cuando hago clic  →  Datos del cliente  →  Armar el saludo
+   (trigger)           (Edit Fields)         (Edit Fields)
+                  └── 1 item ──┘      └── 1 item ──┘
+                  { nombre: Ana, ciudad: Córdoba }
+```
+
+<p style="color:#1a7f37">Uno. Un flujo es una fila de nodos unidos con flechas. El primero, el trigger, dice cuándo arranca. Por cada flecha viaja una ficha con casilleros, que n8n llama item. Y para usar un casillero en el nodo siguiente, lo arrastramos desde la izquierda, desde Input, y queda escrito entre llaves dobles: $json punto nombre.</p>
+
+- **Item = una ficha con casilleros.** Hoy van a ver varios items a la vez: cada fila de una planilla es un item.
+  - *Ejemplo:* Una planilla con 5 filas → 5 items, uno por fila.
+- **Arrastrar = `{{ $json.casillero }}`.** Hoy lo vamos a usar adentro de una dirección:
+  `https://dummyjson.com/users/{{ $json.ID }}`.
+
+**Repaso 2 · Cómo entran los datos: los triggers (2 min)**
+
+| Trigger | Cuándo arranca | Lo que vimos |
+|---|---|---|
+| **Trigger manually** | Cuando apretás *Execute workflow* | El de probar. Hoy es el que usamos |
+| **Webhook** | Cuando alguien toca su dirección | El timbre. Con GET, los datos llegan en `query`. Primero *Execute workflow*, después la dirección (si no, 404 *not registered*) |
+| **n8n Form** | Cuando alguien completa el formulario | Manda un POST: cada pregunta llega como un casillero |
+| **On a schedule** | A una hora, todos los días | "Todos los días a las 9". Para que corra solo: *Publish* y la compu prendida |
+
+<p style="color:#1a7f37">Dos. Cómo arranca un flujo. A mano, con el botón. Con un webhook, el timbre que toca alguien de afuera. Con un formulario, que completa una persona. O con un horario, todos los días a las 9. Hoy arrancamos a mano, porque estamos armando y probando. Cuando ande, se cambia el trigger y el resto queda igual.</p>
+
+**Repaso 3 · Guardar en Google Sheets (2 min)**
+
+```text
+Ordenar los datos   →   Guardar en la planilla (Google Sheets · Append row in sheet)
+fecha · nombre ·         Document: By URL (el link entero) · Sheet: Hoja 1
+destino · personas       Mapping Column Mode: Map Automatically
+                         ↑ los casilleros se llaman IGUAL que los títulos de la fila 1
+```
+
+<p style="color:#1a7f37">Tres. Google Sheets. Para que n8n entre a nuestro Google hace falta una credencial, que en n8n local lleva el trámite en Google Cloud: el Client ID y el Client Secret. Se hace una vez. Después, en cada nodo, se elige de la lista. Agregamos una fila con Append row, pegando el link de la planilla, y con Map Automatically cada casillero cayó en la columna que se llama igual.</p>
+
+<p style="color:#1a7f37">Hoy suman tres cosas: leer la planilla, actualizar una fila que ya existe en vez de agregar una nueva, y dos servicios más, Drive y Gmail. Y la buena noticia: usan el mismo Client ID y el mismo Client Secret. No hay que volver a hacer el proyecto.</p>
+
+- **Append = fila nueva abajo. Hoy: Update = cambiar una fila que ya existe.** Lo vemos en la filmina 18.
+- **¿No tenés la credencial todavía?** Hoy seguís con el flujo de ensayo sin Google, y en casa hacés la guía:
+  [google-sheet-conection.md](../Semana%204/Clase04-beta/google-sheet-conection.md).
+
+**Repaso 4 · Que el flujo decida: IF y Switch (1 min)**
+
+```text
+IF      ¿sí o no?           → true / false              ¿El monto es 1000 o más?
+Switch  ¿cuál de todas?     → Vuelos / Hoteles / … / Otra
+```
+
+<p style="color:#1a7f37">Cuatro. El IF hace una pregunta de sí o no y tiene dos salidas. El Switch pregunta "cuál de todas" y tiene una salida por respuesta, más una para lo que no encaja. Hoy aparece un primo de los dos: el Filter. No abre caminos: deja pasar lo que cumple la condición y descarta el resto.</p>
+
+- **IF: dos caminos. Switch: varios. Filter: uno solo, el de los que pasan.**
+  - *Ejemplo:* Hoy, el Filter deja pasar solo las filas que tienen el Nombre vacío.
+
+**Repaso 5 · API (2 min)**
+
+> **Para vos:** si la clase pasada llegaste al extra de API, esto es un repaso. Si no llegaste, es la primera vez, y
+> con esto alcanza para hoy: la práctica usa un HTTP Request a dummyjson.com.
+
+```text
+n8n (HTTP Request)  ── GET https://dolarapi.com/v1/dolares/oficial ──►  la API
+n8n                 ◄── 200 · { "compra": 1520, "venta": 1570 }     ──   (la respuesta, en JSON)
+```
+
+<p style="color:#1a7f37">Cinco. Una API es la forma en que dos programas se hablan: el mozo del restaurante. En n8n, el que hace el pedido es el nodo HTTP Request. Le decimos el método, GET para leer, y la dirección. La API contesta con un número, el status code, y con los datos, en JSON, que se arrastran como cualquier otro.</p>
+
+<p style="color:#1a7f37">Y el número es importante, porque hoy nos va a aparecer. Si empieza con 2, salió bien. Si empieza con 4, revisá tu pedido: 404 es que no existe; 401, que no saben quién sos; 403, que saben quién sos pero no tenés permiso. Si empieza con 5, falló el otro lado. Hoy, con Google, vamos a ver el 403 y el 404 a propósito.</p>
+
+- **El 403 y el 404, hoy en Google.** El 403 suele ser un permiso: la planilla es de otro y te la compartieron para
+  ver, no para editar. El 404 suele ser un ID que ya no existe: la carpeta la borraron.
   - *Ejemplo:* "403 The caller does not have permission" = no podés escribir en esa planilla.
-- **OAuth2.** Lo vimos la semana pasada: es el "iniciar sesión con Google" para n8n. Le das permiso a n8n para
-  entrar a tus planillas sin darle tu contraseña. Hoy lo repetimos para Drive y Gmail.
-  - *Ejemplo:* La pantalla de Google que dice "n8n curso quiere acceder a tu cuenta de Google" → *Continuar*.
+- **OAuth2 es lo que hicimos con Google Sheets.** Entrar con tu cuenta y darle permiso a n8n, sin darle tu
+  contraseña. Hoy lo repetimos para Drive y Gmail.
+
+**Pregunta rápida para el chat (1 min)** — la pegás, contestan mientras pasás a la filmina 5, no esperás a todos:
+
+```text
+REPASO · ¿Qué nodo usarías? (contestá con el número y el nodo)
+1. Que el flujo arranque todos los lunes a las 8.
+2. Que un cliente complete sus datos en una página.
+3. Que cada consulta quede anotada en una planilla.
+4. Separar las consultas en Vuelos, Hoteles, Paquetes u Otra.
+5. Traer el precio del dólar de hoy.
+```
+
+Respuestas: **1** On a schedule (Schedule Trigger). **2** n8n Form. **3** Google Sheets · Append row. **4** Switch.
+**5** HTTP Request (GET a dolarapi).
+
+<p style="color:#1a7f37">Todo eso lo vamos a usar hoy, junto, en un solo flujo. Vamos.</p>
 
 **Filmina 5 · ¿Dónde quedamos? De la pieza técnica al sistema** (3 min)
 
@@ -197,7 +288,7 @@ Para explicar:
 
 Para explicar:
 - **"En el módulo 4: aprendiste a hablarle a una API: método, URL, headers, body y credenciales."**
-  - *Ejemplo:* El GET al dólar y el pedido a NewsAPI con la API Key.
+  - *Ejemplo:* El GET al dólar, el formulario que guarda en Sheets, el webhook que contesta.
 - **"Lo que tenías: piezas sueltas. Una petición que funciona."** Una petición que funciona es como un ladrillo
   bien hecho: sirve, pero no es una casa. Hoy armamos la casa.
   - *Ejemplo:* Saber pedir el dólar no es lo mismo que tener un sistema que cotiza, guarda y avisa solo.
@@ -734,12 +825,12 @@ PRÁCTICA · Paso 2: los accesos
     Auth Platform* → *Clients* → el cliente → se puede crear un secreto nuevo (*Add secret*). El viejo deja de
     servir para las credenciales nuevas, pero la de Sheets que ya está conectada sigue andando.
 
-13. Al que no hizo el Ejercicio 8 de la Semana 4, le decís en el chat:
+13. Al que no tiene la credencial de Google de la Semana 4, le decís en el chat:
 
 ```text
 Si todavía no tenés el proyecto de Google Cloud: no te frenes acá.
 Importá el flujo 03-ensayo-sin-google.json y seguí la clase con ese: es la misma lógica, sin Google.
-En casa hacé el Ejercicio 8 de la Semana 4 y después repetí esta práctica con Google.
+En casa hacé la guía Semana 4/Clase04-beta/google-sheet-conection.md y después repetí esta práctica con Google.
 ```
 
 **La prueba mínima de cada credencial** es el primer *Execute step* del nodo que la usa: la de Sheets en el Paso 3,
@@ -1029,8 +1120,281 @@ claro por qué el Aggregate va antes del Gmail, y si algún mapeo no les sale (q
 
 - **Para la Semana 6:**
   1. Los **ejercicios para casa** (5 a 8). Sobre todo el 5 (el plano de un flujo propio) y el 6 (la idempotencia).
-  2. Quien no conectó Google: el Ejercicio 8 de la Semana 4 y repetir la práctica de hoy.
+  2. Quien no conectó Google: la guía de la credencial de Google de la Semana 4 ([google-sheet-conection.md](../Semana%204/Clase04-beta/google-sheet-conection.md)) y repetir la práctica de hoy.
+  3. Si quieren más: los tres ejemplos extra del final (flujos 05, 06 y 07).
   3. Leer `Semana 5.docx`, escuchar el podcast y hacer el cuestionario del módulo en la plataforma.
+
+---
+
+### Extra, si sobra tiempo o para casa · Tres ejemplos más con servicios de Google
+
+**Si sobra tiempo** después de la práctica, mostrá uno (el A es el más corto de armar). Si no, quedan para casa: los
+flujos están en la carpeta [n8n/](n8n/) (`05`, `06` y `07`). Cada uno se arma **desde cero**, paso a paso, y suma
+**una idea** a lo de hoy:
+
+| Ejemplo | Flujo | Lo nuevo | Min |
+|---|---|---|---|
+| A · Formulario → planilla → mail al cliente | `05-formulario-planilla-y-mail.json` | Gmail a la persona que escribió, y usar datos de un nodo anterior | 10 |
+| B · El dólar de cada día en una planilla | `06-dolar-del-dia-a-planilla.json` | *Append or Update*: que ejecutarlo dos veces no duplique | 8 |
+| C · El resumen del día por mail | `07-resumen-del-dia.json` | Leer, Filter y Aggregate otra vez, en otro caso | 8 |
+
+**¿Andan en local?** ✅ Sí, con las credenciales de Google de hoy (Sheets y Gmail: mismo Client ID y Client Secret).
+El formulario del A se abre solo desde tu computadora (`localhost`). El B y el C tienen horario: para que corran
+solos, **Publish** y la computadora con Docker prendida a esa hora. Para probarlos: *Execute workflow*.
+
+> **Para vos:** los tres flujos se armaron con los mismos nodos y versiones que el `02` de hoy, pero **no se
+> ejecutaron contra Google**. Probalos con tu cuenta antes de mostrarlos.
+
+#### Ejemplo A · Formulario → planilla → mail al cliente (flujo 05) (10 min)
+
+```text
+Formulario de consulta  →  Ordenar los datos  →  Guardar en la planilla  →  Mail al cliente
+(n8n Form)                 (Edit Fields)          (Sheets · Append row)      (Gmail · Send)
+```
+
+Lo que tiene que pasar: alguien completa el formulario, aparece una fila en la planilla, y a esa persona le llega un
+mail: *"Hola Ana: recibimos tu consulta para viajar a Mendoza. Un vendedor te escribe en las próximas 24 horas."*
+
+<p style="color:#1a7f37">Es el formulario de la clase pasada, con un paso más: además de anotar la consulta, le contestamos a la persona por mail, sola. Así el cliente sabe que su consulta llegó.</p>
+
+**A-1 · La planilla**
+
+```text
+sheets.new → nombre:  Consultas con mail
+Fila 1:   A1 fecha   B1 nombre   C1 email   D1 destino
+Copiá el link de la barra del navegador
+```
+
+<p style="color:#1a7f37">Primero la planilla, con cuatro títulos. Ahora suma una columna: el email.</p>
+
+**A-2 · El formulario**
+
+```text
+Overview → Create workflow → nombre:  Consulta con mail
++ → form → n8n Form → On new n8n Form event
+   Form Title:  Consulta de viaje
+   Preguntas:   Nombre (Text, obligatoria) · Email (Element Type: Email, obligatoria) · Destino (Text, obligatoria)
+   Options → Add option → Path:  consulta-con-mail
+Cerrá → renombralo:  Formulario de consulta → Save
+```
+
+<p style="color:#1a7f37">El formulario, como la clase pasada, con una pregunta nueva: el Email. Le pongo el tipo Email, así el formulario no deja mandar algo que no sea un mail.</p>
+
+- **Element Type: Email** revisa que tenga una arroba y un punto. No revisa que el mail exista.
+
+**A-3 · Probarlo y ordenar los datos**
+
+```text
+Execute workflow → completalo:  Ana · tu propio mail · Mendoza → Submit
++ → edit → Edit Fields (Set):
+   fecha    String  {{ $now.toFormat('dd/MM/yyyy HH:mm') }}
+   nombre   String  arrastrá Nombre
+   email    String  arrastrá Email
+   destino  String  arrastrá Destino
+Execute step → Cerrá → renombralo:  Ordenar los datos
+```
+
+<p style="color:#1a7f37">Lo pruebo con mi propio mail, así después me llega a mí. Y paso en limpio los datos, con los mismos nombres que la planilla.</p>
+
+**A-4 · Guardar en la planilla**
+
+```text
++ → sheets → Google Sheets → Append row in sheet
+   Credential: tu credencial de Sheets · Document: By URL → el link · Sheet: Hoja 1
+   Mapping Column Mode: Map Automatically
+Cerrá → renombralo:  Guardar en la planilla → Save
+```
+
+<p style="color:#1a7f37">Igual que la clase pasada: agregar una fila, con Map Automatically.</p>
+
+**A-5 · El mail: Gmail**
+
+```text
++ → gmail → Gmail → en Actions:  Send a message
+   Credential to connect with:  tu credencial de Gmail (la de hoy)
+   To:  a la izquierda, en INPUT, arriba, elegí el nodo  Ordenar los datos  → arrastrá  email
+        → queda  {{ $('Ordenar los datos').item.json.email }}
+```
+
+<p style="color:#1a7f37">El último nodo: Gmail, mandar un mensaje. ¿A quién? Al mail que escribió la persona. Lo arrastro, pero fíjense: arriba de Input elijo el nodo Ordenar los datos. Cualquier nodo puede usar los datos de cualquier nodo anterior, no solo del que tiene pegado.</p>
+
+- **`$('Ordenar los datos').item.json.email` = "el email, del nodo Ordenar los datos".** Es la forma de pedir un
+  dato a un nodo que no está pegado. Arrastrando, n8n lo escribe solo.
+  - *Ejemplo:* `$json.email` es "del nodo de al lado". `$('Ordenar los datos')…` es "de ese nodo, aunque esté
+    lejos".
+
+**A-6 · El asunto y el texto**
+
+```text
+Subject:     Recibimos tu consulta para  → arrastrá destino (de Ordenar los datos)
+Email Type:  Text
+Message:     Hola {nombre}: recibimos tu consulta para viajar a {destino}. Un vendedor te escribe en
+             las próximas 24 horas.   (los {…} se arrastran de Ordenar los datos)
+Options → Add option → Append n8n Attribution → apagado
+Cerrá → renombralo:  Mail al cliente → Save
+```
+
+<p style="color:#1a7f37">El asunto y el texto, con el nombre y el destino arrastrados. Y una opción: Append n8n Attribution, que agrega al final "este mail lo mandó n8n". La apago, para que el cliente no lo vea.</p>
+
+**A-7 · Probar todo**
+
+```text
+Execute workflow → el formulario → Ana · tu mail · Mendoza → Submit
+→ los cuatro nodos en verde · una fila en la planilla · un mail en tu bandeja
+```
+
+<p style="color:#1a7f37">Completo el formulario, y pasan tres cosas solas: la fila en la planilla, y el mail en mi bandeja. Así funciona la atención automática de muchas empresas.</p>
+
+- **Si el mail no llega:** fijate en *Spam*, y que en Google Cloud esté encendida la **Gmail API**.
+
+#### Ejemplo B · El dólar de cada día en una planilla (flujo 06) (8 min)
+
+```text
+Todos los días a las 9  →  Preguntar el dólar  →  Armar la fila  →  Guardar el dólar del día
+(Schedule Trigger)         (HTTP Request)         (Edit Fields)      (Sheets · Append or Update)
+```
+
+Lo que tiene que pasar: cada día queda una fila `12/11/2026 | 1520 | 1570`. Y si se ejecuta dos veces el mismo día,
+**sigue habiendo una sola fila de hoy**.
+
+<p style="color:#1a7f37">Un historial del dólar, que se arma solo: todos los días a las 9, n8n pregunta el dólar y lo anota. Y vamos a usar lo de hoy: que si se ejecuta dos veces el mismo día, no anote dos filas.</p>
+
+**B-1 · La planilla y el horario**
+
+```text
+sheets.new → nombre:  Dólar histórico → Fila 1:  A1 fecha   B1 compra   C1 venta → copiá el link
+n8n: Overview → Create workflow → nombre:  Dólar del día
++ → On a schedule → Trigger Interval: Days · Days Between Triggers: 1 · Trigger at Hour: 9am · Minute: 0
+Cerrá → renombralo:  Todos los días a las 9
+```
+
+<p style="color:#1a7f37">La planilla con tres columnas, y el trigger con horario: todos los días a las 9.</p>
+
+**B-2 · Preguntar el dólar**
+
+```text
++ → http → HTTP Request · Method: GET · URL:  https://dolarapi.com/v1/dolares/oficial
+Execute step → OUTPUT:  compra: 1520   venta: 1570   …
+Cerrá → renombralo:  Preguntar el dólar
+```
+
+<p style="color:#1a7f37">Un HTTP Request a la API del dólar, como en la clase pasada.</p>
+
+**B-3 · Armar la fila**
+
+```text
++ → Edit Fields (Set):
+   fecha   String  {{ $now.toFormat('dd/MM/yyyy') }}     ← solo el día, sin la hora
+   compra  Number  arrastrá compra
+   venta   Number  arrastrá venta
+Cerrá → renombralo:  Armar la fila
+```
+
+<p style="color:#1a7f37">Armo la fila con los mismos nombres que la planilla. Y fíjense: la fecha va sin la hora, solo el día. En el paso que sigue se entiende por qué.</p>
+
+**B-4 · Guardar sin duplicar: Append or Update**
+
+```text
++ → sheets → Google Sheets → Actions:  Append or update row in sheet
+   Credential · Document: By URL → el link · Sheet: Hoja 1
+   Mapping Column Mode:  Map Automatically
+   Column to match on:   fecha
+Cerrá → renombralo:  Guardar el dólar del día → Save
+```
+
+<p style="color:#1a7f37">Y acá está la idea de hoy. No uso Append, agregar: uso Append or Update, agregar o actualizar. Le digo que busque por fecha. Si la fecha de hoy no está, agrega la fila. Si ya está, la actualiza. Así, si se ejecuta dos veces el mismo día, sigue habiendo una sola fila de hoy: eso es idempotencia.</p>
+
+- **Append: siempre una fila nueva. Update: solo cambia una que existe. Append or Update: las dos, según si la
+  encuentra.**
+  - *Ejemplo:* Con Append, dos ejecuciones el mismo día = dos filas del 12/11. Con Append or Update = una.
+- **Por eso la fecha va sin hora.** Con la hora, cada ejecución tendría una fecha distinta y nunca encontraría la de
+  antes.
+
+**B-5 · Probar dos veces**
+
+```text
+Execute workflow → en la planilla: una fila de hoy
+Execute workflow otra vez → sigue habiendo UNA fila de hoy (si cambió el dólar, con el número nuevo)
+```
+
+<p style="color:#1a7f37">Lo ejecuto dos veces, y en la planilla hay una sola fila de hoy. Para que corra solo todos los días: Publish.</p>
+
+#### Ejemplo C · El resumen del día por mail (flujo 07) (8 min)
+
+```text
+Todos los días a las 18  →  Leer la planilla  →  Solo las de hoy  →  Juntar en un solo item  →  Mail con el resumen
+(Schedule Trigger)          (Sheets · Get rows)   (Filter)            (Aggregate)                 (Gmail)
+```
+
+Usa la planilla **"Consultas de la agencia"** de la Semana 4 (`fecha | nombre | destino | personas`). Lo que tiene
+que salir, si hoy llegaron dos: un solo mail, *"Hoy llegaron 2 consultas: - Ana quiere ir a Mendoza (3 personas) -
+Martín quiere ir a Bariloche (2 personas)"*.
+
+<p style="color:#1a7f37">Último ejemplo, y repasa las dos ideas fuertes de hoy en otro caso. Todos los días a las 6 de la tarde, n8n lee la planilla de consultas, se queda con las de hoy, y nos manda un solo mail con el resumen.</p>
+
+**C-1 · El horario y leer la planilla**
+
+```text
+Overview → Create workflow → nombre:  Resumen del día
++ → On a schedule → Days · 1 · Trigger at Hour: 6pm · Minute: 0 → renombralo:  Todos los días a las 18
++ → sheets → Google Sheets → Actions:  Get row(s) in sheet
+   Credential · Document: By URL → el link de "Consultas de la agencia" · Sheet: Hoja 1
+Execute step → OUTPUT: un item por fila → renombralo:  Leer la planilla
+```
+
+<p style="color:#1a7f37">Leo la planilla de consultas de la clase pasada. Miren: cada fila sale como un item. Si hay diez filas, diez items.</p>
+
+**C-2 · Solo las de hoy: Filter**
+
+```text
++ → filter → Filter · Conditions:
+   izquierda:  arrastrá  fecha   → {{ $json.fecha }}
+   medio:      String → starts with   (empieza con)
+   derecha:    {{ $now.toFormat('dd/MM/yyyy') }}
+Execute step → pasan solo las filas de hoy → renombralo:  Solo las de hoy
+```
+
+<p style="color:#1a7f37">Me quedo con las de hoy: la fecha tiene que empezar con la fecha de hoy. Las de otros días, el Filter las descarta.</p>
+
+- **Si no pasa ninguna y hoy sí hubo consultas:** fijate cómo muestra la fecha la planilla. Tiene que verse como
+  `12/11/2026 12:40`. Si se ve al revés (`11/12/2026`): en la planilla, **Archivo → Configuración → Configuración
+  regional: Argentina**.
+
+**C-3 · Juntar en un solo item: Aggregate**
+
+```text
++ → aggregate → Aggregate · Aggregate:  All Item Data (Into a Single List)
+   Put Output in Field:  consultas
+Execute step → OUTPUT: 1 item, con la lista  consultas  adentro → renombralo:  Juntar en un solo item
+```
+
+<p style="color:#1a7f37">Si dejo pasar dos consultas al Gmail, manda dos mails. Quiero uno. Por eso el Aggregate, como hoy: junta todo en un solo item, con la lista adentro.</p>
+
+**C-4 · El mail con el resumen**
+
+```text
++ → gmail → Gmail → Send a message · Credential · To: tu mail
+   Subject:  Resumen del día: {{ $json.consultas.length }} consultas
+   Email Type: Text
+   Message:  Hoy llegaron {{ $json.consultas.length }} consultas:
+             {{ $json.consultas.map(c => '- ' + c.nombre + ' quiere ir a ' + c.destino + ' (' + c.personas + ' personas)').join('\n') }}
+   Options → Append n8n Attribution → apagado
+Cerrá → renombralo:  Mail con el resumen → Save
+```
+
+<p style="color:#1a7f37">El mail: cuántas llegaron, con length, el largo de la lista. Y la lista, una por renglón. Esa expresión larga no hace falta escribirla de memoria: se copia del flujo de la carpeta. Lo que importa es la idea: un solo mail, con todo adentro.</p>
+
+- **`consultas.length` = cuántas hay en la lista.** `.map(…).join('\n')` = "armá un renglón por cada una y
+  ponelas una abajo de la otra".
+
+**C-5 · Probar**
+
+```text
+Execute workflow → un solo mail: "Resumen del día: 2 consultas" (o las que haya hoy)
+Si hoy no hubo ninguna: el Filter deja 0 items, y el flujo se frena ahí: no sale mail
+```
+
+<p style="color:#1a7f37">Un mail, con el resumen. Y si hoy no llegó ninguna, no sale nada: es la trampa del Ejercicio 2, en otro caso. Si quisiéramos un mail que diga "hoy no hubo consultas", habría que planificarlo.</p>
 
 ---
 
