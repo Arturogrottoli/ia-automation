@@ -3069,6 +3069,7 @@ resto**. Los ejemplos están en `07-api-dolar.json` y `08-api-pokemon.json` de l
 | T9 | 22 y 23 | El nodo HTTP Request | 2 |
 | Ej. 1 | 27 (paso 1) | El dólar: el primer GET | 7 |
 | Ej. 2 | — | Un Pokémon: otra API, la misma receta | 5 |
+| Más | — | Cuatro APIs útiles más (clima, feriados, monedas, provincias) y las que piden clave | 3 |
 
 **¿Anda en local?** ✅ Sí, sin pasos extra: es la "dirección 1", n8n sale a buscar algo a internet. Las dos APIs de
 los ejemplos son gratis y **no piden clave**.
@@ -3521,6 +3522,102 @@ PARA EL CHAT · Probá vos (en casa, con el flujo 08 de la carpeta n8n/)
 3. Bonus: la API de Rick and Morty:
      https://rickandmortyapi.com/api/character/1
    y armá un mensaje con {{ $json.name }} y {{ $json.species }}.
+```
+
+### Más ejemplos de API: para qué sirven (3 min, o para el chat)
+
+<p style="color:#1a7f37">El dólar y Pikachu son para aprender. Pero, ¿para qué sirve esto en un negocio de verdad? Les muestro cuatro APIs más, gratis y sin clave, que se usan con el mismo nodo, HTTP Request, cambiando solo la dirección. Piénsenlas para la agencia de viajes.</p>
+
+Todas probadas hoy (12/11/2026) con *GET* y *Authentication: None*. Los valores cambian con el día.
+
+**1 · El clima de un destino (Open-Meteo)**
+
+```text
+URL:  https://api.open-meteo.com/v1/forecast?latitude=-32.89&longitude=-68.83&current=temperature_2m,precipitation&timezone=America/Argentina/Buenos_Aires
+Responde:  current:  temperature_2m: 35.5   precipitation: 0      (Mendoza, ahora)
+En n8n:    {{ $json.current.temperature_2m }}
+```
+
+- **Para qué sirve:** mandarle al cliente, el día antes del viaje, "Mañana en Mendoza: 35 °C, sin lluvia. ¡Llevá
+  protector!".
+- **Cómo se elige la ciudad:** `latitude` y `longitude` son las coordenadas. Se cambian por las del destino.
+- **Cómo saber las coordenadas de una ciudad: otra API.**
+  `https://geocoding-api.open-meteo.com/v1/search?name=Bariloche&count=1&language=es` responde
+  `latitude: -41.14`, `longitude: -71.30`. Dos HTTP Request seguidos: el primero busca la ciudad y el segundo, su
+  clima.
+
+**2 · Los feriados de Argentina (ArgentinaDatos)**
+
+```text
+URL:  https://api.argentinadatos.com/v1/feriados/2026
+Responde:  una lista de 20 feriados:   fecha: 2026-11-23   tipo: trasladable   nombre: Día de la Soberanía Nacional (20/11)
+En n8n:    {{ $json.fecha }} y {{ $json.nombre }}
+```
+
+- **Para qué sirve:** un flujo que cada lunes mira si se viene un fin de semana largo y avisa "¡Fin de semana largo
+  el 23/11! Armar la promo de escapadas".
+- **Ojo, algo nuevo:** la respuesta es una **lista**. n8n la separa sola: cada feriado sale como **un item**
+  distinto (20 items). Lo que venga después se ejecuta una vez por cada uno.
+  - *Ejemplo:* Un Edit Fields después arma 20 mensajes, uno por feriado. Con un IF, se quedan solo los que
+    faltan.
+
+**3 · Otras monedas: euro y real (DolarApi)**
+
+```text
+URL:  https://dolarapi.com/v1/cotizaciones/eur      → nombre: Euro             venta: 1709.63
+URL:  https://dolarapi.com/v1/cotizaciones/brl      → nombre: Real Brasileño   venta: 273.47
+URL:  https://dolarapi.com/v1/dolares                → todos los dólares juntos (oficial, blue, bolsa…), en lista
+```
+
+- **Para qué sirve:** pasar un paquete a Europa o a Brasil a pesos con la cotización del día.
+  - *Ejemplo:* Juntándolo con el flujo 05: "Tu paquete a Río de 3.000 reales son hoy $820.418"
+    (`{{ 3000 * $json.venta }}`).
+- **Es la misma API del ejemplo 1**, con otra dirección de la "carta".
+
+**4 · Provincias y ciudades de Argentina, bien escritas (Georef, del Gobierno)**
+
+```text
+URL:  https://apis.datos.gob.ar/georef/api/provincias?nombre=cordoba
+Responde:  provincias:  nombre: Córdoba   id: 14   centroide: lat -32.14, lon -63.80
+En n8n:    {{ $json.provincias[0].nombre }}
+```
+
+- **Para qué sirve:** los clientes escriben "cordoba", "Cba", "CORDOBA". La API devuelve el nombre oficial,
+  "Córdoba", con tilde. Así, en la planilla, todas las consultas de Córdoba quedan iguales y se pueden contar.
+- **Es una API pública del Estado:** hay más en `datos.gob.ar` (municipios, calles, localidades).
+
+| API | Qué le pido | Una automatización posible para la agencia |
+|---|---|---|
+| **DolarApi** (ejemplo 1) | El dólar de hoy | Todos los días a las 9, el dólar para los vendedores (es el ejemplo B del final) |
+| **Open-Meteo** | El clima de un destino | El día antes del viaje, el pronóstico al cliente |
+| **ArgentinaDatos** | Los feriados del año | Aviso de fin de semana largo para armar promos |
+| **DolarApi** (euro, real) | Otras monedas | Paquetes al exterior pasados a pesos |
+| **Georef** | El nombre oficial de una provincia | Planilla de consultas ordenada |
+
+<p style="color:#1a7f37">Fíjense que en las cuatro la receta es la misma: HTTP Request, GET, la dirección, Execute step, y arrastrar lo que sirve. Lo único que cambia es a quién le pregunto.</p>
+
+**Y las que piden clave (para lo que viene).** Son las que más se usan en negocios. Algunas tienen nodo propio en
+n8n y otras se usan con HTTP Request y una credencial:
+
+| Servicio | Para qué sirve | Cómo pide permiso |
+|---|---|---|
+| **Gmail** | Mandar el presupuesto por mail, leer consultas que llegan | OAuth2 (como Google Sheets) |
+| **Google Calendar** | Agendar una llamada con el cliente | OAuth2 |
+| **Telegram** | Avisarle al vendedor al celular: "llegó una consulta nueva" | Token del bot |
+| **WhatsApp Business** | Confirmarle la reserva al cliente | Token (de Meta) |
+| **Mercado Pago** | Crear un link de pago, enterarse cuando pagaron (por webhook) | Access Token |
+| **OpenAI / Gemini** | Que una IA lea la consulta y la clasifique, o escriba la respuesta | API Key |
+
+`PARA EL CHAT`:
+
+```text
+PARA EL CHAT · Más APIs gratis y sin clave para probar con HTTP Request (GET)
+Clima en Mendoza:   https://api.open-meteo.com/v1/forecast?latitude=-32.89&longitude=-68.83&current=temperature_2m
+Buscar una ciudad:  https://geocoding-api.open-meteo.com/v1/search?name=Bariloche&count=1&language=es
+Feriados 2026:      https://api.argentinadatos.com/v1/feriados/2026
+Euro / Real:        https://dolarapi.com/v1/cotizaciones/eur    ·    https://dolarapi.com/v1/cotizaciones/brl
+Provincias:         https://apis.datos.gob.ar/georef/api/provincias?nombre=cordoba
+(Pegalas primero en el navegador para ver qué devuelven.)
 ```
 
 <p style="color:#1a7f37">Para llevarse: toda integración que parezca mágica es, por dentro, un método, una dirección, unos headers y un body. La clase que viene seguimos con las APIs que piden clave, y las sumamos a los flujos que ya armamos.</p>
