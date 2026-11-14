@@ -1,0 +1,331 @@
+{
+  "name": "07 · Ejemplo: lo sensible, al modelo local; lo demás, a la nube",
+  "id": "s7e07router00001",
+  "active": false,
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Argentina/Buenos_Aires"
+  },
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "87040852-3db0-4db0-93a2-816d3eef8229",
+      "name": "Arrancar a mano",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"mensajes\": [\n    {\n      \"cliente\": \"Marta\",\n      \"texto\": \"Quiero pagar la seña con la tarjeta 4517 6601 2345 9087, ¿cómo hago?\"\n    },\n    {\n      \"cliente\": \"Jorge\",\n      \"texto\": \"Para el seguro de viaje necesitan mi DNI? es 30.123.456\"\n    },\n    {\n      \"cliente\": \"Sofía\",\n      \"texto\": \"¿Qué conviene llevar para Ushuaia en julio?\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "f2a0a4d4-1f5c-4d54-8db8-f78193a1e269",
+      "name": "Mensajes de prueba",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "mensajes",
+        "options": {}
+      },
+      "id": "070851e2-1f0b-48ea-95ab-c60477b4af19",
+      "name": "Uno por uno",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cec01fe5-238d-4456-adc4-0eae89ebe1b0",
+              "leftValue": "={{ $json.texto }}",
+              "rightValue": "(\\d{4}[ -]?){3}\\d{4}|\\d{1,2}\\.?\\d{3}\\.?\\d{3}",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "2a28c29c-b8fb-4b40-9b19-4228ceae8b91",
+      "name": "¿Tiene datos sensibles?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        660,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Sos la asesora de la agencia de viajes \"Rumbo Sur\". Respondé este mensaje en 3 líneas como mucho, en español rioplatense. Nunca repitas números de tarjeta ni de documento.\n\nMensaje: {{ $json.texto }}",
+        "batching": {}
+      },
+      "id": "fccc0960-e335-49b3-9f87-9045fe80ccfe",
+      "name": "Responder (local)",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        920,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "model": "llama3.2:latest",
+        "options": {
+          "temperature": 0.1
+        }
+      },
+      "id": "e64eb6a8-65b7-45c7-ac31-2ca9f0aac214",
+      "name": "Cerebro local: Ollama",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        920,
+        20
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Sos la asesora de la agencia de viajes \"Rumbo Sur\". Respondé este mensaje en 3 líneas como mucho, en español rioplatense. Nunca repitas números de tarjeta ni de documento.\n\nMensaje: {{ $json.texto }}",
+        "batching": {}
+      },
+      "id": "8cff0a0a-e9ea-4b2e-9884-51e9a4e1aa92",
+      "name": "Responder (nube)",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        920,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3-flash-preview",
+        "options": {
+          "temperature": 0.3
+        }
+      },
+      "id": "550200bf-8bb8-42b4-9f35-43ae3d86f2cb",
+      "name": "Cerebro nube: Gemini",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        920,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e09267a2-268d-4f23-9579-06ebb881271b",
+              "name": "cliente",
+              "value": "={{ $('Uno por uno').item.json.cliente }}",
+              "type": "string"
+            },
+            {
+              "id": "ff383c8c-2d35-4e1f-ad18-c3ab25d6e7db",
+              "name": "cerebro",
+              "value": "Ollama (local): tenía datos sensibles",
+              "type": "string"
+            },
+            {
+              "id": "aee2c8ed-8735-4bfd-9c3d-01e1752e1876",
+              "name": "respuesta",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e19c9c8e-81c5-46e7-8b7c-34a55f25f5f8",
+      "name": "Respuesta local",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1200,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f3aee6c2-21fd-49f6-af8b-a75bf8847b8d",
+              "name": "cliente",
+              "value": "={{ $('Uno por uno').item.json.cliente }}",
+              "type": "string"
+            },
+            {
+              "id": "0a97a850-6701-405f-b975-dc7836e12744",
+              "name": "cerebro",
+              "value": "Gemini (nube)",
+              "type": "string"
+            },
+            {
+              "id": "78e1a99a-a89e-4392-a7ce-f47151f789fa",
+              "name": "respuesta",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fbd54ac8-7132-40d6-a330-12b25bb063ed",
+      "name": "Respuesta nube",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1200,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 07 · El router de privacidad\n\n1. **Mensajes de prueba**: uno con tarjeta, uno con DNI, uno común.\n2. **¿Tiene datos sensibles?** (IF con una *expresión regular*: busca 16 números de tarjeta o un DNI).\n3. **true → Responder (local)** con Ollama: el dato no sale de tu computadora.\n4. **false → Responder (nube)** con Gemini: más rápido y mejor.\n\nLo decide el **flujo**, no el modelo: es una regla fija.\n\n**Antes de ejecutar:** Ollama prendido y la credencial de Gemini.",
+        "height": 380,
+        "width": 700,
+        "color": 4
+      },
+      "id": "7b169b00-3073-4653-bfcc-e750449c1660",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -480
+      ]
+    }
+  ],
+  "connections": {
+    "Arrancar a mano": {
+      "main": [
+        [
+          {
+            "node": "Mensajes de prueba",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensajes de prueba": {
+      "main": [
+        [
+          {
+            "node": "Uno por uno",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Uno por uno": {
+      "main": [
+        [
+          {
+            "node": "¿Tiene datos sensibles?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Tiene datos sensibles?": {
+      "main": [
+        [
+          {
+            "node": "Responder (local)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Responder (nube)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cerebro local: Ollama": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Responder (local)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cerebro nube: Gemini": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Responder (nube)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Responder (local)": {
+      "main": [
+        [
+          {
+            "node": "Respuesta local",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Responder (nube)": {
+      "main": [
+        [
+          {
+            "node": "Respuesta nube",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

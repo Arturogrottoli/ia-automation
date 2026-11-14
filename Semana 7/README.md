@@ -9,7 +9,7 @@ Fuente: `program-summary.pdf` (Módulo 7). **Una clase de 2 horas.**
 | `Modulo_7_AI_Automation.pptx` | Las filminas del módulo (30). |
 | `Semana 7.docx` | El material de lectura: por qué correr un modelo local, qué es Ollama, cómo elegir el modelo según el hardware, el cuestionario de 4 preguntas, el podcast y el guion sugerido de la clase. |
 | [ejercicios-alumnos.md](ejercicios-alumnos.md) | Ejercicios en clase y para casa, con el paso a paso de la instalación. Se comparte con los alumnos. |
-| [n8n/](n8n/) | Cuatro workflows listos para importar: el "hola mundo" con Ollama, la comparación local contra nube, la clasificación de quejas con datos de tarjeta y Ana (el agente de la Semana 6) con el cerebro en Ollama. |
+| [n8n/](n8n/) | Siete workflows listos para importar: el "hola mundo" con Ollama, la comparación local contra nube, la clasificación de quejas con datos de tarjeta, Ana (el agente de la Semana 6) con el cerebro en Ollama, y tres ejemplos extra (05 la IA local lee las encuestas, 06 de un mensaje escrito como sea a la planilla, 07 el router de privacidad). |
 | [ejercicios-docente.md](ejercicios-docente.md) | Respuestas, las salidas reales de los flujos y las trabas más comunes. **No se comparte.** |
 
 ## Los ejercicios
@@ -81,13 +81,19 @@ Fuente: `program-summary.pdf` (Módulo 7). **Una clase de 2 horas.**
 
 | Min | Tramo | Filminas | En clase |
 |---|---|---|---|
-| 0–10 | Apertura y repaso de la Semana 6 | 1–5 | |
+| 0–15 | Apertura y **repaso de la Semana 6** (8 min: qué es un agente, sus piezas, las tools, el manual, lo que cuesta) | 1–5 | Pregunta rápida en el chat |
 | 10–35 | **01 · Por qué correr IA local** | 6–12 | Ej. 1 (5 min) |
 | 35–60 | **02 · Ollama y los modelos** | 13–19 | Ej. 2 (2 min) |
 | 60–70 | Break | 20 | |
 | 70–113 | **03 · Práctica en vivo:** el motor, el modelo, sin internet, el puente y comparar | 21–27 | Ej. 3 |
 | 113–117 | Cómo sigue y la tarea | 28 | |
 | 117–120 | Preguntas y cierre | 29–30 | |
+
+**Al final hay tres ejemplos extra** con IA local (las encuestas, de mensaje a planilla, el router de privacidad): si
+sobra tiempo, se muestra uno; si no, quedan para casa.
+
+**El repaso dura 8 minutos** (antes eran 3): los 5 de más salen de hacer **de entrada** los recortes 2 y 3 de
+abajo. Los minutos de las secciones siguientes quedan corridos 5 minutos.
 
 **Si el tiempo se aprieta**, recortá en este orden:
 1. El Paso 3 (sin internet): lo hacés vos solo, en un minuto, y ellos lo prueban en casa.
@@ -130,7 +136,7 @@ Lo último que se recorta es el Paso 4 (el puente con n8n): es lo que conecta es
 
 ---
 
-### 0–10 · Apertura y repaso de la Semana 6
+### 0–15 · Apertura y repaso de la Semana 6
 
 **Filmina 1 · Portada** (1 min) — Módulo 7: Instalando IA local con Ollama.
 
@@ -177,22 +183,84 @@ Para explicar cada objetivo:
 
 <p style="color:#1a7f37">La clase queda grabada.</p>
 
-**Repaso de la Semana 6** (3 min, sin filmina) — antes de pasar a la filmina 5.
+**Repaso de la Semana 6** (8 min, sin filmina) — antes de pasar a la filmina 5.
 
-<p style="color:#1a7f37">Repasemos. La semana pasada armamos un agente: un cerebro, que era Gemini; un diario, la memoria; unas manos, las herramientas; y un manual, el system prompt. Y una idea clave: el agente decide solo qué herramienta usar, en un ciclo de razonar, actuar y observar.</p>
+Hoy se cambia **una sola pieza** del agente de la semana pasada: el cerebro. Para que se entienda qué cambia y qué
+no, el repaso recorre el agente pieza por pieza. Si alguien no se acuerda de algo, el detalle está en
+[el guion de la Semana 6](../Semana%206/README.md).
 
-<p style="color:#1a7f37">Hoy vamos a tocar solo una de esas piezas: el cerebro. El resto queda igual.</p>
+<p style="color:#1a7f37">Antes de arrancar, repasemos la clase pasada, porque hoy le cambiamos el cerebro a ese mismo agente. Cinco temas, rapidito.</p>
 
-Para explicar:
-- **El cerebro es intercambiable.** En n8n, el modelo es un sub-nodo que se enchufa abajo del agente. Se puede
-  desenchufar Gemini y enchufar otro, sin tocar ni las herramientas ni el system prompt.
-  - *Ejemplo:* Ana, la asesora de "Rumbo Sur", con el cerebro de Gemini o con el de Ollama: mismas herramientas,
-    mismas reglas. Lo prueban en casa con el Ejercicio 7.
-- **Cada vuelta del ciclo es un pedido al modelo.** Lo vimos la semana pasada: un agente le pregunta varias veces al
-  modelo por cada mensaje. Eso hoy importa por dos cosas: en la nube se paga por cada pedido, y en local, cada pedido
-  usa nuestra máquina.
-  - *Ejemplo:* "¿Cuánto sale Bariloche en pesos?" son cuatro vueltas: la planilla, el dólar, la calculadora y la
-    respuesta. Cuatro pedidos al modelo.
+**Repaso 1 · Qué es un agente (2 min)**
+
+```text
+Flujo fijo:  nosotros decidimos los pasos al armarlo        → siempre el mismo camino
+Chain:       un solo paso con IA, siempre igual              → resumir, clasificar, traducir
+Agente:      el modelo decide qué herramientas usar          → razona, actúa, observa, repite
+```
+
+<p style="color:#1a7f37">Uno. Un agente es un sistema que recibe un pedido, decide qué hacer y lo hace, usando herramientas. La diferencia con un flujo fijo es quién decide: en el flujo, nosotros; en el agente, el modelo, mientras corre. Y lo que repite es un ciclo: razona, actúa, mira el resultado, y vuelve a empezar hasta tener la respuesta.</p>
+
+- **Chain o agente:** si la tarea es una sola y siempre igual, chain. Si hay que decidir, usar herramientas o
+  conversar, agente.
+  - *Ejemplo:* Clasificar una queja: chain. Contestar "¿cuánto sale Bariloche en pesos?" buscando en la planilla:
+    agente.
+
+**Repaso 2 · Las piezas: cerebro, diario, manos y manual (2 min)**
+
+```text
+                 ┌──────────────────┐
+Mensaje del chat │     AI Agent     │   ← manual: el system prompt
+                 └──┬──────┬─────┬──┘
+           cerebro  │ diario│ manos│
+                    ▼      ▼     ▼
+                 Gemini  Memoria  consultar_paquetes · cotizacion_dolar · calculadora
+                   ↑
+          HOY SE CAMBIA ESTA PIEZA (y solo esta)
+```
+
+<p style="color:#1a7f37">Dos. El agente tiene tres piezas enchufadas abajo, y un manual adentro. El cerebro, que era Gemini. El diario, la memoria, para que se acuerde de la charla. Las manos, las herramientas: la planilla, el dólar y la calculadora. Y el manual, el system prompt. Hoy vamos a desenchufar el cerebro y enchufar otro, que corre en nuestra computadora. Todo lo demás queda igual.</p>
+
+- **El cerebro es un sub-nodo: se cambia sin tocar lo demás.** Las herramientas, la memoria y el manual no saben
+  qué cerebro tienen enchufado.
+
+**Repaso 3 · Las herramientas: lo que el modelo lee de ellas (1 min)**
+
+<p style="color:#1a7f37">Tres. El modelo no ve cómo está armada una herramienta por dentro: solo lee su nombre y su descripción. Si la descripción es mala, la elige mal. Y los datos que necesita, como el destino, los completa él, con fromAI. Esto hoy importa mucho: elegir bien la herramienta es una habilidad del modelo, y los modelos chicos la tienen menos.</p>
+
+- **Lo vamos a ver hoy:** Ana con un modelo chico usa peor las herramientas que con Gemini. Por eso, en local, conviene
+  usar la IA para tareas cortas y de un solo paso.
+
+**Repaso 4 · El manual: el system prompt (1 min)**
+
+```text
+ROL · ALCANCE · HERRAMIENTAS (cuándo usar cada una) · TONO · FORMATO · LÍMITES (guardrails)
+```
+
+<p style="color:#1a7f37">Cuatro. El system prompt es el manual de operaciones: quién es, de qué puede hablar, cuándo usar cada herramienta, cómo contesta, y qué no puede hacer nunca. Por ejemplo: "nunca confirmes una reserva". Ese manual sirve igual con cualquier cerebro; pero un cerebro chico respeta menos reglas, así que hoy el manual tiene que ser más corto y más claro.</p>
+
+**Repaso 5 · Lo que cuesta un agente (1 min)**
+
+<p style="color:#1a7f37">Cinco. Cada vuelta del ciclo es un pedido al modelo. "¿Cuánto sale Bariloche en pesos?" son cuatro vueltas: la planilla, el dólar, la calculadora y la respuesta. Cuatro pedidos. En la nube, cada pedido se paga, o choca con el límite del plan gratis: el error 429. En local no se paga, pero cada pedido lo hace nuestra máquina, y eso hoy lo vamos a sentir: tarda.</p>
+
+- **Y la pregunta de hoy:** cada uno de esos cuatro pedidos viaja a los servidores de Google, con lo que escribió el
+  cliente. ¿Está bien eso? Depende de qué datos son. De eso se trata la clase.
+
+**Pregunta rápida para el chat (1 min)** — la pegás, contestan mientras pasás a la filmina 5, no esperás a todos:
+
+```text
+REPASO · Contestá con el número y la respuesta
+1. ¿Quién decide qué herramienta usar: nosotros o el modelo?
+2. ¿Cómo se llama la pieza que hace que el agente se acuerde de lo que le dijiste antes?
+3. ¿Qué lee el modelo de una herramienta para decidir si usarla?
+4. "Nunca confirmes una reserva": ¿en qué pieza va?
+5. Si un agente da 429 con Gemini gratis, ¿qué pasó?
+```
+
+Respuestas: **1** El modelo. **2** La memoria (el diario). **3** Su nombre y su descripción. **4** En el system prompt
+(es un límite, un *guardrail*). **5** Se pasó del límite de pedidos por minuto: hay que esperar.
+
+<p style="color:#1a7f37">Hoy le cambiamos el cerebro a ese agente. Y la pregunta es: ¿dónde corre ese cerebro, y qué datos le mandamos? Vamos.</p>
 
 **Filmina 5 · ¿Dónde quedamos? Dónde corre tu modelo** (3 min)
 
@@ -1007,6 +1075,244 @@ Para explicar:
 **Filmina 30 · Gracias** (1 min)
 
 <p style="color:#1a7f37">Gracias por estudiar con nosotros. Nos vemos la semana que viene con WhatsApp.</p>
+
+---
+
+### Extra, si sobra tiempo o para casa · Tres ejemplos más con IA local
+
+**Si sobra tiempo** después de la práctica, mostrá uno (el C es el que mejor resume la clase). Si no, quedan para
+casa: los flujos están en la carpeta [n8n/](n8n/) (`05`, `06` y `07`). Los tres son **tareas cortas y de un solo
+paso**, que es para lo que un modelo chico local anda bien (lo vimos: como cerebro de un agente con muchas
+herramientas, no).
+
+| Ejemplo | Flujo | La idea | Min |
+|---|---|---|---|
+| A · La IA local lee las encuestas | `05-encuestas-con-ia-local.json` | Clasificar texto privado sin que salga de la computadora | 8 |
+| B · De un mensaje escrito como sea, a la planilla | `06-de-mensaje-a-planilla.json` | Pedirle al modelo un JSON y convertirlo en casilleros | 10 |
+| C · El router de privacidad | `07-router-de-privacidad.json` | Lo sensible va al modelo local; lo demás, a la nube | 10 |
+
+**¿Andan en local?** ✅ Sí: es justamente la idea. Ollama prendido (`ollama serve` o la app abierta), `llama3.2`
+descargado, y en el sub-nodo de Ollama la dirección de la práctica (`http://host.docker.internal:11434` si n8n está
+en Docker). El B necesita además la credencial de Sheets; el C, la de Gemini.
+
+> **Para vos:** los flujos se armaron con los mismos nodos y versiones que los de hoy, pero **no se ejecutaron**
+> contra Ollama ni contra Gemini (las respuestas del modelo pueden variar). Lo que sí se probó: la expresión regular
+> del C detecta la tarjeta y el DNI de los ejemplos, y no marca "Somos 4 y vamos 15 días en 2026"; y la limpieza del
+> JSON del B funciona aunque el modelo lo encierre entre ```` ``` ````. Con `llama3.2` sin placa de video, contá con
+> que cada ejecución tarde (la primera, minutos).
+
+#### Ejemplo A · La IA local lee las encuestas (flujo 05) (8 min)
+
+```text
+Encuesta de viaje → Clasificar (local) → Limpiar la respuesta → ¿Es negativo? ─ true  → Aviso urgente al equipo
+(n8n Form)          (Basic LLM Chain                             (IF)           └ false → Guardar como reseña
+                     + Ollama)
+```
+
+Lo que tiene que pasar: *"El hotel estaba sucio y nadie nos fue a buscar al aeropuerto"* → `Negativo` → *"URGENTE:
+Ana volvió de Salta disconforme… Llamarlo hoy."*
+
+<p style="color:#1a7f37">Primer ejemplo. La agencia manda una encuesta al volver del viaje. Los comentarios son de clientes: no hace falta mandarlos a Google para saber si alguien volvió enojado. Un modelo chico, en nuestra computadora, alcanza para eso.</p>
+
+**A-1 · La encuesta**
+
+```text
+Overview → Create workflow → nombre:  Encuestas con IA local
++ → form → n8n Form → On new n8n Form event
+   Form Title: ¿Cómo estuvo tu viaje?
+   Preguntas:  Nombre (Text) · Destino (Text) · Comentario (Element Type: Textarea)
+   Options → Path:  encuesta-de-viaje
+Cerrá → renombralo:  Encuesta de viaje
+Execute workflow → completala:  Ana · Salta · "El hotel estaba sucio y nadie nos fue a buscar" → Submit
+```
+
+<p style="color:#1a7f37">El formulario, como en la Semana 4: nombre, destino y un comentario libre. Lo completo una vez, con una queja, así tengo datos.</p>
+
+**A-2 · Clasificar con el modelo local**
+
+```text
++ → buscá  llm  → Basic LLM Chain · Source for Prompt: Define below
+   Prompt:  Leé el comentario de un cliente sobre su viaje y respondé SOLO una palabra, sin punto:
+            Positivo, Negativo o Neutro.
+            Comentario: (arrastrá Comentario)
+Abajo, Model: + → Ollama Chat Model → la credencial de la práctica → Model: llama3.2:latest
+   Options → Sampling Temperature: 0.1
+→ renombralo:  Clasificar (local)
+```
+
+<p style="color:#1a7f37">Una chain, con el cerebro de hoy: Ollama. Un prompt bien cerrado: una sola palabra, de tres posibles. Y la temperatura baja, 0,1, para que no se ponga creativo: acá queremos siempre la misma respuesta.</p>
+
+- **Una tarea, una palabra.** Para un modelo de 3B, cuanto más cerrada la consigna, mejor. Pedirle "analizá el
+  comentario" daría un párrafo; pedirle una palabra de una lista, da una palabra.
+
+**A-3 · Limpiar la respuesta**
+
+```text
+Execute step → OUTPUT:  text: Negativo
++ → Edit Fields (Set):
+   sentimiento  String  {{ $json.text.trim().replace('.', '') }}     ← saca espacios y un punto, si lo puso
+   nombre, destino, comentario: arrastrados de "Encuesta de viaje"
+→ renombralo:  Limpiar la respuesta
+```
+
+<p style="color:#1a7f37">Los modelos chicos a veces agregan un punto, o un espacio, aunque les digamos que no. Lo limpio, y de paso junto los datos de la encuesta.</p>
+
+**A-4 · Decidir con un IF**
+
+```text
++ → If · {{ $json.sentimiento }} · String → is equal to · Negativo → renombralo:  ¿Es negativo?
+true  → Edit Fields:  aviso = URGENTE: {nombre} volvió de {destino} disconforme: "{comentario}". Llamarlo hoy.
+false → Edit Fields:  resena = {sentimiento} · {nombre} ({destino}): {comentario}
+→ Save
+```
+
+<p style="color:#1a7f37">Y el IF de siempre: si es negativo, aviso urgente al equipo; si no, se guarda como reseña. En la vida real, el aviso sería un mail o un WhatsApp, y la reseña una fila en una planilla.</p>
+
+**A-5 · Probar con tres comentarios**
+
+```text
+"El hotel estaba sucio y nadie nos fue a buscar"           → Negativo → Aviso urgente
+"¡Todo espectacular! Volvemos el año que viene"             → Positivo → Reseña
+"Estuvo bien, el vuelo se atrasó un poco"                   → Neutro (o Negativo: el modelo chico duda) → Reseña
+```
+
+<p style="color:#1a7f37">Los claros, los acierta. El del medio, "estuvo bien pero se atrasó", puede dudar. Eso es lo que hay que saber de un modelo chico: en lo obvio anda; en lo fino, se equivoca más que uno grande.</p>
+
+#### Ejemplo B · De un mensaje escrito como sea, a la planilla (flujo 06) (10 min)
+
+```text
+Arrancar a mano → Mensajes de prueba → Uno por uno → Sacar los datos (local) → Armar la fila → Guardar en la planilla
+                  (3 mensajes)          (Split Out)   (Chain + Ollama, JSON)    (JSON.parse)     (Sheets · Append)
+```
+
+Lo que tiene que pasar: *"Hola! soy Carla Gómez, queremos ir a Salta con mi marido y mis dos hijos en julio"* → una
+fila `13/11/2026 10:30 | Carla Gómez | Salta | 4` en "Consultas de la agencia" (la planilla de la Semana 4).
+
+<p style="color:#1a7f37">La gente no escribe como un formulario. Escribe "somos 6 amigos y queremos conocer Ushuaia". Este ejemplo saca de ese texto los tres datos que necesitamos, nombre, destino y personas, y los anota en la planilla. Con el modelo local, el mensaje del cliente no sale de nuestra computadora.</p>
+
+**B-1 · Los mensajes de prueba**
+
+```text
+Overview → Create workflow → nombre:  De mensaje a planilla
++ (Add first step) → Trigger manually
++ → Edit Fields (Set) · Mode: JSON → pegá la lista de mensajes del flujo 06 (tres textos)
++ → buscá  split  → Split Out · Field To Split Out:  mensajes → renombralo:  Uno por uno
+```
+
+<p style="color:#1a7f37">Tres mensajes de prueba, escritos como escribe la gente. Y el Split Out, como en la práctica de las quejas: los separa en tres items, uno por mensaje.</p>
+
+**B-2 · Pedirle un JSON al modelo**
+
+```text
++ → Basic LLM Chain · Prompt:
+   Del mensaje de un cliente, sacá tres datos y respondé SOLO con un JSON, sin texto antes ni después, así:
+   {"nombre": "...", "destino": "...", "personas": 0}
+   Reglas: personas es un número (contá a la persona que escribe). Si un dato no está, poné "".
+   Mensaje: (arrastrá texto)
+Model: Ollama Chat Model · llama3.2:latest · Options → Temperature: 0.1 · Output Format: JSON (si tu versión no lo muestra, alcanza con el prompt)
+→ renombralo:  Sacar los datos (local)
+Execute step → text:  {"nombre": "Carla Gómez", "destino": "Salta", "personas": 4}
+```
+
+<p style="color:#1a7f37">Le pido una respuesta con una forma fija: un JSON, la ficha con llaves que conocemos desde la Semana 4. Le muestro el molde, y le pongo una regla para lo difícil: contar personas. Y en el modelo, una opción que ayuda mucho: Output Format JSON, que obliga a Ollama a contestar solo con un JSON.</p>
+
+- **Mostrar el molde es la mitad del trabajo.** El modelo copia la forma que ve. Sin el molde, cada respuesta
+  vendría distinta.
+- **Contar personas es lo más difícil.** "Con mi marido y mis dos hijos" son 4: el modelo chico a veces dice 3. Por
+  eso la regla "contá a la persona que escribe".
+
+**B-3 · Convertir el texto en casilleros**
+
+```text
++ → Edit Fields (Set):
+   fecha     String  {{ $now.toFormat('dd/MM/yyyy HH:mm') }}
+   nombre    String  {{ JSON.parse($json.text.replace(/```json|```/g, '').trim()).nombre }}
+   destino   String  (igual, terminando en  .destino )
+   personas  Number  (igual, terminando en  .personas )
+→ renombralo:  Armar la fila
+```
+
+<p style="color:#1a7f37">El modelo devuelve el JSON como texto, todo junto en el casillero text. JSON.parse lo convierte en una ficha de verdad, y de ahí saco cada dato. Y el replace es un seguro: a veces el modelo encierra el JSON entre tres comillas invertidas, y eso lo saca.</p>
+
+- **`JSON.parse(texto)` = "leé este texto como una ficha".** Es lo mismo que hace n8n cuando una API le contesta en
+  JSON, pero acá lo hacemos nosotros.
+- **Si da error *Unexpected token*:** el modelo agregó texto antes o después del JSON. Mirá su respuesta en el
+  OUTPUT de la chain y ajustá el prompt.
+
+**B-4 · Guardar en la planilla**
+
+```text
++ → Google Sheets → Append row in sheet · "Consultas de la agencia" · Hoja 1 · Map Automatically
+→ renombralo:  Guardar en la planilla → Save → Execute workflow
+→ tres filas nuevas:  Carla Gómez | Salta | 4 · Pedro | Ushuaia | 6 · Lucía | Mendoza | 1
+```
+
+<p style="color:#1a7f37">Y lo de la Semana 4: agregar fila, con Map Automatically. Tres mensajes escritos como sea, tres filas ordenadas. Esto, conectado al WhatsApp de la semana que viene, anota solo cada consulta que llega.</p>
+
+#### Ejemplo C · El router de privacidad: lo sensible, al local; lo demás, a la nube (flujo 07) (10 min)
+
+```text
+Arrancar a mano → Mensajes de prueba → Uno por uno → ¿Tiene datos sensibles? ─ true  → Responder (local) → Respuesta local
+                                                       (IF, expresión regular)  │        (Ollama)
+                                                                                └ false → Responder (nube)  → Respuesta nube
+                                                                                         (Gemini)
+```
+
+Lo que tiene que pasar: el mensaje con la tarjeta y el del DNI van al **modelo local**; el de "¿qué llevo a
+Ushuaia?" va a **Gemini**.
+
+<p style="color:#1a7f37">Este junta todo lo de hoy. ¿Local o nube? No hace falta elegir uno para siempre: se puede decidir mensaje por mensaje. Si el mensaje trae un dato sensible, una tarjeta o un DNI, lo responde el modelo de nuestra computadora. Si no, Gemini, que es más rápido y contesta mejor. Y lo decide el flujo, con una regla fija, no el modelo.</p>
+
+**C-1 · Los mensajes de prueba**
+
+```text
+Overview → Create workflow → nombre:  Router de privacidad
+Trigger manually → Edit Fields (Mode: JSON, los tres mensajes del flujo 07) → Split Out (mensajes) → "Uno por uno"
+```
+
+<p style="color:#1a7f37">Tres mensajes: uno con un número de tarjeta, uno con un DNI, y uno común.</p>
+
+**C-2 · ¿Tiene datos sensibles? Un IF con una expresión regular**
+
+```text
++ → If · izquierda: {{ $json.texto }} · medio: String → matches regex · derecha:
+   (\d{4}[ -]?){3}\d{4}|\d{1,2}\.?\d{3}\.?\d{3}
+→ renombralo:  ¿Tiene datos sensibles?
+```
+
+<p style="color:#1a7f37">El IF pregunta: ¿el texto tiene algo con forma de tarjeta o de DNI? Para eso uso una expresión regular: un molde que describe una forma. Parece jeroglífico, pero dice algo simple: cuatro grupos de cuatro números, o un número de siete u ocho cifras, con puntos o sin puntos.</p>
+
+- **Expresión regular (*regex*) = un molde de búsqueda.** `\d` es "un número"; `{4}`, "cuatro veces"; `|`, "o".
+  No hace falta aprenderlo: se copia, y se prueba.
+  - *Ejemplo:* "4517 6601 2345 9087" y "30.123.456" encajan; "somos 4 y vamos 15 días" no.
+
+**C-3 · Dos chains, dos cerebros**
+
+```text
+true  → Basic LLM Chain "Responder (local)" · Model: Ollama Chat Model (llama3.2)
+false → Basic LLM Chain "Responder (nube)"  · Model: Google Gemini Chat Model
+   Prompt (el mismo en las dos):  Sos la asesora de "Rumbo Sur". Respondé en 3 líneas como mucho.
+                                  Nunca repitas números de tarjeta ni de documento.  Mensaje: (arrastrá texto)
+Después de cada una, un Edit Fields: cliente, cerebro ("Ollama (local)" o "Gemini (nube)"), respuesta
+```
+
+<p style="color:#1a7f37">Dos chains con el mismo prompt, pero con cerebros distintos. Arriba, Ollama. Abajo, Gemini. Y al final de cada una, anoto qué cerebro respondió, para verlo.</p>
+
+**C-4 · Probar**
+
+```text
+Execute workflow →
+   Marta (tarjeta)  → Respuesta local · Ollama
+   Jorge (DNI)      → Respuesta local · Ollama
+   Sofía (Ushuaia)  → Respuesta nube  · Gemini
+```
+
+<p style="color:#1a7f37">La tarjeta de Marta y el DNI de Jorge nunca salieron de esta computadora. La pregunta de Sofía, que no tiene nada privado, la contestó Gemini, rápido y bien. Lo mejor de los dos mundos. Y es lo que pregunta la Pre-entrega 4: la decisión local o nube. Esta es una tercera respuesta posible: las dos, según el mensaje.</p>
+
+- **El que decide es el flujo, no el modelo.** Si se lo preguntáramos al modelo ("¿esto es sensible?"), ya le
+  estaríamos mandando el dato. Por eso, una regla fija.
+- **La regex no es perfecta.** Un CBU, una dirección o un diagnóstico no los detecta. Para datos muy delicados, todo
+  local.
 
 ---
 

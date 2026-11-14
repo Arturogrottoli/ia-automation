@@ -1,0 +1,409 @@
+{
+  "name": "07 · Ejemplo: pasar la conversación a una persona",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "whatsapp-humano",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "6e449d5e-8788-4d08-80b1-634a0aa396bb",
+      "name": "Simulador: entra el mensaje",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -440,
+        0
+      ],
+      "webhookId": "2fb0613c-e576-468b-919c-b576f23a4538"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Hace lo mismo que el WhatsApp Trigger: Meta manda un paquete con \"entry\" y \"changes\",\n// y el trigger entrega solo la parte \"value\" de cada cambio (contactos, mensajes, etc.).\nconst body = $input.first().json.body;\nconst salida = [];\nfor (const entry of body.entry ?? []) {\n  for (const change of entry.changes ?? []) {\n    // Igual que el trigger con \"Receive Message Status Updates\" vacío:\n    // los avisos de entregado/leído no pasan.\n    if (change.value?.statuses) continue;\n    salida.push({ json: { ...change.value, field: change.field } });\n  }\n}\nreturn salida;"
+      },
+      "id": "53e66b42-22cf-4351-a449-d3096d9b8da8",
+      "name": "Como lo entrega el WhatsApp Trigger",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d2796995-2f15-4863-bb89-a28387632745",
+              "name": "telefono",
+              "value": "={{ $json.messages?.[0]?.from }}",
+              "type": "string"
+            },
+            {
+              "id": "8de98063-28e4-4d9f-8ec1-a3beaee08788",
+              "name": "nombre",
+              "value": "={{ $json.contacts?.[0]?.profile?.name }}",
+              "type": "string"
+            },
+            {
+              "id": "612edaaa-a236-49ea-8a33-1e4922fa7290",
+              "name": "tipo",
+              "value": "={{ $json.messages?.[0]?.type }}",
+              "type": "string"
+            },
+            {
+              "id": "7eff9518-5510-4338-a00c-a36fe3798d07",
+              "name": "texto",
+              "value": "={{ $json.messages?.[0]?.text?.body }}",
+              "type": "string"
+            },
+            {
+              "id": "44cbfe99-7008-4332-b798-0e3a2c913177",
+              "name": "phoneNumberId",
+              "value": "={{ $json.metadata?.phone_number_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8644b2d7-da86-421d-a8e3-ac443b25ba24",
+      "name": "Datos del mensaje",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8f93a3fb-3def-4126-bff6-683d77868445",
+              "leftValue": "={{ $json.telefono }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "5541b7fe-68d5-4d18-8dd8-9ff7d28d9a9b",
+      "name": "¿Es un mensaje?",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "29765660-d756-464d-b444-cf1039779395",
+              "leftValue": "={{ $json.tipo }}",
+              "rightValue": "text",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "efac3dab-c185-4b30-8e02-ac8c91132fb5",
+      "name": "¿Es texto?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.texto }}",
+        "options": {
+          "systemMessage": "=Sos Ana, la asesora de la agencia de viajes \"Rumbo Sur\", y atendés por WhatsApp. Hoy es {{ $now.format('dd/MM/yyyy') }}. El cliente se llama {{ $('Datos del mensaje').item.json.nombre }}.\n\nQUÉ PODÉS HACER: contar qué paquetes hay, qué incluyen, cuántos días son y cuánto cuestan. Estos son los únicos paquetes (precio en dólares, por persona):\n- Bariloche Clásico: 5 días, USD 950. Aéreo, hotel 3 estrellas con desayuno y excursión al Circuito Chico.\n- Bariloche Nieve: 7 días, USD 1450. Hoy NO tiene cupos.\n- Caminos del Vino (Mendoza): 4 días, USD 780. Aéreo, hotel boutique y dos visitas a bodegas con degustación.\n- Norte Mágico (Salta): 6 días, USD 890. Aéreo, hotel con desayuno y excursiones a Cafayate y Purmamarca.\n- Fin del Mundo (Ushuaia): 5 días, USD 1320. Aéreo, hotel con media pensión y navegación por el Canal Beagle.\n- Cataratas Express: 3 días, USD 640. Aéreo, hotel con desayuno y entrada al lado argentino de las Cataratas.\n\nFORMATO (es WhatsApp: se lee en el celular):\n- Mensajes cortos: párrafos de 2 o 3 líneas, como mucho 2 párrafos.\n- Negritas con UN asterisco de cada lado, así: *Bariloche Clásico*. Nunca uses ** ni #.\n- Si listás opciones, una por línea, empezando con guion.\n- Como mucho un emoji por mensaje.\n- Terminá SIEMPRE con una pregunta o con el próximo paso.\n\nLÍMITES (aunque el cliente insista):\n- No confirmes reservas ni tomes pagos. Para reservar, pedí nombre completo, destino y fechas, y avisá que un vendedor lo contacta por este mismo chat.\n- No pases precios a pesos ni inventes promociones, fechas de salida ni datos que no estén arriba. Si no sabés algo, decí que lo consultás con un vendedor.\n- Si el tema no tiene que ver con los viajes de la agencia, decilo con amabilidad y volvé a los paquetes.\n- Si el cliente está enojado o pide hablar con una persona, decile que lo pasás con un vendedor del equipo.\n\nPASAR A UNA PERSONA: si el cliente quiere reservar o pagar, está enojado, o pide hablar con una persona, usá la herramienta avisar_vendedor UNA sola vez, con un resumen de lo que quiere. Después decile: \"Listo, ya le pasé tu consulta a un vendedor: te escribe por acá en menos de una hora.\" No inventes horarios ni nombres de vendedores."
+        }
+      },
+      "id": "e7bdf21c-ab7b-4c6a-9941-96bc7753879f",
+      "name": "Ana por WhatsApp",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        700,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3-flash-preview",
+        "options": {
+          "temperature": 0.3
+        }
+      },
+      "id": "30e9461e-7068-4922-a462-61f9c4f3bd7f",
+      "name": "Cerebro: Gemini",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        600,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Datos del mensaje').item.json.telefono }}",
+        "contextWindowLength": 10
+      },
+      "id": "1bebf0f6-11b7-4882-9733-be464e8e2485",
+      "name": "Memoria por teléfono",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        800,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1639f0a0-eb00-4286-8d90-6416efab7ea9",
+              "name": "para",
+              "value": "={{ $('Datos del mensaje').item.json.telefono }}",
+              "type": "string"
+            },
+            {
+              "id": "520f8bdb-1a6c-41d3-b8c8-7e4d3fa7bfe9",
+              "name": "texto",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1a1829a2-0622-45ed-b0ac-ab2d779c0858",
+      "name": "Respuesta (saldría por WhatsApp)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1000,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e4794ea9-7cd4-4ec0-a7d4-65177dcc920d",
+              "name": "para",
+              "value": "={{ $('Datos del mensaje').item.json.telefono }}",
+              "type": "string"
+            },
+            {
+              "id": "45a3e428-22ef-4c49-934e-f8c01220be86",
+              "name": "texto",
+              "value": "Por ahora solo puedo leer mensajes de texto 🙏 ¿Me lo escribís?",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "dbb9de34-c844-4591-8370-09aa919a2111",
+      "name": "Respuesta: solo texto",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        780,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Le manda un mail al vendedor de turno para que tome la conversación. Usala cuando el cliente quiere reservar o pagar, está enojado o pide hablar con una persona. Una sola vez por conversación.",
+        "sendTo": "",
+        "subject": "=WhatsApp: {{ $('Datos del mensaje').item.json.nombre }} necesita un vendedor",
+        "emailType": "text",
+        "message": "=Cliente: {{ $('Datos del mensaje').item.json.nombre }}\nTeléfono: {{ $('Datos del mensaje').item.json.telefono }}\n\nQué necesita: {{ $fromAI('resumen', 'Un resumen corto de lo que quiere el cliente y por qué hay que pasarlo a una persona', 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "61d6a7c2-5656-41cf-b227-a1b14659318c",
+      "name": "avisar_vendedor",
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        1000,
+        120
+      ],
+      "webhookId": "6f6fda33-3207-40d4-b2ee-38f16d477511"
+    },
+    {
+      "parameters": {
+        "content": "## 07 · Pasar la conversación a una persona\n\nEs el asistente de la clase (flujo 03) con **una herramienta**: **avisar_vendedor** (Gmail Tool).\n\nCuando el cliente quiere reservar o pagar, se enoja, o pide hablar con alguien, Ana le manda un mail al vendedor con el nombre, el teléfono y un resumen (`$fromAI`), y le avisa al cliente que lo van a contactar.\n\nEs el **human in the loop** de la Semana 6.\n\n**Antes de ejecutar:** credencial de Gmail y el mail del vendedor en *avisar_vendedor* → *To*.\n\n**Para probar sin Meta:** publicá este flujo y, en el flujo 04 (el celular de mentira), cambiá el final de la URL por `/webhook/whatsapp-humano`. Con WhatsApp real: cambiá los dos primeros nodos por el **WhatsApp Trigger** (como en el flujo 02) y la respuesta por el nodo **WhatsApp · Send**.",
+        "height": 440,
+        "width": 760,
+        "color": 4
+      },
+      "id": "47fdcf0d-a6f9-4f1d-9150-14ad2a48f1b4",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        -560
+      ]
+    }
+  ],
+  "connections": {
+    "Simulador: entra el mensaje": {
+      "main": [
+        [
+          {
+            "node": "Como lo entrega el WhatsApp Trigger",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Como lo entrega el WhatsApp Trigger": {
+      "main": [
+        [
+          {
+            "node": "Datos del mensaje",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Datos del mensaje": {
+      "main": [
+        [
+          {
+            "node": "¿Es un mensaje?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Es un mensaje?": {
+      "main": [
+        [
+          {
+            "node": "¿Es texto?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Es texto?": {
+      "main": [
+        [
+          {
+            "node": "Ana por WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respuesta: solo texto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ana por WhatsApp": {
+      "main": [
+        [
+          {
+            "node": "Respuesta (saldría por WhatsApp)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cerebro: Gemini": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Ana por WhatsApp",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memoria por teléfono": {
+      "ai_memory": [
+        [
+          {
+            "node": "Ana por WhatsApp",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "avisar_vendedor": {
+      "ai_tool": [
+        [
+          {
+            "node": "Ana por WhatsApp",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "id": "s8e07humano00001",
+  "active": false
+}

@@ -67,26 +67,33 @@ Fuente: `program-summary.pdf` (Módulo 6). **Una clase de 2 horas.**
 | Min | Tramo | Filminas | En clase |
 |---|---|---|---|
 | 0–15 | Apertura y **repaso de la Semana 5** (8 min: el plano, permisos, Filter/Aggregate, mapear, el log) | 1–5 | Pregunta rápida en el chat |
-| 10–30 | **01 · Qué es un AI Agent** | 6–11 | Ej. 1 (4 min) + demo de la chain |
-| 30–48 | **02 · Las tres piezas** | 12–18 | |
-| 48–60 | **03 · El system prompt** | 19–23 | Ej. 2 (3 min) |
-| 60–70 | Break | 24 | |
-| 70–80 | **04 · Role-play de orquestación** | 25–26 | Ej. 3 (10 min) |
-| 80–112 | **04 · Práctica en vivo:** objetivo, cerebro, manos, diario y manual | 27–31 | Ej. 4: diseñan el suyo mientras armás el de la clase |
-| 112–117 | Para practicar, Pre-entrega 3 y cómo sigue | 32–33 | |
-| 117–120 | Preguntas y cierre | 34–35 | Tarea |
+| 15–35 | **01 · Qué es un AI Agent** | 6–11 | Ej. 1 (4 min); la demo de la chain, contada |
+| 35–47 | **Los agentes, a fondo** (sin filmina): qué son en criollo, cómo usan herramientas, para qué se usan en la vida real, los riesgos, y qué vamos a hacer con ellos en el curso (Semanas 7, 8 y la Entrega Final) | — | |
+| 47–63 | **02 · Las tres piezas** | 12–18 | Los tipos de tools, nombrados |
+| 63–73 | **03 · El system prompt** | 19–23 | Ej. 2: se muestra la versión arreglada |
+| 73–83 | Break | 24 | |
+| 83–88 | **04 · Role-play de orquestación** | 25–26 | Ej. 3, versión corta (5 min) |
+| 88–114 | **04 · Práctica en vivo:** objetivo, cerebro, manos, diario y manual | 27–31 | Ej. 4: diseñan el suyo mientras armás el de la clase |
+| 114–118 | Para practicar, Pre-entrega 3 y cómo sigue | 32–33 | |
+| 118–120 | Preguntas y cierre | 34–35 | Tarea |
 
-**El repaso dura 8 minutos** (antes eran 3): los 5 de más salen de hacer **de entrada** los recortes 2 y 3 de
-abajo. Los minutos de las secciones siguientes quedan corridos 5 minutos.
+**De dónde salen los minutos.** Esta versión suma el repaso largo (8 min en vez de 3) y **los agentes, a fondo**
+(12 min, sin filmina). Para que entren, la agenda de arriba ya trae hechos los cuatro recortes de antes:
+- la demo de la Basic LLM Chain se cuenta (qué pasaría), sin ejecutarla;
+- los tipos de tools (filmina 17) se nombran;
+- el Ejercicio 2 se muestra con la versión arreglada;
+- el role-play lo hacés vos solo, en 5 minutos.
+
+La práctica queda en 26 minutos.
 
 **Al final hay tres ejemplos extra** con IA (la IA clasifica y el Switch reparte, un agente del clima con dos
 herramientas, un agente que anota en la planilla): si sobra tiempo, se muestra uno; si no, quedan para casa.
 
-**Si el tiempo se aprieta**, recortá en este orden:
-1. La demo de la Basic LLM Chain: se cuenta qué pasaría.
-2. Los tipos de tools (filmina 17): se nombran.
-3. El Ejercicio 2: se muestra la versión arreglada.
-4. El role-play: lo hacés vos solo, haciendo los tres papeles, en 5 minutos.
+**Si igual se aprieta**, recortá en este orden:
+1. En "los agentes, a fondo", las partes D (riesgos) y E (cómo se ve en n8n): un minuto entre las dos. **A, C y F
+   no se recortan.**
+2. El Ejercicio 1: se pega en el chat y se dicen las respuestas, sin esperar.
+3. El Paso 4 (el diario): se agrega la memoria sin explicarla; ya se vio en la Sección 02.
 
 Lo último que se recorta es el Paso 3 (las manos) y el Paso 5 (el manual): son el núcleo de la Pre-entrega 3.
 
@@ -270,7 +277,7 @@ Para explicar:
 
 ---
 
-### 10–30 · Sección 01 · Qué es un AI Agent
+### 15–47 · Sección 01 · Qué es un AI Agent (y los agentes, a fondo)
 
 **Filmina 6 · Separador "01: Qué es un AI Agent"**
 
@@ -403,9 +410,165 @@ inteligente"*, y esperás a que te corrijan. Para cerrar, usás la analogía del
 
 <p style="color:#1a7f37">El LLM es el chef: sabe cocinar. El prompt es la receta. Y el agente es el restaurante entero: el chef, la receta, la heladera para buscar ingredientes, y el mozo que vuelve a la mesa a preguntar "¿y de postre?".</p>
 
+#### Los agentes, a fondo: qué son, cómo se usan y qué vamos a hacer con ellos en el curso (12 min, sin filmina)
+
+Va después del Ejercicio 1, antes del separador de la Sección 02. Es el tramo más importante de la clase para el
+resto del curso: **todo lo que queda (Semanas 7, 8 y la Entrega Final) es este agente, mejorado**. Son seis partes;
+si el tiempo aprieta, las partes D y E se cuentan en un minuto. **A, C y F no se recortan.**
+
+<p style="color:#1a7f37">Ya vimos la definición. Ahora quiero que se lleven bien claro qué es un agente, para qué lo usa la gente en la vida real, y sobre todo qué vamos a hacer con esto en lo que queda del curso. Porque el agente que armamos hoy no es un ejercicio más: es el corazón del proyecto final.</p>
+
+##### A · Qué es un agente, en criollo (2 min)
+
+<p style="color:#1a7f37">Piensen en un empleado nuevo en la agencia. ¿Qué le dan el primer día? Un objetivo: atender a los clientes que preguntan por paquetes. Un manual: cómo hablar, qué puede prometer y qué no. Acceso a cosas: la planilla de precios, la página del dólar, una calculadora. Y un cuaderno para anotar lo que le dijo cada cliente. Lo que no le dan es el paso a paso de cada conversación posible, porque es imposible. Le dan criterio, y él decide qué hacer con cada cliente.</p>
+
+<p style="color:#1a7f37">Un agente es exactamente eso, pero en n8n. El criterio lo pone el modelo, el cerebro. El manual es el system prompt. El acceso a las cosas son las herramientas, las manos. Y el cuaderno es la memoria, el diario.</p>
+
+```text
+EL EMPLEADO NUEVO                         EL AGENTE EN n8n
+───────────────────────────────           ───────────────────────────────────────────
+Su cabeza, su criterio            →       el Chat Model (Gemini): el cerebro
+El manual de la agencia           →       el system prompt: el manual
+La planilla, el dólar, la calcu   →       las Tools: las manos
+El cuaderno de cada cliente       →       la memoria: el diario
+"Atendé a los clientes"           →       el objetivo
+```
+
+| | ¿Quién decide los pasos? | ¿Usa herramientas? | ¿Se acuerda de la charla? | Ejemplo del curso |
+|---|---|---|---|---|
+| **Flujo fijo** (Semanas 3 a 5) | Nosotros, al armarlo | Sí, siempre las mismas, en el mismo orden | No | La planilla que se completa sola |
+| **Basic LLM Chain** (Semana 2) | Nosotros: un solo paso, siempre igual | No | No | Sacar los datos de un mail |
+| **Chatbot** (ChatGPT común) | Nadie: solo conversa | No: responde con lo que sabe | Sí | "¿Cómo voy a París?" |
+| **Agente** (hoy) | **El modelo, mientras corre** | **Sí, elige cuáles y en qué orden** | Sí, si le ponemos memoria | Ana, la asesora de Rumbo Sur |
+
+Para explicar:
+- **La diferencia está en quién decide.** En un flujo fijo, decidimos nosotros cuando lo armamos. En un agente,
+  decide el modelo cada vez que llega un mensaje.
+  - *Ejemplo:* El flujo de la planilla siempre hace Leer → Filter → API → Sheets. Ana, según lo que le pregunten,
+    usa una herramienta, tres, o ninguna.
+- **Un agente no es "una IA más inteligente".** Es el mismo modelo de siempre (Gemini), con manos y con un manual.
+  Lo que cambia no es el cerebro: es lo que le dejamos hacer.
+  - *Ejemplo:* El mismo Gemini, en una chain, inventa el precio de Bariloche. En un agente con la planilla, lo busca.
+
+##### B · ¿Cómo hace un modelo para "usar" una herramienta? (2 min)
+
+<p style="color:#1a7f37">Acá hay un truco que vale la pena entender. El modelo no tiene manos de verdad: lo único que sabe hacer es escribir texto. No puede abrir una planilla. Entonces, ¿cómo la usa? Así: n8n le manda al modelo el mensaje del cliente, y además la lista de herramientas, cada una con su nombre y su descripción. El modelo, en vez de contestar, escribe un pedido: "quiero usar consultar_paquetes, con destino Bariloche". n8n lee ese pedido, ejecuta la herramienta de verdad, y le devuelve el resultado al modelo. Y le vuelve a preguntar: ¿y ahora?</p>
+
+```text
+n8n → modelo:   "El cliente dice: ¿cuánto sale Bariloche?
+                 Tenés estas herramientas: consultar_paquetes (busca paquetes por destino),
+                 cotizacion_dolar (el dólar de hoy), calculadora."
+modelo → n8n:   "Quiero usar consultar_paquetes con destino = Bariloche"      ← no contesta: pide
+n8n:            (ejecuta la herramienta de verdad, en la planilla)
+n8n → modelo:   "Resultado: Bariloche Clásico, 5 días, USD 950"
+modelo → n8n:   "El Bariloche Clásico sale USD 950 por persona."               ← ahora sí contesta
+```
+
+Para explicar:
+- **El modelo pide; n8n ejecuta.** Por eso el modelo nunca "entra" a tu planilla: le pide a n8n que lo haga, y n8n
+  usa tu credencial. A esto se le dice ***tool calling*** ("llamar a herramientas").
+- **Por eso la descripción es todo.** Lo único que el modelo sabe de cada herramienta es su nombre y su descripción.
+  Si la descripción es mala, la elige mal o no la usa.
+  - *Ejemplo:* `tool1` con la descripción "Herramienta." → el modelo no sabe para qué sirve. Es el Ejercicio 7.
+- **No todos los modelos son igual de buenos para esto.** Elegir bien la herramienta es una habilidad del modelo.
+  Lo vamos a notar en la Semana 7: los modelos chicos que corren en la computadora la usan peor que Gemini.
+
+##### C · Para qué se usan en la vida real (3 min)
+
+<p style="color:#1a7f37">¿Y esto para qué lo usa la gente? Para muchísimas cosas, pero todas tienen la misma forma: llega un pedido en lenguaje humano, el agente consulta o toca algún sistema, y responde o hace algo. Y siempre hay algo que no puede hacer, un límite, y una persona detrás para eso.</p>
+
+| Negocio | Qué le llega | Sus herramientas (manos) | Qué decide solo | Dónde se frena (el límite) |
+|---|---|---|---|---|
+| **Agencia de viajes** (el nuestro) | "¿Cuánto sale Bariloche en pesos?" | Planilla de paquetes, dólar, calculadora | Qué paquete, cuánto en pesos | No confirma reservas ni toma tarjetas |
+| **Consultorio** | "Necesito turno con la doctora" | Calendario, planilla de pacientes | Qué horarios ofrecer | No da diagnósticos ni recetas |
+| **Tienda online** | "¿Dónde está mi pedido?" | Sistema de pedidos, el correo | Buscar el pedido, avisar si se demora | No devuelve plata: lo pasa a una persona |
+| **Inmobiliaria** | "Busco un 2 ambientes en Nueva Córdoba" | Planilla de propiedades, calendario | Filtrar por zona y precio, agendar la visita | No negocia el precio |
+| **RR.HH. de una empresa** | "¿Cuántos días de vacaciones me quedan?" | Planilla del personal, el reglamento | Buscar la respuesta del empleado | No aprueba vacaciones |
+| **Administración** | Facturas que llegan por mail | Gmail, Drive, planilla | Leerlas, guardarlas en su carpeta, anotarlas | No paga nada |
+| **Ventas** | Un formulario de alguien interesado | Planilla de clientes, Gmail | Contestar primero, ver si es un cliente probable | Pasa el cliente a un vendedor |
+| **Asistente personal** | "Organizame la reunión del jueves" | Calendar, Gmail | Proponer horarios libres | No manda la invitación sin preguntar |
+
+Para explicar:
+- **El patrón es siempre el mismo.** Pedido en lenguaje humano → consulta sistemas → responde o actúa → con un límite.
+  Si pueden contar su idea con esa forma, es un buen caso para un agente.
+  - *Ejemplo:* "Me escriben por WhatsApp preguntando por turnos (pedido) → miro la agenda (herramienta) → ofrezco
+    horarios (respuesta) → no cancelo turnos de otros (límite)."
+- **Donde más se usan: atender gente.** Por WhatsApp, por la web, por mail. Es lo que más tiempo le come a un
+  negocio chico, y es lo que vamos a armar en el curso.
+- **Siempre hay una persona detrás.** El agente resuelve lo repetitivo (el 80 % de las consultas) y le pasa a una
+  persona lo delicado. A eso se le dice ***human in the loop*** ("una persona en el circuito").
+  - *Ejemplo:* Ana contesta precios a cualquier hora; la reserva y la plata las maneja un vendedor.
+- **Piensen en el suyo ahora.** Mientras siguen, piensen qué agente les sirve a ustedes: es el que van a diseñar en
+  la práctica y presentar en la Pre-entrega 3.
+
+##### D · Lo que hay que tener en cuenta: los riesgos (2 min)
+
+<p style="color:#1a7f37">Ahora, lo que no les dicen en los videos de "armá tu agente en cinco minutos". Un agente tiene riesgos, y hay que conocerlos para diseñarlo bien.</p>
+
+| Riesgo | Qué pasa | Cómo se cuida |
+|---|---|---|
+| **Inventa** (en inglés, *alucina*) | Si no tiene el dato, puede inventar uno que suena bien | Darle la herramienta, y en el manual: "nunca respondas precios de memoria" |
+| **No es 100 % predecible** | La misma pregunta puede tener respuestas un poco distintas | Temperatura baja, reglas claras, y probarlo mucho |
+| **Es más lento y más caro** | Cada vuelta del ciclo es un pedido al modelo | Si un flujo fijo o una chain alcanzan, usar eso |
+| **Acciones que no se deshacen** | Mandar un mail, borrar una fila, cobrar | Que pida confirmación, o que lo haga una persona |
+| **Los datos viajan afuera** | Cada mensaje va a los servidores de Google | Cuidar qué datos le pasamos. En la Semana 7: IA local |
+
+Para explicar:
+- **La regla de oro: un agente solo para lo que necesita decidir.** Si la tarea es siempre igual, un flujo fijo es
+  más barato, más rápido y no se equivoca.
+  - *Ejemplo:* Mandar el resumen del día a las 18: flujo fijo. Contestar consultas que llegan escritas de mil
+    formas: agente.
+- **Los límites se escriben.** No hay un botón de "no hagas macanas": los límites van en el system prompt, y lo
+  vamos a ver en la Sección 03.
+
+##### E · Cómo se ve en n8n (1 min)
+
+```text
+                 ┌────────────────────────┐
+Mensaje del  ──► │        AI Agent         │ ──► (la respuesta vuelve al chat)
+chat             │  (Ana, la asesora)      │
+                 └──┬──────────┬────────┬──┘
+           Chat Model│    Memory│   Tool │
+                     ▼          ▼        ▼
+                 Gemini    Memoria   consultar_paquetes · cotizacion_dolar · calculadora
+                (cerebro)  (diario)  (las manos)
+```
+
+<p style="color:#1a7f37">En n8n, el agente es un nodo grande con tres enchufes abajo: uno para el cerebro, uno para el diario y uno para las manos. Lo que se enchufa ahí se llama sub-nodo. Y el manual va adentro del agente, en el system message. En la Sección 02 vemos cada pieza.</p>
+
+##### F · Qué vamos a hacer con los agentes en lo que queda del curso (2 min)
+
+<p style="color:#1a7f37">Y lo más importante. El agente que armamos hoy no se tira: lo vamos a ir mejorando hasta el proyecto final. Hoy nace, con el cerebro en Google y un chat de prueba. La semana que viene le cambiamos el cerebro, para que corra en nuestra computadora. La siguiente le damos una voz: WhatsApp. Y en la Entrega Final, queda un asistente de WhatsApp funcionando solo, atendiendo clientes de verdad.</p>
+
+| Semana | Qué le hacemos al agente | Lo que se entrega |
+|---|---|---|
+| **6 · hoy** | **Nace.** Ana, de Rumbo Sur: cerebro (Gemini), diario (memoria), manos (planilla, dólar, calculadora) y manual (system prompt). Se prueba en el chat de n8n | **Pre-entrega 3:** planificá y construí tu primer agente |
+| **7** | **Cambia el cerebro.** El mismo agente, con un modelo que corre en tu computadora (Ollama): los datos no salen de tu máquina | — |
+| **8** | **Le damos voz.** El chat de prueba se cambia por **WhatsApp Business**. Cada cliente con su propia memoria (por su número). Y, como desafío, que lea las preguntas frecuentes de la agencia (RAG) | **Pre-entrega 4:** el asistente de WhatsApp |
+| **9** | **Sale al mundo.** Sin clase: se entrega | **Entrega Final:** el asistente autónomo de WhatsApp, desplegado |
+
+```text
+Hoy:        Chat de n8n ──► [ AI Agent ] ── Gemini · memoria · planilla, dólar, calculadora · manual
+Semana 7:   Chat de n8n ──► [ AI Agent ] ── Ollama (en tu compu) · …lo demás igual
+Semana 8:   WhatsApp    ──► [ AI Agent ] ── Gemini u Ollama · memoria por número · … ──► responde por WhatsApp
+Final:      el mismo, publicado y andando solo
+```
+
+Para explicar:
+- **Lo que se cambia son piezas, no el agente.** El cerebro se cambia por otro sub-nodo; el chat se cambia por el
+  trigger de WhatsApp. Es lo mismo que vimos en la Semana 4: se cambia el trigger y el resto del flujo queda igual.
+  - *Ejemplo:* En la Semana 8, "Mensaje del chat" pasa a ser "llegó un WhatsApp". Ana sigue siendo Ana.
+- **El agente de la Pre-entrega 3 puede ser el de su proyecto final.** Conviene pensarlo hoy para su propio caso:
+  un negocio, un trabajo, algo real. Lo van a mejorar dos semanas más.
+  - *Ejemplo:* Si hoy diseñás el agente de turnos de un consultorio, en la Semana 8 contesta turnos por WhatsApp.
+- **Lo que no se cambia: el manual y las manos.** Un buen system prompt y buenas descripciones de herramientas
+  sirven igual con cualquier cerebro y por cualquier canal. Por eso hoy les dedicamos la mitad de la clase.
+
+<p style="color:#1a7f37">Así que hoy no armamos un ejercicio: armamos la primera versión del proyecto final. Vamos a ver sus piezas.</p>
+
 ---
 
-### 30–48 · Sección 02 · Las tres piezas
+### 47–63 · Sección 02 · Las tres piezas
 
 **Filmina 12 · Separador "02: Las tres piezas"**
 
@@ -561,7 +724,7 @@ Parámetro: tipo → "El tipo de dólar: oficial, blue o tarjeta. Si el cliente 
 
 ---
 
-### 48–60 · Sección 03 · El system prompt
+### 63–73 · Sección 03 · El system prompt
 
 **Filmina 19 · Separador "03: El system prompt"**
 
@@ -655,7 +818,7 @@ Para confirmar un turno, pedí nombre y teléfono. No canceles turnos de otras p
 
 ---
 
-### 60–70 · Break
+### 73–83 · Break
 
 **Filmina 24 · Break**
 
@@ -663,7 +826,7 @@ Para confirmar un turno, pedí nombre y teléfono. No canceles turnos de otras p
 
 ---
 
-### 70–112 · Sección 04 · Práctica en vivo
+### 83–114 · Sección 04 · Práctica en vivo
 
 #### Antes de la clase (una sola vez, 30 minutos)
 
@@ -684,7 +847,7 @@ Para confirmar un turno, pedí nombre y teléfono. No canceles turnos de otras p
 | 4 · *¿Cuánto sería con el dólar MEP?* | `cotizacion_dolar` con tipo `mep` → **404** | Que no pudo consultarlo, sin inventar el número. Algunos modelos reintentan con `bolsa` (que es el MEP) y lo resuelven: también está bien. |
 | 5 · *¿Me recomendás un buen restaurante en Bariloche?* | Ninguna: fuera de alcance | Que solo ayuda con los paquetes, y ofrece un vendedor. |
 
-#### Role-play de orquestación (70–80) — Ejercicio 3
+#### Role-play de orquestación (83–88, la versión corta) — Ejercicio 3
 
 1. **Filmina 25 · Separador "04".** Decís:
 
@@ -719,7 +882,7 @@ Para confirmar un turno, pedí nombre y teléfono. No canceles turnos de otras p
 
 <p style="color:#1a7f37">Así trabaja un agente por dentro: pensar, elegir una herramienta, mirar qué le devolvió, y volver a pensar. El 404 no es el fin: es información. Lo que no puede hacer es inventar. Y eso no lo sabe solo: se lo tenemos que escribir en el system prompt. Ahora lo armamos de verdad.</p>
 
-#### Paso 1 · El objetivo (80–84)
+#### Paso 1 · El objetivo (88–91)
 
 8. **Filmina 27.** Decís:
 
@@ -745,7 +908,7 @@ El de la clase:
     lo decís: **está perfecto, y para la pre-entrega vale** (el programa acepta agente o chain), pero tiene que
     justificarlo.
 
-#### Paso 2 · El cerebro (84–90)
+#### Paso 2 · El cerebro (91–96)
 
 11. **Filmina 28.** Decís:
 
@@ -769,7 +932,7 @@ PRÁCTICA · Paso 2: el cerebro  (lo armo yo; vos anotá en tu plantilla qué mo
 
 <p style="color:#1a7f37">Ya razona: entendió la pregunta y respondió algo coherente. Pero es la chain de hace un rato: no tiene manos. Si inventó un precio, peor todavía. Fíjense que la temperatura la puse baja, 0.2: para un asesor que da precios, queremos precisión, no creatividad.</p>
 
-#### Paso 3 · Las manos (90–99)
+#### Paso 3 · Las manos (96–104)
 
 14. **Filmina 29.** Decís:
 
@@ -815,7 +978,7 @@ En tu plantilla: 2 o 3 herramientas. Para cada una:
 **Si Gemini da *properties: should be non-empty for OBJECT type***: alguna herramienta no tiene ningún dato que
 complete el modelo (falta el ✨ en el filtro de la planilla). Gemini lo exige.
 
-#### Paso 4 · El diario (99–104)
+#### Paso 4 · El diario (104–107)
 
 19. **Filmina 30.** Decís:
 
@@ -842,7 +1005,7 @@ PRÁCTICA · Paso 4: el diario
 
 <p style="color:#1a7f37">Ahora sí. Ojo: no es que "se acuerde"; en cada mensaje, n8n le vuelve a mandar los últimos diez. Esta memoria simple vive en la RAM de n8n: si reinicio n8n, se borra. Para un WhatsApp de verdad, en la Semana 8, conviene guardarla en una base de datos.</p>
 
-#### Paso 5 · El manual (104–112)
+#### Paso 5 · El manual (107–114)
 
 23. **Filmina 31.** Decís:
 
@@ -905,7 +1068,7 @@ Ctrl + S → menú … → Download   (si armaste algo en n8n)
 
 ---
 
-### 112–117 · Para practicar, Pre-entrega 3 y cómo sigue
+### 114–118 · Para practicar, Pre-entrega 3 y cómo sigue
 
 #### Filmina 32 · Para practicar: antes de la pre-entrega (2 min)
 
@@ -959,7 +1122,7 @@ Para explicar:
 
 ---
 
-### 117–120 · Preguntas y cierre
+### 118–120 · Preguntas y cierre
 
 **Filmina 34 · ¿Preguntas?** (2 min) — las tres de la filmina: si su caso necesita un agente o alcanza con una
 chain, qué guardrail no debería cruzar nunca su agente, y si tienen alguna herramienta que no saben cómo describir
@@ -1324,3 +1487,5 @@ Todas las palabras técnicas de hoy, en criollo. Se puede pegar en el chat al fi
 | **Max Iterations** | El máximo de vueltas del ciclo antes de cortar. | 10. |
 | **Chat Trigger** | El trigger que arranca el flujo con un mensaje de chat. | *On chat message*, con el botón *Open chat*. |
 | **Ollama / IA local** | Un programa para correr modelos en tu computadora / IA que corre en tu máquina. | El tema de la Semana 7. |
+| **WhatsApp Business** | La versión de WhatsApp para empresas, que deja conectar un programa (como n8n) para contestar mensajes. | El tema de la Semana 8: Ana contestando por WhatsApp. |
+| **RAG** | Que el agente busque la respuesta en tus documentos antes de contestar, en vez de inventarla. | Las preguntas frecuentes de la agencia (desafío de la Semana 8). |

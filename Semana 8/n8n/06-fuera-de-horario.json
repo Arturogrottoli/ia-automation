@@ -1,0 +1,561 @@
+{
+  "name": "06 · Ejemplo: fuera de horario",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "whatsapp-horario",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "40ceb6e8-8ee6-4b46-b5a7-002be0e8fdb3",
+      "name": "Simulador: entra el mensaje",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -440,
+        0
+      ],
+      "webhookId": "d097df5d-d2dc-45df-8a61-7508509a30b1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Hace lo mismo que el WhatsApp Trigger: Meta manda un paquete con \"entry\" y \"changes\",\n// y el trigger entrega solo la parte \"value\" de cada cambio (contactos, mensajes, etc.).\nconst body = $input.first().json.body;\nconst salida = [];\nfor (const entry of body.entry ?? []) {\n  for (const change of entry.changes ?? []) {\n    // Igual que el trigger con \"Receive Message Status Updates\" vacío:\n    // los avisos de entregado/leído no pasan.\n    if (change.value?.statuses) continue;\n    salida.push({ json: { ...change.value, field: change.field } });\n  }\n}\nreturn salida;"
+      },
+      "id": "080919bc-1182-450d-b968-78a6ca076715",
+      "name": "Como lo entrega el WhatsApp Trigger",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d2796995-2f15-4863-bb89-a28387632745",
+              "name": "telefono",
+              "value": "={{ $json.messages?.[0]?.from }}",
+              "type": "string"
+            },
+            {
+              "id": "8de98063-28e4-4d9f-8ec1-a3beaee08788",
+              "name": "nombre",
+              "value": "={{ $json.contacts?.[0]?.profile?.name }}",
+              "type": "string"
+            },
+            {
+              "id": "612edaaa-a236-49ea-8a33-1e4922fa7290",
+              "name": "tipo",
+              "value": "={{ $json.messages?.[0]?.type }}",
+              "type": "string"
+            },
+            {
+              "id": "7eff9518-5510-4338-a00c-a36fe3798d07",
+              "name": "texto",
+              "value": "={{ $json.messages?.[0]?.text?.body }}",
+              "type": "string"
+            },
+            {
+              "id": "44cbfe99-7008-4332-b798-0e3a2c913177",
+              "name": "phoneNumberId",
+              "value": "={{ $json.metadata?.phone_number_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "0c61d6cf-0892-4b67-b9e6-5239ad322d32",
+      "name": "Datos del mensaje",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8f93a3fb-3def-4126-bff6-683d77868445",
+              "leftValue": "={{ $json.telefono }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "1320d5b1-28f6-4405-a6f5-931884b779bc",
+      "name": "¿Es un mensaje?",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "29765660-d756-464d-b444-cf1039779395",
+              "leftValue": "={{ $json.tipo }}",
+              "rightValue": "text",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "2fd613c4-b512-47c2-a560-c8f215f84b2a",
+      "name": "¿Es texto?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.texto }}",
+        "options": {
+          "systemMessage": "=Sos Ana, la asesora de la agencia de viajes \"Rumbo Sur\", y atendés por WhatsApp. Hoy es {{ $now.format('dd/MM/yyyy') }}. El cliente se llama {{ $('Datos del mensaje').item.json.nombre }}.\n\nQUÉ PODÉS HACER: contar qué paquetes hay, qué incluyen, cuántos días son y cuánto cuestan. Estos son los únicos paquetes (precio en dólares, por persona):\n- Bariloche Clásico: 5 días, USD 950. Aéreo, hotel 3 estrellas con desayuno y excursión al Circuito Chico.\n- Bariloche Nieve: 7 días, USD 1450. Hoy NO tiene cupos.\n- Caminos del Vino (Mendoza): 4 días, USD 780. Aéreo, hotel boutique y dos visitas a bodegas con degustación.\n- Norte Mágico (Salta): 6 días, USD 890. Aéreo, hotel con desayuno y excursiones a Cafayate y Purmamarca.\n- Fin del Mundo (Ushuaia): 5 días, USD 1320. Aéreo, hotel con media pensión y navegación por el Canal Beagle.\n- Cataratas Express: 3 días, USD 640. Aéreo, hotel con desayuno y entrada al lado argentino de las Cataratas.\n\nFORMATO (es WhatsApp: se lee en el celular):\n- Mensajes cortos: párrafos de 2 o 3 líneas, como mucho 2 párrafos.\n- Negritas con UN asterisco de cada lado, así: *Bariloche Clásico*. Nunca uses ** ni #.\n- Si listás opciones, una por línea, empezando con guion.\n- Como mucho un emoji por mensaje.\n- Terminá SIEMPRE con una pregunta o con el próximo paso.\n\nLÍMITES (aunque el cliente insista):\n- No confirmes reservas ni tomes pagos. Para reservar, pedí nombre completo, destino y fechas, y avisá que un vendedor lo contacta por este mismo chat.\n- No pases precios a pesos ni inventes promociones, fechas de salida ni datos que no estén arriba. Si no sabés algo, decí que lo consultás con un vendedor.\n- Si el tema no tiene que ver con los viajes de la agencia, decilo con amabilidad y volvé a los paquetes.\n- Si el cliente está enojado o pide hablar con una persona, decile que lo pasás con un vendedor del equipo."
+        }
+      },
+      "id": "a9c1fa8b-5b7a-4934-9f48-85b66612e837",
+      "name": "Ana por WhatsApp",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        700,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3-flash-preview",
+        "options": {
+          "temperature": 0.3
+        }
+      },
+      "id": "81c9bb94-b44c-4758-9400-b9ab8bfed5be",
+      "name": "Cerebro: Gemini",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        600,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Datos del mensaje').item.json.telefono }}",
+        "contextWindowLength": 10
+      },
+      "id": "8dc54879-5570-45d5-8639-94be8f8eeffb",
+      "name": "Memoria por teléfono",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        800,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1639f0a0-eb00-4286-8d90-6416efab7ea9",
+              "name": "para",
+              "value": "={{ $('Datos del mensaje').item.json.telefono }}",
+              "type": "string"
+            },
+            {
+              "id": "520f8bdb-1a6c-41d3-b8c8-7e4d3fa7bfe9",
+              "name": "texto",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9efeed40-56dc-46ee-ba4c-f37d85d38b8d",
+      "name": "Respuesta (saldría por WhatsApp)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1000,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e4794ea9-7cd4-4ec0-a7d4-65177dcc920d",
+              "name": "para",
+              "value": "={{ $('Datos del mensaje').item.json.telefono }}",
+              "type": "string"
+            },
+            {
+              "id": "45a3e428-22ef-4c49-934e-f8c01220be86",
+              "name": "texto",
+              "value": "Por ahora solo puedo leer mensajes de texto 🙏 ¿Me lo escribís?",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "af040b04-ec68-4fe6-80dd-7afe39d7bdd0",
+      "name": "Respuesta: solo texto",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        780,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "20db87a2-33d7-407a-b0c3-2acc07eef4df",
+              "leftValue": "={{ $now.weekday }}",
+              "rightValue": 5,
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            },
+            {
+              "id": "82cc9b43-f73f-47ad-a1fd-591801eaf893",
+              "leftValue": "={{ $now.hour }}",
+              "rightValue": 9,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            },
+            {
+              "id": "84c129a8-b3d4-4bd3-a7cf-4d9366c7324e",
+              "leftValue": "={{ $now.hour }}",
+              "rightValue": 18,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "e46a442f-9945-4ce5-9e81-b2e2789aacae",
+      "name": "¿Estamos atendiendo?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        330,
+        -200
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "fecha": "={{ $now.toFormat('dd/MM/yyyy HH:mm') }}",
+            "nombre": "={{ $('Datos del mensaje').item.json.nombre }}",
+            "telefono": "={{ $('Datos del mensaje').item.json.telefono }}",
+            "mensaje": "={{ $('Datos del mensaje').item.json.texto }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "fecha",
+              "displayName": "fecha",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "nombre",
+              "displayName": "nombre",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "telefono",
+              "displayName": "telefono",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "mensaje",
+              "displayName": "mensaje",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "64061a40-8114-4dfc-ae49-2869867c6d0e",
+      "name": "Anotar para mañana",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        560,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "acf22c0b-683e-401e-9333-eb56b2aa23db",
+              "name": "para",
+              "value": "={{ $('Datos del mensaje').item.json.telefono }}",
+              "type": "string"
+            },
+            {
+              "id": "f9a20708-2667-4e27-b011-a5b22b30725c",
+              "name": "texto",
+              "value": "=¡Hola {{ $('Datos del mensaje').item.json.nombre }}! Ahora estamos fuera de horario (atendemos de lunes a viernes, de 9 a 18). Ya anotamos tu mensaje: mañana a primera hora te escribe un vendedor.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "383814f6-25fc-444d-a443-ffe94d5b1bd1",
+      "name": "Respuesta: fuera de horario",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        800,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 06 · Fuera de horario\n\nEs el asistente de la clase (flujo 03) con **un IF más**: **¿Estamos atendiendo?** (lunes a viernes, de 9 a 18, con `$now`).\n\n- **Sí** → sigue como siempre: Ana contesta.\n- **No** → **Anotar para mañana** (Google Sheets: `fecha | nombre | telefono | mensaje`) y una **respuesta fija** que avisa el horario.\n\nPara probar el \"no\" sin esperar a la noche: cambiá el 18 por la hora de ahora.\n\n**Para probar sin Meta:** publicá este flujo y, en el flujo 04 (el celular de mentira), cambiá el final de la URL por `/webhook/whatsapp-horario`. Con WhatsApp real: cambiá los dos primeros nodos por el **WhatsApp Trigger** (como en el flujo 02) y la respuesta por el nodo **WhatsApp · Send**.",
+        "height": 440,
+        "width": 760,
+        "color": 4
+      },
+      "id": "acb2f315-4365-400c-99cc-1708f857456f",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        -560
+      ]
+    }
+  ],
+  "connections": {
+    "Simulador: entra el mensaje": {
+      "main": [
+        [
+          {
+            "node": "Como lo entrega el WhatsApp Trigger",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Como lo entrega el WhatsApp Trigger": {
+      "main": [
+        [
+          {
+            "node": "Datos del mensaje",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Datos del mensaje": {
+      "main": [
+        [
+          {
+            "node": "¿Es un mensaje?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Es un mensaje?": {
+      "main": [
+        [
+          {
+            "node": "¿Estamos atendiendo?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Es texto?": {
+      "main": [
+        [
+          {
+            "node": "Ana por WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respuesta: solo texto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ana por WhatsApp": {
+      "main": [
+        [
+          {
+            "node": "Respuesta (saldría por WhatsApp)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cerebro: Gemini": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Ana por WhatsApp",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memoria por teléfono": {
+      "ai_memory": [
+        [
+          {
+            "node": "Ana por WhatsApp",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Estamos atendiendo?": {
+      "main": [
+        [
+          {
+            "node": "¿Es texto?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Anotar para mañana",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anotar para mañana": {
+      "main": [
+        [
+          {
+            "node": "Respuesta: fuera de horario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "id": "s8e06horario0001",
+  "active": false
+}

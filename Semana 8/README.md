@@ -10,7 +10,7 @@ la Entrega Final, sin clase.
 | `Modulo_8_AI_Automation.pptx` | Las filminas del módulo (33). |
 | `Semana 8.docx` | El material de lectura: RAG y Supabase (bases vectoriales, embeddings, chunks), el cuestionario de 6 preguntas, el podcast, la consigna de la Pre-entrega 4 y el guion sugerido de la clase. |
 | [ejercicios-alumnos.md](ejercicios-alumnos.md) | Lo que hay que hacer **antes de la clase** (la app de Meta), los ejercicios en clase y los de casa, con la Pre-entrega 4 paso a paso. Se comparte con los alumnos. |
-| [n8n/](n8n/) | Cinco workflows: el eco por WhatsApp, el asistente completo, el mismo asistente con WhatsApp simulado, el "celular de mentira" que le manda mensajes, y un RAG con las preguntas frecuentes de la agencia. |
+| [n8n/](n8n/) | Ocho workflows: el eco por WhatsApp, el asistente completo, el mismo asistente con WhatsApp simulado, el "celular de mentira" que le manda mensajes, un RAG con las preguntas frecuentes de la agencia, y tres ejemplos extra sobre el asistente (06 fuera de horario, 07 pasar a una persona, 08 Ana con las herramientas de la Semana 6). |
 | [ejercicios-docente.md](ejercicios-docente.md) | Respuestas, las salidas reales de los flujos, las trabas y cómo corregir la Pre-entrega 4. **No se comparte.** |
 
 ## Los ejercicios
@@ -119,13 +119,21 @@ la Entrega Final, sin clase.
 
 | Min | Tramo | Filminas | En clase |
 |---|---|---|---|
-| 0–10 | Apertura y repaso de la Semana 7 | 1–5 | |
+| 0–16 | Apertura y **repaso de la Semana 7** (8 min: por qué local, Ollama, el puente, local contra nube, la decisión para WhatsApp) | 1–5 | Pregunta rápida en el chat |
 | 10–30 | **01 · La plataforma de Meta** | 6–10 | Ej. 1 (5 min) |
 | 30–55 | **02 · El asistente con IA** | 11–16 | Ej. 2 (5 min) |
 | 55–65 | Break | 17 | |
 | 65–105 | **03 · Práctica en vivo:** el canal, el cerebro, la memoria, la voz y los bordes | 18–24 | Ej. 3 |
 | 105–115 | **04 · El cierre del curso** y la Entrega Final | 25–30 | |
 | 115–120 | Preguntas y despedida | 31–33 | |
+
+**Al final hay tres ejemplos extra** para el asistente (fuera de horario, pasar a una persona, Ana con las
+herramientas de la Semana 6): casi seguro no entran en esta clase, que cierra el curso; quedan para casa y para la
+Entrega Final. Mencionalos en la tarea.
+
+**El repaso dura 8 minutos** (antes eran 2): los 6 de más salen de hacer **de entrada** los recortes 1 y 2 de
+abajo. Los minutos de las secciones siguientes quedan corridos 6 minutos. La Sección 04 (el cierre del curso) no
+se toca.
 
 **Si el tiempo se aprieta**, recortá en este orden:
 1. Los casos de uso (filmina 9): se leen.
@@ -177,7 +185,7 @@ Lo último que se recorta es la Sección 04: es el cierre del curso y la Entrega
 
 ---
 
-### 0–10 · Apertura y repaso de la Semana 7
+### 0–16 · Apertura y repaso de la Semana 7
 
 **Filmina 1 · Portada** (1 min) — Módulo 8: WhatsApp Business · última clase.
 
@@ -225,17 +233,78 @@ Para explicar cada objetivo:
 
 <p style="color:#1a7f37">La clase queda grabada.</p>
 
-**Repaso de la Semana 7** (2 min, sin filmina) — antes de pasar a la filmina 5.
+**Repaso de la Semana 7** (8 min, sin filmina) — antes de pasar a la filmina 5.
 
-<p style="color:#1a7f37">Repasemos. La semana pasada bajamos un modelo a nuestra propia computadora con Ollama y lo conectamos a n8n. Vimos que el cerebro del agente es una pieza que se cambia: Gemini en la nube, o llama3.2 en casa. Y vimos el precio: el modelo local es privado y gratis por pedido, pero más lento y más limitado.</p>
+Es la última clase: hoy se arma el asistente de WhatsApp, que junta todo el curso. El repaso va por la Semana 7
+(dónde corre el cerebro), pero termina en la decisión que piden la Pre-entrega 4 y la Entrega Final: **local o
+nube**. Si alguien no se acuerda de algo, el detalle está en [el guion de la Semana 7](../Semana%207/README.md).
 
-<p style="color:#1a7f37">Eso hoy importa, porque en WhatsApp el cliente espera la respuesta en segundos. Es una de las decisiones de la pre-entrega.</p>
+<p style="color:#1a7f37">Antes de arrancar, repasemos la clase pasada, porque hoy tienen que tomar una decisión con lo que vimos: qué cerebro va a tener su asistente de WhatsApp. Cinco temas, rapidito.</p>
 
-Para explicar:
-- **La decisión de cerebro llega hoy a un caso concreto.** En la Semana 7, Ana con `llama3.2` tardó más de 5 minutos
-  en responder una pregunta con herramientas. Por WhatsApp, eso es un cliente que se fue.
-  - *Ejemplo:* Para la práctica de hoy usamos Gemini. El que quiera, en casa, prueba el asistente con Ollama y
-    compara.
+**Repaso 1 · Por qué correr IA local (2 min)**
+
+| Razón | Qué quiere decir | Ejemplo |
+|---|---|---|
+| **Costo** | En la nube se paga por cada pedido; en local, se paga una vez (la computadora) | Miles de mensajes por día: en local no suma la cuenta |
+| **Privacidad** | Los datos no salen de tu computadora ni de tu red | Una clínica, un banco: datos que no pueden ir a otra empresa |
+| **Independencia** | Nadie te cambia el modelo, ni te sube el precio, ni te lo apaga | Un modelo que se discontinúa no te rompe el flujo |
+| **La contrapartida** | Más lento, menos capaz, y necesita una máquina con memoria | Ana con `llama3.2` tardó más de 5 minutos e inventó un precio |
+
+<p style="color:#1a7f37">Uno. Hay tres razones para correr la IA en nuestra computadora: el costo, porque no se paga por cada pedido; la privacidad, porque los datos no salen; y la independencia, porque nadie nos apaga el modelo. Pero tiene un precio: es más lento, sabe menos, y necesita memoria en la máquina.</p>
+
+**Repaso 2 · Ollama y los modelos (2 min)**
+
+```text
+ollama pull llama3.2     ← bajar un modelo (como descargar una canción)
+ollama run llama3.2      ← charlar con él en la terminal
+ollama list              ← qué modelos tengo
+ollama ps                ← cuáles están cargados en memoria ahora
+```
+
+<p style="color:#1a7f37">Dos. Ollama es el reproductor; el modelo es la canción. Ollama se instala una vez, y después se bajan modelos: llama3.2, el de 3 mil millones de parámetros, o el chico, el de 1. Y el límite para elegir no es lo que sabe el modelo: es la memoria de nuestra computadora. Si no entra, se corta.</p>
+
+- **Más grande = más capaz, pero más pesado y más lento.** El de 1B le recomendó a un cliente llevar "un casco
+  ligero" a Bariloche.
+- **Si no alcanza la memoria:** el modelo se corta (*signal: killed*). Se usa uno más chico o se cierran programas.
+
+**Repaso 3 · El puente con n8n (1 min)**
+
+```text
+n8n en Docker  ──►  http://host.docker.internal:11434  ──►  Ollama (instalado en la computadora)
+   (con localhost, desde adentro de Docker:  fetch failed)
+```
+
+<p style="color:#1a7f37">Tres. Para que n8n, que está en Docker, hable con Ollama, que está en la computadora, la dirección es host.docker.internal, puerto 11434. Con localhost no anda: adentro de Docker, localhost es la caja de Docker, no nuestra computadora. Y en el agente, el cerebro se cambia por el sub-nodo Ollama Chat Model. Lo demás, igual.</p>
+
+**Repaso 4 · Lo que aprendimos comparando (1 min)**
+
+<p style="color:#1a7f37">Cuatro. Comparamos la misma pregunta en local y en la nube. El modelo local anda bien para tareas cortas y de un paso: clasificar una queja, resumir, sacar un dato. Como cerebro de un agente con varias herramientas, se queda corto: tarda mucho y se equivoca más. Y en la tarea quedó un truco: tapar los datos sensibles antes de mandarlos a la nube.</p>
+
+**Repaso 5 · La decisión de hoy: ¿local o nube para WhatsApp? (1 min)**
+
+<p style="color:#1a7f37">Y cinco, lo que hoy importa. En WhatsApp, el cliente espera la respuesta en segundos. Un asistente que tarda cinco minutos es un cliente que se fue. Por eso, para la práctica de hoy usamos Gemini. Pero la Pre-entrega 4 les pide decidir y justificar: ¿su caso necesita privacidad por encima de todo, o velocidad? No hay una respuesta correcta: hay una respuesta justificada.</p>
+
+- **Las tres respuestas posibles:** nube (rápido y capaz), local (privado), o las dos según el mensaje (el router de
+  privacidad, ejemplo C de la Semana 7).
+  - *Ejemplo:* Una agencia de viajes: nube. Un consultorio que recibe síntomas por WhatsApp: local, o tapar los
+    datos antes.
+
+**Pregunta rápida para el chat (1 min)** — la pegás, contestan mientras pasás a la filmina 5, no esperás a todos:
+
+```text
+REPASO · Contestá con el número y la respuesta
+1. Nombrá una razón para correr la IA en tu computadora.
+2. ¿Qué comando baja un modelo con Ollama?
+3. Desde n8n en Docker, ¿qué dirección uso para llegar a Ollama?
+4. ¿Para qué anda bien un modelo chico local: para una tarea corta o para un agente con muchas herramientas?
+5. Para tu asistente de WhatsApp: ¿local o nube? ¿Por qué? (una línea)
+```
+
+Respuestas: **1** Costo, privacidad o independencia. **2** `ollama pull llama3.2`. **3**
+`http://host.docker.internal:11434`. **4** Para una tarea corta. **5** No hay una correcta: leé un par en voz alta y
+decí "esto es lo que piden justificar en la Pre-entrega 4".
+
+<p style="color:#1a7f37">Ya tenemos un agente con cerebro, diario, manos y manual, y sabemos dónde puede correr. Lo que le falta es gente: que le escriban clientes de verdad. Para eso, WhatsApp. Vamos.</p>
 
 **Filmina 5 · ¿Dónde quedamos? El agente ya existe, le falta gente** (3 min)
 
@@ -1247,6 +1316,226 @@ Para explicar (respuestas listas para las tres preguntas de la filmina):
 **Filmina 33 · Gracias** — cierre.
 
 <p style="color:#1a7f37">Gracias por estudiar con nosotros. Mucha suerte con la entrega final: cualquier duda, por los canales de siempre.</p>
+
+---
+
+### Extra, si sobra tiempo o para casa · Tres ejemplos más para el asistente de WhatsApp
+
+**Si sobra tiempo** (es la última clase y el cierre no se recorta: casi seguro que no), quedan **para casa y para la
+Entrega Final**. Los tres parten del **asistente de la clase** (flujo `03`, el simulado) y le suman **una cosa** que
+un asistente de verdad necesita. Los flujos están en la carpeta [n8n/](n8n/) (`06`, `07` y `08`).
+
+| Ejemplo | Flujo | Lo que le suma al asistente | Min |
+|---|---|---|---|
+| A · Fuera de horario | `06-fuera-de-horario.json` | Un IF con la hora: fuera de horario, respuesta fija y se anota para mañana | 8 |
+| B · Pasar a una persona | `07-pasar-a-una-persona.json` | Una herramienta que le avisa por mail a un vendedor (*human in the loop*) | 10 |
+| C · Ana con las herramientas de la Semana 6 | `08-whatsapp-con-herramientas.json` | Los precios salen de la planilla y del dólar, no del prompt: la forma del proyecto final | 10 |
+
+**¿Andan en local?** ✅ Con el **simulador**, sí, igual que el flujo 03: se publica el flujo y se le mandan mensajes
+con el "celular de mentira" (flujo 04), cambiando el final de su URL por el *Path* de cada ejemplo
+(`whatsapp-horario`, `whatsapp-humano`, `whatsapp-completo`). Con **WhatsApp real**, hace falta lo mismo que en la
+clase: la dirección pública (n8n Cloud o el túnel), y cambiar los dos primeros nodos por el **WhatsApp Trigger** y la
+respuesta por **WhatsApp · Send**, como en el flujo 02.
+
+> **Para vos:** los tres flujos son copias del `03` (que sí se probó) con nodos agregados, pero **no se ejecutaron**:
+> ni contra Gemini, ni contra Google. Probalos antes de recomendarlos. Ojo con la regla de Meta: **una sola app
+> admite un solo WhatsApp Trigger**; para pasarlos a WhatsApp real, de a uno.
+
+#### Ejemplo A · Fuera de horario (flujo 06) (8 min)
+
+```text
+… → ¿Es un mensaje? → ¿Estamos atendiendo? ─ true  → ¿Es texto? → Ana por WhatsApp → Respuesta   (como siempre)
+                       (IF: día y hora)     └ false → Anotar para mañana → Respuesta: fuera de horario
+                                                      (Sheets · Append)
+```
+
+Lo que tiene que pasar: un mensaje un sábado, o a las 23, recibe *"¡Hola Juan! Ahora estamos fuera de horario
+(atendemos de lunes a viernes, de 9 a 18). Ya anotamos tu mensaje: mañana a primera hora te escribe un vendedor."*, y
+queda una fila en la planilla "Pendientes".
+
+<p style="color:#1a7f37">Ana puede contestar a cualquier hora, pero a veces el negocio no quiere: si el cliente pide algo que necesita un vendedor, a las 11 de la noche no hay nadie. Este ejemplo le pone horario: fuera de horario, una respuesta fija, y el mensaje queda anotado para mañana.</p>
+
+**A-1 · Partir del asistente de la clase**
+
+```text
+Abrí el flujo 03 (el simulado) → menú … → Duplicate → nombre:  Asistente con horario
+En "Simulador: entra el mensaje" → Path:  whatsapp-horario
+```
+
+<p style="color:#1a7f37">No arrancamos de cero: duplicamos el de la clase. Le cambio el Path, para que no choque con el original.</p>
+
+**A-2 · La planilla de pendientes**
+
+```text
+sheets.new → nombre:  Pendientes → Fila 1:  fecha | nombre | telefono | mensaje → copiá el link
+```
+
+**A-3 · ¿Estamos atendiendo? Un IF con tres condiciones**
+
+```text
+Borrá la flecha entre "¿Es un mensaje?" y "¿Es texto?" (tachito) → en el medio, + → If
+   Condición 1:  {{ $now.weekday }}  · Number → is less than or equal to · 5     (lunes a viernes)
+   Add condition → Condición 2:  {{ $now.hour }}  · Number → is greater than or equal to · 9
+   Add condition → Condición 3:  {{ $now.hour }}  · Number → is less than · 18
+   Arriba de las condiciones:  AND   (se tienen que cumplir las tres)
+→ renombralo:  ¿Estamos atendiendo?
+true → conectalo a "¿Es texto?"
+```
+
+<p style="color:#1a7f37">El IF con tres preguntas a la vez: ¿es día de semana? ¿son las 9 o más? ¿son menos de las 18? Con AND, tienen que cumplirse las tres. Es el $now.weekday del IF de la Semana 4, y $now.hour, la hora.</p>
+
+- **AND: todas. OR: alcanza con una.** Para "estamos atendiendo" hacen falta las tres.
+- **`$now` usa la zona horaria del flujo:** en *Settings* del flujo, *America/Argentina/Buenos_Aires*.
+
+**A-4 · Fuera de horario: anotar y avisar**
+
+```text
+false → Google Sheets → Append row in sheet · "Pendientes" · Mapping: Map Each Column Manually
+   fecha {{ $now.toFormat('dd/MM/yyyy HH:mm') }} · nombre, telefono, mensaje: arrastrados de "Datos del mensaje"
+→ renombralo:  Anotar para mañana
++ → Edit Fields:  para = telefono · texto = ¡Hola {nombre}! Ahora estamos fuera de horario (…). Ya anotamos tu
+  mensaje: mañana a primera hora te escribe un vendedor.
+→ renombralo:  Respuesta: fuera de horario → Save → Publish
+```
+
+<p style="color:#1a7f37">Fuera de horario, dos cosas: anotar el mensaje en la planilla, para que mañana alguien lo llame, y contestarle al cliente con un mensaje fijo. No hace falta IA para esto: siempre es el mismo mensaje.</p>
+
+**A-5 · Probar sin esperar a la noche**
+
+```text
+En "¿Estamos atendiendo?", cambiá el 18 por la hora de ahora (por ejemplo, 10) → Save
+Flujo 04 (el celular de mentira) → URL terminada en  /webhook/whatsapp-horario → Execute workflow
+→ la respuesta fija, y una fila en "Pendientes"
+Volvé a poner el 18
+```
+
+<p style="color:#1a7f37">Para probar el "fuera de horario" sin quedarme hasta la noche, hago trampa: cambio el 18 por la hora de ahora. Y llega la respuesta fija, y la fila en la planilla.</p>
+
+#### Ejemplo B · Pasar la conversación a una persona (flujo 07) (10 min)
+
+```text
+… → Ana por WhatsApp → Respuesta
+      ├─ Cerebro: Gemini
+      ├─ Memoria por teléfono
+      └─ avisar_vendedor   (Gmail Tool: mail al vendedor con nombre, teléfono y un resumen)
+```
+
+Lo que tiene que pasar: *"Quiero reservar el Bariloche Clásico para el 15 de julio"* → al vendedor le llega un mail
+*"WhatsApp: Juan necesita un vendedor"* con el teléfono y el resumen, y Juan recibe *"Listo, ya le pasé tu consulta
+a un vendedor: te escribe por acá en menos de una hora."*
+
+<p style="color:#1a7f37">¿Se acuerdan del human in the loop de la Semana 6? Ana resuelve lo repetitivo, pero hay cosas que tiene que hacer una persona: reservar, cobrar, calmar a alguien enojado. Este ejemplo le da a Ana una herramienta para eso: avisarle a un vendedor.</p>
+
+**B-1 · Partir del asistente de la clase**
+
+```text
+Flujo 03 → … → Duplicate → nombre:  Asistente con vendedor · Path del simulador:  whatsapp-humano
+```
+
+**B-2 · La herramienta: un mail al vendedor**
+
+```text
+En "Ana por WhatsApp", Tool + → Gmail Tool → renombralo:  avisar_vendedor
+   Credential: tu Gmail · Operation: Send
+   Description:  Le manda un mail al vendedor de turno para que tome la conversación. Usala cuando el cliente
+                 quiere reservar o pagar, está enojado o pide hablar con una persona. Una sola vez por conversación.
+   To:       el mail del vendedor (el tuyo, para probar)
+   Subject:  WhatsApp: {nombre} necesita un vendedor            ← arrastrado de "Datos del mensaje"
+   Message:  Cliente: {nombre} · Teléfono: {telefono}
+             Qué necesita: {{ $fromAI('resumen', 'Un resumen corto de lo que quiere el cliente', 'string') }}
+   Options → Append n8n Attribution: apagado
+```
+
+<p style="color:#1a7f37">La herramienta es un Gmail. El nombre y el teléfono los pongo yo, arrastrados: no quiero que el modelo los escriba, porque se puede equivocar. Lo único que completa el modelo es el resumen de lo que quiere el cliente. Y en la descripción, cuándo usarla.</p>
+
+- **Lo que se puede arrastrar, se arrastra; el modelo completa solo lo que no se sabe de antes.** Así hay menos
+  lugar para errores.
+
+**B-3 · El manual: cuándo pasar a una persona**
+
+```text
+En "Ana por WhatsApp" → System Message, al final, agregá:
+   PASAR A UNA PERSONA: si el cliente quiere reservar o pagar, está enojado, o pide hablar con una persona, usá
+   avisar_vendedor UNA sola vez, con un resumen de lo que quiere. Después decile: "Listo, ya le pasé tu consulta
+   a un vendedor: te escribe por acá en menos de una hora." No inventes horarios ni nombres de vendedores.
+→ Save → Publish
+```
+
+<p style="color:#1a7f37">Y en el manual, la regla: en qué casos pasar a una persona, una sola vez, y qué decirle al cliente. Lo de "no inventes nombres" es porque, si no, el modelo dice "te va a escribir Martín", y Martín no existe.</p>
+
+**B-4 · Probar los cuatro casos**
+
+```text
+Con el celular de mentira (URL terminada en /webhook/whatsapp-humano):
+   "¿Cuánto sale Mendoza?"                       → contesta Ana, sin avisar a nadie
+   "Quiero reservar el Bariloche Clásico"         → mail al vendedor + "ya le pasé tu consulta…"
+   "Hace dos días que nadie me contesta, ¡un desastre!" → mail al vendedor (cliente enojado)
+   "¿Me pasás con una persona?"                   → mail al vendedor
+```
+
+<p style="color:#1a7f37">Una pregunta de precio la contesta Ana sola. Reservar, un cliente enojado o pedir una persona: le llega el mail al vendedor. Así el vendedor solo atiende lo que vale la pena, y nadie queda sin respuesta.</p>
+
+#### Ejemplo C · Ana por WhatsApp, con las herramientas de la Semana 6 (flujo 08) (10 min)
+
+```text
+… → Ana por WhatsApp → Respuesta
+      ├─ Cerebro: Gemini · Memoria por teléfono
+      ├─ consultar_paquetes   (la planilla "Paquetes Rumbo Sur")
+      ├─ cotizacion_dolar     (dolarapi)
+      └─ calculadora
+```
+
+Lo que tiene que pasar: *"¿Cuánto sale Bariloche para dos en pesos?"* → Ana usa la planilla, el dólar y la
+calculadora, y contesta por WhatsApp con el precio en pesos de hoy.
+
+<p style="color:#1a7f37">En la clase, los paquetes estaban escritos en el system prompt. Funciona, pero si cambia un precio, hay que tocar el flujo. Este ejemplo junta las dos semanas: el WhatsApp de hoy con las manos de la Semana 6. Los precios salen de la planilla, y si cambian, se cambian ahí. Esta es la forma que tiene el proyecto final.</p>
+
+**C-1 · Partir del asistente de la clase**
+
+```text
+Flujo 03 → … → Duplicate → nombre:  Asistente completo · Path del simulador:  whatsapp-completo
+```
+
+**C-2 · Traer las tres herramientas de la Semana 6**
+
+```text
+Abrí el flujo 02 de la Semana 6 (el agente de la agencia) → seleccioná  consultar_paquetes, cotizacion_dolar
+y calculadora  (clic en uno, Shift + clic en los otros) → Ctrl + C
+Volvé al Asistente completo → Ctrl + V → conectá cada una al enchufe Tool de "Ana por WhatsApp"
+En consultar_paquetes: tu credencial de Sheets y el link de "Paquetes Rumbo Sur"
+```
+
+<p style="color:#1a7f37">No hace falta armarlas de nuevo: las copio del agente de la Semana 6 y las pego acá. Copiar y pegar nodos entre flujos funciona como con cualquier texto: Control C, Control V. Después conecto cada una al enchufe de herramientas.</p>
+
+- **Copiar nodos entre flujos** copia la configuración, pero no siempre la credencial: revisala en cada uno.
+
+**C-3 · Cambiar el manual: de la lista a las herramientas**
+
+```text
+En el System Message, borrá la parte "QUÉ PODÉS HACER" con la lista de los seis paquetes y poné:
+   QUÉ PODÉS HACER: contar qué paquetes hay para un destino, qué incluyen, cuántos días son, cuánto cuestan en
+   dólares y en pesos, y si hay cupos.
+   HERRAMIENTAS:
+   - consultar_paquetes: usala SIEMPRE que pregunten por un destino, un precio o los cupos. Nunca respondas
+     precios de memoria.
+   - cotizacion_dolar: cuando pidan el precio en pesos. Usá el campo 'venta'.
+   - calculadora: para las cuentas (precio por persona × personas × dólar).
+(lo demás, el FORMATO para WhatsApp y los límites, queda igual)
+→ Save → Publish
+```
+
+<p style="color:#1a7f37">En el manual, saco la lista de paquetes y pongo cuándo usar cada herramienta. Lo de WhatsApp, mensajes cortos, negrita con un asterisco, queda igual: eso no cambia.</p>
+
+**C-4 · Probar**
+
+```text
+Con el celular de mentira (URL terminada en /webhook/whatsapp-completo):
+   "¿Cuánto sale Bariloche para dos en pesos?"   → planilla + dólar + calculadora → precio en pesos de hoy
+   "¿Y el de nieve?"                              → planilla (memoria: sabe que es Bariloche) → sin cupos
+Cambiá un precio en la planilla → preguntá de nuevo → Ana ya dice el precio nuevo
+```
+
+<p style="color:#1a7f37">Pregunto por Bariloche en pesos, y miren el log: planilla, dólar, calculadora. Y ahora cambio un precio en la planilla, pregunto de nuevo, y Ana ya lo sabe. Nadie tocó el flujo. Esto es un asistente que el dueño del negocio puede mantener solo, desde una planilla. Y es exactamente lo que piden para la Entrega Final.</p>
 
 ---
 

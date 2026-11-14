@@ -1,0 +1,242 @@
+{
+  "name": "06 · Ejemplo: de un mensaje escrito como sea, a la planilla",
+  "id": "s7e06extraer0001",
+  "active": false,
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Argentina/Buenos_Aires"
+  },
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "6b2824ad-46e0-4fcb-91f8-f5d3b74f1dee",
+      "name": "Arrancar a mano",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"mensajes\": [\n    {\n      \"texto\": \"Hola! soy Carla Gómez, queremos ir a Salta con mi marido y mis dos hijos en julio\"\n    },\n    {\n      \"texto\": \"buenas, me llamo Pedro. Somos 6 amigos y queremos conocer Ushuaia\"\n    },\n    {\n      \"texto\": \"Hola, quisiera info de Mendoza para mí sola. Gracias! Lucía\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "dcaa39a5-8ab9-474b-afa2-032cb7bebacb",
+      "name": "Mensajes de prueba",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "mensajes",
+        "options": {}
+      },
+      "id": "e3b117c3-0573-4c6a-9fe3-d08433d97f09",
+      "name": "Uno por uno",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Del mensaje de un cliente, sacá tres datos y respondé SOLO con un JSON, sin texto antes ni después, así:\n{\"nombre\": \"...\", \"destino\": \"...\", \"personas\": 0}\n\nReglas: personas es un número (contá a la persona que escribe). Si un dato no está, poné \"\".\n\nMensaje: {{ $json.texto }}",
+        "batching": {}
+      },
+      "id": "d38e09ac-e1c3-4f71-8e8c-49ef96986fb1",
+      "name": "Sacar los datos (local)",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        660,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "model": "llama3.2:latest",
+        "options": {
+          "temperature": 0.1,
+          "format": "json"
+        }
+      },
+      "id": "e658ad21-5497-44cc-80b4-d14eca9294f8",
+      "name": "Cerebro local: Ollama",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        660,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5d9d6501-7107-4bd2-aab1-b794f83a1031",
+              "name": "fecha",
+              "value": "={{ $now.toFormat('dd/MM/yyyy HH:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "a08215b7-cfd1-4c4e-a800-7c8427fecc6d",
+              "name": "nombre",
+              "value": "={{ JSON.parse($json.text.replace(/```json|```/g, '').trim()).nombre }}",
+              "type": "string"
+            },
+            {
+              "id": "44334745-ce1d-4332-9c7b-c7ccc0ef9aa5",
+              "name": "destino",
+              "value": "={{ JSON.parse($json.text.replace(/```json|```/g, '').trim()).destino }}",
+              "type": "string"
+            },
+            {
+              "id": "436f5895-2084-449a-8d92-19b2d5eb7177",
+              "name": "personas",
+              "value": "={{ JSON.parse($json.text.replace(/```json|```/g, '').trim()).personas }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "867b3865-3670-40d4-a845-b4070cbda759",
+      "name": "Armar la fila",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        940,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "949f74e4-c2c5-4aa5-b8fb-101ef8e551ee",
+      "name": "Guardar en la planilla",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1180,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 06 · De un mensaje escrito como sea, a la planilla\n\n1. **Mensajes de prueba**: tres consultas escritas como escribe la gente.\n2. **Uno por uno** (Split Out).\n3. **Sacar los datos (local)**: Ollama devuelve un JSON con nombre, destino y personas.\n4. **Armar la fila**: lee ese JSON (`JSON.parse`) y agrega la fecha.\n5. **Guardar en la planilla**: \"Consultas de la agencia\" (`fecha | nombre | destino | personas`).\n\n**Antes de ejecutar:** la credencial de Sheets y el link de la planilla.",
+        "height": 360,
+        "width": 700,
+        "color": 4
+      },
+      "id": "73c70a83-c09d-4268-acd5-35c5d1b685c1",
+      "name": "Nota: qué hace",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -460
+      ]
+    }
+  ],
+  "connections": {
+    "Arrancar a mano": {
+      "main": [
+        [
+          {
+            "node": "Mensajes de prueba",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensajes de prueba": {
+      "main": [
+        [
+          {
+            "node": "Uno por uno",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Uno por uno": {
+      "main": [
+        [
+          {
+            "node": "Sacar los datos (local)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cerebro local: Ollama": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Sacar los datos (local)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sacar los datos (local)": {
+      "main": [
+        [
+          {
+            "node": "Armar la fila",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Armar la fila": {
+      "main": [
+        [
+          {
+            "node": "Guardar en la planilla",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
