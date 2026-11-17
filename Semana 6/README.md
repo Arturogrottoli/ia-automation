@@ -99,6 +99,31 @@ Lo último que se recorta es el Paso 3 (las manos) y el Paso 5 (el manual): son 
 
 ---
 
+### Mapa de la clase: el PowerPoint y los flujos de n8n, en orden
+
+Para seguir la clase con las dos pantallas: qué filmina va (`Modulo_6_AI_Automation.pptx`) y qué hay abierto en n8n en
+cada momento. Los flujos están en [n8n/](n8n/).
+
+| Min | Filminas | Tramo | En n8n |
+|---|---|---|---|
+| 0–15 | 1–5 | Apertura y repaso de la Semana 5 | Nada (si alguien pregunta: el `02` de la Semana 5) |
+| 15–35 | 6–11 | 01 · Qué es un AI Agent · Ejercicio 1 | **`01-basic-llm-chain.json`**: la chain que no puede consultar (contada, o ejecutada si hay tiempo) |
+| 35–47 | — (sin filmina) | Los agentes, a fondo | **`02-agente-agencia.json`** abierto, solo para señalar las piezas en la parte E |
+| 47–63 | 12–18 | 02 · Las tres piezas | **`02`**: señalás el cerebro, el diario y cada herramienta con su descripción |
+| 63–73 | 19–23 | 03 · El system prompt · Ejercicio 2 | **`02`**: abrís el agente → *System Message* |
+| 73–83 | 24 | Break | Abrís el workflow vacío **`Agente en vivo`** |
+| 83–88 | 25–26 | Role-play de orquestación · Ejercicio 3 | Nada: es en voz alta |
+| 88–91 | 27 | Paso 1 · El objetivo | Nada: plantilla en papel |
+| 91–96 | 28 | Paso 2 · El cerebro | **`Agente en vivo`**: chat + AI Agent + Gemini |
+| 96–104 | 29 | Paso 3 · Las manos | **`Agente en vivo`**: consultar_paquetes, cotizacion_dolar, calculadora |
+| 104–107 | 30 | Paso 4 · El diario | **`Agente en vivo`**: Simple Memory |
+| 107–114 | 31 | Paso 5 · El manual | **`Agente en vivo`**: system prompt y las tres preguntas de prueba. Plan B: **`02`** |
+| 114–118 | 32–33 | Para practicar, Pre-entrega 3 y cómo sigue | **`03-agente-mal-descrito.json`** para mostrar el Ejercicio 7 de casa (si da el tiempo) |
+| 118–120 | 34–35 | Preguntas y cierre | — |
+| Extra | — | Tres ejemplos más | **`04`** (la IA clasifica), **`05`** (el clima), **`06`** (el que anota) |
+
+---
+
 ### Preparación (antes de la clase)
 
 - [ ] **Tu n8n prendido y logueado.** Probá antes la práctica entera.
@@ -128,6 +153,91 @@ Lo último que se recorta es el Paso 3 (las manos) y el Paso 5 (el manual): son 
     de partida de la práctica y de la Pre-entrega 3.
 - [ ] [ejercicios-alumnos.md](ejercicios-alumnos.md) y `paquetes.csv` listos para compartir.
 - [ ] Avisar que la clase queda grabada.
+
+---
+
+### Resumen de la clase 5: las filminas y los flujos de n8n
+
+Para tenerlo a mano antes de la clase y en el repaso. **No se lee entero en clase:** el repaso de 8 minutos (más
+abajo) es la versión hablada. Esto es el mapa completo: qué dijo cada filmina del Módulo 5, qué flujo se mostró en
+cada momento y qué de todo eso vuelve hoy. Se puede pegar en el chat o compartir para el que faltó.
+
+#### El hilo de la clase 5, en una línea
+
+**De la pieza al sistema:** en el Módulo 4 aprendimos a hacer un pedido a una API (una pieza). En el 5, a **planificar**
+un flujo antes de construirlo y a **orquestar** Sheets, una API, Drive y Gmail para que trabajen juntos, sin
+duplicar nada si se ejecuta dos veces, y sabiendo leer el error cuando se rompe.
+
+#### Las filminas, una por una (`Semana 5/Modulo_5_AI_Automation.pptx`)
+
+| Filmina | Título | La idea | Qué se mostró / se hizo |
+|---|---|---|---|
+| 1–4 | Portada, objetivos, agenda, grabación | Los cinco objetivos: planificar, verificar accesos, idempotencia, construir de punta a punta, diagnosticar con el log | — |
+| 5 | ¿Dónde quedamos? De la pieza técnica al sistema | Una petición que anda es un ladrillo; hoy, la casa | — |
+| **01 · Planificar antes de construir** | | | |
+| 6–7 | ¿Por qué planificar? El costo del lienzo en blanco | Arrastrar nodos "a ver qué sale" anda en flujos chicos; con datos reales, no: duplicados, fallas en silencio | — |
+| 8 | El problema y el proceso | Definir el resultado en términos de negocio, no de nodos; dibujar el flujo real | — |
+| 9–10 | Accesos y permisos · Para recordar | Verificar los accesos **antes** de construir. **Leer no es escribir** | — |
+| 11 | Errores e idempotencia | ¿Qué pasa si la API falla, si llegan datos raros, si se ejecuta dos veces? | — |
+| 12 | Logging y mantenimiento | Cómo te enterás de que falló, dónde quedan los logs, quién lo mantiene, exportar el JSON | — |
+| 13 | Actividad: ¿qué pasa si se ejecuta dos veces? | Pensar la idempotencia sobre el boceto del Módulo 2 | **Ejercicio 1** (chat) |
+| **02 · El caso del módulo** | | | |
+| 14–15 | El caso: completar una planilla con datos externos | Planilla con ID completo y Nombre, Edad, Cargo vacíos; una API los completa | — |
+| 16 | La cadena completa: siete nodos | Manual Trigger → Sheets (leer) → Filter → HTTP Request → Sheets (actualizar) → Aggregate → Gmail | — |
+| 17 | Decisiones, no casualidades | Manual Trigger para probar; **Filter = idempotencia**; **Aggregate = un correo, no cinco** | — |
+| 18 | Lo que cierra el flujo | **Update** (no Append) busca la fila por ID; el Aggregate va antes del Gmail | **Ejercicio 2:** ¿cuántos correos salen? (4 · 1 · 0) |
+| 19 | El error no es el fin del flujo | El error es la pista para mejorarlo | — |
+| 20 | Coder Tips | **El nombre es la etiqueta; el ID es el pasaporte** (dónde está el ID de una carpeta y de una planilla) | — |
+| 21 | Break | | |
+| **03 · Práctica en vivo** | | | |
+| 22–23 | Desafío de mapeo relámpago | Mapear es decidir qué dato va en qué casillero, y transformarlo en el camino | **Flujo 01** · Ejercicio 3 |
+| 24 | Paso 1 · El plano | Problema en una línea, entrada → proceso → salida, servicios | El plano en papel |
+| 25 | Paso 2 · Los accesos | Sheets, Drive y Gmail con OAuth2 (el mismo Client ID y Secret), probados de a uno | Credenciales nuevas: Drive y Gmail |
+| 26 | Paso 3 · La entrada | Manual Trigger, leer la planilla, Filter "Nombre vacío" | **Flujo 02** (o **03** sin Google) |
+| 27 | Paso 4 · Proceso y salida | HTTP Request a dummyjson, carpeta en Drive (por ID), Update de la fila, Aggregate, Gmail | **Flujo 02** (o **03**) |
+| 28 | Paso 5 · La clínica | Romperlo a propósito: **404** (ID de carpeta cambiado) y **403** (planilla de solo lectura); leer **Executions** | **Flujo 02** · y en casa el **04** |
+| 29–30 | Para practicar · ¿Cómo sigue? | Repetirlo con tu planilla; probar la idempotencia. Lo que falta: **criterio propio** → el agente | — |
+| 31–32 | Preguntas · Gracias | | |
+
+#### Los flujos de n8n de la clase 5 (`Semana 5/n8n/`)
+
+| Flujo | Qué hace | Qué enseñó | Resultado (probado) |
+|---|---|---|---|
+| `01-mapeo-relampago.json` | Tres "formularios" con *Nombre completo*, email y teléfono desprolijos, pasados a `nombre`, `apellido`, `email`, `telefono` | Transformar datos al mapear: `split`, `trim`, `toLowerCase`, `replace`. Y que hay **casos ambiguos** | Lucía y María Laura bien; **Juan Martín del Potro** mal (apellido "Potro"): se resuelve en el plano, no en el nodo |
+| `02-planilla-google.json` | El caso del módulo completo: Leer planilla → Solo filas incompletas → Buscar datos del empleado (dummyjson) → Crear carpeta del empleado (Drive) → Completar la fila (Update) → Juntar en un solo item → Avisar que terminó (Gmail) | Orquestar cuatro servicios de punta a punta | No se probó contra Google (hace falta una cuenta): se probó la lógica con el 03 |
+| `03-ensayo-sin-google.json` | El mismo flujo, con Google simulado | Seguir la clase sin credenciales | 5 filas → **4** completadas → **1** correo. Segunda ejecución: **0** |
+| `04-clinica-de-errores.json` | Tres errores a propósito | Leer errores: **A** `$json.id` en minúscula (falla **en silencio**: trae la lista entera); **B** un ID que no existe (**404**, frena todo el nodo); **C** sin Aggregate (**4** correos) | Los tres probados |
+| `05`, `06`, `07` (extra) | Formulario → planilla → mail · El dólar del día sin duplicar (*Append or Update*) · El resumen del día (Filter + Aggregate) | Las mismas ideas, en otros casos | Armados, no ejecutados contra Google |
+
+#### La cadena del caso, con la cuenta de items
+
+```text
+Arrancar a mano → Leer planilla → Solo filas incompletas → Buscar datos → Crear carpeta → Completar la fila → Juntar → Avisar
+                    5 items          4 items (Filter)        4 pedidos      4 carpetas      4 filas (Update)    1 item    1 correo
+Segunda ejecución:  5 items          0 items  ──────────────────────────────────────────────────────────────►  no sigue: 0 correos
+```
+
+#### Las seis ideas que hay que llevarse de la clase 5
+
+1. **Planificar antes de construir:** problema, entrada, proceso, salida, accesos y errores, en papel.
+2. **Leer no es escribir:** el 403 es un permiso, y no se arregla con lógica ni cambiando la credencial.
+3. **Idempotencia:** ejecutar dos veces no duplica nada. En el caso, la da el **Filter**.
+4. **Item por item:** cada nodo corre una vez por item; el **Aggregate** junta todo para que salga **un** correo.
+5. **El ID es el pasaporte:** en Google se trabaja con el ID de la carpeta y de la planilla, no con el nombre.
+6. **El log (*Executions*) es la caja negra:** qué entró y qué salió de cada nodo, y dónde se rompió.
+
+#### Qué de la clase 5 vuelve hoy (seguimiento)
+
+| De la clase 5 | Dónde aparece hoy, en la Semana 6 |
+|---|---|
+| El plano (Paso 1) | **Paso 1 · El objetivo** de la práctica (filmina 27) y la primera parte de la **Pre-entrega 3** |
+| Credencial de Google Sheets (Paso 2) | La herramienta **consultar_paquetes** del agente (flujo 02, Paso 3 · Las manos) |
+| HTTP Request a una API | La herramienta **cotizacion_dolar** (un *HTTP Request Tool*): la misma idea, pero la usa el modelo cuando decide |
+| Filter = idempotencia | **El system prompt** ("usala una sola vez"): con un agente, la idempotencia se escribe (ejemplo C del final) |
+| Aggregate e item por item | El **ciclo del agente** (filmina 8): cada vuelta es un pedido al modelo |
+| `{{ $json.ID }}` adentro de la URL (mapear) | **`$fromAI`**: el dato de la herramienta lo completa el modelo (filmina 16 y Paso 3) |
+| Executions: la caja negra | El **log del agente**: qué herramienta eligió en cada vuelta y qué le devolvió (Paso 5 y trabas) |
+| Filmina 30: "le falta criterio propio" | **Toda la clase de hoy**: le pasamos la decisión al modelo (filmina 5) |
 
 ---
 
@@ -181,8 +291,9 @@ Para explicar cada objetivo:
 **Repaso de la Semana 5** (8 min, sin filmina) — antes de pasar a la filmina 5.
 
 Hoy el agente usa todo lo de la clase pasada, pero **las decisiones las toma el modelo**. Por eso el repaso va tema por
-tema, y cada tema termina en "¿y con un agente?". Si alguien no se acuerda de algo, el detalle está en
-[el guion de la Semana 5](../Semana%205/README.md).
+tema, y cada tema termina en "¿y con un agente?". El mapa completo, filmina por filmina y flujo por flujo, está arriba, en
+[Resumen de la clase 5](#resumen-de-la-clase-5-las-filminas-y-los-flujos-de-n8n); el guion entero, en
+[la Semana 5](../Semana%205/README.md).
 
 <p style="color:#1a7f37">Antes de arrancar, repasemos la clase pasada, porque hoy la usamos toda. Cinco temas, y en cada uno les cuento qué cambia cuando el que decide es un agente.</p>
 
