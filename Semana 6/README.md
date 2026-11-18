@@ -9,7 +9,7 @@ Fuente: `program-summary.pdf` (Módulo 6). **Una clase de 2 horas.**
 | `Modulo_6_AI_Automation.pptx` | Las filminas del módulo (35). |
 | `Semana 6.docx` | El material de lectura: qué es un AI Agent, Chat Model, memoria, tools, system prompt, el cuestionario de 5 preguntas, el podcast, la Pre-entrega 3 y el guion sugerido de la clase. |
 | [ejercicios-alumnos.md](ejercicios-alumnos.md) | Ejercicios en clase y para casa, la plantilla para diseñar un agente, el paso a paso del agente de la clase y la consigna completa de la Pre-entrega 3 con su rúbrica. Se comparte con los alumnos. |
-| [n8n/](n8n/) | Seis workflows listos para importar: una Basic LLM Chain (para comparar), el agente de la agencia, el mismo agente mal descrito (el desafío), y tres ejemplos extra (04 la IA clasifica y el Switch reparte, 05 un agente del clima con dos herramientas, 06 un agente que anota en la planilla). Además, `paquetes.csv`: la planilla de paquetes que consulta el agente, para subir a Google Sheets. |
+| [n8n/](n8n/) | Seis workflows de referencia (**en clase no se importan: todo se arma en vivo**; sirven para comparar y para casa): una Basic LLM Chain (para comparar), el agente de la agencia, el mismo agente mal descrito (el desafío), y tres ejemplos extra (04 la IA clasifica y el Switch reparte, 05 un agente del clima con dos herramientas, 06 un agente que anota en la planilla). Además, `paquetes.csv`: la planilla de paquetes que consulta el agente, para subir a Google Sheets. |
 | [ejercicios-docente.md](ejercicios-docente.md) | Respuestas, cómo se comporta el agente, el role-play con guion y la Pre-entrega 3 resuelta. **No se comparte.** |
 
 ## Los ejercicios
@@ -45,7 +45,7 @@ Fuente: `program-summary.pdf` (Módulo 6). **Una clase de 2 horas.**
   `models/gemini-3-flash-preview`, el que n8n 2.46 trae por defecto. Si el día de la clase ya no existe, se elige
   otro *flash* de la lista. El plan gratis tiene un límite de pedidos por minuto, y un agente hace varios pedidos por
   cada mensaje (uno por vuelta del ciclo). Si alguien da **429**, que espere un minuto.
-- **Qué está probado y qué no.** Los tres flujos se importan en n8n 2.46 y n8n acepta todos sus nodos: solo piden
+- **Qué está probado y qué no.** Los flujos de referencia (no se usan en clase) se importan en n8n 2.46 y n8n acepta todos sus nodos: solo piden
   las credenciales. **No se ejecutaron contra Gemini** (hace falta una clave), así que las respuestas del agente que
   aparecen en el guion son las esperables, no copiadas de una ejecución. Probalo vos antes de la clase con tu clave.
   Las tres APIs de las herramientas sí están probadas (6 de noviembre de 2026):
@@ -67,7 +67,7 @@ Fuente: `program-summary.pdf` (Módulo 6). **Una clase de 2 horas.**
 | Min | Tramo | Filminas | En clase |
 |---|---|---|---|
 | 0–15 | Apertura (filminas 1–4, rápido) y **repaso de la Semana 5** en la filmina 5 | 1–5 | Dura unos 9 min: los que sobran, para dudas de la clase 5 |
-| 15–35 | **01 · Qué es un AI Agent** | 6–11 | Ej. 1 (4 min); la demo de la chain, contada |
+| 15–35 | **01 · Qué es un AI Agent** | 6–11 | Ej. 1 (4 min); la demo de la chain, armada en vivo |
 | 35–47 | **Los agentes, a fondo** (sin filmina): qué son en criollo, cómo usan herramientas, para qué se usan en la vida real, los riesgos, y qué vamos a hacer con ellos en el curso (Semanas 7, 8 y la Entrega Final) | — | |
 | 47–63 | **02 · Las tres piezas** | 12–18 | Los tipos de tools, nombrados |
 | 63–73 | **03 · El system prompt** | 19–23 | Ej. 2: se muestra la versión arreglada |
@@ -79,7 +79,7 @@ Fuente: `program-summary.pdf` (Módulo 6). **Una clase de 2 horas.**
 
 **De dónde salen los minutos.** Esta versión suma **los agentes, a fondo**
 (12 min, sin filmina). Para que entren, la agenda de arriba ya trae hechos los cuatro recortes de antes:
-- la demo de la Basic LLM Chain se cuenta (qué pasaría), sin ejecutarla;
+- la demo de la Basic LLM Chain se arma en vivo en 3 minutos (usa los minutos que sobran de la apertura);
 - los tipos de tools (filmina 17) se nombran;
 - el Ejercicio 2 se muestra con la versión arreglada;
 - el role-play lo hacés vos solo, en 5 minutos.
@@ -99,28 +99,29 @@ Lo último que se recorta es el Paso 3 (las manos) y el Paso 5 (el manual): son 
 
 ---
 
-### Mapa de la clase: el PowerPoint y los flujos de n8n, en orden
+### Mapa de la clase: el PowerPoint y lo que se arma en n8n, en orden
 
-Para seguir la clase con las dos pantallas: qué filmina va (`Modulo_6_AI_Automation.pptx`) y qué hay abierto en n8n en
-cada momento. Los flujos están en [n8n/](n8n/).
+Para seguir la clase con las dos pantallas: qué filmina va (`Modulo_6_AI_Automation.pptx`) y qué se arma en n8n en
+cada momento. **No se importa ningún flujo:** todo se arma en vivo, en el workflow `Agente en vivo`, que empieza
+vacío.
 
 | Min | Filminas | Tramo | En n8n |
 |---|---|---|---|
-| 0–15 | 1–5 | Apertura y repaso de la Semana 5 | Nada (si alguien pregunta: el `02` de la Semana 5) |
-| 15–35 | 6–11 | 01 · Qué es un AI Agent · Ejercicio 1 | **`01-basic-llm-chain.json`**: la chain que no puede consultar (contada, o ejecutada si hay tiempo) |
-| 35–47 | — (sin filmina) | Los agentes, a fondo | **`02-agente-agencia.json`** abierto, solo para señalar las piezas en la parte E |
-| 47–63 | 12–18 | 02 · Las tres piezas | **`02`**: señalás el cerebro, el diario y cada herramienta con su descripción |
-| 63–73 | 19–23 | 03 · El system prompt · Ejercicio 2 | **`02`**: abrís el agente → *System Message* |
-| 73–83 | 24 | Break | Abrís el workflow vacío **`Agente en vivo`** |
+| 0–15 | 1–5 | Apertura y repaso de la Semana 5 | Nada |
+| 15–35 | 6–11 | 01 · Qué es un AI Agent · Ejercicio 1 | **Demo (filmina 9):** se arma la chain (chat + Basic LLM Chain + Gemini) y se le pregunta por Bariloche |
+| 35–47 | — (sin filmina) | Los agentes, a fondo | Nada: se explica con el dibujo |
+| 47–63 | 12–18 | 02 · Las tres piezas | Nada: las piezas se arman en la práctica |
+| 63–73 | 19–23 | 03 · El system prompt · Ejercicio 2 | Nada |
+| 73–83 | 24 | Break | Queda abierto `Agente en vivo`, con la demo |
 | 83–88 | 25–26 | Role-play de orquestación · Ejercicio 3 | Nada: es en voz alta |
 | 88–91 | 27 | Paso 1 · El objetivo | Nada: plantilla en papel |
-| 91–96 | 28 | Paso 2 · El cerebro | **`Agente en vivo`**: chat + AI Agent + Gemini |
-| 96–104 | 29 | Paso 3 · Las manos | **`Agente en vivo`**: consultar_paquetes, cotizacion_dolar, calculadora |
-| 104–107 | 30 | Paso 4 · El diario | **`Agente en vivo`**: Simple Memory |
-| 107–114 | 31 | Paso 5 · El manual | **`Agente en vivo`**: system prompt y las tres preguntas de prueba. Plan B: **`02`** |
-| 114–118 | 32–33 | Para practicar, Pre-entrega 3 y cómo sigue | **`03-agente-mal-descrito.json`** para mostrar el Ejercicio 7 de casa (si da el tiempo) |
+| 91–96 | 28 | Paso 2 · El cerebro | Se cambia la chain por el **AI Agent** + Gemini |
+| 96–104 | 29 | Paso 3 · Las manos | Se agregan consultar_paquetes, cotizacion_dolar y calculadora |
+| 104–107 | 30 | Paso 4 · El diario | Se agrega la Simple Memory |
+| 107–114 | 31 | Paso 5 · El manual | Se pega el system prompt y se prueban las preguntas |
+| 114–118 | 32–33 | Para practicar, Pre-entrega 3 y cómo sigue | Nada (el Ejercicio 7 se explica; se hace en casa) |
 | 118–120 | 34–35 | Preguntas y cierre | — |
-| Extra | — | Tres ejemplos más | **`04`** (la IA clasifica), **`05`** (el clima), **`06`** (el que anota) |
+| Extra | — | Tres ejemplos más | Cada uno se arma de cero, en un workflow nuevo |
 
 ---
 
@@ -133,17 +134,10 @@ cada momento. Los flujos están en [n8n/](n8n/).
   - **Nuevo** → **Hoja de cálculo de Google** → nombre `Paquetes Rumbo Sur`;
   - **Archivo** → **Importar** → **Subir** → `n8n/paquetes.csv` → *Reemplazar la hoja actual*;
   - tienen que quedar 6 paquetes, y el "Bariloche Nieve" con 0 cupos.
-- [ ] **Los workflows importados** (carpeta [n8n/](n8n/)). Para cada uno: workflow nuevo → menú **…** → **Import from
-  File** → **Save**.
-  - `01-basic-llm-chain.json`: elegí tu credencial de Gemini en *Modelo: Gemini* y ejecutalo. Fijate qué responde
-    sobre los paquetes y el dólar: lo vas a mostrar en la Sección 01.
-  - `02-agente-agencia.json`: el agente terminado. Para dejarlo listo:
-    - elegí la credencial de Gemini en *Cerebro: Gemini*;
-    - en *consultar_paquetes*, elegí la credencial de Sheets y pegá el link de tu planilla;
-    - **Open chat** y probá las tres preguntas del Paso 5 (están en "Las preguntas de prueba").
-  - `03-agente-mal-descrito.json`: el Ejercicio 7. Mismas credenciales.
-- [ ] **Un workflow vacío** llamado `Agente en vivo`, para armarlo en clase desde cero. Si algo falla, el 02 es el
-  plan B.
+- [ ] **El ensayo:** armá una vez, desde cero, todo lo que se arma en clase (la demo de la chain, los Pasos 2 a 5 y
+  el ejemplo extra que pienses mostrar). Ver "Antes de la clase", en la Sección 04.
+- [ ] **En clase no se importa ningún flujo.** Todo se arma en vivo. Los `.json` de [n8n/](n8n/) son para vos (para
+  comparar si algo no te sale en el ensayo) y para los alumnos en casa.
 - [ ] **El role-play:** pensá de antemano a quién le vas a pedir que haga de "herramienta" y de "usuario". Si nadie
   se ofrece, Romina hace uno de los papeles. El guion está en el Ejercicio 3 de `ejercicios-docente.md`.
 - [ ] **El día anterior**, avisales a los alumnos:
@@ -283,15 +277,45 @@ Para explicar:
   contexto."** **Contexto** es lo que ya se habló antes en la conversación.
   - *Ejemplo:* Un asistente que consulta precios, stock o turnos, y que entiende "¿y el otro?".
 
-**Demo (2 min): la chain que no puede consultar.** Abrís el flujo **01 · Basic LLM Chain** y lo ejecutás. La
-consulta es "Quiero ir a Bariloche 5 días con mi pareja. ¿Qué paquetes tienen y cuánto sale en pesos?". Leés la
-respuesta en voz alta. Va a pasar una de dos cosas:
+**Demo (3 min): la chain que no puede consultar.** Se arma en vivo, en el workflow vacío `Agente en vivo`. Son tres
+nodos, y son la base de lo que vamos a armar en la práctica.
+
+<p style="color:#1a7f37">Para que se vea la diferencia, armemos una chain en un minuto, y le hacemos una pregunta que un cliente de verdad haría.</p>
+
+**D-1 · El trigger del chat**
+
+```text
+Overview → Create workflow → Add first step → buscá "chat" → On chat message
+```
+
+<p style="color:#1a7f37">Este trigger nos da una ventanita de chat adentro de n8n, para escribirle como si fuéramos un cliente. Hasta ahora usábamos formularios o un botón; hoy, un chat.</p>
+
+**D-2 · La chain**
+
+```text
++ a la derecha del trigger → buscá "Basic LLM Chain" → Basic LLM Chain
+   Source for Prompt: Connected Chat Trigger Node   (toma lo que escribimos en el chat; viene así)
+```
+
+<p style="color:#1a7f37">La Basic LLM Chain de la Semana 2: recibe un texto, se lo pasa al modelo y devuelve la respuesta. Un solo paso. No le doy nada más.</p>
+
+**D-3 · El cerebro**
+
+```text
+Abajo de la chain, + de "Model" → Google Gemini Chat Model
+   Credential: tu clave de Gemini · Model: uno que diga "flash"
+```
+
+**D-4 · La pregunta.** Abajo del lienzo, **Open chat** → escribís *"Hola! Quiero ir a Bariloche 5 días con mi pareja.
+¿Qué paquetes tienen y cuánto sale en pesos?"*. Leés la respuesta en voz alta. Va a pasar una de dos cosas:
 - **inventa** paquetes y precios que suenan bien;
 - **dice que no tiene esa información** y sugiere consultar a la agencia.
 
 Las dos sirven para el punto. Decís:
 
-<p style="color:#1a7f37">La chain no tiene manos: no puede mirar nuestra planilla ni el dólar de hoy. O inventa, o dice que no sabe. Para esta tarea, necesitamos un agente. Pero para resumir este mail, la chain alcanzaba y sobraba.</p>
+<p style="color:#1a7f37">La chain no tiene manos: no puede mirar nuestra planilla ni el dólar de hoy. O inventa, o dice que no sabe. Para esta tarea, necesitamos un agente. Pero para resumir un mail, la chain alcanzaba y sobraba. Dejo esto guardado: en la práctica, a este mismo workflow le cambiamos la chain por un agente.</p>
+
+- **Ctrl + S.** El trigger del chat se reusa en el Paso 2.
 
 #### Filmina 10 · Un agente te reserva el vuelo (1 min)
 
@@ -456,10 +480,6 @@ chat             │  (Ana, la asesora)      │
 
 <p style="color:#1a7f37">En n8n, el agente es un nodo grande con tres enchufes abajo: uno para el cerebro, uno para el diario y uno para las manos. Lo que se enchufa ahí se llama sub-nodo. Y el manual va adentro del agente, en el system message. En la Sección 02 vemos cada pieza.</p>
 
-**En n8n (30 s):** compartís pantalla con el **`02-agente-agencia.json`** abierto, sin ejecutar nada. Pasás el mouse
-por los tres enchufes de abajo de *Ana, la asesora*: **Chat Model**, **Memory**, **Tool**. Hasta acá, solo se señala;
-cada pieza se abre en la Sección 02.
-
 ##### F · Qué vamos a hacer con los agentes en lo que queda del curso (2 min)
 
 <p style="color:#1a7f37">Y lo más importante. El agente que armamos hoy no se tira: lo vamos a ir mejorando hasta el proyecto final. Hoy nace, con el cerebro en Google y un chat de prueba. La semana que viene le cambiamos el cerebro, para que corra en nuestra computadora. La siguiente le damos una voz: WhatsApp. Y en la Entrega Final, queda un asistente de WhatsApp funcionando solo, atendiendo clientes de verdad.</p>
@@ -514,11 +534,6 @@ Para explicar:
   meses. No sabe el dólar de hoy ni lo que hay en tu planilla.
   - *Ejemplo:* La planilla de paquetes, el dólar del día, mandar un correo.
 
-**En n8n (flujo 02):** en el lienzo, señalás cada sub-nodo con su nombre: **Cerebro: Gemini**, **Diario: memoria
-simple**, y las tres manos, **consultar_paquetes**, **cotizacion_dolar** y **calculadora**.
-
-<p style="color:#1a7f37">Miren los nombres que les puse: cerebro, diario, y las manos con nombre propio. Es el agente que vamos a armar en la práctica, ya terminado. Ahora abrimos cada pieza.</p>
-
 #### Filmina 14 · El Chat Model: el cerebro que se conecta abajo (4 min)
 
 <p style="color:#1a7f37">El Chat Model es el sub-nodo que se conecta abajo del AI Agent y le da la capacidad de razonar. Sin él, el nodo no funciona. No hay un solo modelo: n8n tiene nodos para distintos proveedores, y se elige por costo, velocidad, privacidad o capacidades. Y se configura la credencial, el modelo, y parámetros como la temperatura o el máximo de tokens.</p>
@@ -548,12 +563,7 @@ Para explicar:
   - El **máximo de tokens de salida** es el largo máximo de la respuesta.
   - *Ejemplo:* Para un asesor que da precios, temperatura 0.2: queremos que sea preciso, no creativo.
 
-**En n8n (flujo 02):** doble clic en **Cerebro: Gemini**. Mostrás tres cosas y cerrás:
-- **Credential:** la clave de Gemini de la Semana 2.
-- **Model:** `models/gemini-3-flash-preview`.
-- **Options → Sampling Temperature:** `0.2`.
-
-<p style="color:#1a7f37">Credencial, modelo y temperatura: las tres cosas de la filmina. Temperatura baja, porque Ana da precios.</p>
+**En n8n:** no se abre nada todavía. Esto se configura en vivo en el **Paso 2 · El cerebro** de la práctica.
 
 #### Filmina 15 · La memoria: para que no arranque de cero cada vez (4 min)
 
@@ -582,9 +592,7 @@ Para explicar:
   reinyectado son tokens, una conversación de 200 mensajes sería lenta y cara.
   - *Ejemplo:* *Context Window Length*: 10 → recuerda los últimos 10 mensajes.
 
-**En n8n (flujo 02):** doble clic en **Diario: memoria simple** → señalás **Context Window Length: 10**.
-
-<p style="color:#1a7f37">Esta es la ventana: los últimos diez mensajes. Y el session ID lo pone solo el chat de n8n, uno por conversación. En la Semana 8 lo vamos a cambiar por el número de WhatsApp de cada cliente.</p>
+**En n8n:** se agrega en vivo en el **Paso 4 · El diario**, y ahí se ve qué pasa sin memoria y con memoria.
 
 #### Filmina 16 · Las Tools: la diferencia entre conversar y resolver (4 min)
 
@@ -613,11 +621,7 @@ El modelo no busca en la planilla. Devuelve esto, y n8n lo ejecuta:
 { "herramienta": "consultar_paquetes", "datos": { "destino": "Bariloche" } }
 ```
 
-**En n8n (flujo 02):** doble clic en **consultar_paquetes**. Señalás dos campos:
-- **Description:** "Busca en la planilla de la agencia los paquetes de UN destino…". Es lo que lee el modelo.
-- **Filters → Destino:** `$fromAI('destino', …)`. Es el parámetro que completa el modelo.
-
-<p style="color:#1a7f37">Acá están las dos cosas de la filmina. La descripción, que es lo que el modelo lee para elegirla. Y el parámetro, destino, que no lo escribimos nosotros: lo completa el modelo con lo que dijo el cliente. Eso es fromAI, y en la práctica lo armamos.</p>
+**En n8n:** la descripción y el `$fromAI` se escriben en vivo en el **Paso 3 · Las manos**.
 
 #### Filmina 17 · Tipos de Tools: las que más vas a usar (2 min)
 
@@ -641,8 +645,8 @@ Para explicar:
   LLM predice texto; a veces "adivina" el resultado de una cuenta en vez de hacerla.
   - *Ejemplo:* 950 × 2 × 1570. Un modelo puede decir "2.938.000" en vez de "2.983.000". La calculadora, no.
 
-**En n8n (flujo 02):** las tres manos son tres tipos de la filmina. **consultar_paquetes** es un nodo nativo
-(Google Sheets), **cotizacion_dolar** es un HTTP Request Tool, y **calculadora** es el Calculator.
+**Lo van a ver en el Paso 3:** las tres manos de Ana son tres tipos de esta filmina. `consultar_paquetes` es un
+nodo nativo (Google Sheets), `cotizacion_dolar` es un HTTP Request Tool y `calculadora` es el Calculator.
 
 #### Filmina 18 · Para recordar: el nombre y la descripción (1 min)
 
@@ -670,9 +674,6 @@ Descripción: Devuelve la cotización del dólar en Argentina hoy, en pesos. Us�
 dólares a pesos.
 Parámetro: tipo → "El tipo de dólar: oficial, blue o tarjeta. Si el cliente no dice nada, oficial."
 ```
-
-**En n8n:** no hace falta abrir nada. Si alguien pregunta, el **`03-agente-mal-descrito.json`** es este "mal"
-armado de verdad, y es el Ejercicio 7 para casa.
 
 ---
 
@@ -745,11 +746,7 @@ Para explicar:
   - *Ejemplo:* `Hoy es {{ $now.format('dd/MM/yyyy') }}.` → "Hoy es 13/11/2026." Así, "¿hay algo para el mes que
     viene?" tiene sentido.
 
-**En n8n (flujo 02, 1 min):** doble clic en **Ana, la asesora** → **Options → System Message**. Recorrés en voz alta
-las partes de la filmina 21: **TONO**, **ALCANCE**, **HERRAMIENTAS**… Y señalás la expresión de la primera línea,
-`Hoy es {{ $now.format('dd/MM/yyyy') }}`.
-
-<p style="color:#1a7f37">Este es el manual de Ana, escrito. Fíjense que está ordenado por partes, las de la filmina. Y en la primera línea, la fecha con una expresión: cada vez que alguien escribe, se cambia sola. En el Paso 5 lo vamos a pegar en nuestro agente.</p>
+**En n8n:** el system prompt de Ana se escribe en vivo en el **Paso 5 · El manual**, con estas seis partes.
 
 Pegás en el chat:
 
@@ -788,12 +785,11 @@ Para confirmar un turno, pedí nombre y teléfono. No canceles turnos de otras p
 
 #### Antes de la clase (una sola vez, 30 minutos)
 
-- Importá los tres flujos y conectales tus credenciales (ver "Preparación").
-- En el 01, ejecutalo y anotá qué respondió: lo citás en la demo.
-- En el 02, **Open chat** y probá en una misma conversación las preguntas de prueba de abajo. Revisá en los
-  **Logs** del chat que use las herramientas que tiene que usar.
-- Armá una vez el agente desde cero en el workflow `Agente en vivo` (los Pasos 2 a 5), para ver cómo se llaman los
-  botones en tu versión. Después borrale todos los nodos y dejalo vacío para la clase.
+- **Ensayá una vez, desde cero**, la demo de la chain y los Pasos 2 a 5, en un workflow de prueba. Así ves cómo se
+  llaman los botones en tu versión y anotás qué respondió la chain (lo citás en la demo).
+- Con el agente armado, **Open chat** y probá en una misma conversación las preguntas de prueba de abajo. Revisá en
+  los **Logs** del chat que use las herramientas que tiene que usar.
+- Después borrá ese workflow de prueba. En clase se arranca de un lienzo vacío.
 
 **Las preguntas de prueba** (en este orden, en la misma conversación; los pesos dependen del dólar del día):
 
@@ -876,8 +872,8 @@ El de la clase:
 
 ```text
 PRÁCTICA · Paso 2: el cerebro  (lo armo yo; vos anotá en tu plantilla qué modelo y qué temperatura usarías)
-1. Add first step → buscá "chat" → On chat message   (Chat Trigger: el agente recibe mensajes por un chat)
-2. + → AI → AI Agent. Renombralo: Ana, la asesora
+1. El "On chat message" de la demo queda. Borrás la Basic LLM Chain y su Gemini (clic → tecla Supr)
+2. + a la derecha del trigger → AI → AI Agent. Renombralo: Ana, la asesora
 3. Abajo del agente, + de "Chat Model" → Google Gemini Chat Model
    Credential: tu clave de Gemini (aistudio.google.com → Get API key)
    Model: uno que diga "flash"
@@ -974,8 +970,8 @@ PRÁCTICA · Paso 4: el diario
 
 <p style="color:#1a7f37">Acaba de prometer una reserva que no existe. No tiene ninguna herramienta para reservar: lo dijo para quedar bien. Eso, con un cliente real, es un problema serio. Para eso está el manual.</p>
 
-25. Abrís el AI Agent → **Add Option** → **System Message**, y pegás el system prompt del flujo 02 (está entero en
-    el Ejercicio 5 de `ejercicios-alumnos.md`). Lo recorrés en voz alta marcando las seis partes de la filmina 21:
+25. Abrís el AI Agent → **Add Option** → **System Message**, y pegás el system prompt de Ana (está entero en el
+    Ejercicio 5 de `ejercicios-alumnos.md`: lo compartís en el chat para que lo copien). Lo recorrés en voz alta marcando las seis partes de la filmina 21:
     - **rol**: "Sos Ana…", y la fecha con `{{ $now }}`;
     - **tono**: rioplatense, amable, máximo 6 líneas;
     - **alcance**: solo los paquetes;
@@ -1007,7 +1003,8 @@ Y al menos UN guardrail: algo que tu agente nunca puede hacer sin confirmación 
 Ctrl + S → menú … → Download   (si armaste algo en n8n)
 ```
 
-**Plan B:** el flujo **02 · Agente: Ana, la asesora** es todo esto terminado.
+**Si algo no anda en vivo:** no se importa nada. Mirás la tabla de trabas de abajo y, si no se resuelve en un minuto,
+seguís explicando los pasos que faltan y lo terminás de probar al final de la clase.
 
 #### Las trabas más comunes durante la práctica
 
@@ -1101,9 +1098,9 @@ chain, qué guardrail no debería cruzar nunca su agente, y si tienen alguna her
 
 ### Extra, si sobra tiempo o para casa · Tres ejemplos más con IA
 
-**Si sobra tiempo** después de la práctica, mostrá uno (el B es el más vistoso). Si no, quedan para casa: los flujos
-están en la carpeta [n8n/](n8n/) (`04`, `05` y `06`). Cada uno se arma **desde cero**, paso a paso, y muestra **una
-idea** distinta de hoy:
+**Si sobra tiempo** después de la práctica, mostrá uno (el B es el más vistoso). Si no, quedan para casa. En clase no se
+importa: cada uno se arma **desde cero**, paso a paso, en un workflow nuevo. Los `.json` de [n8n/](n8n/) (`04`, `05`
+y `06`) quedan para comparar en casa. Cada ejemplo muestra **una idea** distinta de hoy:
 
 | Ejemplo | Flujo | La idea | Min |
 |---|---|---|---|
@@ -1277,12 +1274,22 @@ Tool + → HTTP Request Tool → renombralo:  clima_ahora
 **B-5 · El system prompt**
 
 ```text
-En el agente → Options → System Message: el del flujo 05 de la carpeta. Lo importante:
-   ALCANCE: solo el clima de AHORA en una ciudad.
-   HERRAMIENTAS (en este orden): 1. buscar_ciudad, siempre primero. 2. clima_ahora, con esa latitud y longitud.
-   Nunca inventes temperaturas: si una herramienta falla, decilo.
-   FORMATO: ciudad, temperatura, si llueve o no, y un consejo corto para el viaje.
-→ Save
+En el agente → Add Option → System Message → pegás esto → Save
+```
+
+```text
+Sos el asistente de clima de la agencia de viajes "Rumbo Sur". Hoy es {{ $now.toFormat('dd/MM/yyyy') }}.
+
+TONO: español rioplatense, amable y breve (máximo 4 líneas). Sin emojis.
+
+ALCANCE: solo contestás cómo está el clima AHORA en una ciudad. Si te piden un pronóstico de otros días, o cualquier otra cosa, decí que solo sabés el clima de este momento.
+
+HERRAMIENTAS (en este orden):
+1. buscar_ciudad: siempre primero, con el nombre de la ciudad. Te da la latitud y la longitud.
+2. clima_ahora: después, con esa latitud y esa longitud. Te da la temperatura, la lluvia y el viento.
+Nunca inventes temperaturas: si una herramienta falla, decilo.
+
+FORMATO: ciudad, temperatura en °C, si llueve o no, y un consejo corto para el viaje.
 ```
 
 <p style="color:#1a7f37">El manual: qué hace, en qué orden usa las herramientas, que no invente, y cómo contesta. Lo de "no inventes" es clave: si no, el modelo puede decir una temperatura de memoria.</p>
@@ -1349,12 +1356,23 @@ Tool + → Google Sheets Tool → renombralo:  registrar_consulta
 **C-3 · El system prompt, con límites**
 
 ```text
-En el agente → Options → System Message: el del flujo 06. Lo importante:
-   PASOS: 1. Pedí, de a uno, nombre, destino y cantidad de personas.
-          2. Repetilos: "Anoto: <nombre>, <destino>, <personas> personas. ¿Lo confirmo?"
-          3. SOLO si dice que sí, usá registrar_consulta. Después: "Listo, quedó anotado."
-   LÍMITES: registrar_consulta UNA sola vez por consulta · no inventes datos · no des precios ni confirmes reservas
-→ Save
+En el agente → Add Option → System Message → pegás esto → Save
+```
+
+```text
+Sos Ana, la asesora virtual de la agencia de viajes "Rumbo Sur". Tu trabajo es tomar consultas y anotarlas en la planilla.
+
+TONO: español rioplatense, amable y breve (máximo 4 líneas). Sin emojis.
+
+PASOS:
+1. Pedí, de a uno, los tres datos que faltan: nombre, destino y cantidad de personas.
+2. Cuando los tengas, repetilos así: "Anoto: <nombre>, <destino>, <personas> personas. ¿Lo confirmo?"
+3. SOLO si la persona dice que sí, usá registrar_consulta. Después decí: "Listo, quedó anotado. Un vendedor te escribe en 24 horas."
+
+LÍMITES:
+- Usá registrar_consulta UNA sola vez por consulta. Si ya la anotaste, no la vuelvas a anotar aunque te lo pidan.
+- No inventes datos: si falta uno, preguntalo.
+- No des precios ni confirmes reservas: eso lo hace un vendedor.
 ```
 
 <p style="color:#1a7f37">Y acá está lo importante. Tres pasos: pedir, repetir, y anotar solo si le dicen que sí. Y los límites: una sola vez, no inventar, no confirmar reservas. ¿Se acuerdan de la idempotencia de la clase pasada? Ahí la resolvía un Filter. Acá la tiene que respetar el modelo, y por eso se la escribimos.</p>
