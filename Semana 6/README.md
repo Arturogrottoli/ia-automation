@@ -1377,7 +1377,7 @@ Y lo armás:
 ```text
 Paso 2 · el cerebro
 1. El "Mensaje del chat" del Ejemplo 1 queda. Borrás "Responder con una chain" y "Modelo: Gemini" (clic → tecla Supr)
-2. + a la derecha del trigger → AI → AI Agent. Renombralo: Ana, la asesora
+2. + a la derecha del trigger → en el buscador escribís "agent" → clic en "AI Agent". Renombralo: Ana, la asesora
    Source for Prompt (User Message): Connected Chat Trigger Node   (viene así: no se toca)
    El System Message se agrega en el Paso 5; por ahora, nada más
 3. Abajo del agente, + de "Chat Model" → Google Gemini Chat Model
@@ -1400,6 +1400,19 @@ Mientras lo armás, explicás cada paso:
   aparece, *Enable Fallback Model* (un segundo modelo de repuesto) quedan apagados.
 - **El Gemini es igual al del Ejemplo 1:** misma credencial, mismo modelo, misma temperatura. Lo único que cambió es a
   qué nodo está enchufado.
+
+**Cómo se ve el panel del AI Agent** (al hacerle doble clic), de arriba hacia abajo:
+
+| Campo | Qué es | Qué ponemos |
+|---|---|---|
+| **Source for Prompt (User Message)** | De dónde sale el mensaje que recibe el agente | *Connected Chat Trigger Node* (viene así): el mensaje del chat, tal cual |
+| **Prompt (User Message)** | Aparece en gris, con `{{ $json.chatInput }}` | Nada: lo completa n8n con lo que escribe el cliente |
+| **Require Specific Output Format** | Pedir la respuesta con un formato fijo (por ejemplo, JSON) | Apagado: queremos texto para una persona |
+| **Enable Fallback Model** | Un segundo modelo de repuesto, si el primero falla | Apagado |
+| **Options → Add Option** | Ajustes extra: **System Message** (el manual), *Max Iterations* (cuántas vueltas del ciclo como máximo, viene en 10), y otros | El System Message, más adelante. Lo demás, como viene |
+
+- **Abajo del nodo, en el lienzo, tres enchufes:** *Chat Model* (con asterisco rojo: obligatorio), *Memory* y
+  *Tool*. Hasta que no se le enchufa un Chat Model, el agente muestra un aviso rojo.
 
 9. Apretás **Open chat** (abajo del lienzo) y escribís *"Hola! ¿Cuánto sale un paquete a Bariloche?"*. El agente
     responde, pero no sabe los precios: o los inventa o dice que no los tiene. En **Logs** se ve que corrieron solo
@@ -1763,32 +1776,69 @@ Si no la tenés: Nuevo → Hoja de cálculo → nombre: Consultas de la agencia
 
 <p style="color:#1a7f37">La planilla donde va a escribir: cuatro columnas. La primera fila son los títulos, y es importante, porque n8n los lee para saber qué casilleros completar.</p>
 
-**E5-2 · El chat y el agente**
+**E5-2 · El trigger del chat**
 
 ```text
-Overview → Create workflow → nombre:  Agente que anota
-Add first step → buscá "chat" → On chat message → no se configura nada (como en el Ejemplo 1) → renombrás: Mensaje del chat
-+ a la derecha → AI → AI Agent → renombrás:  Ana, la que anota
-   Source for Prompt (User Message): Connected Chat Trigger Node   (viene así)
+Overview → Create workflow → arriba a la izquierda, el nombre:  Agente que anota
+Add first step → en el buscador escribís "chat" → clic en "On chat message"
 ```
 
-- **Lo mismo que en el Paso 2.** El agente recibe el mensaje del chat tal cual; las instrucciones van en el System
-  Message (E5-5).
-
-**E5-3 · El cerebro y el diario**
+Se abre el panel *When chat message received*. **No se configura nada:**
+- **Make Chat Publicly Available:** apagado (el chat lo usamos desde *Open chat*, adentro de n8n).
+- **Options** y **Add Field:** vacíos.
 
 ```text
-Enchufe Chat Model, + → Google Gemini Chat Model → la credencial de la lista · Model: flash
-   Options → Add Option → Sampling Temperature → 0.2 → renombrás: Cerebro: Gemini
-Enchufe Memory, + → Simple Memory → Context Window Length: 10 → renombrás: Diario: memoria simple
+Cerrás (la X) → clic en el nombre del nodo → Mensaje del chat
 ```
 
-<p style="color:#1a7f37">Cerebro y diario, como con Ana. Y acá la memoria es imprescindible: el cliente da los datos en tres mensajes distintos, y para anotarlos el agente tiene que acordarse de los tres.</p>
+<p style="color:#1a7f37">Workflow nuevo, y arranca igual que Ana: con un chat, para escribirle como si fuéramos un cliente.</p>
 
-**E5-4 · La herramienta que escribe: `registrar_consulta`**
+**E5-3 · El agente**
 
 ```text
-Enchufe Tool, + → buscá "Google Sheets" → Google Sheets Tool
++ a la derecha de "Mensaje del chat" → en el buscador escribís "agent" → clic en "AI Agent"
+   Source for Prompt (User Message):  Connected Chat Trigger Node   (viene así: no se toca)
+   Require Specific Output Format y Enable Fallback Model: apagados (vienen así)
+Cerrás → renombrás:  Ana, la que anota
+```
+
+<p style="color:#1a7f37">El agente. Recibe el mensaje del chat tal cual. Las instrucciones, qué datos pedir y cuándo anotar, no van acá: van en el manual, el System Message, que lo agregamos al final.</p>
+
+- **Abajo del nodo aparecen los tres enchufes:** *Chat Model* (obligatorio, con asterisco), *Memory* y *Tool*. El
+  aviso rojo del agente es porque todavía no tiene cerebro.
+
+**E5-4 · El cerebro**
+
+```text
+Abajo del agente, en el enchufe "Chat Model", clic en + → en la lista de modelos: Google Gemini Chat Model
+   Credential to connect with:  la de Gemini (ya está guardada: se elige de la lista)
+   Model:  uno que diga "flash" (por ejemplo, models/gemini-3-flash-preview)
+   Options → Add Option → Sampling Temperature → 0.2
+Cerrás → renombrás:  Cerebro: Gemini
+```
+
+- **La credencial no se vuelve a crear:** n8n la guardó en el Ejemplo 1. Si la lista está vacía, se crea como en el
+  D-3b-bis.
+- **Temperatura 0.2:** que pida los datos siempre igual, sin ponerse creativo.
+
+**E5-5 · El diario**
+
+```text
+Abajo del agente, en el enchufe "Memory", clic en + → Simple Memory
+   Session ID:             Connected Chat Trigger Node   (viene así)
+   Context Window Length:  10   (viene en 5)
+Cerrás → renombrás:  Diario: memoria simple
+```
+
+<p style="color:#1a7f37">Y el diario. Acá es imprescindible: el cliente da el nombre en un mensaje, el destino en otro y las personas en otro. Para anotar los tres juntos, el agente tiene que acordarse de los tres.</p>
+
+- **Session ID:** cada conversación del chat tiene su número (`sessionId`); la memoria guarda cada una por separado.
+- **Context Window Length: 10:** recuerda los últimos 10 mensajes. Para juntar tres datos alcanza y sobra.
+
+**E5-6 · La herramienta que escribe: `registrar_consulta`**
+
+```text
+Abajo del agente, en el enchufe "Tool", clic en + → en el buscador escribís "Google Sheets" → Google Sheets Tool
    Credential to connect with:  tu credencial de Google Sheets
    Tool Description:  Set Manually →
       Anota UNA consulta nueva en la planilla de la agencia (agrega una fila). Usala solo cuando ya tenés nombre,
@@ -1823,7 +1873,7 @@ Cerrás → renombrás:  registrar_consulta → Ctrl + S
   diciendo en la charla. En cada casillero se puede usar el botón ✨ y escribir la descripción del dato.
 - **`personas` es `number`:** así el modelo manda un número (3), no un texto ("tres").
 
-**E5-5 · El system prompt, con límites**
+**E5-7 · El system prompt, con límites**
 
 ```text
 Doble clic en "Ana, la que anota" → Options → Add Option → System Message
@@ -1858,7 +1908,7 @@ LÍMITES:
 
 <p style="color:#1a7f37">¿Se acuerdan de la idempotencia de la clase pasada? Ahí la resolvía un Filter. Acá no hay Filter: la tiene que respetar el modelo, y por eso se la escribimos. "Usala una sola vez".</p>
 
-**E5-6 · Probar la conversación**
+**E5-8 · Probar la conversación**
 
 ```text
 Open chat →  Hola, quiero consultar por un viaje
@@ -1874,7 +1924,7 @@ Open chat →  Hola, quiero consultar por un viaje
 
 <p style="color:#1a7f37">Me pidió los datos de a uno, los repitió, me preguntó si confirmo, y recién cuando dije que sí, usó la herramienta. Miren la planilla: la fila nueva.</p>
 
-**E5-7 · Probar los límites, como alguien que lo quiere romper**
+**E5-9 · Probar los límites, como alguien que lo quiere romper**
 
 | Escribís | Lo que tiene que pasar |
 |---|---|
@@ -1921,22 +1971,42 @@ https://api.open-meteo.com/v1/forecast?latitude=-41.14&longitude=-71.30&current=
 - **Parámetros** (*query parameters*): lo que va después del `?`, separado por `&`, con la forma `nombre=valor`.
   `name=Bariloche` es "la ciudad que busco"; `count=1`, "dame un solo resultado"; `language=es`, "en español".
 
-**E6-2 · El chat, el agente, el cerebro y el diario**
+**E6-2 · El trigger del chat**
 
 ```text
-Overview → Create workflow → nombre:  Agente del clima
-Add first step → chat → On chat message → no se configura nada → renombrás: Mensaje del chat
-+ → AI → AI Agent → renombrás: Asistente del clima   (Source for Prompt: como viene)
-Chat Model: + → Google Gemini Chat Model · credencial de la lista · flash · Temperature 0.2 → Cerebro: Gemini
-Memory: + → Simple Memory · Context Window Length 10 → Diario: memoria simple
+Overview → Create workflow → arriba a la izquierda, el nombre:  Agente del clima
+Add first step → en el buscador escribís "chat" → clic en "On chat message"
+   Make Chat Publicly Available: apagado · Options y Add Field: vacíos   (no se configura nada)
+Cerrás → renombrás:  Mensaje del chat
 ```
 
-- **Lo mismo que en el Ejemplo 5 (E5-2 y E5-3).** Cambian solo los nombres.
-
-**E6-3 · La herramienta 1: `buscar_ciudad`**
+**E6-3 · El agente**
 
 ```text
-Enchufe Tool, + → HTTP Request Tool
++ a la derecha de "Mensaje del chat" → buscá "agent" → AI Agent
+   Source for Prompt (User Message):  Connected Chat Trigger Node   (viene así)
+Cerrás → renombrás:  Asistente del clima
+```
+
+<p style="color:#1a7f37">El mismo arranque de siempre: un chat y un agente. Lo que cambia en este ejemplo son las manos.</p>
+
+**E6-4 · El cerebro y el diario**
+
+```text
+Enchufe "Chat Model", + → Google Gemini Chat Model
+   Credential: la de Gemini (de la lista) · Model: uno "flash" · Options → Add Option → Sampling Temperature → 0.2
+   Cerrás → renombrás:  Cerebro: Gemini
+Enchufe "Memory", + → Simple Memory
+   Session ID: Connected Chat Trigger Node (viene así) · Context Window Length: 10
+   Cerrás → renombrás:  Diario: memoria simple
+```
+
+- **La memoria acá sirve para "¿y en Ushuaia?":** sin ella, no sabe que seguimos hablando del clima.
+
+**E6-5 · La herramienta 1: `buscar_ciudad`**
+
+```text
+Abajo del agente, en el enchufe "Tool", clic en + → en el buscador escribís "HTTP Request" → HTTP Request Tool
    Description:  Busca una ciudad por su nombre y devuelve su latitud (latitude), longitud (longitude),
                  provincia (admin1) y país (country). Usala siempre antes de clima_ahora.
    Method:  GET
@@ -1957,10 +2027,10 @@ Cerrás → renombrás:  buscar_ciudad
 - **La descripción dice qué devuelve, con los nombres de los campos** (`latitude`, `longitude`): así el modelo sabe
   qué buscar en la respuesta para la herramienta siguiente.
 
-**E6-4 · La herramienta 2: `clima_ahora`**
+**E6-6 · La herramienta 2: `clima_ahora`**
 
 ```text
-Enchufe Tool, + → HTTP Request Tool
+Enchufe "Tool", + → buscá "HTTP Request" → HTTP Request Tool
    Description:  Devuelve el clima de ESTE momento en un lugar, a partir de su latitud y longitud:
                  temperatura en °C (temperature_2m), lluvia en mm (precipitation) y viento en km/h (wind_speed_10m).
    Method:  GET
@@ -1980,7 +2050,7 @@ Cerrás → renombrás:  clima_ahora → Ctrl + S
 - **`current`** le dice a la API qué datos queremos ahora: temperatura, lluvia y viento. **`timezone: auto`** usa la
   hora del lugar.
 
-**E6-5 · El system prompt**
+**E6-7 · El system prompt**
 
 ```text
 Doble clic en "Asistente del clima" → Options → Add Option → System Message → borrás lo que viene → pegás esto
@@ -2009,7 +2079,7 @@ FORMATO: ciudad, temperatura en °C, si llueve o no, y un consejo corto para el 
 | **"Nunca inventes temperaturas"** | Lo que vimos en el role-play: ante un error, avisar, no inventar |
 | **FORMATO** | Que todas las respuestas tengan lo mismo: ciudad, temperatura, lluvia y un consejo |
 
-**E6-6 · Probar, y mirar el ciclo**
+**E6-8 · Probar, y mirar el ciclo**
 
 | Escribís | Lo que tiene que pasar (en *Logs*) |
 |---|---|
