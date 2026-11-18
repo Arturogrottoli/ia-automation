@@ -66,7 +66,7 @@ Fuente: `program-summary.pdf` (Módulo 6). **Una clase de 2 horas.**
 
 | Min | Tramo | Filminas | En clase |
 |---|---|---|---|
-| 0–15 | Apertura y **repaso de la Semana 5** (8 min: el plano, permisos, Filter/Aggregate, mapear, el log) | 1–5 | Pregunta rápida en el chat |
+| 0–15 | Apertura y **repaso de la Semana 5** (3 min, hablado) | 1–5 | Si sobran minutos: dudas de la clase 5 |
 | 15–35 | **01 · Qué es un AI Agent** | 6–11 | Ej. 1 (4 min); la demo de la chain, contada |
 | 35–47 | **Los agentes, a fondo** (sin filmina): qué son en criollo, cómo usan herramientas, para qué se usan en la vida real, los riesgos, y qué vamos a hacer con ellos en el curso (Semanas 7, 8 y la Entrega Final) | — | |
 | 47–63 | **02 · Las tres piezas** | 12–18 | Los tipos de tools, nombrados |
@@ -77,7 +77,7 @@ Fuente: `program-summary.pdf` (Módulo 6). **Una clase de 2 horas.**
 | 114–118 | Para practicar, Pre-entrega 3 y cómo sigue | 32–33 | |
 | 118–120 | Preguntas y cierre | 34–35 | Tarea |
 
-**De dónde salen los minutos.** Esta versión suma el repaso largo (8 min en vez de 3) y **los agentes, a fondo**
+**De dónde salen los minutos.** Esta versión suma **los agentes, a fondo**
 (12 min, sin filmina). Para que entren, la agenda de arriba ya trae hechos los cuatro recortes de antes:
 - la demo de la Basic LLM Chain se cuenta (qué pasaría), sin ejecutarla;
 - los tipos de tools (filmina 17) se nombran;
@@ -156,91 +156,6 @@ cada momento. Los flujos están en [n8n/](n8n/).
 
 ---
 
-### Resumen de la clase 5: las filminas y los flujos de n8n
-
-Para tenerlo a mano antes de la clase y en el repaso. **No se lee entero en clase:** el repaso de 8 minutos (más
-abajo) es la versión hablada. Esto es el mapa completo: qué dijo cada filmina del Módulo 5, qué flujo se mostró en
-cada momento y qué de todo eso vuelve hoy. Se puede pegar en el chat o compartir para el que faltó.
-
-#### El hilo de la clase 5, en una línea
-
-**De la pieza al sistema:** en el Módulo 4 aprendimos a hacer un pedido a una API (una pieza). En el 5, a **planificar**
-un flujo antes de construirlo y a **orquestar** Sheets, una API, Drive y Gmail para que trabajen juntos, sin
-duplicar nada si se ejecuta dos veces, y sabiendo leer el error cuando se rompe.
-
-#### Las filminas, una por una (`Semana 5/Modulo_5_AI_Automation.pptx`)
-
-| Filmina | Título | La idea | Qué se mostró / se hizo |
-|---|---|---|---|
-| 1–4 | Portada, objetivos, agenda, grabación | Los cinco objetivos: planificar, verificar accesos, idempotencia, construir de punta a punta, diagnosticar con el log | — |
-| 5 | ¿Dónde quedamos? De la pieza técnica al sistema | Una petición que anda es un ladrillo; hoy, la casa | — |
-| **01 · Planificar antes de construir** | | | |
-| 6–7 | ¿Por qué planificar? El costo del lienzo en blanco | Arrastrar nodos "a ver qué sale" anda en flujos chicos; con datos reales, no: duplicados, fallas en silencio | — |
-| 8 | El problema y el proceso | Definir el resultado en términos de negocio, no de nodos; dibujar el flujo real | — |
-| 9–10 | Accesos y permisos · Para recordar | Verificar los accesos **antes** de construir. **Leer no es escribir** | — |
-| 11 | Errores e idempotencia | ¿Qué pasa si la API falla, si llegan datos raros, si se ejecuta dos veces? | — |
-| 12 | Logging y mantenimiento | Cómo te enterás de que falló, dónde quedan los logs, quién lo mantiene, exportar el JSON | — |
-| 13 | Actividad: ¿qué pasa si se ejecuta dos veces? | Pensar la idempotencia sobre el boceto del Módulo 2 | **Ejercicio 1** (chat) |
-| **02 · El caso del módulo** | | | |
-| 14–15 | El caso: completar una planilla con datos externos | Planilla con ID completo y Nombre, Edad, Cargo vacíos; una API los completa | — |
-| 16 | La cadena completa: siete nodos | Manual Trigger → Sheets (leer) → Filter → HTTP Request → Sheets (actualizar) → Aggregate → Gmail | — |
-| 17 | Decisiones, no casualidades | Manual Trigger para probar; **Filter = idempotencia**; **Aggregate = un correo, no cinco** | — |
-| 18 | Lo que cierra el flujo | **Update** (no Append) busca la fila por ID; el Aggregate va antes del Gmail | **Ejercicio 2:** ¿cuántos correos salen? (4 · 1 · 0) |
-| 19 | El error no es el fin del flujo | El error es la pista para mejorarlo | — |
-| 20 | Coder Tips | **El nombre es la etiqueta; el ID es el pasaporte** (dónde está el ID de una carpeta y de una planilla) | — |
-| 21 | Break | | |
-| **03 · Práctica en vivo** | | | |
-| 22–23 | Desafío de mapeo relámpago | Mapear es decidir qué dato va en qué casillero, y transformarlo en el camino | **Flujo 01** · Ejercicio 3 |
-| 24 | Paso 1 · El plano | Problema en una línea, entrada → proceso → salida, servicios | El plano en papel |
-| 25 | Paso 2 · Los accesos | Sheets, Drive y Gmail con OAuth2 (el mismo Client ID y Secret), probados de a uno | Credenciales nuevas: Drive y Gmail |
-| 26 | Paso 3 · La entrada | Manual Trigger, leer la planilla, Filter "Nombre vacío" | **Flujo 02** (o **03** sin Google) |
-| 27 | Paso 4 · Proceso y salida | HTTP Request a dummyjson, carpeta en Drive (por ID), Update de la fila, Aggregate, Gmail | **Flujo 02** (o **03**) |
-| 28 | Paso 5 · La clínica | Romperlo a propósito: **404** (ID de carpeta cambiado) y **403** (planilla de solo lectura); leer **Executions** | **Flujo 02** · y en casa el **04** |
-| 29–30 | Para practicar · ¿Cómo sigue? | Repetirlo con tu planilla; probar la idempotencia. Lo que falta: **criterio propio** → el agente | — |
-| 31–32 | Preguntas · Gracias | | |
-
-#### Los flujos de n8n de la clase 5 (`Semana 5/n8n/`)
-
-| Flujo | Qué hace | Qué enseñó | Resultado (probado) |
-|---|---|---|---|
-| `01-mapeo-relampago.json` | Tres "formularios" con *Nombre completo*, email y teléfono desprolijos, pasados a `nombre`, `apellido`, `email`, `telefono` | Transformar datos al mapear: `split`, `trim`, `toLowerCase`, `replace`. Y que hay **casos ambiguos** | Lucía y María Laura bien; **Juan Martín del Potro** mal (apellido "Potro"): se resuelve en el plano, no en el nodo |
-| `02-planilla-google.json` | El caso del módulo completo: Leer planilla → Solo filas incompletas → Buscar datos del empleado (dummyjson) → Crear carpeta del empleado (Drive) → Completar la fila (Update) → Juntar en un solo item → Avisar que terminó (Gmail) | Orquestar cuatro servicios de punta a punta | No se probó contra Google (hace falta una cuenta): se probó la lógica con el 03 |
-| `03-ensayo-sin-google.json` | El mismo flujo, con Google simulado | Seguir la clase sin credenciales | 5 filas → **4** completadas → **1** correo. Segunda ejecución: **0** |
-| `04-clinica-de-errores.json` | Tres errores a propósito | Leer errores: **A** `$json.id` en minúscula (falla **en silencio**: trae la lista entera); **B** un ID que no existe (**404**, frena todo el nodo); **C** sin Aggregate (**4** correos) | Los tres probados |
-| `05`, `06`, `07` (extra) | Formulario → planilla → mail · El dólar del día sin duplicar (*Append or Update*) · El resumen del día (Filter + Aggregate) | Las mismas ideas, en otros casos | Armados, no ejecutados contra Google |
-
-#### La cadena del caso, con la cuenta de items
-
-```text
-Arrancar a mano → Leer planilla → Solo filas incompletas → Buscar datos → Crear carpeta → Completar la fila → Juntar → Avisar
-                    5 items          4 items (Filter)        4 pedidos      4 carpetas      4 filas (Update)    1 item    1 correo
-Segunda ejecución:  5 items          0 items  ──────────────────────────────────────────────────────────────►  no sigue: 0 correos
-```
-
-#### Las seis ideas que hay que llevarse de la clase 5
-
-1. **Planificar antes de construir:** problema, entrada, proceso, salida, accesos y errores, en papel.
-2. **Leer no es escribir:** el 403 es un permiso, y no se arregla con lógica ni cambiando la credencial.
-3. **Idempotencia:** ejecutar dos veces no duplica nada. En el caso, la da el **Filter**.
-4. **Item por item:** cada nodo corre una vez por item; el **Aggregate** junta todo para que salga **un** correo.
-5. **El ID es el pasaporte:** en Google se trabaja con el ID de la carpeta y de la planilla, no con el nombre.
-6. **El log (*Executions*) es la caja negra:** qué entró y qué salió de cada nodo, y dónde se rompió.
-
-#### Qué de la clase 5 vuelve hoy (seguimiento)
-
-| De la clase 5 | Dónde aparece hoy, en la Semana 6 |
-|---|---|
-| El plano (Paso 1) | **Paso 1 · El objetivo** de la práctica (filmina 27) y la primera parte de la **Pre-entrega 3** |
-| Credencial de Google Sheets (Paso 2) | La herramienta **consultar_paquetes** del agente (flujo 02, Paso 3 · Las manos) |
-| HTTP Request a una API | La herramienta **cotizacion_dolar** (un *HTTP Request Tool*): la misma idea, pero la usa el modelo cuando decide |
-| Filter = idempotencia | **El system prompt** ("usala una sola vez"): con un agente, la idempotencia se escribe (ejemplo C del final) |
-| Aggregate e item por item | El **ciclo del agente** (filmina 8): cada vuelta es un pedido al modelo |
-| `{{ $json.ID }}` adentro de la URL (mapear) | **`$fromAI`**: el dato de la herramienta lo completa el modelo (filmina 16 y Paso 3) |
-| Executions: la caja negra | El **log del agente**: qué herramienta eligió en cada vuelta y qué le devolvió (Paso 5 y trabas) |
-| Filmina 30: "le falta criterio propio" | **Toda la clase de hoy**: le pasamos la decisión al modelo (filmina 5) |
-
----
-
 ### 0–15 · Apertura y repaso de la Semana 5
 
 **Filmina 1 · Portada** (1 min) — Módulo 6: Implementación del AI Agent.
@@ -288,90 +203,14 @@ Para explicar cada objetivo:
 
 <p style="color:#1a7f37">La clase queda grabada.</p>
 
-**Repaso de la Semana 5** (8 min, sin filmina) — antes de pasar a la filmina 5.
+**Repaso de la Semana 5** (3 min, sin filmina) — antes de pasar a la filmina 5. Se dice de corrido; si alguien
+pregunta algo puntual, el detalle está en [el guion de la Semana 5](../Semana%205/README.md).
 
-Se recorren **todos los temas de la clase 5, en el orden en que se dieron**: las tres secciones del PowerPoint, la
-práctica y los extras. En voz alta se dice solo la frase en verde de cada bloque. Las tablas son para vos: si alguien
-pregunta por un tema, ahí tenés las dos líneas para contestar sin abrir la Semana 5. El detalle filmina por filmina
-está arriba, en [Resumen de la clase 5](#resumen-de-la-clase-5-las-filminas-y-los-flujos-de-n8n); el guion entero,
-en [la Semana 5](../Semana%205/README.md).
+<p style="color:#1a7f37">Antes de arrancar, un repaso rápido de la clase pasada. Empezamos por planificar antes de construir: antes de abrir n8n se escribe el plano, con el problema, qué entra, qué pasos tiene, qué sale, qué accesos hacen falta y qué puede fallar. Vimos que leer no es escribir: si la planilla te la compartieron como lector, Google contesta 403. Vimos la idempotencia, que un flujo ejecutado dos veces no duplique nada. Y vimos el log, la pestaña Executions, como la caja negra del flujo, y que el flujo se guarda bajando su JSON.</p>
 
-<p style="color:#1a7f37">Antes de arrancar, repasemos la clase pasada, porque hoy la usamos toda. Fue en tres partes: planificar, el caso de la planilla y la práctica. Vamos rapidito; si alguno tiene una duda de algo, me la escribe en el chat.</p>
+<p style="color:#1a7f37">Después, el caso del módulo: una planilla con el ID de cada empleado y el resto vacío. El flujo lee la planilla, un Filter deja pasar solo las filas sin nombre, un HTTP Request trae los datos de la API, se crea una carpeta en Drive, un Update completa la fila buscándola por ID, y un Aggregate junta todo para que Gmail mande un solo correo y no cuatro. Si se ejecuta dos veces, la segunda no hace nada, gracias al Filter. Y la regla de Google: el nombre es la etiqueta, el ID es el pasaporte.</p>
 
-**Parte 1 · Planificar antes de construir (filminas 6 a 13) (2 min)**
-
-<p style="color:#1a7f37">Primera parte: planificar antes de construir. Antes de abrir n8n se escribe el plano: el problema, qué entra, qué pasos tiene, qué sale, qué accesos hacen falta y qué puede fallar. Vimos que leer no es escribir, que un flujo tiene que poder ejecutarse dos veces sin duplicar nada, y que el log es la caja negra.</p>
-
-| Tema | En dos líneas (por si preguntan) |
-|---|---|
-| **Por qué planificar** (filminas 6–7) | Arrastrar nodos "a ver qué sale" anda en flujos chicos. Con datos reales aparecen duplicados y fallas en silencio. |
-| **El problema y el proceso** (filmina 8) | El resultado se define en palabras de negocio ("la planilla queda completa"), no de nodos. Después se dibuja entrada → proceso → salida. |
-| **Accesos y permisos** (filminas 9–10) | Se prueban **antes** de construir. **Leer no es escribir:** con permiso de lector, Google contesta **403**. El **401** es que no saben quién sos. |
-| **Errores e idempotencia** (filmina 11) | ¿Qué pasa si la API falla, si llegan datos raros, si se ejecuta dos veces? **Idempotencia:** dos ejecuciones dejan todo igual que una. Para fallas pasajeras, *Settings* → **Retry On Fail**. |
-| **Logging y mantenimiento** (filmina 12) | Cómo te enterás de que falló (**Executions**; un **Error Trigger** que manda un mail), quién lo mantiene, y **versionar**: menú … → *Download* baja el `.json`. |
-| **Ejercicio 1** (filmina 13) | "¿Qué pasa si tu boceto se ejecuta dos veces?" Sobre el boceto del Módulo 2. |
-
-**Parte 2 · El caso del módulo: la planilla que se completa sola (filminas 14 a 20) (2 min)**
-
-```text
-Manual Trigger → Leer planilla → Filter "Nombre vacío" → HTTP Request (dummyjson) → Crear carpeta (Drive)
-               → Completar la fila (Update) → Aggregate → Gmail
-   5 filas           5 items          4 items                 4 pedidos                4 carpetas
-                                                              4 filas                  1 item     → 1 correo
-Segunda vez:   5 items → Filter: 0 items → no sigue → 0 correos
-```
-
-<p style="color:#1a7f37">Segunda parte, el caso. Una planilla con el ID de cada empleado y el nombre, la edad y el cargo vacíos. El flujo busca los datos en una API, le crea una carpeta en Drive a cada uno, completa la fila y manda un solo correo avisando. Siete nodos, y cada uno está por una razón: el Filter para no repetir, el Update para no agregar filas, y el Aggregate para que salga un correo y no cuatro.</p>
-
-| Tema | En dos líneas (por si preguntan) |
-|---|---|
-| **El caso** (filminas 14–15) | La planilla trae el **ID** completo y el resto vacío. La API `https://dummyjson.com/users/{{ $json.ID }}` devuelve los datos de esa persona. |
-| **Item por item** (filmina 16) | Cada nodo corre **una vez por item** que le llega: 4 filas incompletas son 4 pedidos a la API y 4 carpetas. |
-| **El Filter = la idempotencia** (filmina 17) | Deja pasar solo las filas con *Nombre vacío*. La segunda vez no queda ninguna, y el flujo no hace nada. |
-| **El Aggregate = un correo** (filmina 17) | Junta los 4 items en 1, y por eso el Gmail manda un solo correo. Sin él, salen 4. |
-| **Update, no Append** (filmina 18) | *Update Row* busca la fila por la columna **ID** y la cambia. *Append* agregaría una fila nueva. **Ejercicio 2:** ¿cuántos correos? **4 · 1 · 0**. |
-| **El error es la pista** (filmina 19) | El error dice qué nodo falló y por qué. No es el fin: es lo que hay que mirar primero. |
-| **El ID es el pasaporte** (filmina 20) | En Google se trabaja con el **ID** de la carpeta y de la planilla, que está en la dirección del navegador, no con el nombre. El nombre es la etiqueta: se cambia. |
-
-**Parte 3 · La práctica en vivo (filminas 22 a 28) (2 min)**
-
-<p style="color:#1a7f37">Y la tercera, la práctica. Arrancamos con el mapeo relámpago: pasar datos desprolijos a los casilleros correctos. Después armamos el caso paso a paso: el plano, las credenciales de Drive y Gmail, la entrada, el proceso y la salida. Y terminamos rompiéndolo a propósito, en la clínica, para aprender a leer los errores.</p>
-
-| Tema | En dos líneas (por si preguntan) |
-|---|---|
-| **Mapeo relámpago** (filminas 22–23, flujo `01`) | Mapear es decidir qué dato va en qué casillero, y transformarlo en el camino: `split`, `trim`, `toLowerCase`. **Juan Martín del Potro** quedó con apellido "Potro": los casos ambiguos se deciden en el plano, no en el nodo. |
-| **Paso 1 · El plano** (filmina 24) | El problema en una línea, entrada → proceso → salida, y los servicios. En papel, antes de n8n. |
-| **Paso 2 · Los accesos** (filmina 25) | Credenciales nuevas de **Google Drive** y **Gmail**, con el **mismo Client ID y Secret** de Sheets (Semana 4). Se prueba cada una por separado. |
-| **Pasos 3 y 4 · Entrada, proceso y salida** (filminas 26–27, flujos `02` y `03`) | Se armó la cadena de los siete nodos. El **`03`** es el mismo flujo sin Google, para el que no tenía credenciales: dio 5 → 4 → 1 correo, y la segunda vez 0. |
-| **Paso 5 · La clínica** (filmina 28, flujo `04`) | Tres errores a propósito. **A:** `$json.id` en minúscula falla **en silencio** (trae la lista de 30 personas). **B:** un ID que no existe da **404**. **C:** sin Aggregate salen **4** correos. En Google: **404** con la carpeta cambiada, **403** con la planilla de solo lectura. |
-| **Para practicar y cómo sigue** (filminas 29–30) | Repetirlo con su propia planilla y probar la idempotencia. Lo que le faltaba al flujo: **criterio propio**. Es la clase de hoy. |
-
-**Extra · Los tres ejemplos con servicios de Google (flujos `05`, `06`, `07`) (30 s)**
-
-<p style="color:#1a7f37">Y quedaron tres ejemplos más para casa, con las mismas ideas: un formulario que anota en la planilla y le manda un mail al cliente, el dólar de cada día en una planilla sin duplicar, y un resumen del día por mail.</p>
-
-| Ejemplo | En dos líneas (por si preguntan) |
-|---|---|
-| **A · Formulario → planilla → mail** (flujo `05`) | Form Trigger → Sheets *Append* → Gmail al que llenó el formulario. Una fila y un mail por respuesta. |
-| **B · El dólar del día** (flujo `06`) | HTTP Request a dolarapi → Sheets **Append or Update**, buscando por la columna `fecha`: si se ejecuta dos veces el mismo día, actualiza la fila en vez de duplicarla. Idempotencia sin Filter. |
-| **C · El resumen del día** (flujo `07`) | Leer planilla → Filter de las filas de hoy → **Aggregate** → un solo mail con todas las consultas del día. |
-
-**El puente con hoy (30 s)**
-
-<p style="color:#1a7f37">En todo eso, las decisiones las tomábamos nosotros: qué nodo va, en qué orden, qué dato va en cada casillero. Hoy le pasamos esas decisiones al modelo. El plano sigue, las APIs y la planilla pasan a ser herramientas del agente, y el log va a ser la forma de ver qué decidió.</p>
-
-**Pregunta rápida para el chat (1 min)** — la pegás, contestan mientras pasás a la filmina 5, no esperás a todos:
-
-```text
-REPASO · ¿Qué es? (contestá con el número y la palabra)
-1. Que ejecutar el flujo dos veces deje todo igual que ejecutarlo una.
-2. El nodo que deja pasar solo los items que cumplen una condición.
-3. El nodo que junta muchos items en uno, para mandar un solo correo.
-4. "Sé quién sos, pero no tenés permiso": ¿qué número?
-5. ¿Dónde mirás qué pasó en cada nodo cuando algo falló?
-```
-
-Respuestas: **1** idempotencia. **2** Filter. **3** Aggregate. **4** 403. **5** Executions (el log de ejecución).
+<p style="color:#1a7f37">Y en la práctica: el mapeo relámpago, pasar datos desprolijos a los casilleros correctos, donde Juan Martín del Potro nos quedó con apellido Potro. Armamos el caso paso a paso, con las credenciales nuevas de Drive y Gmail. Lo rompimos a propósito en la clínica: un id en minúscula que falla en silencio, un 404, un 403 y los cuatro correos sin Aggregate. Y quedaron para casa tres ejemplos: formulario a planilla y mail, el dólar del día sin duplicar, y el resumen del día. En todo eso, las decisiones las tomábamos nosotros. Hoy se las pasamos al modelo.</p>
 
 **Filmina 5 · ¿Dónde quedamos? Del flujo fijo al agente que decide** (3 min)
 
