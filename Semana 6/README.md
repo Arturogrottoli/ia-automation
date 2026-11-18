@@ -290,66 +290,75 @@ Para explicar cada objetivo:
 
 **Repaso de la Semana 5** (8 min, sin filmina) — antes de pasar a la filmina 5.
 
-Hoy el agente usa todo lo de la clase pasada, pero **las decisiones las toma el modelo**. Por eso el repaso va tema por
-tema, y cada tema termina en "¿y con un agente?". El mapa completo, filmina por filmina y flujo por flujo, está arriba, en
-[Resumen de la clase 5](#resumen-de-la-clase-5-las-filminas-y-los-flujos-de-n8n); el guion entero, en
-[la Semana 5](../Semana%205/README.md).
+Se recorren **todos los temas de la clase 5, en el orden en que se dieron**: las tres secciones del PowerPoint, la
+práctica y los extras. En voz alta se dice solo la frase en verde de cada bloque. Las tablas son para vos: si alguien
+pregunta por un tema, ahí tenés las dos líneas para contestar sin abrir la Semana 5. El detalle filmina por filmina
+está arriba, en [Resumen de la clase 5](#resumen-de-la-clase-5-las-filminas-y-los-flujos-de-n8n); el guion entero,
+en [la Semana 5](../Semana%205/README.md).
 
-<p style="color:#1a7f37">Antes de arrancar, repasemos la clase pasada, porque hoy la usamos toda. Cinco temas, y en cada uno les cuento qué cambia cuando el que decide es un agente.</p>
+<p style="color:#1a7f37">Antes de arrancar, repasemos la clase pasada, porque hoy la usamos toda. Fue en tres partes: planificar, el caso de la planilla y la práctica. Vamos rapidito; si alguno tiene una duda de algo, me la escribe en el chat.</p>
 
-**Repaso 1 · El plano: planificar antes de construir (2 min)**
+**Parte 1 · Planificar antes de construir (filminas 6 a 13) (2 min)**
 
-```text
-PROBLEMA   ¿Qué se hace hoy a mano y cuesta?        Completar la planilla de empleados nuevos
-ENTRADA    ¿Qué llega y de dónde?                    Los ID cargados en la planilla
-PROCESO    ¿Qué pasos, en qué orden?                 Leer → Filter → API → Drive → Sheets → Aggregate → Gmail
-SALIDA     ¿Qué queda hecho?                         Las filas completas, una carpeta por persona, 1 correo
-ACCESOS    ¿Qué servicios y qué permisos?            Sheets (escribir), Drive (crear), Gmail (mandar)
-ERRORES    ¿Qué puede fallar?                        403 sin permiso · 404 carpeta borrada · ejecutar dos veces
-```
+<p style="color:#1a7f37">Primera parte: planificar antes de construir. Antes de abrir n8n se escribe el plano: el problema, qué entra, qué pasos tiene, qué sale, qué accesos hacen falta y qué puede fallar. Vimos que leer no es escribir, que un flujo tiene que poder ejecutarse dos veces sin duplicar nada, y que el log es la caja negra.</p>
 
-<p style="color:#1a7f37">Uno. Antes de abrir n8n, se escribe el plano: el problema, qué entra, qué pasos tiene, qué sale, qué accesos necesita y qué puede fallar. La clase pasada lo hicimos para la planilla de empleados. Hoy lo vamos a hacer para un agente, y es la primera parte de la Pre-entrega 3.</p>
+| Tema | En dos líneas (por si preguntan) |
+|---|---|
+| **Por qué planificar** (filminas 6–7) | Arrastrar nodos "a ver qué sale" anda en flujos chicos. Con datos reales aparecen duplicados y fallas en silencio. |
+| **El problema y el proceso** (filmina 8) | El resultado se define en palabras de negocio ("la planilla queda completa"), no de nodos. Después se dibuja entrada → proceso → salida. |
+| **Accesos y permisos** (filminas 9–10) | Se prueban **antes** de construir. **Leer no es escribir:** con permiso de lector, Google contesta **403**. El **401** es que no saben quién sos. |
+| **Errores e idempotencia** (filmina 11) | ¿Qué pasa si la API falla, si llegan datos raros, si se ejecuta dos veces? **Idempotencia:** dos ejecuciones dejan todo igual que una. Para fallas pasajeras, *Settings* → **Retry On Fail**. |
+| **Logging y mantenimiento** (filmina 12) | Cómo te enterás de que falló (**Executions**; un **Error Trigger** que manda un mail), quién lo mantiene, y **versionar**: menú … → *Download* baja el `.json`. |
+| **Ejercicio 1** (filmina 13) | "¿Qué pasa si tu boceto se ejecuta dos veces?" Sobre el boceto del Módulo 2. |
 
-- **¿Y con un agente?** El proceso ya no es una fila fija de nodos: es la lista de herramientas que el agente
-  puede usar. El plano dice cuáles y para qué.
-
-**Repaso 2 · Leer no es escribir: accesos y permisos (1 min)**
-
-<p style="color:#1a7f37">Dos. Leer no es escribir. Que puedas ver una planilla no quiere decir que puedas cambiarla. Si el flujo tiene que escribir y la planilla te la compartieron como lector, Google contesta 403: sé quién sos, pero no tenés permiso. Y si alguien borró la carpeta, 404: no existe. Y lo que identifica un archivo es su ID, no su nombre: el nombre es la etiqueta, el ID es el pasaporte.</p>
-
-- **¿Y con un agente?** Una herramienta que escribe es más peligrosa que una que lee, porque el que decide cuándo
-  usarla es el modelo. Por eso hoy, las herramientas que escriben llevan límites en el system prompt.
-
-**Repaso 3 · Item por item: el Filter y el Aggregate (2 min)**
+**Parte 2 · El caso del módulo: la planilla que se completa sola (filminas 14 a 20) (2 min)**
 
 ```text
-5 filas → Leer planilla (5 items) → Filter "Nombre vacío" (4 items) → … → Aggregate (1 item) → Gmail (1 correo)
+Manual Trigger → Leer planilla → Filter "Nombre vacío" → HTTP Request (dummyjson) → Crear carpeta (Drive)
+               → Completar la fila (Update) → Aggregate → Gmail
+   5 filas           5 items          4 items                 4 pedidos                4 carpetas
+                                                              4 filas                  1 item     → 1 correo
+Segunda vez:   5 items → Filter: 0 items → no sigue → 0 correos
 ```
 
-<p style="color:#1a7f37">Tres, la regla de oro de n8n: cada nodo se ejecuta una vez por cada item que le llega. Por eso el Filter: deja pasar solo lo que falta completar, y así ejecutar dos veces no duplica nada. Eso es la idempotencia. Y por eso el Aggregate antes del Gmail: junta todo en un item, para que salga un correo y no cuatro.</p>
+<p style="color:#1a7f37">Segunda parte, el caso. Una planilla con el ID de cada empleado y el nombre, la edad y el cargo vacíos. El flujo busca los datos en una API, le crea una carpeta en Drive a cada uno, completa la fila y manda un solo correo avisando. Siete nodos, y cada uno está por una razón: el Filter para no repetir, el Update para no agregar filas, y el Aggregate para que salga un correo y no cuatro.</p>
 
-- **¿Y con un agente?** El agente también puede repetir una acción: anotar dos veces la misma consulta, mandar
-  dos mails. La idempotencia ya no la da un Filter: hay que pedírsela en el system prompt ("usala una sola vez").
+| Tema | En dos líneas (por si preguntan) |
+|---|---|
+| **El caso** (filminas 14–15) | La planilla trae el **ID** completo y el resto vacío. La API `https://dummyjson.com/users/{{ $json.ID }}` devuelve los datos de esa persona. |
+| **Item por item** (filmina 16) | Cada nodo corre **una vez por item** que le llega: 4 filas incompletas son 4 pedidos a la API y 4 carpetas. |
+| **El Filter = la idempotencia** (filmina 17) | Deja pasar solo las filas con *Nombre vacío*. La segunda vez no queda ninguna, y el flujo no hace nada. |
+| **El Aggregate = un correo** (filmina 17) | Junta los 4 items en 1, y por eso el Gmail manda un solo correo. Sin él, salen 4. |
+| **Update, no Append** (filmina 18) | *Update Row* busca la fila por la columna **ID** y la cambia. *Append* agregaría una fila nueva. **Ejercicio 2:** ¿cuántos correos? **4 · 1 · 0**. |
+| **El error es la pista** (filmina 19) | El error dice qué nodo falló y por qué. No es el fin: es lo que hay que mirar primero. |
+| **El ID es el pasaporte** (filmina 20) | En Google se trabaja con el **ID** de la carpeta y de la planilla, que está en la dirección del navegador, no con el nombre. El nombre es la etiqueta: se cambia. |
 
-**Repaso 4 · Mapear: pasar datos de un servicio a otro (1 min)**
+**Parte 3 · La práctica en vivo (filminas 22 a 28) (2 min)**
 
-```text
-https://dummyjson.com/users/{{ $json.ID }}                     ← el ID de la planilla, adentro de la dirección
-{{ $('Solo filas incompletas').item.json.ID }}                 ← un dato de un nodo anterior, no del de al lado
-Update Row · Column to match on: ID                            ← cambiar la fila que ya existe, no agregar una
-```
+<p style="color:#1a7f37">Y la tercera, la práctica. Arrancamos con el mapeo relámpago: pasar datos desprolijos a los casilleros correctos. Después armamos el caso paso a paso: el plano, las credenciales de Drive y Gmail, la entrada, el proceso y la salida. Y terminamos rompiéndolo a propósito, en la clínica, para aprender a leer los errores.</p>
 
-<p style="color:#1a7f37">Cuatro. Mapear es pasar los datos de un servicio al otro. El ID que sale de la planilla entra en la dirección de la API; el nombre que trae la API entra en Drive y en la planilla. Y para escribir en la fila que ya existía usamos Update, buscando por ID, en vez de Append, que agrega una nueva.</p>
+| Tema | En dos líneas (por si preguntan) |
+|---|---|
+| **Mapeo relámpago** (filminas 22–23, flujo `01`) | Mapear es decidir qué dato va en qué casillero, y transformarlo en el camino: `split`, `trim`, `toLowerCase`. **Juan Martín del Potro** quedó con apellido "Potro": los casos ambiguos se deciden en el plano, no en el nodo. |
+| **Paso 1 · El plano** (filmina 24) | El problema en una línea, entrada → proceso → salida, y los servicios. En papel, antes de n8n. |
+| **Paso 2 · Los accesos** (filmina 25) | Credenciales nuevas de **Google Drive** y **Gmail**, con el **mismo Client ID y Secret** de Sheets (Semana 4). Se prueba cada una por separado. |
+| **Pasos 3 y 4 · Entrada, proceso y salida** (filminas 26–27, flujos `02` y `03`) | Se armó la cadena de los siete nodos. El **`03`** es el mismo flujo sin Google, para el que no tenía credenciales: dio 5 → 4 → 1 correo, y la segunda vez 0. |
+| **Paso 5 · La clínica** (filmina 28, flujo `04`) | Tres errores a propósito. **A:** `$json.id` en minúscula falla **en silencio** (trae la lista de 30 personas). **B:** un ID que no existe da **404**. **C:** sin Aggregate salen **4** correos. En Google: **404** con la carpeta cambiada, **403** con la planilla de solo lectura. |
+| **Para practicar y cómo sigue** (filminas 29–30) | Repetirlo con su propia planilla y probar la idempotencia. Lo que le faltaba al flujo: **criterio propio**. Es la clase de hoy. |
 
-- **¿Y con un agente?** Los datos de las herramientas no los arrastramos nosotros: los completa el modelo, con
-  `$fromAI`. Por ejemplo, el destino que busca en la planilla lo saca de lo que escribió el cliente.
+**Extra · Los tres ejemplos con servicios de Google (flujos `05`, `06`, `07`) (30 s)**
 
-**Repaso 5 · El log: Executions (1 min)**
+<p style="color:#1a7f37">Y quedaron tres ejemplos más para casa, con las mismas ideas: un formulario que anota en la planilla y le manda un mail al cliente, el dólar de cada día en una planilla sin duplicar, y un resumen del día por mail.</p>
 
-<p style="color:#1a7f37">Cinco. Cuando algo falla, se mira el log, en la pestaña Executions: qué entró y qué salió de cada nodo, y dónde se rompió. La caja negra del avión. Hoy la vamos a usar más que nunca, porque ahí se ve qué pensó el agente y qué herramientas usó.</p>
+| Ejemplo | En dos líneas (por si preguntan) |
+|---|---|
+| **A · Formulario → planilla → mail** (flujo `05`) | Form Trigger → Sheets *Append* → Gmail al que llenó el formulario. Una fila y un mail por respuesta. |
+| **B · El dólar del día** (flujo `06`) | HTTP Request a dolarapi → Sheets **Append or Update**, buscando por la columna `fecha`: si se ejecuta dos veces el mismo día, actualiza la fila en vez de duplicarla. Idempotencia sin Filter. |
+| **C · El resumen del día** (flujo `07`) | Leer planilla → Filter de las filas de hoy → **Aggregate** → un solo mail con todas las consultas del día. |
 
-- **¿Y con un agente?** En la ejecución se ve cada vuelta del ciclo: qué herramienta eligió, con qué datos, y qué le
-  devolvió. Es la forma de entender por qué contestó lo que contestó.
+**El puente con hoy (30 s)**
+
+<p style="color:#1a7f37">En todo eso, las decisiones las tomábamos nosotros: qué nodo va, en qué orden, qué dato va en cada casillero. Hoy le pasamos esas decisiones al modelo. El plano sigue, las APIs y la planilla pasan a ser herramientas del agente, y el log va a ser la forma de ver qué decidió.</p>
 
 **Pregunta rápida para el chat (1 min)** — la pegás, contestan mientras pasás a la filmina 5, no esperás a todos:
 
@@ -363,8 +372,6 @@ REPASO · ¿Qué es? (contestá con el número y la palabra)
 ```
 
 Respuestas: **1** idempotencia. **2** Filter. **3** Aggregate. **4** 403. **5** Executions (el log de ejecución).
-
-<p style="color:#1a7f37">Hasta hoy, todas esas decisiones las tomábamos nosotros, al armar el flujo. Hoy se las pasamos al modelo. Vamos a ver cómo.</p>
 
 **Filmina 5 · ¿Dónde quedamos? Del flujo fijo al agente que decide** (3 min)
 
@@ -647,6 +654,10 @@ chat             │  (Ana, la asesora)      │
 
 <p style="color:#1a7f37">En n8n, el agente es un nodo grande con tres enchufes abajo: uno para el cerebro, uno para el diario y uno para las manos. Lo que se enchufa ahí se llama sub-nodo. Y el manual va adentro del agente, en el system message. En la Sección 02 vemos cada pieza.</p>
 
+**En n8n (30 s):** compartís pantalla con el **`02-agente-agencia.json`** abierto, sin ejecutar nada. Pasás el mouse
+por los tres enchufes de abajo de *Ana, la asesora*: **Chat Model**, **Memory**, **Tool**. Hasta acá, solo se señala;
+cada pieza se abre en la Sección 02.
+
 ##### F · Qué vamos a hacer con los agentes en lo que queda del curso (2 min)
 
 <p style="color:#1a7f37">Y lo más importante. El agente que armamos hoy no se tira: lo vamos a ir mejorando hasta el proyecto final. Hoy nace, con el cerebro en Google y un chat de prueba. La semana que viene le cambiamos el cerebro, para que corra en nuestra computadora. La siguiente le damos una voz: WhatsApp. Y en la Entrega Final, queda un asistente de WhatsApp funcionando solo, atendiendo clientes de verdad.</p>
@@ -701,6 +712,11 @@ Para explicar:
   meses. No sabe el dólar de hoy ni lo que hay en tu planilla.
   - *Ejemplo:* La planilla de paquetes, el dólar del día, mandar un correo.
 
+**En n8n (flujo 02):** en el lienzo, señalás cada sub-nodo con su nombre: **Cerebro: Gemini**, **Diario: memoria
+simple**, y las tres manos, **consultar_paquetes**, **cotizacion_dolar** y **calculadora**.
+
+<p style="color:#1a7f37">Miren los nombres que les puse: cerebro, diario, y las manos con nombre propio. Es el agente que vamos a armar en la práctica, ya terminado. Ahora abrimos cada pieza.</p>
+
 #### Filmina 14 · El Chat Model: el cerebro que se conecta abajo (4 min)
 
 <p style="color:#1a7f37">El Chat Model es el sub-nodo que se conecta abajo del AI Agent y le da la capacidad de razonar. Sin él, el nodo no funciona. No hay un solo modelo: n8n tiene nodos para distintos proveedores, y se elige por costo, velocidad, privacidad o capacidades. Y se configura la credencial, el modelo, y parámetros como la temperatura o el máximo de tokens.</p>
@@ -730,6 +746,13 @@ Para explicar:
   - El **máximo de tokens de salida** es el largo máximo de la respuesta.
   - *Ejemplo:* Para un asesor que da precios, temperatura 0.2: queremos que sea preciso, no creativo.
 
+**En n8n (flujo 02):** doble clic en **Cerebro: Gemini**. Mostrás tres cosas y cerrás:
+- **Credential:** la clave de Gemini de la Semana 2.
+- **Model:** `models/gemini-3-flash-preview`.
+- **Options → Sampling Temperature:** `0.2`.
+
+<p style="color:#1a7f37">Credencial, modelo y temperatura: las tres cosas de la filmina. Temperatura baja, porque Ana da precios.</p>
+
 #### Filmina 15 · La memoria: para que no arranque de cero cada vez (4 min)
 
 <p style="color:#1a7f37">Sin memoria, cada mensaje se procesa aislado, como si fuera la primera vez. Con memoria, el historial se guarda y se vuelve a mandar en cada ejecución, para que entienda "y el segundo que me dijiste". Es por sesión: vale mientras dura esa conversación. Hay memoria simple, en la RAM del flujo, para probar, o en una base de datos, para lo que tiene que durar. Y se limita cuántos mensajes se guardan, para no gastar de más.</p>
@@ -756,6 +779,10 @@ Para explicar:
   cada llamada."** La **ventana de contexto** es cuántos mensajes anteriores se reinyectan. Como cada mensaje
   reinyectado son tokens, una conversación de 200 mensajes sería lenta y cara.
   - *Ejemplo:* *Context Window Length*: 10 → recuerda los últimos 10 mensajes.
+
+**En n8n (flujo 02):** doble clic en **Diario: memoria simple** → señalás **Context Window Length: 10**.
+
+<p style="color:#1a7f37">Esta es la ventana: los últimos diez mensajes. Y el session ID lo pone solo el chat de n8n, uno por conversación. En la Semana 8 lo vamos a cambiar por el número de WhatsApp de cada cliente.</p>
 
 #### Filmina 16 · Las Tools: la diferencia entre conversar y resolver (4 min)
 
@@ -784,6 +811,12 @@ El modelo no busca en la planilla. Devuelve esto, y n8n lo ejecuta:
 { "herramienta": "consultar_paquetes", "datos": { "destino": "Bariloche" } }
 ```
 
+**En n8n (flujo 02):** doble clic en **consultar_paquetes**. Señalás dos campos:
+- **Description:** "Busca en la planilla de la agencia los paquetes de UN destino…". Es lo que lee el modelo.
+- **Filters → Destino:** `$fromAI('destino', …)`. Es el parámetro que completa el modelo.
+
+<p style="color:#1a7f37">Acá están las dos cosas de la filmina. La descripción, que es lo que el modelo lee para elegirla. Y el parámetro, destino, que no lo escribimos nosotros: lo completa el modelo con lo que dijo el cliente. Eso es fromAI, y en la práctica lo armamos.</p>
+
 #### Filmina 17 · Tipos de Tools: las que más vas a usar (2 min)
 
 <p style="color:#1a7f37">Las que más van a usar. HTTP Request Tool, para llamar a cualquier API. Workflow Tool, para usar otro flujo de n8n como herramienta. Code Tool, para correr código. Los nodos de siempre, como Gmail o Sheets, usados como herramienta. Y Calculator, porque los modelos no siempre calculan bien solos.</p>
@@ -805,6 +838,9 @@ Para explicar:
 - **"Calculator: resolver operaciones matemáticas con precisión, porque los LLM no siempre calculan bien solos."** Un
   LLM predice texto; a veces "adivina" el resultado de una cuenta en vez de hacerla.
   - *Ejemplo:* 950 × 2 × 1570. Un modelo puede decir "2.938.000" en vez de "2.983.000". La calculadora, no.
+
+**En n8n (flujo 02):** las tres manos son tres tipos de la filmina. **consultar_paquetes** es un nodo nativo
+(Google Sheets), **cotizacion_dolar** es un HTTP Request Tool, y **calculadora** es el Calculator.
 
 #### Filmina 18 · Para recordar: el nombre y la descripción (1 min)
 
@@ -832,6 +868,9 @@ Descripción: Devuelve la cotización del dólar en Argentina hoy, en pesos. Us�
 dólares a pesos.
 Parámetro: tipo → "El tipo de dólar: oficial, blue o tarjeta. Si el cliente no dice nada, oficial."
 ```
+
+**En n8n:** no hace falta abrir nada. Si alguien pregunta, el **`03-agente-mal-descrito.json`** es este "mal"
+armado de verdad, y es el Ejercicio 7 para casa.
 
 ---
 
@@ -903,6 +942,12 @@ Para explicar:
 - **Las expresiones.** Las mismas `{{ }}` de siempre. La más útil: la fecha, porque el modelo no sabe qué día es.
   - *Ejemplo:* `Hoy es {{ $now.format('dd/MM/yyyy') }}.` → "Hoy es 13/11/2026." Así, "¿hay algo para el mes que
     viene?" tiene sentido.
+
+**En n8n (flujo 02, 1 min):** doble clic en **Ana, la asesora** → **Options → System Message**. Recorrés en voz alta
+las partes de la filmina 21: **TONO**, **ALCANCE**, **HERRAMIENTAS**… Y señalás la expresión de la primera línea,
+`Hoy es {{ $now.format('dd/MM/yyyy') }}`.
+
+<p style="color:#1a7f37">Este es el manual de Ana, escrito. Fíjense que está ordenado por partes, las de la filmina. Y en la primera línea, la fecha con una expresión: cada vez que alguien escribe, se cambia sola. En el Paso 5 lo vamos a pegar en nuestro agente.</p>
 
 Pegás en el chat:
 
