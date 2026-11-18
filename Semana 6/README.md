@@ -66,7 +66,7 @@ Fuente: `program-summary.pdf` (Módulo 6). **Una clase de 2 horas.**
 
 | Min | Tramo | Filminas | En clase |
 |---|---|---|---|
-| 0–15 | Apertura y **repaso de la Semana 5** (3 min, hablado) | 1–5 | Si sobran minutos: dudas de la clase 5 |
+| 0–15 | Apertura (filminas 1–4, rápido) y **repaso de la Semana 5** en la filmina 5 | 1–5 | Dura unos 7 min: los que sobran, para dudas de la clase 5 |
 | 15–35 | **01 · Qué es un AI Agent** | 6–11 | Ej. 1 (4 min); la demo de la chain, contada |
 | 35–47 | **Los agentes, a fondo** (sin filmina): qué son en criollo, cómo usan herramientas, para qué se usan en la vida real, los riesgos, y qué vamos a hacer con ellos en el curso (Semanas 7, 8 y la Entrega Final) | — | |
 | 47–63 | **02 · Las tres piezas** | 12–18 | Los tipos de tools, nombrados |
@@ -158,79 +158,36 @@ cada momento. Los flujos están en [n8n/](n8n/).
 
 ### 0–15 · Apertura y repaso de la Semana 5
 
-**Filmina 1 · Portada** (1 min) — Módulo 6: Implementación del AI Agent.
+Las filminas 1 a 4 se pasan rápido: una frase por filmina, sin detenerse. Lo nuevo de la clase se explica a partir
+de la filmina 6.
 
-<p style="color:#1a7f37">Bienvenidos al Módulo 6, el que muchos estaban esperando. Hasta hoy, cada flujo hacía exactamente lo que le dijimos, en el orden que le dijimos. Hoy armamos algo distinto: un agente, que recibe un pedido y decide solo qué hacer para resolverlo.</p>
+**Filmina 1 · Portada** (30 s) — Módulo 6: Implementación del AI Agent.
 
-Para explicar:
-- **"AI Agent".** *Agent* es "agente": alguien que actúa en nombre de otro, como un agente de viajes o un agente
-  inmobiliario. Un **AI Agent** ("agente de IA") es un programa que usa un modelo de IA para decidir qué hacer y que,
-  además, puede hacerlo: consultar una planilla, mandar un correo, buscar un precio.
-  - *Ejemplo:* Le escribís "¿cuánto me sale Bariloche para dos en pesos?" y el agente, solo, busca el paquete, busca
-    el dólar, hace la cuenta y te responde.
-- **"Implementación".** Es llevarlo a la práctica, armarlo de verdad. Hoy lo diseñamos y lo vemos andar; en la
-  Pre-entrega 3 cada uno arma el suyo.
+<p style="color:#1a7f37">Bienvenidos al Módulo 6. Hasta hoy, cada flujo hacía exactamente lo que le dijimos. Hoy armamos un agente: recibe un pedido y decide solo qué hacer para resolverlo.</p>
 
-**Filmina 2 · Objetivos** (2 min)
+**Filmina 2 · Objetivos** (1 min)
 
-<p style="color:#1a7f37">Hoy vamos a distinguir un agente de una cadena simple, entender el ciclo de razonar y actuar, configurar las tres piezas del agente, escribir descripciones de herramientas que el modelo entienda, y redactar un system prompt con rol, alcance, herramientas y límites.</p>
+<p style="color:#1a7f37">Al terminar la clase van a poder cinco cosas. Uno, distinguir un agente de una Basic LLM Chain, el nodo de IA simple de la Semana 2, y saber cuándo usar cada uno. Dos, explicar el ciclo del agente: razona, actúa, mira el resultado y repite. Tres, configurar sus tres piezas: el cerebro, que es el Chat Model; el diario, que es la memoria; y las manos, que son las herramientas. Cuatro, describir las herramientas para que el modelo las elija bien. Y cinco, escribir su system prompt, el manual: quién es, de qué habla, cuándo usa cada herramienta y qué no puede hacer nunca. Todo eso lo vamos a ver con calma.</p>
 
-Para explicar cada objetivo:
-- **"Distinguir un AI Agent de un Basic LLM Chain y saber cuándo usar cada uno."** Una **Basic LLM Chain** ("cadena
-  básica de LLM") es el nodo de IA que usamos en la Semana 2: le das un prompt, el modelo responde un texto, y
-  listo. **LLM** es *Large Language Model*, "modelo de lenguaje grande": el tipo de IA de ChatGPT o Gemini.
-  - *Ejemplo:* Resumir un mail: chain. Responder consultas buscando precios en una planilla: agente.
-- **"Explicar el ciclo de razonar y actuar que le da autonomía al agente."** **Autonomía** es poder decidir solo.
-  El agente piensa, hace algo, mira el resultado y vuelve a pensar, tantas veces como haga falta.
-  - *Ejemplo:* Piensa "necesito el precio" → consulta la planilla → ve "USD 950" → piensa "ahora necesito el dólar"
-    → …
-- **"Configurar las tres piezas del agente: Chat Model, Memoria y Tools."** El cerebro, el diario y las manos. Las
-  vamos a ver una por una.
-  - *Ejemplo:* Cerebro: Gemini. Diario: los últimos 10 mensajes. Manos: la planilla, el dólar y la calculadora.
-- **"Escribir descripciones de tools que el modelo entienda y elija bien."** Las **tools** ("herramientas") son lo
-  que el agente puede usar. El modelo no ve cómo están armadas por dentro: solo lee su nombre y su descripción.
-  - *Ejemplo:* Una herramienta que se llama "tool1" y dice "Herramienta." no la va a usar nunca bien.
-- **"Redactar un system prompt con rol, alcance, uso de tools y guardrails."** El **system prompt** son las
-  instrucciones de base del agente, como las que escribimos en la Semana 1. Los **guardrails** ("barandas", como
-  las de una ruta de montaña) son los límites que no puede cruzar.
-  - *Ejemplo:* "Nunca confirmes una reserva: pasáselo a un vendedor."
+**Filmina 3 · Agenda** (30 s)
 
-**Filmina 3 · Agenda** (1 min)
+<p style="color:#1a7f37">Primero, dónde quedamos. Después, qué es un agente, sus tres piezas y el system prompt. Break. Y la práctica: armamos un agente en n8n.</p>
 
-<p style="color:#1a7f37">Primero, dónde quedamos. Después, qué es un agente. Después, sus tres piezas: cerebro, diario y manos. Después, el system prompt, su manual. Break. Y la práctica: cada uno diseña su agente, mientras yo armo uno en n8n.</p>
-
-**Filmina 4 · La clase queda grabada** — pasarla.
+**Filmina 4 · La clase queda grabada** (10 s)
 
 <p style="color:#1a7f37">La clase queda grabada.</p>
 
-**Repaso de la Semana 5** (3 min, sin filmina) — antes de pasar a la filmina 5. Se dice de corrido; si alguien
-pregunta algo puntual, el detalle está en [el guion de la Semana 5](../Semana%205/README.md).
+**Filmina 5 · ¿Dónde quedamos? Del flujo fijo al agente que decide** (5 min) — acá va el **repaso de la Semana 5**.
+Se dice de corrido; si alguien pregunta algo puntual, el detalle está en
+[el guion de la Semana 5](../Semana%205/README.md).
 
-<p style="color:#1a7f37">Antes de arrancar, un repaso rápido de la clase pasada. Empezamos por planificar antes de construir: antes de abrir n8n se escribe el plano, con el problema, qué entra, qué pasos tiene, qué sale, qué accesos hacen falta y qué puede fallar. Vimos que leer no es escribir: si la planilla te la compartieron como lector, Google contesta 403. Vimos la idempotencia, que un flujo ejecutado dos veces no duplique nada. Y vimos el log, la pestaña Executions, como la caja negra del flujo, y que el flujo se guarda bajando su JSON.</p>
+<p style="color:#1a7f37">Primero, un repaso rápido de la clase pasada. Empezamos por planificar antes de construir: antes de abrir n8n se escribe el plano, con el problema, qué entra, qué pasos tiene, qué sale, qué accesos hacen falta y qué puede fallar. Vimos que leer no es escribir: si la planilla te la compartieron como lector, Google contesta 403. Vimos la idempotencia, que un flujo ejecutado dos veces no duplique nada. Y vimos el log, la pestaña Executions, como la caja negra del flujo, y que el flujo se guarda bajando su JSON.</p>
 
 <p style="color:#1a7f37">Después, el caso del módulo: una planilla con el ID de cada empleado y el resto vacío. El flujo lee la planilla, un Filter deja pasar solo las filas sin nombre, un HTTP Request trae los datos de la API, se crea una carpeta en Drive, un Update completa la fila buscándola por ID, y un Aggregate junta todo para que Gmail mande un solo correo y no cuatro. Si se ejecuta dos veces, la segunda no hace nada, gracias al Filter. Y la regla de Google: el nombre es la etiqueta, el ID es el pasaporte.</p>
 
 <p style="color:#1a7f37">Y en la práctica: el mapeo relámpago, pasar datos desprolijos a los casilleros correctos, donde Juan Martín del Potro nos quedó con apellido Potro. Armamos el caso paso a paso, con las credenciales nuevas de Drive y Gmail. Lo rompimos a propósito en la clínica: un id en minúscula que falla en silencio, un 404, un 403 y los cuatro correos sin Aggregate. Y quedaron para casa tres ejemplos: formulario a planilla y mail, el dólar del día sin duplicar, y el resumen del día. En todo eso, las decisiones las tomábamos nosotros. Hoy se las pasamos al modelo.</p>
 
-**Filmina 5 · ¿Dónde quedamos? Del flujo fijo al agente que decide** (3 min)
-
-<p style="color:#1a7f37">En el Módulo 5 orquestaron varios servicios de Google en un flujo de punta a punta. Lo que tenían en común los Módulos 2 al 5: ustedes definían paso a paso qué tenía que pasar. Hoy le pasamos esa decisión al modelo: el agente elige qué herramienta usar y en qué orden, mientras corre. Y al final de la clase van a tener diseñado un agente, con su cerebro, su memoria, sus herramientas y sus límites.</p>
-
-Para explicar:
-- **"En el módulo 5: orquestaste varios servicios de Google en un flujo que corre de punta a punta."**
-  - *Ejemplo:* Leer planilla → Filter → API → Drive → Sheets → Aggregate → Gmail.
-- **"Lo que tenían en común los módulos 2 al 5: vos definías paso a paso qué tenía que pasar."** Un flujo fijo es
-  como un tren: va siempre por las mismas vías. Si hay que ir a otro lado, hay que poner vías nuevas.
-  - *Ejemplo:* El flujo de la planilla no puede decidir "esta fila mejor la salteo y le aviso a RR.HH.", salvo que le
-    hayamos puesto un IF para eso.
-- **"Hoy: le pasamos esa decisión al modelo. El agente elige qué herramienta usar y en qué orden, en tiempo de
-  ejecución."** Un agente es más como un taxista: le decís a dónde vas y él elige el camino. **En tiempo de
-  ejecución** es mientras corre, no cuando lo armamos.
-  - *Ejemplo:* "¿Cuánto sale Mendoza?" → usa la planilla. "¿Y en pesos?" → usa el dólar y la calculadora. "¿Hay
-    cupo?" → la planilla otra vez. Nadie le dibujó ese camino.
-- **"Al final de la clase: vas a tener diseñado un agente con su cerebro, su memoria, sus herramientas y sus
-  límites."** Diseñado en papel, que es el corazón de la Pre-entrega 3, y visto andar en n8n.
-  - *Ejemplo:* Una hoja con: objetivo, modelo, memoria, tres herramientas con su descripción y un system prompt.
+<p style="color:#1a7f37">Y eso es lo que dice esta filmina. En el Módulo 5 orquestamos varios servicios de Google en un flujo de punta a punta. Del Módulo 2 al 5, nosotros definíamos paso a paso qué tenía que pasar: un flujo fijo es como un tren, va siempre por las mismas vías. Hoy le pasamos esa decisión al modelo: el agente es más como un taxista, le decís a dónde vas y él elige el camino, mientras corre. Y al final de la clase van a tener diseñado su propio agente.</p>
 
 ---
 
