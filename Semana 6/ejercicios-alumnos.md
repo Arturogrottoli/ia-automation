@@ -19,15 +19,15 @@
 
 ---
 
-## En clase
+## Para casa · Repaso de la clase (Ejercicios 1 a 4)
 
-### Ejercicio 1 · ¿Ya es un agente? (4 min)
+### Ejercicio 1 · ¿Ya es un agente? (5 min)
 
 - a) Un bot de preguntas frecuentes con una calculadora conectada, ¿es un agente? Sí / No / Depende
 - b) Un agente sin memoria, ¿puede existir? Sí / No
 - c) En **una** palabra: ¿cuál es la diferencia real entre un chatbot y un agente?
 
-### Ejercicio 2 · Arreglá el system prompt (3 min)
+### Ejercicio 2 · Arreglá el system prompt (5 min)
 
 El system prompt de un agente de turnos de una peluquería:
 
@@ -38,12 +38,14 @@ Sos un asistente. Ayudá a la gente con lo que necesite. Usá las herramientas.
 ¿Cuáles de las seis cosas le faltan (rol, tono, alcance, herramientas, formato, seguridad)? Reescribí **una** línea
 que agregarías.
 
-### Ejercicio 3 · Role-play: el cerebro piensa en voz alta (10 min)
+### Ejercicio 3 · El cerebro piensa en voz alta (10 min)
 
-El profe hace de cerebro del agente, un compañero de herramienta del clima y otro de usuario. Mirá cómo piensa el
-cerebro antes de hablar. Cuando la herramienta dé un **404**, escribí en el chat qué harías vos.
+En clase, el profe hizo de cerebro de un agente con una herramienta de clima (filminas 25 y 26). Hacelo vos, por
+escrito, con otro caso: un cliente le pregunta a un agente de una pizzería "¿llegan a Nueva Córdoba en menos de una
+hora?", y el agente tiene una herramienta `demora_envio` que pide un barrio. Escribí cada vuelta: qué **piensa**, qué
+herramienta **usa** y con qué dato, qué **observa**. Y después: si la herramienta da **404**, ¿qué hace?
 
-### Ejercicio 4 · Diseñá tu agente (lo completás durante la práctica)
+### Ejercicio 4 · Diseñá tu agente (30 min · la base de la Pre-entrega 3)
 
 Completá esta plantilla con **tu** caso, una tarea repetitiva de tu trabajo o tu vida. Es la base de la
 Pre-entrega 3. Debajo de cada paso está el agente de la clase como ejemplo.
@@ -87,7 +89,7 @@ PASO 5 · EL MANUAL (system prompt)
 
 ---
 
-## Para casa (antes de la Semana 7)
+## Para casa · Armar (antes de la Semana 7)
 
 ### Ejercicio 5 · Armá el agente de la clase (30 min)
 

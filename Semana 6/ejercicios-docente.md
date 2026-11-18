@@ -11,7 +11,7 @@ clase. Las APIs de las herramientas sí están probadas (6/11/2026): dolarapi.co
 
 ---
 
-## En clase
+## Para casa · Repaso de la clase (Ejercicios 1 a 4)
 
 ### Ejercicio 1 · ¿Ya es un agente?
 
@@ -37,30 +37,23 @@ Le faltan **las seis**:
 La versión arreglada está en el guion (Lu, la de "Corte Fino"). Cualquier línea que agregue rol, alcance o un límite
 concreto está bien.
 
-### Ejercicio 3 · Role-play: guion completo
+### Ejercicio 3 · El cerebro piensa en voz alta (por escrito)
 
-**Papeles:** vos sos el cerebro, un alumno es la herramienta `clima` y otro el usuario. Antes de empezar, al que hace
-de herramienta le mandás por privado:
+Una respuesta esperable:
 
 ```text
-Sos la herramienta "clima". Solo respondés cuando el profe te llama con una ciudad. Leé exactamente esto:
-- Si te piden Bariloche:  "Bariloche, sábado: nieve, -2 °C. Domingo: soleado, 4 °C."
-- Si te piden cualquier otra ciudad:  "Error 404: ciudad no encontrada."
-No agregues nada más: una herramienta no conversa.
+Piensa:   me preguntan si llegan a Nueva Córdoba en menos de una hora. No sé la demora: depende del día.
+          Tengo demora_envio, que pide un barrio.
+Usa:      demora_envio, con barrio = Nueva Córdoba
+Observa:  "Nueva Córdoba: 40 minutos"
+Piensa:   ¿me alcanza? Sí.
+Responde: "Sí, hoy a Nueva Córdoba estamos tardando unos 40 minutos."
 ```
 
-Al usuario: *"Preguntá en voz alta: '¿Me conviene ir a Bariloche este fin de semana? ¿Va a nevar?'. Cuando te
-responda, preguntá: '¿Y en El Bolsón?'"*.
-
-**Qué tiene que quedar:**
-1. El cerebro **piensa antes de hablar**: qué le piden, qué no sabe, qué herramienta tiene, con qué dato la llama.
-2. La herramienta **no decide nada**: recibe un pedido y devuelve un dato. Es el *tool calling*: el modelo pide, n8n
-   ejecuta.
-3. El cerebro **usa la memoria**: "este fin de semana" sigue valiendo para la segunda pregunta.
-4. Ante el 404, lo bueno es reintentar **distinto** una vez, o avisar y ofrecer algo. Lo malo es **inventar** (el
-   usuario no se entera) o **repetir igual** (el bucle).
-
-Si nadie se ofrece, Romina hace de herramienta y vos hacés de usuario y de cerebro, cambiando de lugar.
+**Si da 404:** no inventa ("seguro llegamos"). Reintenta **una** vez distinto (por ejemplo, "Nueva Cordoba" sin
+tilde) o avisa: "No pude consultar la demora a tu barrio; te la confirma el local por teléfono". Reintentar igual
+sin parar es el **bucle**. Lo que corregís: que separen **piensa / usa / observa**, y que el dato de la herramienta
+(el barrio) salga de lo que dijo el cliente.
 
 ### Ejercicio 4 · Diseñá tu agente
 
