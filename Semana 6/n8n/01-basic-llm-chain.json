@@ -2,43 +2,23 @@
   "name": "01 · Basic LLM Chain: responde sin poder consultar",
   "nodes": [
     {
-      "parameters": {},
+      "parameters": {
+        "options": {}
+      },
       "id": "d9e5cf05-864e-42b5-96a9-b4ae082cadd4",
-      "name": "Arrancar a mano",
-      "type": "n8n-nodes-base.manualTrigger",
-      "typeVersion": 1,
+      "name": "Mensaje del chat",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
       "position": [
         0,
         0
-      ]
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "46017c6b-3a2e-4c82-aceb-12367070f9fc",
-              "name": "consulta",
-              "value": "Hola! Quiero ir a Bariloche 5 días con mi pareja. ¿Qué paquetes tienen y cuánto sale en pesos?",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "6df282d7-3910-403e-ad5c-d76dc046765a",
-      "name": "La consulta del cliente",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        220,
-        0
-      ]
+      ],
+      "webhookId": "7c1f3a52-2b8e-4d61-9a0f-5e3c2d1b4a77"
     },
     {
       "parameters": {
         "promptType": "define",
-        "text": "=Sos la asesora de la agencia de viajes \"Rumbo Sur\". Respondé esta consulta de un cliente en español, en no más de 6 líneas:\n\n{{ $json.consulta }}",
+        "text": "=Sos la asesora de la agencia de viajes \"Rumbo Sur\". Respondé esta consulta de un cliente en español, en no más de 6 líneas:\n\n{{ $json.chatInput }}",
         "batching": {}
       },
       "id": "29494d54-53f0-495b-b5dd-c171512b0642",
@@ -46,7 +26,7 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.9,
       "position": [
-        460,
+        240,
         0
       ]
     },
@@ -62,13 +42,13 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.2,
       "position": [
-        460,
+        240,
         220
       ]
     },
     {
       "parameters": {
-        "content": "## Basic LLM Chain: el camino fijo\n\nUn prompt → el modelo → un texto. Siempre el mismo camino.\n\nEjecutalo y leé la respuesta: ¿de dónde sacó los paquetes y el precio del dólar? **No tiene forma de saberlos**: no puede consultar nada. O los inventa, o te dice que no sabe.\n\nCompará con el flujo 02, el agente, que sí puede consultar.",
+        "content": "## Basic LLM Chain: el camino fijo\n\nUn prompt → el modelo → un texto. Siempre el mismo camino.\n\nAbrí el chat (Open chat), preguntale por Bariloche y leé la respuesta: ¿de dónde sacó los paquetes y el precio del dólar? **No tiene forma de saberlos**: no puede consultar nada. O los inventa, o te dice que no sabe.\n\nCompará con el flujo 02, el agente, que sí puede consultar.",
         "height": 300,
         "width": 720,
         "color": 3
@@ -84,18 +64,7 @@
     }
   ],
   "connections": {
-    "Arrancar a mano": {
-      "main": [
-        [
-          {
-            "node": "La consulta del cliente",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "La consulta del cliente": {
+    "Mensaje del chat": {
       "main": [
         [
           {

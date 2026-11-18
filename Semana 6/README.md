@@ -280,31 +280,66 @@ Para explicar:
 **Demo (3 min): la chain que no puede consultar.** Se arma en vivo, en el workflow vacío `Agente en vivo`. Son tres
 nodos, y son la base de lo que vamos a armar en la práctica.
 
+> **¿Anda en local (Docker)?** ✅ Sí, sin configurar nada extra. El chat de *Open chat* corre adentro del editor de
+> n8n: no necesita dirección pública ni túnel. Y Gemini es un pedido que **sale** de n8n hacia Google, así que solo
+> hace falta internet y la clave de Gemini de la Semana 2. Si da **429**, esperá un minuto (límite del plan gratis).
+
 <p style="color:#1a7f37">Para que se vea la diferencia, armemos una chain en un minuto, y le hacemos una pregunta que un cliente de verdad haría.</p>
 
 **D-1 · El trigger del chat**
 
 ```text
-Overview → Create workflow → Add first step → buscá "chat" → On chat message
+Overview → Create workflow → arriba a la izquierda, el nombre: Agente en vivo
+Add first step → buscá "chat" → On chat message
 ```
 
-<p style="color:#1a7f37">Este trigger nos da una ventanita de chat adentro de n8n, para escribirle como si fuéramos un cliente. Hasta ahora usábamos formularios o un botón; hoy, un chat.</p>
+Se abre el panel del nodo, que se llama *When chat message received*. **Acá no se configura nada:**
+- **Make Chat Publicly Available:** queda **apagado**. Prenderlo da una dirección pública para que cualquiera use el
+  chat desde internet; para probar no hace falta (y en local, sin túnel, igual no andaría desde afuera).
+- **Options** y **Add Field:** vacíos.
+- La derecha dice *No trigger output*: es normal, todavía nadie escribió.
+
+```text
+Cerrás el panel (la X de arriba a la derecha) → clic en el nombre del nodo → renombralo: Mensaje del chat
+```
+
+<p style="color:#1a7f37">Este trigger nos da una ventanita de chat adentro de n8n, para escribirle como si fuéramos un cliente. Hasta ahora usábamos formularios o un botón; hoy, un chat. No le configuro nada: lo dejo como viene.</p>
 
 **D-2 · La chain**
 
 ```text
-+ a la derecha del trigger → buscá "Basic LLM Chain" → Basic LLM Chain
-   Source for Prompt: Connected Chat Trigger Node   (toma lo que escribimos en el chat; viene así)
++ a la derecha de "Mensaje del chat" → buscá "Basic LLM Chain" → Basic LLM Chain
+   Source for Prompt (User Message):  Define below
+   Prompt (User Message):  (pasalo a Expression y pegá)
+      Sos la asesora de la agencia de viajes "Rumbo Sur". Respondé esta consulta de un cliente en español, en no más de 6 líneas:
+
+      {{ $json.chatInput }}
+Cerrás → renombralo: Responder con una chain
 ```
 
-<p style="color:#1a7f37">La Basic LLM Chain de la Semana 2: recibe un texto, se lo pasa al modelo y devuelve la respuesta. Un solo paso. No le doy nada más.</p>
+<p style="color:#1a7f37">La Basic LLM Chain de la Semana 2: recibe un texto, se lo pasa al modelo y devuelve la respuesta. Un solo paso. Le escribo un prompt corto, con el rol, y adentro va lo que escribió el cliente.</p>
+
+- **Source for Prompt.** Viene en *Connected Chat Trigger Node*, que manda el mensaje del chat tal cual. Lo cambiamos a
+  *Define below* para poder agregarle el rol ("Sos la asesora de Rumbo Sur"): así es una comparación justa con el
+  agente.
+- **`{{ $json.chatInput }}`** es lo que escribió la persona en el chat. El trigger del chat lo entrega en un campo que
+  se llama `chatInput`.
+- La chain todavía muestra un aviso rojo: le falta el cerebro.
 
 **D-3 · El cerebro**
 
 ```text
 Abajo de la chain, + de "Model" → Google Gemini Chat Model
-   Credential: tu clave de Gemini · Model: uno que diga "flash"
+   Credential to connect with:  tu clave de Gemini (la de la Semana 2)
+   Model:  uno que diga "flash" (por ejemplo, models/gemini-3-flash-preview)
+   Options → Add Option → Sampling Temperature → 0.2
+Cerrás → renombralo: Modelo: Gemini → Ctrl + S
 ```
+
+<p style="color:#1a7f37">El cerebro se enchufa abajo: es un sub-nodo. La credencial es la misma clave de Gemini de la Semana 2. Y la temperatura baja, porque queremos que conteste preciso.</p>
+
+- **Si no tenés la credencial:** en *Credential to connect with* → *Create new credential* → pegás la clave de
+  aistudio.google.com (*Get API key*). El campo *Host* se deja como viene.
 
 **D-4 · La pregunta.** Abajo del lienzo, **Open chat** → escribís *"Hola! Quiero ir a Bariloche 5 días con mi pareja.
 ¿Qué paquetes tienen y cuánto sale en pesos?"*. Leés la respuesta en voz alta. Va a pasar una de dos cosas:
@@ -874,6 +909,8 @@ El de la clase:
 PRÁCTICA · Paso 2: el cerebro  (lo armo yo; vos anotá en tu plantilla qué modelo y qué temperatura usarías)
 1. El "On chat message" de la demo queda. Borrás la Basic LLM Chain y su Gemini (clic → tecla Supr)
 2. + a la derecha del trigger → AI → AI Agent. Renombralo: Ana, la asesora
+   Source for Prompt (User Message): Connected Chat Trigger Node   (viene así: no se toca)
+   El System Message se agrega en el Paso 5; por ahora, nada más
 3. Abajo del agente, + de "Chat Model" → Google Gemini Chat Model
    Credential: tu clave de Gemini (aistudio.google.com → Get API key)
    Model: uno que diga "flash"
