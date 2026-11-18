@@ -66,7 +66,7 @@ Fuente: `program-summary.pdf` (Módulo 6). **Una clase de 2 horas.**
 
 | Min | Tramo | Filminas | En clase |
 |---|---|---|---|
-| 0–15 | Apertura (filminas 1–4, rápido) y **repaso de la Semana 5** en la filmina 5 | 1–5 | Dura unos 7 min: los que sobran, para dudas de la clase 5 |
+| 0–15 | Apertura (filminas 1–4, rápido) y **repaso de la Semana 5** en la filmina 5 | 1–5 | Dura unos 9 min: los que sobran, para dudas de la clase 5 |
 | 15–35 | **01 · Qué es un AI Agent** | 6–11 | Ej. 1 (4 min); la demo de la chain, contada |
 | 35–47 | **Los agentes, a fondo** (sin filmina): qué son en criollo, cómo usan herramientas, para qué se usan en la vida real, los riesgos, y qué vamos a hacer con ellos en el curso (Semanas 7, 8 y la Entrega Final) | — | |
 | 47–63 | **02 · Las tres piezas** | 12–18 | Los tipos de tools, nombrados |
@@ -165,13 +165,19 @@ de la filmina 6.
 
 <p style="color:#1a7f37">Bienvenidos al Módulo 6. Hasta hoy, cada flujo hacía exactamente lo que le dijimos. Hoy armamos un agente: recibe un pedido y decide solo qué hacer para resolverlo.</p>
 
-**Filmina 2 · Objetivos** (1 min)
+**Filmina 2 · Objetivos** (2 min)
 
 <p style="color:#1a7f37">Al terminar la clase van a poder cinco cosas. Uno, distinguir un agente de una Basic LLM Chain, el nodo de IA simple de la Semana 2, y saber cuándo usar cada uno. Dos, explicar el ciclo del agente: razona, actúa, mira el resultado y repite. Tres, configurar sus tres piezas: el cerebro, que es el Chat Model; el diario, que es la memoria; y las manos, que son las herramientas. Cuatro, describir las herramientas para que el modelo las elija bien. Y cinco, escribir su system prompt, el manual: quién es, de qué habla, cuándo usa cada herramienta y qué no puede hacer nunca. Todo eso lo vamos a ver con calma.</p>
 
-**Filmina 3 · Agenda** (30 s)
+<p style="color:#1a7f37">Y para que no quede en el aire, les cuento cómo se ve todo eso junto. Vamos a armar a Ana, la asesora de una agencia de viajes. Un cliente le escribe "¿cuánto sale Bariloche para dos, en pesos?". Una chain, el nodo de la Semana 2, no puede contestarlo: no sabe qué paquetes tiene la agencia ni el dólar de hoy, así que inventa o dice que no sabe. Ana, en cambio, busca el paquete en la planilla, consulta el dólar, hace la cuenta con una calculadora y contesta. Y si después le preguntan "¿y el de Mendoza?", entiende de qué se habla, porque tiene memoria. Esos son los cinco objetivos, funcionando.</p>
 
-<p style="color:#1a7f37">Primero, dónde quedamos. Después, qué es un agente, sus tres piezas y el system prompt. Break. Y la práctica: armamos un agente en n8n.</p>
+<p style="color:#1a7f37">¿Por qué importa? Porque lo que aprendan hoy es la Pre-entrega 3, y además es la base del proyecto final: este mismo agente lo vamos a mejorar la semana que viene y, en la Semana 8, va a contestar por WhatsApp. Así que mientras avanzamos, piensen en una tarea de su trabajo o de un negocio que conozcan donde les serviría un agente así.</p>
+
+**Filmina 3 · Agenda** (1 min)
+
+<p style="color:#1a7f37">Primero, dónde quedamos: un repaso corto de la clase pasada. Después, qué es un agente y en qué se diferencia de lo que veníamos haciendo, con ejemplos de la vida real. Después, sus tres piezas y el system prompt: es la parte más teórica, pero es la que después hace que el agente funcione bien o mal. Break. Y en la segunda mitad, la práctica: yo armo a Ana en n8n desde cero, paso a paso, y ustedes, en paralelo, diseñan el suyo en papel. Ese diseño es la primera parte de la Pre-entrega 3.</p>
+
+<p style="color:#1a7f37">Para la práctica, tengan a mano dos cosas: n8n abierto y la clave de Gemini que sacamos en la Semana 2. Si no la tienen, no se preocupen: pueden seguir mirando y la sacan después, el flujo terminado queda en la carpeta de la clase.</p>
 
 **Filmina 4 · La clase queda grabada** (10 s)
 
