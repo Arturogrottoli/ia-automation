@@ -73,7 +73,7 @@ Lo que más falla, para corregir en vivo:
 
 ### Ejercicio 5 · Armá el agente de la clase
 
-El resultado es el flujo `02-agente-agencia.json`. Lo esperable en cada pregunta (los pesos cambian con el dólar del
+El resultado es el flujo `03-agente-agencia.json`. Lo esperable en cada pregunta (los pesos cambian con el dólar del
 día; con 1570):
 
 | Pregunta | Herramientas | Respuesta esperable |

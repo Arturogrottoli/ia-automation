@@ -9,7 +9,7 @@ Fuente: `program-summary.pdf` (Módulo 6). **Una clase de 2 horas.**
 | `Modulo_6_AI_Automation.pptx` | Las filminas del módulo (35). |
 | `Semana 6.docx` | El material de lectura: qué es un AI Agent, Chat Model, memoria, tools, system prompt, el cuestionario de 5 preguntas, el podcast, la Pre-entrega 3 y el guion sugerido de la clase. |
 | [ejercicios-alumnos.md](ejercicios-alumnos.md) | Los ejercicios (todos para casa), la plantilla para diseñar un agente, el paso a paso del agente de la clase y la consigna completa de la Pre-entrega 3 con su rúbrica. Se comparte con los alumnos. |
-| [n8n/](n8n/) | Seis workflows de referencia (**en clase no se importan: todo se arma en vivo**; sirven para comparar y para casa): una Basic LLM Chain (para comparar), el agente de la agencia, el mismo agente mal descrito (el desafío), y tres ejemplos extra (04 la IA clasifica y el Switch reparte, 05 un agente del clima con dos herramientas, 06 un agente que anota en la planilla). Además, `paquetes.csv`: la planilla de paquetes que consulta el agente, para subir a Google Sheets. |
+| [n8n/](n8n/) | Seis workflows de referencia, **uno por ejemplo y con el mismo número** (**en clase no se importan: todo se arma en vivo**; sirven para comparar y para casa): 01 la Basic LLM Chain, 02 la IA clasifica y el Switch reparte, 03 el agente de la agencia (Ana), 04 el mismo agente mal descrito (el desafío), 05 un agente que anota en la planilla, 06 un agente del clima con dos herramientas. Además, `paquetes.csv`: la planilla de paquetes que consulta el agente, para subir a Google Sheets. |
 | [ejercicios-docente.md](ejercicios-docente.md) | Respuestas de los ejercicios, cómo se comporta el agente y la Pre-entrega 3 resuelta. **No se comparte.** |
 
 ## Los ejercicios
@@ -278,6 +278,18 @@ Para explicar:
   - *Ejemplo:* Un asistente que consulta precios, stock o turnos, y que entiende "¿y el otro?".
 
 #### Ejemplo 1 en n8n · La chain que no puede consultar (flujo `01`) (5 min)
+
+> **En pocas palabras.** Es un chat con Gemini: escribís una pregunta y te contesta.
+>
+> ```text
+> Chat  →  Basic LLM Chain  →  Gemini
+> ```
+>
+> Le preguntás *"¿Cuánto sale Bariloche en pesos?"* y no lo sabe, porque no tiene la planilla de precios ni el dólar
+> del día. Entonces inventa o dice que no sabe.
+>
+> **La idea para los alumnos:** una chain solo le pasa el mensaje al modelo, no puede ir a buscar datos. Para eso
+> hace falta un agente, que es el Ejemplo 3, y se arma sobre este mismo workflow.
 
 Se arma en vivo, en el workflow vacío `Agente en vivo`. Son tres nodos, y son la base de lo que vamos a armar en la
 práctica.
@@ -664,7 +676,17 @@ Para explicar:
 
 <p style="color:#1a7f37">Ahora lo vemos en n8n, con un flujo que confunde mucho. Usa IA, y según lo que escribe el cliente, toma un camino distinto. ¿Es un agente? Armémoslo y lo vemos.</p>
 
-#### Ejemplo 2 en n8n · La IA clasifica, el Switch reparte (flujo `04`) (10 min)
+#### Ejemplo 2 en n8n · La IA clasifica, el Switch reparte (flujo `02`) (10 min)
+
+> **En pocas palabras.** Una persona escribe su consulta en un formulario, con sus palabras. La IA la resume en una
+> sola palabra (Vuelo, Hotel, Paquete u Otra), y el Switch la manda por un camino distinto según esa palabra.
+>
+> ```text
+> Formulario  →  Basic LLM Chain + Gemini  →  Switch  →  Vuelos / Hoteles / Paquetes / Revisar a mano
+> ```
+>
+> **La idea para los alumnos:** usa IA y toma caminos distintos, pero **no es un agente**. La IA hace siempre lo
+> mismo (clasificar), y el camino lo decide el Switch, que armamos nosotros. Es la respuesta a la filmina 11.
 
 **Qué va a hacer este flujo (y qué no).**
 
@@ -1371,7 +1393,23 @@ el **Ejemplo 6**.
 
 <p style="color:#1a7f37">Así trabaja un agente por dentro: pensar, elegir una herramienta, mirar qué le devolvió, y volver a pensar. El 404 no es el fin: es información. Lo que no puede hacer es inventar. Y eso no lo sabe solo: se lo tenemos que escribir en el system prompt. Ahora lo armamos de verdad.</p>
 
-#### Ejemplo 3 en n8n · Ana, la asesora (flujo `02`), en los cinco pasos de las filminas 27 a 31 (33 min)
+#### Ejemplo 3 en n8n · Ana, la asesora (flujo `03`), en los cinco pasos de las filminas 27 a 31 (33 min)
+
+> **En pocas palabras.** Es el agente de la clase. A la chain del Ejemplo 1 la cambiamos por un agente, Ana, y le
+> damos lo que le faltaba: la planilla de paquetes, el dólar del día y una calculadora. Una pieza por filmina.
+>
+> ```text
+> Chat  →  AI Agent (Ana)  ─┬─ Gemini (el cerebro)
+>                           ├─ Memoria (el diario)
+>                           └─ consultar_paquetes · cotizacion_dolar · calculadora (las manos)
+>                           + el System Message (el manual)
+> ```
+>
+> Le preguntás *"¿Cuánto sale Bariloche en pesos?"* y ahora sí contesta: busca el paquete, consulta el dólar, hace
+> la cuenta y responde. Por ejemplo: *"$ 3.011.500 para dos"*.
+>
+> **La idea para los alumnos:** el agente **decide** solo qué herramienta usar y en qué orden. Nadie le dibujó ese
+> camino: lo elige leyendo el nombre y la descripción de cada herramienta. Es el ciclo de la filmina 8, de verdad.
 
 > ▶ **Dónde arranca.** Terminaste el role-play: estás en la **filmina 26**. Avanzás a la **filmina 27** (Paso 1).
 > Desde acá hasta la filmina 31, cada filmina es un paso, y en cada paso se agrega una pieza a Ana en n8n.
@@ -1884,7 +1922,20 @@ Lo que tiene que aparecer en *Logs*, en este orden (los pesos dependen del dóla
 - **Si da *properties: should be non-empty for OBJECT type*:** tu versión de Gemini no acepta una herramienta sin
   datos (la planilla). Ver la tabla de trabas.
 
-#### Ejemplo 4 en n8n · El agente mal descrito (flujo `03`) — la filmina 18, en vivo (4 min)
+#### Ejemplo 4 en n8n · El agente mal descrito (flujo `04`) — la filmina 18, en vivo (4 min)
+
+> **En pocas palabras.** No se arma nada nuevo: a la misma Ana le **arruinamos a propósito** la herramienta del
+> dólar. Le dejamos el nombre que pone n8n ("HTTP Request") y una descripción que no dice nada ("Hace un pedido.").
+>
+> ```text
+> cotizacion_dolar + buena descripción   →  Ana contesta en pesos
+> HTTP Request + "Hace un pedido."       →  Ana no la usa, o la usa mal (404), o inventa el dólar
+> ```
+>
+> Después le devolvemos el nombre y la descripción, y vuelve a andar.
+>
+> **La idea para los alumnos:** la herramienta funciona igual en los dos casos. Lo único que cambió es lo que lee el
+> modelo. El nombre y la descripción son lo único que ve: si están mal escritos, el agente no sabe para qué sirve.
 
 > ▶ **Dónde arranca.** Seguís en n8n, en `Agente en vivo`, sin volver al PowerPoint: Ana ya tiene las tres
 > herramientas y acaba de contestar $ 2.983.000 (P3-5). El PowerPoint sigue en la filmina 29. La filmina 18 se nombra,
@@ -1894,7 +1945,7 @@ Lo que tiene que aparecer en *Logs*, en este orden (los pesos dependen del dóla
 > **filmina 30** (Paso 4).
 
 **Qué vamos a hacer (y qué no).** No se arma un flujo nuevo: le **arruinamos a propósito** una herramienta a Ana,
-probamos, miramos qué pasa, y la arreglamos. El flujo `03` de la carpeta es esto mismo, con las tres herramientas
+probamos, miramos qué pasa, y la arreglamos. El flujo `04` de la carpeta es esto mismo, con las tres herramientas
 mal descritas: queda para la tarea (Ejercicio 7).
 
 <p style="color:#1a7f37">¿Se acuerdan de la filmina 18? El nombre y la descripción son lo único que el modelo ve. Vamos a comprobarlo: le borro la descripción a la herramienta del dólar y la dejo como la deja n8n si uno no la toca.</p>
@@ -2114,7 +2165,7 @@ seguís explicando los pasos que faltan y lo terminás de probar al final de la 
 > ■ **Termina el Ejemplo 3.** Ana está completa: Ctrl + S. **No volvés al PowerPoint:** seguís en n8n, con un workflow
 > nuevo, para el Ejemplo 5. Al PowerPoint volvés después del Ejemplo 6, en la filmina 32.
 
-#### Ejemplo 5 en n8n · Un agente que anota en la planilla (flujo `06`) (10 min)
+#### Ejemplo 5 en n8n · Un agente que anota en la planilla (flujo `05`) (10 min)
 
 > ▶ **Dónde arranca.** Recién terminaste a Ana (P5-5). **Seguís en n8n, sin PowerPoint**: este ejemplo no tiene
 > filmina. Se arma en un **workflow nuevo**, de cero. Lo enganchás con lo último que dijiste: una herramienta que
@@ -2338,7 +2389,7 @@ Open chat →  Hola, quiero consultar por un viaje
 
 > ■ **Termina el Ejemplo 5.** Ctrl + S. Seguís en n8n: Overview → *Create workflow*, para el Ejemplo 6.
 
-#### Ejemplo 6 en n8n · El role-play, de verdad: un agente del clima (flujo `05`) (10 min)
+#### Ejemplo 6 en n8n · El role-play, de verdad: un agente del clima (flujo `06`) (10 min)
 
 > ▶ **Dónde arranca.** Seguís en n8n, **sin PowerPoint**: es la escena de las filminas 25 y 26 (el role-play del
 > clima), ahora armada de verdad. No hace falta volver a mostrarlas: alcanza con nombrarlas. Se arma en un **workflow

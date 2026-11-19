@@ -210,7 +210,7 @@ Ana, la asesora de la Semana 6, con el cerebro en tu máquina. Mismas herramient
 Ollama (local)*, y en *consultar_paquetes* tu credencial de Sheets y el link de tu planilla de paquetes.
 
 **Opción B · cambiarle el cerebro a tu agente:**
-1. Abrí tu agente de la Semana 6 (o el `02-agente-agencia.json`) → menú **…** → **Duplicate** → nombre: `Ana local`.
+1. Abrí tu agente de la Semana 6 (o el `03-agente-agencia.json`) → menú **…** → **Duplicate** → nombre: `Ana local`.
 2. Seleccioná el sub-nodo de Gemini → **Supr** (lo borrás).
 3. Abajo del agente, en **Chat Model**, el **+** → **Ollama Chat Model** → credencial `Ollama local` → **Model**:
    `llama3.2:latest`.

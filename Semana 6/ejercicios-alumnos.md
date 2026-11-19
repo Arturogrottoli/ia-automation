@@ -93,7 +93,7 @@ PASO 5 · EL MANUAL (system prompt)
 
 ### Ejercicio 5 · Armá el agente de la clase (30 min)
 
-Antes de armar el tuyo, armá el de la clase siguiendo estos pasos. Si te trabás, el flujo `02-agente-agencia.json`
+Antes de armar el tuyo, armá el de la clase siguiendo estos pasos. Si te trabás, el flujo `03-agente-agencia.json`
 es el resultado.
 
 **Lo que necesitás:**
@@ -181,7 +181,7 @@ Con tu agente del Ejercicio 5:
 
 ### Ejercicio 7 · El agente mal descrito (20 min)
 
-Importá `03-agente-mal-descrito.json` (elegí tus credenciales y pegá el link de tu planilla de paquetes). Es el mismo
+Importá `04-agente-mal-descrito.json` (elegí tus credenciales y pegá el link de tu planilla de paquetes). Es el mismo
 agente, con las mismas herramientas, pero:
 - las herramientas se llaman `tool1`, `HTTP Request` y `Calculator`;
 - sus descripciones dicen "Herramienta." y "Hace un pedido.", y sus parámetros, "valor";

@@ -48,7 +48,7 @@
     },
     {
       "parameters": {
-        "content": "## Basic LLM Chain: el camino fijo\n\nUn prompt → el modelo → un texto. Siempre el mismo camino.\n\nAbrí el chat (Open chat), preguntale por Bariloche y leé la respuesta: ¿de dónde sacó los paquetes y el precio del dólar? **No tiene forma de saberlos**: no puede consultar nada. O los inventa, o te dice que no sabe.\n\nCompará con el flujo 02, el agente, que sí puede consultar.",
+        "content": "## Basic LLM Chain: el camino fijo\n\nUn prompt → el modelo → un texto. Siempre el mismo camino.\n\nAbrí el chat (Open chat), preguntale por Bariloche y leé la respuesta: ¿de dónde sacó los paquetes y el precio del dólar? **No tiene forma de saberlos**: no puede consultar nada. O los inventa, o te dice que no sabe.\n\nCompará con el flujo 03, el agente, que sí puede consultar.",
         "height": 300,
         "width": 720,
         "color": 3

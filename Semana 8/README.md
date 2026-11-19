@@ -1499,7 +1499,7 @@ Flujo 03 → … → Duplicate → nombre:  Asistente completo · Path del simul
 **C-2 · Traer las tres herramientas de la Semana 6**
 
 ```text
-Abrí el flujo 02 de la Semana 6 (el agente de la agencia) → seleccioná  consultar_paquetes, cotizacion_dolar
+Abrí el flujo 03 de la Semana 6 (el agente de la agencia) → seleccioná  consultar_paquetes, cotizacion_dolar
 y calculadora  (clic en uno, Shift + clic en los otros) → Ctrl + C
 Volvé al Asistente completo → Ctrl + V → conectá cada una al enchufe Tool de "Ana por WhatsApp"
 En consultar_paquetes: tu credencial de Sheets y el link de "Paquetes Rumbo Sur"
