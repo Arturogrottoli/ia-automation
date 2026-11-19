@@ -126,6 +126,9 @@ vacío.
 - [ ] **Tu n8n prendido y logueado.** Probá antes la práctica entera.
 - [ ] **Tu credencial de Gemini** (aistudio.google.com → *Get API key*; la de la Semana 2 sirve) y la de **Google
   Sheets** (la de las Semanas 4 y 5).
+  - **El día anterior, probá que la de Google Sheets siga conectada.** Si la app de Google Cloud está en modo
+    *Testing* (prueba), Google la desconecta a los 7 días: aparece *"needs to be reconnected"*. Se arregla con
+    *Reconnect* (ver la tabla de trabas). Avisales a los alumnos: a ellos les va a pasar lo mismo.
 - [ ] **La planilla de paquetes.** En Google Drive:
   - **Nuevo** → **Hoja de cálculo de Google** → nombre `Paquetes Rumbo Sur`;
   - **Archivo** → **Importar** → **Subir** → `n8n/paquetes.csv` → *Reemplazar la hoja actual*;
@@ -1631,17 +1634,22 @@ descripción de la herramienta. Cuando un cliente pregunta por un destino, pasa 
 
 **P3-2 · La herramienta 1: `consultar_paquetes` (Google Sheets)**
 
-Se arma en siete micro-pasos: buscar el nodo, la credencial, la descripción, qué hace, qué planilla, el filtro, y
-cerrar.
+Se arma en ocho micro-pasos: buscar el nodo, la credencial, la descripción, qué hace, qué planilla, probarlo solo,
+el filtro, y cerrar.
 
 **P3-2a · Buscar el nodo**
 
 ```text
 En el lienzo, abajo de "Ana, la asesora", el enchufe que dice "Tool" → clic en su +
 Se abre el buscador, a la derecha, con la lista de herramientas → escribís:  Google Sheets  → clic en "Google Sheets"
-Si aparece una lista de acciones (Append row, Get row(s), Update row…) → clic en "Get row(s) in sheet"
-Si se abre directo el panel del nodo → seguís igual: la acción se elige abajo, en Operation
+Si aparece una lista de acciones (Append row, Get row(s), Update row…) → clic en  Get row(s) in sheet
+   (el nodo se llama "Get row(s) in sheet in Google Sheets", y Resource y Operation ya vienen bien puestos)
+Si se abre directo el panel (con un nombre como "tool1") → la acción se elige en el P3-2d
 ```
+
+Cómo se ve el panel: a la izquierda **INPUT** (con dos pestañas, *Mapping* y *From AI*, y "No input data"); en el
+medio **Parameters**, con el botón **Execute step** arriba; a la derecha **OUTPUT** ("No output data"). Las dos
+columnas de los costados quedan vacías: es normal, a una herramienta no le llega nada por una flecha.
 
 <p style="color:#1a7f37">La primera mano. Toco el más del enchufe Tool, el de abajo del agente, y busco Google Sheets: el mismo de las Semanas 4 y 5, pero en su versión herramienta. Es el mismo nodo; la diferencia es que no corre cuando le llega una fila por la flecha, sino cuando el agente lo pide.</p>
 
@@ -1649,14 +1657,16 @@ Si se abre directo el panel del nodo → seguís igual: la acción se elige abaj
   punteada. No hay que conectarlo a mano.
 - **Si en cambio usás el + de la derecha del agente**, se agrega el Google Sheets común, conectado con flecha: no es
   lo que queremos. Si te pasa, lo borrás (Supr) y lo agregás desde el enchufe *Tool*.
-- **"Get row(s) in sheet"** quiere decir "traer filas de una hoja": leer.
+- **El botón ✨ que aparece a la derecha de varios campos** es "que lo complete el modelo". **No lo usamos:** en el filtro
+  (P3-2f) escribimos el `$fromAI` a mano, para darle instrucciones al modelo. En los demás campos, no se toca: si no, el modelo podría elegir qué planilla
+  leer.
 
 **P3-2b · La credencial**
 
-Se abre el panel del nodo. Arriba de todo:
+Arriba de todo, en *Parameters*:
 
 ```text
-Credential to connect with:  clic → elegís tu credencial de Google Sheets (la de la Semana 4)
+Credential *:  clic en la lista → elegís tu credencial de Google Sheets (la de la Semana 4, "Google Sheets account")
 ```
 
 - **Es la misma credencial de las Semanas 4 y 5:** no se crea de nuevo, se elige de la lista.
@@ -1668,7 +1678,7 @@ Credential to connect with:  clic → elegís tu credencial de Google Sheets (la
 
 ```text
 Tool Description:  viene en "Set Automatically" → lo cambiás a  Set Manually
-Aparece el campo Description → pegás:
+Aparece el campo Description → borrás lo que tenga → pegás:
    Busca en la planilla de la agencia los paquetes de UN destino: nombre del paquete, días, precio en dólares
    por persona, cupos disponibles y qué incluye. Destinos disponibles: Bariloche, Mendoza, Salta, Ushuaia o Cataratas.
 ```
@@ -1692,54 +1702,127 @@ La descripción, parte por parte:
 **P3-2d · Qué hace: leer filas**
 
 ```text
-Resource:   Sheet Within Document   (viene así: no se toca)
-Operation:  Get Row(s)              (si elegiste "Get row(s) in sheet" en el P3-2a, ya viene así)
+Resource:   viene en "Document" → clic → elegís  Sheet Within Document
+            (con "Document", abajo aparece un campo "Title": es para CREAR una planilla nueva. No es lo que queremos)
+Operation:  aparece abajo → clic → elegís  Get Row(s)
 ```
 
-<p style="color:#1a7f37">Le digo qué tiene que hacer con la planilla: leer filas. Nada más. No puede agregar, ni cambiar, ni borrar.</p>
+<p style="color:#1a7f37">Le digo qué tiene que hacer con la planilla: leer filas. Ojo, que viene en Document, que es para crear o borrar planillas enteras: lo cambio a Sheet Within Document, una hoja de adentro. Y la operación, Get Row(s): leer. Nada más. No puede agregar, ni cambiar, ni borrar.</p>
 
 | Campo | Opciones | Qué ponemos y por qué |
 |---|---|---|
 | **Resource** ("sobre qué trabaja") | *Document* (el archivo entero: crear o borrar planillas) o *Sheet Within Document* (una hoja de adentro) | *Sheet Within Document*: trabajamos con las filas de una hoja |
 | **Operation** ("qué hace") | *Append Row* (agregar), *Append or Update Row*, *Update Row* (cambiar), *Delete Rows or Columns* (borrar), *Clear* (vaciar), *Get Row(s)* (leer), y otras | *Get Row(s)*: Ana solo tiene que leer. Si no puede escribir, no puede romper nada aunque se equivoque |
 
-**P3-2e · Qué planilla y qué hoja**
+**P3-2e · Vincular tu planilla: qué planilla y qué hoja**
+
+Abajo aparecen dos campos, **Document** y **Sheet**. Los dos tienen la misma forma: **a la izquierda, una listita**
+que dice cómo le vas a indicar cuál es (viene en *From list*), y **a la derecha, el casillero** *Choose...*
 
 ```text
-Document:  a la izquierda del campo, la lista dice "From list" → la cambiás a  By URL
-           → pegás el link de "Paquetes Rumbo Sur" (el que copiaste de la barra del navegador)
-Sheet:     From list (viene así) → clic → elegís  Hoja 1
+Document:  dejás "From list" → clic en "Choose..." → aparecen las planillas de tu Google Drive
+           → elegís  Paquetes Rumbo Sur   (si hay muchas, escribís "Paquetes" para buscarla)
+Sheet:     dejás "From list" → clic en "Choose..." → aparecen las pestañas de esa planilla → elegís  Hoja 1
 ```
 
-<p style="color:#1a7f37">Ahora le digo cuál planilla: pego el link. Y cuál hoja de adentro: la Hoja 1. Esto lo dejo fijo yo: el modelo no elige qué planilla leer.</p>
+<p style="color:#1a7f37">Ahora le digo cuál planilla: n8n me muestra las de mi Drive y elijo la de paquetes. Y cuál pestaña de adentro: la Hoja 1. Esto lo dejo fijo yo: el modelo no elige qué planilla leer.</p>
 
 | Campo | Opciones | Qué ponemos y por qué |
 |---|---|---|
-| **Document** (el archivo) | *From list* (lo buscás por nombre), *By URL* (pegás el link), *By ID* (pegás solo el código) | *By URL*: pegás el link entero y n8n saca el ID solo (*el ID es el pasaporte*, Semana 5). Con *From list* también anda |
-| **Sheet** (la pestaña de abajo) | *From list*, *By URL*, *By ID*, *By Name* | *From list*: n8n ya leyó la planilla y muestra sus pestañas. Hay una sola: *Hoja 1* |
+| **Document** (el archivo) | *From list* (lo elegís de tu Drive), *By URL* (pegás el link), *By ID* (pegás solo el código) | **From list** |
+| **Sheet** (la pestaña de abajo) | *From list*, *By URL*, *By ID*, *By Name* | **From list**: n8n ya leyó la planilla y muestra sus pestañas. Hay una sola: *Hoja 1* |
 
+- **Usá *From list* en los dos, no *By URL* ni *By Name*.** En el ensayo, con el link pegado (*By URL*) y la hoja
+  escrita (*By Name*), la planilla se leía bien pero **el filtro del P3-2f devolvía vacío**. Elegidas de la lista,
+  el filtro anduvo.
 - **Primero el Document, después la Sheet:** hasta que n8n no sabe cuál es la planilla, la lista de hojas aparece
   vacía.
-- **Si la lista de hojas da error:** la credencial no tiene permiso sobre esa planilla. Fijate que la planilla sea
-  de la misma cuenta de Google que usaste en la credencial.
+- **Si las listas no aparecen o dan error:** casi siempre es la credencial (cortada a los 7 días, o de otra cuenta de
+  Google que no es la dueña de la planilla). Ver la tabla de trabas.
+
+**P3-2e-bis · Probar que la planilla se lee (antes del filtro)**
+
+```text
+Arriba del panel, botón  Execute step
+A la derecha, OUTPUT → pestaña JSON (o Table)
+```
+
+Tienen que aparecer **las 6 filas** de la planilla, cada una con sus columnas: `Destino`, `Paquete`, `Dias`,
+`Precio_USD`, `Cupos`, `Incluye`. Arriba, un recuadro gris avisa *"No parameters are set up to be filled by AI"*:
+es normal, el dato para el modelo (`$fromAI`) lo ponemos en el paso siguiente.
+
+<p style="color:#1a7f37">Antes de dárselo al agente, lo pruebo solo. Execute step, y miren a la derecha: las seis filas de la planilla. Si esto anda, la credencial y la planilla están bien. Si después el agente falla, ya sé que no es la planilla.</p>
+
+- **`row_number`** es un dato que agrega n8n: en qué fila de la planilla está cada paquete (la 1 son los títulos, así
+  que el primero es la 2). No hay que hacer nada con él.
+- **Por qué probar ahora:** si algo falla en la credencial o en la planilla, se ve acá, con el error claro. Si se prueba
+  recién con el agente, el error queda escondido adentro del chat.
+- **Si da *"The credential … needs to be reconnected"*:** Google cortó el permiso (en modo *Testing*, a los 7 días).
+  Ver la tabla de trabas.
 
 **P3-2f · El filtro: el único dato que completa el modelo**
 
-Abajo de *Sheet* aparece **Filters**, vacío.
+Abajo de *Sheet* está **Filters**, con el botón **Add Filter**. Primero se prueba con el destino escrito fijo, y
+después se cambia para que lo complete el modelo.
 
 ```text
-Filters → Add Filter
-   Column:  clic → aparecen los títulos de la fila 1 → elegís  Destino
-   Value:   pasás el mouse → clic en el botón ✨ ("Let the model define this parameter")
-            → queda escrito:  {{ $fromAI('destino', '...', 'string') }}
-            → en la descripción del dato (la segunda parte), escribís:
-              El destino, escrito exactamente así: Bariloche, Mendoza, Salta, Ushuaia o Cataratas
+Filters → Add Filter → aparece un recuadro "Filter 1" con dos campos:
+   Column:  clic en la lista → aparecen los títulos de la fila 1 de la planilla → elegís  Destino
+   Value:   escribís  Bariloche   (fijo, solo para probar)
+Execute step → en OUTPUT quedan solo 2 filas (row_number 2 y 3: el Clásico y el Nieve)
 ```
 
-<p style="color:#1a7f37">Esto es lo nuevo de hoy. El filtro busca en la columna Destino, pero ¿qué destino? No lo sé: depende de lo que pregunte el cliente. Por eso no lo escribo yo. Le aprieto a las estrellitas, y queda fromAI: este dato lo completa el modelo.</p>
+- **Abajo del *Value* dice** *"The column must have this value to be matched"*: "la columna tiene que tener este
+  valor para coincidir". Es un filtro de **igual**: letra por letra.
+- **Si sale vacío (`"response": []`):** revisá que *Document* y *Sheet* estén elegidos de la lista (P3-2e).
 
+Ahora sí, el valor que cambia:
+
+<p style="color:#1a7f37">Esto es lo nuevo de hoy. El filtro busca en la columna Destino, pero ¿qué destino? No lo sé: depende de lo que pregunte el cliente. Si escribo "Bariloche", siempre buscaría Bariloche. Entonces no lo escribo yo: le digo que lo complete el modelo.</p>
+
+**Primero, pasar el casillero a modo expresión.** En un nodo nuevo, *Value* viene en **Fixed** (texto fijo): lo que
+escribas se busca **tal cual, letra por letra**, con llaves y todo. Para que n8n calcule la fórmula:
+
+```text
+Borrás "Bariloche" → pasás el mouse por arriba de Value → arriba a la derecha aparece  Fixed | Expression
+→ clic en  Expression  → a la izquierda del casillero aparece una  fx
+```
+
+- **La *fx* es la señal:** con *fx*, el casillero es una expresión (calcula lo que está entre llaves `{{ }}`). Sin
+  *fx*, es texto fijo.
+- **Si pegás la fórmula sin la *fx*:** el filtro busca un destino que se llame literalmente "{{ $fromAI(…) }}", no
+  encuentra nada, y *Execute step* no te pide el destino (sale *"Node was not executed"*). Pasalo a *Expression* y
+  listo.
+
+**Después, escribir el `$fromAI` a mano.** Clic adentro del casillero *Value* (ya con la *fx*) y pegás, entero:
+
+```text
+{{ $fromAI('destino', 'El destino, escrito exactamente así: Bariloche, Mendoza, Salta, Ushuaia o Cataratas', 'string') }}
+```
+
+Abajo del casillero, donde decía `[empty]`, ahora aparece algo como *[Defined by the model]* o un aviso parecido: es
+normal, el valor no existe hasta que el agente lo complete.
+
+<p style="color:#1a7f37">Le escribo fromAI, que quiere decir "este dato lo completa la IA". Le doy tres cosas: cómo se llama el dato, destino; cómo lo tiene que escribir, con la lista de destinos; y que es texto. Cuando un cliente pregunte por Bariloche, el modelo va a poner Bariloche acá.</p>
+
+- **La fórmula queda escrita en rojo: es normal.** n8n pinta de rojo las expresiones que no puede calcular mientras
+  se arma el flujo, y `$fromAI` no tiene valor hasta que el agente corre. Si hubiera un error de verdad (falta una
+  comilla o una llave), aparece un aviso de error abajo del casillero.
+- **Por qué a mano y no con el ✨:** el ✨ hace lo mismo con un clic, pero el dato queda con un nombre automático y
+  **sin descripción**: el modelo no sabría que tiene que escribir "Bariloche" con mayúscula, ni cuáles destinos hay.
+  Escribiéndolo, le damos las instrucciones.
+- **Si apretaste el ✨ sin querer:** el casillero queda en gris y dice *Defined automatically by the model*. Se vuelve
+  atrás apretando el ✨ otra vez, y pegás la expresión.
 - **Column** muestra los títulos de la fila 1 de la planilla: por eso es importante que estén bien escritos.
 - **El filtro es "Destino igual a…":** de las 6 filas, n8n devuelve solo las que coinciden. Con Bariloche, 2.
+- **Combine Filters: AND** (viene así, abajo de *Add Filter*): solo importa con dos filtros o más ("que cumpla los
+  dos" o "que cumpla uno"). Con uno solo, no se toca.
+- **El aviso gris del *OUTPUT*** (*"No parameters are set up to be filled by AI"*) desaparece: ahora la herramienta
+  tiene un dato para el modelo.
+- **Probar con el filtro:** *Execute step* otra vez. Como el destino lo completa el modelo, y acá no hay modelo, n8n
+  abre una ventanita, **Test tool1** (*"Provide the data that would normally come from the AI Agent node"*: "poné el
+  dato que normalmente daría el agente"), con un casillero **destino**. Escribís `Bariloche` → **Execute step**. En *OUTPUT* tienen que quedar **solo 2 filas** (el Clásico y el
+  Nieve). Si sale vacío, revisá que lo escribiste con mayúscula, igual que en la planilla.
 
 **`$fromAI`, parte por parte:**
 
@@ -1749,11 +1832,10 @@ Filters → Add Filter
 | La descripción del dato | `'El destino, escrito exactamente así: …'` | Las instrucciones para completarlo. Acá se le dice **cómo** escribirlo |
 | El tipo | `'string'` | Texto (`string`), número (`number`) o sí/no (`boolean`) |
 
-- **Si tu versión no muestra el botón ✨:** pasás el *Value* a *Expression* y escribís la expresión entera, a mano:
-  `{{ $fromAI('destino', 'El destino, escrito exactamente así: Bariloche, Mendoza, Salta, Ushuaia o Cataratas', 'string') }}`
+- **Las comillas simples (`'`) y las comas** separan las tres partes. Si falta una comilla, el casillero se pone rojo.
 - **Por qué el filtro y no traer la planilla entera:** con el filtro, la herramienta devuelve solo los paquetes de
-  ese destino (menos texto para el modelo, menos tokens). Y además Gemini **exige** que cada herramienta tenga al
-  menos un dato que complete el modelo: sin ningún `$fromAI`, da error (*properties: should be non-empty*).
+  ese destino (menos texto para el modelo, menos tokens). Y, en algunas versiones de n8n, Gemini da error con una
+  herramienta que no tiene ningún dato para el modelo (*properties: should be non-empty*).
 - **"Exactamente así"** está porque el filtro busca igual, letra por letra: "bariloche" en minúscula no encuentra
   "Bariloche".
 
@@ -1779,8 +1861,8 @@ Cerrás (la X) → clic en el nombre del nodo → renombrás:  consultar_paquete
 | **Google Sheets Tool** (desde el enchufe *Tool*) | El nodo **Google Sheets** común (desde el **+** de la derecha) | El común corre siempre, en su lugar de la flecha. La versión *Tool* queda colgada del agente y corre **solo cuando él la pide**. Al entrar por el enchufe *Tool*, n8n ya muestra solo las versiones herramienta |
 | **Tool Description: Set Manually** | *Set Automatically* | En automático n8n escribe algo genérico, en inglés ("Get rows…"). El modelo decide si la usa leyendo esto: tiene que decir qué hace, qué devuelve y para qué destinos |
 | **Get Row(s)** | *Append*, *Update*, *Delete* | Ana solo tiene que **leer**. Si no puede escribir, no puede romper la planilla aunque se equivoque |
-| **Document By URL** | *From list* | Las dos andan. Con el link no hay dudas de cuál es la planilla, aunque haya varias con nombres parecidos |
-| **Un filtro con `$fromAI`** | Sin filtro (traer todo) o el destino escrito fijo | Sin filtro, le llega toda la planilla (más tokens) y Gemini da error porque la herramienta no tiene ningún dato. Fijo, siempre buscaría el mismo destino |
+| **Document y Sheet From list** | *By URL* / *By Name* | Se eligen, no se copia nada. Y en el ensayo, con *By URL* y *By Name* el filtro devolvía vacío |
+| **Un filtro con `$fromAI`** | Sin filtro (traer todo) o el destino escrito fijo | Sin filtro, le llega toda la planilla (más tokens). Fijo, siempre buscaría el mismo destino |
 | **`string`** | `number` | Un destino es texto |
 
 **P3-3 · La herramienta 2: `cotizacion_dolar` (HTTP Request)**
@@ -1808,8 +1890,8 @@ Cerrás → renombrás:  cotizacion_dolar
 |---|---|---|
 | **HTTP Request Tool** | Buscar un nodo "del dólar" | No existe: dolarapi no tiene nodo propio. El HTTP Request sirve para **cualquier** API que tenga dirección (Semana 4) |
 | **GET** | POST u otro | Solo pedimos un dato, no mandamos nada (Semana 4) |
-| **URL en Expression** | *Fixed* | Lleva un `$fromAI` entre llaves. En *Fixed* se mandarían las llaves tal cual y la API daría 404. Si usás el botón ✨, n8n la pasa a *Expression* solo |
-| **El tipo con `$fromAI`** | Dejar `/oficial` fijo en la dirección | El cliente puede pedir blue o tarjeta. Fijo, la herramienta no tendría ningún dato para el modelo y Gemini daría el error *properties: should be non-empty* |
+| **URL en Expression** | *Fixed* | Lleva un `$fromAI` entre llaves. En *Fixed* se mandarían las llaves tal cual y la API daría 404. Al pegar el `$fromAI` ya queda en *Expression* (la **fx** a la izquierda) |
+| **El tipo con `$fromAI`** | Dejar `/oficial` fijo en la dirección | El cliente puede pedir blue o tarjeta. Fijo, siempre consultaría el oficial |
 | **"Si el cliente no dice nada, oficial"** | Nada | Sin eso, el modelo puede inventar un tipo que no existe (el 404 de las filminas 25 y 26) |
 
 **P3-4 · La herramienta 3: `calculadora`**
@@ -2185,14 +2267,14 @@ Cerrás → renombrás:  Diario: memoria simple
 **E5-6 · La herramienta que escribe: `registrar_consulta`**
 
 ```text
-Abajo del agente, en el enchufe "Tool", clic en + → en el buscador escribís "Google Sheets" → Google Sheets Tool
-   Credential to connect with:  tu credencial de Google Sheets
+Abajo del agente, en el enchufe "Tool", clic en + → en el buscador escribís "Google Sheets" → clic en "Google Sheets" (se abre directo el panel)
+   Credential *:  tu credencial de Google Sheets
    Tool Description:  Set Manually →
       Anota UNA consulta nueva en la planilla de la agencia (agrega una fila). Usala solo cuando ya tenés nombre,
       destino y cantidad de personas, y la persona confirmó.
-   Resource:   Sheet Within Document
+   Resource:   viene en "Document" → lo cambiás a  Sheet Within Document
    Operation:  Append Row            (agregar una fila al final)
-   Document:   By URL → el link de "Consultas de la agencia"
+   Document:   From list → elegís "Consultas de la agencia" (como en el P3-2e)
    Sheet:      From list → Hoja 1
    Mapping Column Mode:  Map Each Column Manually
 ```
@@ -2217,10 +2299,10 @@ Cerrás → renombrás:  registrar_consulta → Ctrl + S
 - **La fecha la pone n8n, no el modelo:** `$now` es la fecha y hora de este momento. El modelo no sabe qué día es, y
   no es algo que diga el cliente.
 - **Los otros tres los completa el modelo**, con `$fromAI` (como en el Paso 3), con lo que el cliente le fue
-  diciendo en la charla. En cada casillero se puede usar el botón ✨ y escribir la descripción del dato.
+  diciendo en la charla. Se pegan a mano, como en el P3-2f (no con el ✨, para que cada dato tenga su descripción).
 - **`personas` es `number`:** así el modelo manda un número (3), no un texto ("tres").
-- **El casillero `fecha` va en Expression** (pasás el mouse → *Expression*), porque tiene llaves. Los otros tres
-  quedan en *Expression* solos al usar el botón ✨.
+- **El casillero `fecha` va en Expression** (pasás el mouse → *Expression*), porque tiene llaves. Los otros tres,
+  igual: tienen llaves.
 
 **Por qué cada elección:**
 
@@ -2403,7 +2485,7 @@ Cerrás → renombrás:  buscar_ciudad
   español.
 - **La descripción dice qué devuelve, con los nombres de los campos** (`latitude`, `longitude`): así el modelo sabe
   qué buscar en la respuesta para la herramienta siguiente.
-- **El *Value* de `name`:** botón ✨ (o pasarlo a *Expression* y escribir el `$fromAI` a mano). `count` y `language`
+- **El *Value* de `name`:** se pega el `$fromAI` a mano, como en el P3-2f (con el ✨ quedaría sin descripción). `count` y `language`
   quedan en *Fixed*: no tienen llaves.
 
 **Por qué cada elección:**
@@ -2506,12 +2588,13 @@ Panel Logs (al lado del chat) → clic en cada línea: Input (qué le mandó el 
 | "No veo el botón *Open chat*" | El flujo tiene que empezar con **On chat message** (Chat Trigger). Con *Trigger manually* no hay chat. |
 | "Gemini: *model not found*" | El modelo ya no existe o cambió de nombre. En *Model*, elegir otro de la lista que diga *flash*. |
 | "Gemini: 429 / *quota exceeded*" | El plan gratis tiene un límite de pedidos por minuto, y el agente hace varios por mensaje. Esperar un minuto. |
-| "Gemini: *properties: should be non-empty for OBJECT type*" | Una herramienta no tiene ningún dato con ✨ (`$fromAI`). En la de la planilla, el *Value* del filtro. |
+| "Gemini: *properties: should be non-empty for OBJECT type*" | Una herramienta no tiene ningún dato con `$fromAI`. En la de la planilla, el *Value* del filtro. |
 | "El agente no usa la herramienta, responde de memoria" | La descripción no dice cuándo usarla, o falta en el system prompt "usala siempre que…". Es el Ejemplo 4. |
 | "La planilla devuelve vacío" | El filtro busca el destino **exacto**: "bariloche" en minúscula no coincide con "Bariloche". La descripción del parámetro dice cómo escribirlo; si sigue, que lo agreguen al system prompt. |
 | "Hace mal la cuenta" | No conectaron la calculadora, o el system prompt no dice "usá la calculadora para cualquier cuenta". |
 | "Se olvida de lo que le dije" | Falta la memoria, o abrieron una conversación nueva. |
 | "Responde en inglés" | Falta el tono en el system prompt: "Respondé siempre en español". |
+| "Google Sheets: *The credential needs to be reconnected*" | Google cortó el permiso: en modo *Testing* dura 7 días. En el nodo, el lápiz al lado de *Credential* → **Sign in with Google** → misma cuenta → permitir todo → *Save*. Para que no vuelva a pasar: en Google Cloud, *OAuth consent screen* (o *Google Auth Platform → Audience*) → **Publish app**. |
 | "Se queda pensando mucho y corta" | Un **bucle**: repite la misma herramienta. El agente corta a las 10 vueltas (*Max Iterations*). Revisar la descripción de la herramienta y que el prompt diga qué hacer si da error. |
 
 ---
@@ -2631,7 +2714,7 @@ Todas las palabras técnicas de hoy, en criollo. Se puede pegar en el chat al fi
 | **Tools (herramientas)** | Lo que el agente puede usar para actuar: las manos. | consultar_paquetes, calculadora. |
 | **Tool calling / function calling** | El modelo pide usar una herramienta; n8n la ejecuta. | "Usá consultar_paquetes con destino Bariloche". |
 | **Parámetro** | Un dato que necesita la herramienta. | `destino`, `tipo`. |
-| **`$fromAI`** | En n8n: "este dato lo completa el modelo". El botón ✨. | `$fromAI('destino', '...', 'string')` |
+| **`$fromAI`** | En n8n: "este dato lo completa el modelo". Se escribe en el casillero (o con el botón ✨, pero sin descripción). | `$fromAI('destino', '...', 'string')` |
 | **HTTP Request Tool / Workflow Tool / Code Tool** | Herramientas para llamar una API / otro flujo / correr código. | `cotizacion_dolar` es un HTTP Request Tool. |
 | **Calculator** | La herramienta para hacer cuentas sin errores. | 950 × 2 × 1570. |
 | **System prompt / System Message** | Las instrucciones de base del agente: el manual. En n8n, el campo *System Message*. | "Sos Ana, la asesora…" |
