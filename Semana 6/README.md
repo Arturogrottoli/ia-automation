@@ -70,24 +70,25 @@ ejercicios quedan todos de tarea.
 | Min | Tramo | Filminas | En n8n |
 |---|---|---|---|
 | 0–10 | Apertura (filminas 1–4, rápido) y **repaso de la Semana 5** en la filmina 5 | 1–5 | — |
-| 10–43 | **01 · Qué es un AI Agent** | 6–11 | **Ejemplo 1** (la chain, filmina 9, 5 min) y **Ejemplo 2** (la IA clasifica, filmina 11, 10 min) |
-| 43–55 | **Los agentes, a fondo** (sin filmina): qué son en criollo, cómo usan herramientas, para qué se usan en la vida real, los riesgos, y qué vamos a hacer con ellos en el curso | — | — |
-| 55–71 | **02 · Las tres piezas** | 12–18 | — |
-| 71–81 | **03 · El system prompt** | 19–23 | — |
-| 81–91 | Break | 24 | — |
-| 91–94 | El cerebro piensa en voz alta (lo contás vos) | 25–26 | — |
-| 94–127 | **04 · Práctica en vivo: Ana** (objetivo, cerebro, manos, diario y manual) | 27–31 | **Ejemplo 3** (Ana) y, en el Paso 3, el **Ejemplo 4** (mal descrito, 4 min) |
-| 127–147 | **Dos agentes más** | — | **Ejemplo 5** (el que anota, 10 min) y **Ejemplo 6** (el del clima, 10 min) |
-| 147–152 | Para practicar, Pre-entrega 3 y cómo sigue | 32–33 | — |
-| 152–155 | Preguntas y cierre | 34–35 | — |
+| 10–45 | **01 · Qué es un AI Agent** | 6–11 | **Ejemplo 1** (la chain, filmina 9, 5 min) y **Ejemplo 2** (la IA clasifica, filmina 11, 10 min) |
+| 45–57 | **Los agentes, a fondo** (sin filmina): qué son en criollo, cómo usan herramientas, para qué se usan en la vida real, los riesgos, y qué vamos a hacer con ellos en el curso | — | — |
+| 57–73 | **02 · Las tres piezas** | 12–18 | — |
+| 73–83 | **03 · El system prompt** | 19–23 | — |
+| 83–93 | Break | 24 | — |
+| 93–96 | El cerebro piensa en voz alta (lo contás vos) | 25–26 | — |
+| 96–129 | **04 · Práctica en vivo: Ana** (objetivo, cerebro, manos, diario y manual) | 27–31 | **Ejemplo 3** (Ana) y, en el Paso 3, el **Ejemplo 4** (mal descrito, 4 min) |
+| 129–149 | **Dos agentes más** | — | **Ejemplo 5** (el que anota, 10 min) y **Ejemplo 6** (el del clima, 10 min) |
+| 149–154 | Para practicar, Pre-entrega 3 y cómo sigue | 32–33 | — |
+| 154–157 | Preguntas y cierre | 34–35 | — |
 
-**Ojo con el tiempo: así completa, son unos 2 h 35 min, no 2 horas.** Armar seis ejemplos en vivo, explicando cada
+**Ojo con el tiempo: así completa, son unos 2 h 37 min, no 2 horas.** Armar seis ejemplos en vivo, explicando cada
 clic, lleva más que las filminas solas. Para que entre en 120 minutos, recortá en este orden:
 1. El **Ejemplo 6** (el clima) pasa a la tarea, o al arranque de la Semana 7 (−10 min).
 2. El **Ejemplo 5** (el que anota) pasa a la tarea (−10 min).
 3. En **los agentes, a fondo**, solo las partes A, C y F (−6 min).
 4. En el **Ejemplo 2**, se arma hasta la chain que clasifica (E2-5) y el Switch se cuenta con el dibujo (−5 min).
 5. En la **Sección 02**, las filminas 14 y 15 en 2 minutos cada una: se vuelven a ver armando (−4 min).
+6. La **filmina 10** solo con la tabla, sin los "Para explicar" (−2 min).
 
 Lo último que se recorta son los Pasos 3 y 5 de Ana (las manos y el manual): son el núcleo de la Pre-entrega 3.
 
@@ -102,21 +103,21 @@ vacío.
 | Min | Filminas | Tramo | En n8n |
 |---|---|---|---|
 | 0–10 | 1–5 | Apertura y repaso de la Semana 5 | Nada |
-| 10–43 | 6–11 | 01 · Qué es un AI Agent | **Ejemplo 1 (filmina 9):** la chain (chat + Basic LLM Chain + Gemini), en `Agente en vivo`. **Ejemplo 2 (filmina 11):** la IA clasifica y el Switch reparte, en un workflow nuevo, `IA clasifica` |
-| 43–55 | — (sin filmina) | Los agentes, a fondo | Nada: se explica con el dibujo |
-| 55–71 | 12–18 | 02 · Las tres piezas | Nada: las piezas se arman en la práctica |
-| 71–81 | 19–23 | 03 · El system prompt | Nada |
-| 81–91 | 24 | Break | Queda abierto `Agente en vivo`, con el Ejemplo 1 |
-| 91–94 | 25–26 | El cerebro piensa en voz alta | Nada: lo contás vos |
-| 94–96 | 27 | Paso 1 · El objetivo | Una nota con el objetivo de Ana |
-| 96–101 | 28 | Paso 2 · El cerebro | **Ejemplo 3:** se cambia la chain por el **AI Agent** + Gemini |
-| 101–115 | 29 | Paso 3 · Las manos | Se agregan consultar_paquetes, cotizacion_dolar y calculadora. **Ejemplo 4:** se arruina y se arregla la del dólar |
-| 115–119 | 30 | Paso 4 · El diario | Se agrega la Simple Memory |
-| 119–127 | 31 | Paso 5 · El manual | Se pega el system prompt y se prueban las preguntas |
-| 127–137 | — | Ejemplo 5 | Workflow nuevo, `Agente que anota` |
-| 137–147 | — | Ejemplo 6 | Workflow nuevo, `Agente del clima` |
-| 147–152 | 32–33 | Para practicar, Pre-entrega 3 y cómo sigue | Nada |
-| 152–155 | 34–35 | Preguntas y cierre | — |
+| 10–45 | 6–11 | 01 · Qué es un AI Agent | **Ejemplo 1 (filmina 9):** la chain (chat + Basic LLM Chain + Gemini), en `Agente en vivo`. **Ejemplo 2 (filmina 11):** la IA clasifica y el Switch reparte, en un workflow nuevo, `IA clasifica` |
+| 45–57 | — (sin filmina) | Los agentes, a fondo | Nada: se explica con el dibujo |
+| 57–73 | 12–18 | 02 · Las tres piezas | Nada: las piezas se arman en la práctica |
+| 73–83 | 19–23 | 03 · El system prompt | Nada |
+| 83–93 | 24 | Break | Queda abierto `Agente en vivo`, con el Ejemplo 1 |
+| 93–96 | 25–26 | El cerebro piensa en voz alta | Nada: lo contás vos |
+| 96–98 | 27 | Paso 1 · El objetivo | Una nota con el objetivo de Ana |
+| 98–103 | 28 | Paso 2 · El cerebro | **Ejemplo 3:** se cambia la chain por el **AI Agent** + Gemini |
+| 103–117 | 29 | Paso 3 · Las manos | Se agregan consultar_paquetes, cotizacion_dolar y calculadora. **Ejemplo 4:** se arruina y se arregla la del dólar |
+| 117–121 | 30 | Paso 4 · El diario | Se agrega la Simple Memory |
+| 121–129 | 31 | Paso 5 · El manual | Se pega el system prompt y se prueban las preguntas |
+| 129–139 | — | Ejemplo 5 | Workflow nuevo, `Agente que anota` |
+| 139–149 | — | Ejemplo 6 | Workflow nuevo, `Agente del clima` |
+| 149–154 | 32–33 | Para practicar, Pre-entrega 3 y cómo sigue | Nada |
+| 154–157 | 34–35 | Preguntas y cierre | — |
 
 ---
 
@@ -185,7 +186,7 @@ Se dice de corrido; si alguien pregunta algo puntual, el detalle está en
 
 ---
 
-### 10–55 · Sección 01 · Qué es un AI Agent (y los agentes, a fondo)
+### 10–57 · Sección 01 · Qué es un AI Agent (y los agentes, a fondo)
 
 **Filmina 6 · Separador "01: Qué es un AI Agent"**
 
@@ -607,15 +608,41 @@ Las dos sirven para el punto. Decís:
 - **Si inventó precios, remarcalo:** suena convincente, y un cliente le creería. Eso es lo peligroso de un modelo sin
   datos (se llama **alucinar**, filmina 22).
 
-#### Filmina 10 · Un agente te reserva el vuelo (1 min)
+#### Filmina 10 · Un agente te reserva el vuelo (3 min)
 
 <p style="color:#1a7f37">Un chatbot te dice cómo ir a París. Un agente te reserva el vuelo y te avisa si cambia el clima.</p>
+
+<p style="color:#1a7f37">Esta frase tiene tres partes, y cada una es una diferencia. "Te dice cómo ir": el chatbot contesta con lo que sabe, y lo que sabe lo aprendió hace meses. "Te reserva el vuelo": el agente hace algo en otro sistema, como la aerolínea. Y "te avisa si cambia el clima": el agente puede seguir trabajando después de que terminó la charla, sin que le preguntes.</p>
+
+| | Chatbot | Agente |
+|---|---|---|
+| **Qué hace** | Conversa: responde | Conversa **y actúa**: consulta, anota, manda |
+| **Con qué datos** | Lo que aprendió al entrenarse (puede estar viejo) | Lo que busca **en el momento**, con sus herramientas |
+| **Cuándo trabaja** | Solo cuando le escribís | También cuando pasa algo (un mail que llega, un horario, un cambio) |
+| **Si no sabe** | Inventa o dice que no sabe | Va a buscarlo |
+| **En la clase de hoy** | El **Ejemplo 1**: la chain que no podía consultar | **Ana**, que busca en la planilla y en el dólar (Ejemplo 3) |
 
 Para explicar:
 - **Chatbot contra agente.** Un **chatbot** es un programa que conversa: responde con lo que sabe. Un agente,
   además, hace cosas con otros sistemas.
   - *Ejemplo:* El material de lectura lo compara con un recepcionista. El chatbot te dice el horario; el agente
     tiene las llaves: te agenda el turno, te manda la confirmación y lo anota en el sistema.
+- **"Te reserva el vuelo": actuar en otro sistema.** Para eso, el agente necesita una **herramienta** que llegue a
+  ese sistema (la web de la aerolínea, una planilla, el calendario). Sin herramienta, por más inteligente que sea el
+  modelo, solo puede hablar.
+  - *Ejemplo:* Ana puede decir el precio porque tiene la planilla. No puede reservar porque no le dimos ninguna
+    herramienta para reservar, y eso es a propósito (Paso 5).
+- **"Te avisa si cambia el clima": no solo contesta.** Un agente puede arrancar por un **trigger** que no es un
+  mensaje: un horario (todos los días a las 8), un mail que llega, una fila nueva en una planilla. Es lo mismo que
+  vimos con los flujos: lo que cambia es que, cuando arranca, decide qué hacer.
+  - *Ejemplo:* Un agente que cada mañana mira los vuelos reservados del día y, si hay alerta de tormenta en el
+    destino, le escribe al pasajero.
+- **El otro lado de la frase: actuar tiene riesgo.** Un chatbot que se equivoca dice una macana; un agente que se
+  equivoca **hace** una macana: reserva la fecha equivocada o paga dos veces. Por eso, a las acciones importantes se
+  les pone un límite o una confirmación de una persona (lo vemos en el Paso 5 y en el Ejemplo 5).
+  - *Ejemplo:* "Te reservo el vuelo del 12 a las 8:40 por USD 950. ¿Lo confirmo?" Recién con un sí, compra.
+
+<p style="color:#1a7f37">Entonces: un chatbot habla, un agente hace. Y como hace, hay que decirle bien qué puede hacer y qué no. De eso se trata toda la segunda mitad de la clase.</p>
 
 #### Filmina 11 · Para pensar: ¿ya es un agente? (2 min)
 
@@ -713,6 +740,17 @@ Source for Prompt (User Message):  Define below
 Prompt (User Message) → Expression → pegás el prompt de abajo
 Al final, en "Consulta:", arrastrás Consulta desde el INPUT (a la izquierda)
 ```
+
+**Por qué cada elección:**
+
+| Elegimos | En vez de | Por qué |
+|---|---|---|
+| **Basic LLM Chain** | Un AI Agent | La tarea es **una sola y siempre la misma**: leer un texto y decir una palabra. No hay herramientas que elegir ni charla que recordar. Una chain es más rápida, más barata (un solo pedido al modelo) y siempre hace lo mismo. Es la filmina 9 |
+| **Define below** | *Connected Chat Trigger Node* | Acá **no hay chat**: el flujo arranca con un formulario. Esa opción busca el campo `chatInput`, que el formulario no tiene, y la chain se queda sin nada que mandar (da error de prompt vacío). Además, queremos escribir nosotros las instrucciones de clasificación |
+| **Expression** | *Fixed* | El prompt tiene una parte que cambia en cada envío: la consulta. Con *Fixed*, `{{ $json.Consulta }}` se mandaría como texto, letra por letra, y el modelo recibiría las llaves en vez de la consulta |
+| **Arrastrar `Consulta`** | Escribir la expresión a mano | Arrastrar desde el INPUT escribe la expresión exacta, con el nombre del campo bien escrito (con mayúscula, como en el formulario). A mano es fácil equivocarse una letra, y el dato llega vacío |
+
+<p style="color:#1a7f37">Fíjense que es el mismo nodo del Ejemplo 1, pero configurado distinto. Allá el texto venía de un chat; acá viene de un formulario. Por eso elijo escribir el prompt yo, y adentro meto la consulta arrastrándola. Y uso una chain, no un agente, porque acá no hay nada que decidir: siempre es leer y clasificar.</p>
 
 ```text
 Clasificá la consulta de un cliente de una agencia de viajes.
@@ -991,7 +1029,7 @@ Para explicar:
 
 ---
 
-### 55–71 · Sección 02 · Las tres piezas
+### 57–73 · Sección 02 · Las tres piezas
 
 **Filmina 12 · Separador "02: Las tres piezas"**
 
@@ -1156,7 +1194,7 @@ Parámetro: tipo → "El tipo de dólar: oficial, blue o tarjeta. Si el cliente 
 
 ---
 
-### 71–81 · Sección 03 · El system prompt
+### 73–83 · Sección 03 · El system prompt
 
 **Filmina 19 · Separador "03: El system prompt"**
 
@@ -1251,7 +1289,7 @@ Para confirmar un turno, pedí nombre y teléfono. No canceles turnos de otras p
 
 ---
 
-### 81–91 · Break
+### 83–93 · Break
 
 **Filmina 24 · Break**
 
@@ -1259,7 +1297,7 @@ Para confirmar un turno, pedí nombre y teléfono. No canceles turnos de otras p
 
 ---
 
-### 91–147 · Sección 04 · Práctica en vivo: Ana y dos agentes más
+### 93–149 · Sección 04 · Práctica en vivo: Ana y dos agentes más
 
 #### Antes de la clase (una sola vez, 30 minutos)
 
@@ -2107,7 +2145,7 @@ FORMATO: ciudad, temperatura en °C, si llueve o no, y un consejo corto para el 
 
 ---
 
-### 147–152 · Para practicar, Pre-entrega 3 y cómo sigue
+### 149–154 · Para practicar, Pre-entrega 3 y cómo sigue
 
 #### Filmina 32 · Para practicar: antes de la pre-entrega (2 min)
 
@@ -2161,7 +2199,7 @@ Para explicar:
 
 ---
 
-### 152–155 · Preguntas y cierre
+### 154–157 · Preguntas y cierre
 
 **Filmina 34 · ¿Preguntas?** (2 min) — las tres de la filmina: si su caso necesita un agente o alcanza con una
 chain, qué guardrail no debería cruzar nunca su agente, y si tienen alguna herramienta que no saben cómo describir
