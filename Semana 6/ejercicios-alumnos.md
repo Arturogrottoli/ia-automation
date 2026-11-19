@@ -112,11 +112,12 @@ es el resultado.
 **Las manos**
 
 4. **+** de *Tool* → **Google Sheets** → **Get row(s) in sheet**. Nombre del nodo: `consultar_paquetes`.
-   - *Tool Description*: **Set Manually** → `Busca en la planilla de la agencia los paquetes de UN destino: nombre
-     del paquete, días, precio en dólares por persona, cupos disponibles y qué incluye. Destinos disponibles:
-     Bariloche, Mendoza, Salta, Ushuaia o Cataratas.`
-   - Tu credencial de Sheets. *Document*: **By URL** → tu planilla. *Sheet*: **Hoja 1**.
-   - **Filters** → **Add Filter** → *Column*: `Destino` → en *Value*, el botón ✨.
+   - *Tool Description*: **Set Manually** → `Devuelve TODOS los paquetes de la agencia: destino, nombre del paquete,
+     días, precio en dólares por persona, cupos disponibles y qué incluye. Usala siempre que pregunten por un destino,
+     un precio o los cupos, y buscá en la lista los del destino que pidió el cliente. Destinos: Bariloche, Mendoza,
+     Salta, Ushuaia y Cataratas.`
+   - Tu credencial de Sheets. *Document*: **From list** → tu planilla. *Sheet*: **From list** → **Hoja 1**.
+   - **Filters**: vacío (trae los 6 paquetes; el modelo elige). Probala con **Execute step**: salen las 6 filas.
 5. **+** de *Tool* → **HTTP Request**. Nombre del nodo: `cotizacion_dolar`.
    - *Description*: `Devuelve la cotización del dólar en Argentina hoy, en pesos. Usá el campo 'venta' para pasar
      dólares a pesos.`

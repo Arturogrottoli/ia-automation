@@ -54,9 +54,11 @@ ejercicios quedan todos de tarea.
   Las tres APIs de las herramientas sí están probadas (6 de noviembre de 2026):
   - dolarapi.com responde para `oficial`, `blue`, `tarjeta`, `bolsa`, `contadoconliqui`, `mayorista` y `cripto`;
   - `mep` y `euro` dan **404**, y eso se usa en la práctica (pregunta de prueba 4).
-- **Gemini pide que cada herramienta tenga al menos un dato que complete el modelo** (un `$fromAI`). Si no, da un
-  error que habla de *properties: should be non-empty for OBJECT type*. Por eso la herramienta de la planilla busca
-  **por destino**, en vez de traer la planilla entera.
+- **La herramienta de la planilla trae las 6 filas, sin filtro.** En el ensayo (n8n 2.46), el filtro de Google Sheets
+  andaba con un valor fijo ("Bariloche") pero devolvía vacío cuando el valor lo completaba el modelo (`$fromAI`).
+  Con 6 filas no hace falta filtrar: el modelo elige. El `$fromAI` se presenta en la herramienta del dólar (P3-3).
+- **Si Gemini da *properties: should be non-empty for OBJECT type*** con una herramienta sin ningún `$fromAI` (pasa
+  en algunas versiones de n8n), se le agrega un dato para el modelo. En el ensayo, en 2.46, no dio error.
 - **El material de lectura sugiere tres actividades de 10, 20 y 25 minutos.** En clase no se hacen: la "batalla de
   conceptos" es el Ejercicio 1, el role-play lo contás vos en las filminas 25 y 26 (y es el Ejercicio 3), y el
   mini-lab de diseño es el Ejercicio 4. Todos de tarea.
@@ -1621,21 +1623,22 @@ descripción de la herramienta. Cuando un cliente pregunta por un destino, pasa 
 
 ```text
 1. El cliente escribe:   "Quiero ir a Bariloche 5 días…"
-2. El MODELO lee las herramientas que tiene, y decide:  "uso consultar_paquetes, con destino = Bariloche"
-3. N8N corre la herramienta:  lee la planilla y se queda solo con las filas donde Destino = Bariloche
-4. N8N le devuelve al modelo esas 2 filas (el Clásico y el Nieve), como texto
-5. El MODELO las lee y arma la respuesta:  "El Bariloche Clásico, 5 días, sale USD 950…"
+2. El MODELO lee las herramientas que tiene, y decide:  "uso consultar_paquetes"
+3. N8N corre la herramienta:  lee la planilla entera (las 6 filas)
+4. N8N le devuelve al modelo esas 6 filas, como texto
+5. El MODELO busca entre las 6 las de Bariloche, y arma la respuesta:  "El Bariloche Clásico, 5 días, sale USD 950…"
 ```
 
-- **Lo único que completa el modelo es el destino** (el paso 2). Todo lo demás (qué planilla, qué pestaña, qué
-  columna) lo dejamos fijo nosotros en el panel. Así el modelo no puede leer otra planilla aunque se equivoque.
-- **La columna `Destino`** es la que se usa para buscar. Por eso los destinos tienen que estar escritos siempre igual:
-  Bariloche, Mendoza, Salta, Ushuaia, Cataratas.
+- **Qué planilla y qué pestaña lo dejamos fijo nosotros** en el panel. El modelo no elige nada de eso: así no puede
+  leer otra planilla aunque se equivoque. Lo único que decide es **si** la usa.
+- **Por qué trae la planilla entera y no solo un destino:** son 6 filas, para el modelo es poquísimo texto. Con una
+  planilla de cientos de filas convendría un filtro, pero para la clase no hace falta, y es una pieza menos que se
+  puede romper en vivo.
 
 **P3-2 · La herramienta 1: `consultar_paquetes` (Google Sheets)**
 
-Se arma en ocho micro-pasos: buscar el nodo, la credencial, la descripción, qué hace, qué planilla, probarlo solo,
-el filtro, y cerrar.
+Se arma en siete micro-pasos: buscar el nodo, la credencial, la descripción, qué hace, qué planilla, probarla sola, y
+cerrar.
 
 **P3-2a · Buscar el nodo**
 
@@ -1657,9 +1660,9 @@ columnas de los costados quedan vacías: es normal, a una herramienta no le lleg
   punteada. No hay que conectarlo a mano.
 - **Si en cambio usás el + de la derecha del agente**, se agrega el Google Sheets común, conectado con flecha: no es
   lo que queremos. Si te pasa, lo borrás (Supr) y lo agregás desde el enchufe *Tool*.
-- **El botón ✨ que aparece a la derecha de varios campos** es "que lo complete el modelo". **No lo usamos:** en el filtro
-  (P3-2f) escribimos el `$fromAI` a mano, para darle instrucciones al modelo. En los demás campos, no se toca: si no, el modelo podría elegir qué planilla
-  leer.
+- **El botón ✨ que aparece a la derecha de varios campos** es "que lo complete el modelo". **En esta herramienta no
+  se toca:** si lo apretás en *Document* o *Sheet*, el modelo podría elegir qué planilla leer. Lo de "que lo complete
+  el modelo" lo vemos en la herramienta del dólar (P3-3).
 
 **P3-2b · La credencial**
 
@@ -1679,11 +1682,12 @@ Credential *:  clic en la lista → elegís tu credencial de Google Sheets (la d
 ```text
 Tool Description:  viene en "Set Automatically" → lo cambiás a  Set Manually
 Aparece el campo Description → borrás lo que tenga → pegás:
-   Busca en la planilla de la agencia los paquetes de UN destino: nombre del paquete, días, precio en dólares
-   por persona, cupos disponibles y qué incluye. Destinos disponibles: Bariloche, Mendoza, Salta, Ushuaia o Cataratas.
+   Devuelve TODOS los paquetes de la agencia: destino, nombre del paquete, días, precio en dólares por persona,
+   cupos disponibles y qué incluye. Usala siempre que pregunten por un destino, un precio o los cupos, y buscá
+   en la lista los del destino que pidió el cliente. Destinos: Bariloche, Mendoza, Salta, Ushuaia y Cataratas.
 ```
 
-<p style="color:#1a7f37">Esto es lo más importante del panel, aunque parezca un detalle. El modelo no ve la planilla ni este panel: ve solo esta descripción. Con esto decide si usa la herramienta. Por eso digo qué hace, qué devuelve, y con qué destinos funciona.</p>
+<p style="color:#1a7f37">Esto es lo más importante del panel, aunque parezca un detalle. El modelo no ve la planilla ni este panel: ve solo esta descripción. Con esto decide si usa la herramienta. Por eso digo qué devuelve, cuándo usarla, y qué tiene que hacer con lo que le llega.</p>
 
 | Opción | Qué hace | ¿La usamos? |
 |---|---|---|
@@ -1694,10 +1698,11 @@ La descripción, parte por parte:
 
 | Parte | Para qué está |
 |---|---|
-| "Busca en la planilla de la agencia los paquetes" | **Qué hace**: el modelo sabe que acá están los paquetes |
-| "de UN destino" | **Cómo se usa**: un destino por vez. Si el cliente pregunta por dos, la usa dos veces |
-| "nombre del paquete, días, precio en dólares por persona, cupos y qué incluye" | **Qué devuelve**: sabe que acá encuentra el precio y los cupos. "En dólares por persona" le avisa que después hay que multiplicar y pasar a pesos |
-| "Destinos disponibles: Bariloche, Mendoza…" | **Con qué datos funciona**: si le preguntan por Córdoba, sabe que no está, sin buscar |
+| "Devuelve TODOS los paquetes de la agencia" | **Qué hace**: el modelo sabe que acá están los paquetes, y que le llegan todos juntos |
+| "destino, nombre del paquete, días, precio en dólares por persona, cupos y qué incluye" | **Qué devuelve**: sabe que acá encuentra el precio y los cupos. "En dólares por persona" le avisa que después hay que multiplicar y pasar a pesos |
+| "Usala siempre que pregunten por un destino, un precio o los cupos" | **Cuándo usarla**: que no conteste precios de memoria |
+| "buscá en la lista los del destino que pidió el cliente" | **Qué hacer con lo que le llega**: de las 6 filas, quedarse con las que importan |
+| "Destinos: Bariloche, Mendoza…" | **Con qué datos funciona**: si le preguntan por Córdoba, sabe que no está |
 
 **P3-2d · Qué hace: leer filas**
 
@@ -1732,15 +1737,16 @@ Sheet:     dejás "From list" → clic en "Choose..." → aparecen las pestañas
 | **Document** (el archivo) | *From list* (lo elegís de tu Drive), *By URL* (pegás el link), *By ID* (pegás solo el código) | **From list** |
 | **Sheet** (la pestaña de abajo) | *From list*, *By URL*, *By ID*, *By Name* | **From list**: n8n ya leyó la planilla y muestra sus pestañas. Hay una sola: *Hoja 1* |
 
-- **Usá *From list* en los dos, no *By URL* ni *By Name*.** En el ensayo, con el link pegado (*By URL*) y la hoja
-  escrita (*By Name*), la planilla se leía bien pero **el filtro del P3-2f devolvía vacío**. Elegidas de la lista,
-  el filtro anduvo.
+- **Usá *From list* en los dos.** *By URL* (pegar el link) y *By Name* (escribir "Hoja 1") también leen la planilla,
+  pero en el ensayo dieron resultados raros. Elegidas de la lista, no hay nada que copiar ni que escribir mal.
+- **Abajo aparecen *Filters* (Add Filter) y *Combine Filters*:** no se tocan. Sirven para traer solo algunas filas;
+  acá traemos todas.
 - **Primero el Document, después la Sheet:** hasta que n8n no sabe cuál es la planilla, la lista de hojas aparece
   vacía.
 - **Si las listas no aparecen o dan error:** casi siempre es la credencial (cortada a los 7 días, o de otra cuenta de
   Google que no es la dueña de la planilla). Ver la tabla de trabas.
 
-**P3-2e-bis · Probar que la planilla se lee (antes del filtro)**
+**P3-2f · Probarla sola**
 
 ```text
 Arriba del panel, botón  Execute step
@@ -1749,7 +1755,7 @@ A la derecha, OUTPUT → pestaña JSON (o Table)
 
 Tienen que aparecer **las 6 filas** de la planilla, cada una con sus columnas: `Destino`, `Paquete`, `Dias`,
 `Precio_USD`, `Cupos`, `Incluye`. Arriba, un recuadro gris avisa *"No parameters are set up to be filled by AI"*:
-es normal, el dato para el modelo (`$fromAI`) lo ponemos en el paso siguiente.
+("ningún dato lo completa la IA"): es normal, en esta herramienta el modelo no completa nada, solo decide usarla.
 
 <p style="color:#1a7f37">Antes de dárselo al agente, lo pruebo solo. Execute step, y miren a la derecha: las seis filas de la planilla. Si esto anda, la credencial y la planilla están bien. Si después el agente falla, ya sé que no es la planilla.</p>
 
@@ -1760,85 +1766,6 @@ es normal, el dato para el modelo (`$fromAI`) lo ponemos en el paso siguiente.
 - **Si da *"The credential … needs to be reconnected"*:** Google cortó el permiso (en modo *Testing*, a los 7 días).
   Ver la tabla de trabas.
 
-**P3-2f · El filtro: el único dato que completa el modelo**
-
-Abajo de *Sheet* está **Filters**, con el botón **Add Filter**. Primero se prueba con el destino escrito fijo, y
-después se cambia para que lo complete el modelo.
-
-```text
-Filters → Add Filter → aparece un recuadro "Filter 1" con dos campos:
-   Column:  clic en la lista → aparecen los títulos de la fila 1 de la planilla → elegís  Destino
-   Value:   escribís  Bariloche   (fijo, solo para probar)
-Execute step → en OUTPUT quedan solo 2 filas (row_number 2 y 3: el Clásico y el Nieve)
-```
-
-- **Abajo del *Value* dice** *"The column must have this value to be matched"*: "la columna tiene que tener este
-  valor para coincidir". Es un filtro de **igual**: letra por letra.
-- **Si sale vacío (`"response": []`):** revisá que *Document* y *Sheet* estén elegidos de la lista (P3-2e).
-
-Ahora sí, el valor que cambia:
-
-<p style="color:#1a7f37">Esto es lo nuevo de hoy. El filtro busca en la columna Destino, pero ¿qué destino? No lo sé: depende de lo que pregunte el cliente. Si escribo "Bariloche", siempre buscaría Bariloche. Entonces no lo escribo yo: le digo que lo complete el modelo.</p>
-
-**Primero, pasar el casillero a modo expresión.** En un nodo nuevo, *Value* viene en **Fixed** (texto fijo): lo que
-escribas se busca **tal cual, letra por letra**, con llaves y todo. Para que n8n calcule la fórmula:
-
-```text
-Borrás "Bariloche" → pasás el mouse por arriba de Value → arriba a la derecha aparece  Fixed | Expression
-→ clic en  Expression  → a la izquierda del casillero aparece una  fx
-```
-
-- **La *fx* es la señal:** con *fx*, el casillero es una expresión (calcula lo que está entre llaves `{{ }}`). Sin
-  *fx*, es texto fijo.
-- **Si pegás la fórmula sin la *fx*:** el filtro busca un destino que se llame literalmente "{{ $fromAI(…) }}", no
-  encuentra nada, y *Execute step* no te pide el destino (sale *"Node was not executed"*). Pasalo a *Expression* y
-  listo.
-
-**Después, escribir el `$fromAI` a mano.** Clic adentro del casillero *Value* (ya con la *fx*) y pegás, entero:
-
-```text
-{{ $fromAI('destino', 'El destino, escrito exactamente así: Bariloche, Mendoza, Salta, Ushuaia o Cataratas', 'string') }}
-```
-
-Abajo del casillero, donde decía `[empty]`, ahora aparece algo como *[Defined by the model]* o un aviso parecido: es
-normal, el valor no existe hasta que el agente lo complete.
-
-<p style="color:#1a7f37">Le escribo fromAI, que quiere decir "este dato lo completa la IA". Le doy tres cosas: cómo se llama el dato, destino; cómo lo tiene que escribir, con la lista de destinos; y que es texto. Cuando un cliente pregunte por Bariloche, el modelo va a poner Bariloche acá.</p>
-
-- **La fórmula queda escrita en rojo: es normal.** n8n pinta de rojo las expresiones que no puede calcular mientras
-  se arma el flujo, y `$fromAI` no tiene valor hasta que el agente corre. Si hubiera un error de verdad (falta una
-  comilla o una llave), aparece un aviso de error abajo del casillero.
-- **Por qué a mano y no con el ✨:** el ✨ hace lo mismo con un clic, pero el dato queda con un nombre automático y
-  **sin descripción**: el modelo no sabría que tiene que escribir "Bariloche" con mayúscula, ni cuáles destinos hay.
-  Escribiéndolo, le damos las instrucciones.
-- **Si apretaste el ✨ sin querer:** el casillero queda en gris y dice *Defined automatically by the model*. Se vuelve
-  atrás apretando el ✨ otra vez, y pegás la expresión.
-- **Column** muestra los títulos de la fila 1 de la planilla: por eso es importante que estén bien escritos.
-- **El filtro es "Destino igual a…":** de las 6 filas, n8n devuelve solo las que coinciden. Con Bariloche, 2.
-- **Combine Filters: AND** (viene así, abajo de *Add Filter*): solo importa con dos filtros o más ("que cumpla los
-  dos" o "que cumpla uno"). Con uno solo, no se toca.
-- **El aviso gris del *OUTPUT*** (*"No parameters are set up to be filled by AI"*) desaparece: ahora la herramienta
-  tiene un dato para el modelo.
-- **Probar con el filtro:** *Execute step* otra vez. Como el destino lo completa el modelo, y acá no hay modelo, n8n
-  abre una ventanita, **Test tool1** (*"Provide the data that would normally come from the AI Agent node"*: "poné el
-  dato que normalmente daría el agente"), con un casillero **destino**. Escribís `Bariloche` → **Execute step**. En *OUTPUT* tienen que quedar **solo 2 filas** (el Clásico y el
-  Nieve). Si sale vacío, revisá que lo escribiste con mayúscula, igual que en la planilla.
-
-**`$fromAI`, parte por parte:**
-
-| Parte | En el ejemplo | Qué es |
-|---|---|---|
-| El nombre del dato | `'destino'` | Cómo se llama el dato. El modelo lo ve |
-| La descripción del dato | `'El destino, escrito exactamente así: …'` | Las instrucciones para completarlo. Acá se le dice **cómo** escribirlo |
-| El tipo | `'string'` | Texto (`string`), número (`number`) o sí/no (`boolean`) |
-
-- **Las comillas simples (`'`) y las comas** separan las tres partes. Si falta una comilla, el casillero se pone rojo.
-- **Por qué el filtro y no traer la planilla entera:** con el filtro, la herramienta devuelve solo los paquetes de
-  ese destino (menos texto para el modelo, menos tokens). Y, en algunas versiones de n8n, Gemini da error con una
-  herramienta que no tiene ningún dato para el modelo (*properties: should be non-empty*).
-- **"Exactamente así"** está porque el filtro busca igual, letra por letra: "bariloche" en minúscula no encuentra
-  "Bariloche".
-
 **P3-2g · Lo que no se toca, y cerrar**
 
 ```text
@@ -1846,10 +1773,9 @@ Options:  vacío (no se agrega ninguna)
 Cerrás (la X) → clic en el nombre del nodo → renombrás:  consultar_paquetes → Ctrl + S
 ```
 
-<p style="color:#1a7f37">Y le pongo un nombre claro, en minúscula y con guion bajo: consultar_paquetes. Este nombre también lo lee el modelo. "Google Sheets" no le dice nada; "consultar paquetes", sí.</p>
+<p style="color:#1a7f37">Y le pongo un nombre claro, en minúscula y con guion bajo: consultar_paquetes. Este nombre también lo lee el modelo. "Get row(s) in sheet" no le dice nada; "consultar paquetes", sí.</p>
 
-- **Options** tiene ajustes extra (en qué fila empiezan los títulos, devolver solo la primera fila que coincida, el
-  formato de las fechas). La planilla es simple: lo que viene alcanza.
+- **Options** tiene ajustes extra (en qué fila empiezan los títulos, el formato de las fechas). La planilla es simple: lo que viene alcanza.
 - **El nombre, sin espacios:** `consultar_paquetes`, con guion bajo. Es la costumbre para nombres de herramientas, y
   algunos modelos se confunden con espacios o acentos.
 - **Se prueba hablándole al agente**, en el P3-5, cuando estén las tres herramientas.
@@ -1861,18 +1787,19 @@ Cerrás (la X) → clic en el nombre del nodo → renombrás:  consultar_paquete
 | **Google Sheets Tool** (desde el enchufe *Tool*) | El nodo **Google Sheets** común (desde el **+** de la derecha) | El común corre siempre, en su lugar de la flecha. La versión *Tool* queda colgada del agente y corre **solo cuando él la pide**. Al entrar por el enchufe *Tool*, n8n ya muestra solo las versiones herramienta |
 | **Tool Description: Set Manually** | *Set Automatically* | En automático n8n escribe algo genérico, en inglés ("Get rows…"). El modelo decide si la usa leyendo esto: tiene que decir qué hace, qué devuelve y para qué destinos |
 | **Get Row(s)** | *Append*, *Update*, *Delete* | Ana solo tiene que **leer**. Si no puede escribir, no puede romper la planilla aunque se equivoque |
-| **Document y Sheet From list** | *By URL* / *By Name* | Se eligen, no se copia nada. Y en el ensayo, con *By URL* y *By Name* el filtro devolvía vacío |
-| **Un filtro con `$fromAI`** | Sin filtro (traer todo) o el destino escrito fijo | Sin filtro, le llega toda la planilla (más tokens). Fijo, siempre buscaría el mismo destino |
-| **`string`** | `number` | Un destino es texto |
+| **Document y Sheet From list** | *By URL* / *By Name* | Se eligen, no se copia ni se escribe nada |
+| **Traer las 6 filas, sin filtro** | Un filtro por destino con `$fromAI` | Con 6 filas no hace falta. Y en el ensayo, el filtro con `$fromAI` devolvía vacío aunque con el destino fijo anduviera |
 
 **P3-3 · La herramienta 2: `cotizacion_dolar` (HTTP Request)**
 
 ```text
 Enchufe Tool, + → buscá "HTTP Request" → HTTP Request Tool
-   Description:  Devuelve la cotización del dólar en Argentina hoy, en pesos. Usá el campo 'venta' para pasar dólares a pesos.
+   Description:  (el primer campo del panel; abajo hay un botón "Import cURL" que no se usa) → pegás:
+                 Devuelve la cotización del dólar en Argentina hoy, en pesos. Usá el campo 'venta' para pasar dólares a pesos.
    Method:       GET   (viene así)
-   URL → Expression →  https://dolarapi.com/v1/dolares/{{ $fromAI('tipo', 'El tipo de dólar: oficial, blue o tarjeta. Si el cliente no dice nada, oficial.', 'string') }}
-Cerrás → renombrás:  cotizacion_dolar
+   URL:          pasás el mouse → Fixed | Expression → clic en Expression (aparece la fx) → pegás:
+      https://dolarapi.com/v1/dolares/{{ $fromAI('tipo', 'El tipo de dólar: oficial, blue o tarjeta. Si el cliente no dice nada, oficial.', 'string') }}
+Cerrás → renombrás el nodo (viene como "HTTP Request"):  cotizacion_dolar → Ctrl + S
 ```
 
 <p style="color:#1a7f37">La segunda mano es la API del dólar de la Semana 4. Abro la dirección en el navegador para que la vean: dolarapi punto com, barra dólares, barra oficial. Devuelve la compra y la venta. Lo nuevo es el final de la dirección: oficial, blue o tarjeta lo elige el modelo, según lo que diga el cliente.</p>
@@ -1881,6 +1808,31 @@ Cerrás → renombrás:  cotizacion_dolar
   descripción dice "usá el campo venta" porque es el precio al que se compran dólares.
 - **El `$fromAI` va adentro de la URL:** lo que el modelo complete (`oficial`, `blue`, `tarjeta`) queda pegado al
   final de la dirección. Si el cliente no dice nada, la descripción del dato le dice que use `oficial`.
+
+**Lo nuevo de hoy: `$fromAI`, "este dato lo completa la IA".** En la planilla el modelo no completaba nada: solo
+decidía usarla. Acá sí: la dirección cambia según el tipo de dólar, y ese pedacito lo pone el modelo.
+
+<p style="color:#1a7f37">Fíjense el final de la dirección: fromAI. Quiere decir "este dato lo completa la IA". Le doy tres cosas: cómo se llama el dato, tipo; cómo lo tiene que elegir, oficial, blue o tarjeta, y oficial si el cliente no dice nada; y que es texto. Si el cliente pregunta por el blue, el modelo pone blue, y la dirección queda dólares barra blue.</p>
+
+| Parte | En el ejemplo | Qué es |
+|---|---|---|
+| El nombre del dato | `'tipo'` | Cómo se llama el dato. El modelo lo ve |
+| La descripción del dato | `'El tipo de dólar: oficial, blue o tarjeta. Si el cliente no dice nada, oficial.'` | Las instrucciones para completarlo: qué valores puede poner, y qué hacer si no sabe |
+| El tipo | `'string'` | Texto (`string`), número (`number`) o sí/no (`boolean`) |
+
+- **Primero *Expression*, después pegar.** La **fx** a la izquierda del casillero es la señal de que n8n va a
+  calcular lo que está entre llaves. Sin la *fx* (modo *Fixed*), se mandaría el texto `{{ $fromAI(…) }}` tal cual, y
+  la API daría 404.
+- **Si lo de entre llaves queda en rojo, o abajo dice `undefined`: es normal.** `$fromAI` no tiene valor hasta que
+  el agente corre. Si faltara una comilla o una llave, aparece un aviso de error.
+- **Las comillas simples (`'`) y las comas** separan las tres partes.
+- **Por qué a mano y no con el botón ✨:** el ✨ también deja un dato para el modelo, pero con un nombre automático y
+  **sin descripción**: el modelo no sabría qué valores puede poner. Si lo apretaste sin querer, el casillero queda en
+  gris (*Defined automatically by the model*): lo volvés a apretar y pegás la dirección.
+- **Probarla sola:** *Execute step* → se abre una ventanita, *Test …* (*"Provide the data that would normally come
+  from the AI Agent node"*: "poné el dato que normalmente daría el agente"), con un casillero **tipo** → escribís
+  `oficial` → *Execute step*. En *OUTPUT* aparece `"casa": "oficial"`, `"compra"` y `"venta"` (en el ensayo: compra
+  1535, venta 1585).
 - **El resto del panel no se toca:** *Authentication: None*, y *Send Query Parameters*, *Send Headers* y *Send Body*
   apagados. Es un GET simple, como en la Semana 4.
 
@@ -1913,21 +1865,24 @@ Open chat → conversación nueva →  Quiero ir a Bariloche 5 días con mi pare
 Panel Logs (al lado del chat) → abrís cada vuelta
 ```
 
-Lo que tiene que aparecer en *Logs*, en este orden:
+Lo que tiene que aparecer en *Logs*, en este orden (los pesos dependen del dólar del día: en la tabla, con el dólar a
+1570; en el ensayo del 19/11/2026, con 1585, dio $ 3.011.500):
 
 | Vuelta | Qué usó | Con qué dato | Qué le devolvió |
 |---|---|---|---|
-| 1 | `consultar_paquetes` | `destino: Bariloche` (lo completó el modelo) | El Bariloche Clásico (5 días, USD 950) y el Nieve (0 cupos) |
-| 2 | `cotizacion_dolar` | `tipo: oficial` | La venta del día (por ejemplo, 1570) |
+| 1 | `consultar_paquetes` | — (no lleva datos) | Los 6 paquetes. De ahí, el modelo toma el Bariloche Clásico (5 días, USD 950) y el Nieve (0 cupos) |
+| 2 | `cotizacion_dolar` | `tipo: oficial` (lo completó el modelo) | La venta del día (por ejemplo, 1570) |
 | 3 | `calculadora` | `950 * 2 * 1570` | `2983000` |
 | 4 | — | — | La respuesta: "…para dos, al oficial de hoy, $ 2.983.000" |
 
-<p style="color:#1a7f37">Miren el ciclo de la filmina 8, de verdad. Primero buscó los paquetes de Bariloche, con destino igual a Bariloche, que lo completó él. Después el dólar oficial. Después la cuenta. Y recién ahí respondió. Nadie le dijo ese orden: lo decidió leyendo los nombres y las descripciones.</p>
+<p style="color:#1a7f37">Miren el ciclo de la filmina 8, de verdad. Primero leyó los paquetes y se quedó con los de Bariloche. Después el dólar, y el tipo, oficial, lo completó él. Después la cuenta. Y recién ahí respondió. Nadie le dijo ese orden: lo decidió leyendo los nombres y las descripciones.</p>
 
+- **Fijate el final de la respuesta:** en el ensayo, Ana terminó con *"¿Te gustaría que reservemos sus lugares?"*.
+  Ofrece reservar sin tener cómo hacerlo. No lo arregles ahora: es el problema que se muestra en el Paso 5 (P5-1).
 - **Clic en cada vuelta de *Logs*:** se ve qué le mandó el agente a la herramienta (*Input*) y qué le devolvió
   (*Output*). Es la caja negra de la Semana 5, pero del agente.
-- **Si da *properties: should be non-empty for OBJECT type*:** a la herramienta de la planilla le falta el `$fromAI`
-  en el filtro.
+- **Si da *properties: should be non-empty for OBJECT type*:** tu versión de Gemini no acepta una herramienta sin
+  datos (la planilla). Ver la tabla de trabas.
 
 #### Ejemplo 4 en n8n · El agente mal descrito (flujo `03`) — la filmina 18, en vivo (4 min)
 
@@ -2299,7 +2254,7 @@ Cerrás → renombrás:  registrar_consulta → Ctrl + S
 - **La fecha la pone n8n, no el modelo:** `$now` es la fecha y hora de este momento. El modelo no sabe qué día es, y
   no es algo que diga el cliente.
 - **Los otros tres los completa el modelo**, con `$fromAI` (como en el Paso 3), con lo que el cliente le fue
-  diciendo en la charla. Se pegan a mano, como en el P3-2f (no con el ✨, para que cada dato tenga su descripción).
+  diciendo en la charla. Se pegan a mano, con el casillero en *Expression*, como en el P3-3 (no con el ✨, para que cada dato tenga su descripción).
 - **`personas` es `number`:** así el modelo manda un número (3), no un texto ("tres").
 - **El casillero `fecha` va en Expression** (pasás el mouse → *Expression*), porque tiene llaves. Los otros tres,
   igual: tienen llaves.
@@ -2485,7 +2440,7 @@ Cerrás → renombrás:  buscar_ciudad
   español.
 - **La descripción dice qué devuelve, con los nombres de los campos** (`latitude`, `longitude`): así el modelo sabe
   qué buscar en la respuesta para la herramienta siguiente.
-- **El *Value* de `name`:** se pega el `$fromAI` a mano, como en el P3-2f (con el ✨ quedaría sin descripción). `count` y `language`
+- **El *Value* de `name`:** se pasa a *Expression* y se pega el `$fromAI` a mano, como en el P3-3 (con el ✨ quedaría sin descripción). `count` y `language`
   quedan en *Fixed*: no tienen llaves.
 
 **Por qué cada elección:**
@@ -2588,9 +2543,9 @@ Panel Logs (al lado del chat) → clic en cada línea: Input (qué le mandó el 
 | "No veo el botón *Open chat*" | El flujo tiene que empezar con **On chat message** (Chat Trigger). Con *Trigger manually* no hay chat. |
 | "Gemini: *model not found*" | El modelo ya no existe o cambió de nombre. En *Model*, elegir otro de la lista que diga *flash*. |
 | "Gemini: 429 / *quota exceeded*" | El plan gratis tiene un límite de pedidos por minuto, y el agente hace varios por mensaje. Esperar un minuto. |
-| "Gemini: *properties: should be non-empty for OBJECT type*" | Una herramienta no tiene ningún dato con `$fromAI`. En la de la planilla, el *Value* del filtro. |
+| "Gemini: *properties: should be non-empty for OBJECT type*" | En algunas versiones, Gemini no acepta una herramienta sin ningún `$fromAI` (la de la planilla). Se le agrega uno: *Filters → Add Filter → Column: Destino*, y en *Value* (en *Expression*) el `$fromAI` del destino. |
 | "El agente no usa la herramienta, responde de memoria" | La descripción no dice cuándo usarla, o falta en el system prompt "usala siempre que…". Es el Ejemplo 4. |
-| "La planilla devuelve vacío" | El filtro busca el destino **exacto**: "bariloche" en minúscula no coincide con "Bariloche". La descripción del parámetro dice cómo escribirlo; si sigue, que lo agreguen al system prompt. |
+| "La planilla devuelve vacío" (`"response": []`) | Quedó un filtro puesto: en el nodo, *Filters* tiene que estar vacío. Y *Document* y *Sheet*, elegidos de la lista (*From list*). |
 | "Hace mal la cuenta" | No conectaron la calculadora, o el system prompt no dice "usá la calculadora para cualquier cuenta". |
 | "Se olvida de lo que le dije" | Falta la memoria, o abrieron una conversación nueva. |
 | "Responde en inglés" | Falta el tono en el system prompt: "Respondé siempre en español". |

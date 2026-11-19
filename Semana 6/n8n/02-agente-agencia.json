@@ -63,7 +63,7 @@
     {
       "parameters": {
         "descriptionType": "manual",
-        "toolDescription": "Busca en la planilla de la agencia los paquetes de UN destino: nombre del paquete, días, precio en dólares por persona, cupos disponibles y qué incluye. Destinos disponibles: Bariloche, Mendoza, Salta, Ushuaia o Cataratas.",
+        "toolDescription": "Devuelve TODOS los paquetes de la agencia: destino, nombre del paquete, días, precio en dólares por persona, cupos disponibles y qué incluye. Usala siempre que pregunten por un destino, un precio o los cupos, y buscá en la lista los del destino que pidió el cliente. Destinos: Bariloche, Mendoza, Salta, Ushuaia y Cataratas.",
         "documentId": {
           "__rl": true,
           "value": "",
@@ -74,14 +74,6 @@
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "Hoja 1"
-        },
-        "filtersUI": {
-          "values": [
-            {
-              "lookupColumn": "Destino",
-              "lookupValue": "={{ $fromAI('destino', 'El destino, escrito exactamente así: Bariloche, Mendoza, Salta, Ushuaia o Cataratas', 'string') }}"
-            }
-          ]
         },
         "options": {}
       },

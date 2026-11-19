@@ -89,9 +89,8 @@ día; con 1570):
   ideal es que lo deduzca, pero preguntar está permitido por el prompt ("si no queda claro, preguntá").
 - Que use la calculadora dos veces (950 × 2, y después × 1570).
 
-**Si la herramienta de la planilla vuelve vacía:** el filtro busca el destino exacto. Si el modelo manda
-"bariloche", no encuentra nada. La descripción del parámetro dice cómo escribirlo; si igual pasa, agregá al system
-prompt: "En consultar_paquetes, escribí el destino con mayúscula inicial, como en la lista".
+**Si la herramienta de la planilla vuelve vacía** (`"response": []`): quedó un filtro puesto (*Filters* tiene que
+estar vacío), o *Document* / *Sheet* no están elegidos de la lista (*From list*).
 
 ### Ejercicio 6 · Probá la memoria y el bucle
 

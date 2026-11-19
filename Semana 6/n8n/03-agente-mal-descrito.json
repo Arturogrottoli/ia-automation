@@ -75,14 +75,6 @@
           "mode": "list",
           "cachedResultName": "Hoja 1"
         },
-        "filtersUI": {
-          "values": [
-            {
-              "lookupColumn": "Destino",
-              "lookupValue": "={{ $fromAI('destino', 'valor', 'string') }}"
-            }
-          ]
-        },
         "options": {}
       },
       "id": "2f9dd423-cb2f-42d8-94e6-840c50c23c08",
