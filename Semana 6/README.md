@@ -1573,59 +1573,173 @@ Mensaje del chat ─► Ana, la asesora ─┬─ Cerebro: Gemini
 - **Ninguna se ejecuta sola.** Quedan "a mano": el agente, en cada mensaje, decide cuál usar, cuándo y con qué
   datos. Por eso el nombre y la descripción son tan importantes.
 
-**P3-1 · Mirar la planilla**
+**P3-1 · La planilla: tiene que existir antes, y no hace nada sola**
+
+Sí: **la planilla se crea antes de la clase** (está en "Preparación"). No es un flujo ni tiene fórmulas: es solo una
+tabla con datos, como la lista de precios de la agencia. No "hace" nada. La que hace algo es la herramienta que la lee.
+
+Lo que tiene adentro (la primera fila son los títulos de las columnas):
+
+| Destino | Paquete | Dias | Precio_USD | Cupos | Incluye |
+|---|---|---|---|---|---|
+| Bariloche | Bariloche Clásico | 5 | 950 | 8 | Aéreo, hotel 3 estrellas con desayuno, excursión al Circuito Chico |
+| Bariloche | Bariloche Nieve | 7 | 1450 | **0** | Aéreo, hotel 4 estrellas, pases al Cerro Catedral por 4 días |
+| Mendoza | Caminos del Vino | 4 | 780 | 12 | Aéreo, hotel boutique, dos visitas a bodegas con degustación |
+| Salta | Norte Mágico | 6 | 890 | 5 | Aéreo, hotel con desayuno, excursiones a Cafayate y Purmamarca |
+| Ushuaia | Fin del Mundo | 5 | 1320 | 3 | Aéreo, hotel con media pensión, navegación por el Canal Beagle |
+| Cataratas | Cataratas Express | 3 | 640 | 20 | Aéreo, hotel con desayuno, entrada al lado argentino de las Cataratas |
+
+**Si todavía no la tenés** (antes de la clase, 2 minutos):
+
+```text
+drive.google.com → Nuevo → Hoja de cálculo de Google → arriba a la izquierda, el nombre:  Paquetes Rumbo Sur
+Archivo → Importar → Subir → elegís  Semana 6/n8n/paquetes.csv
+   Ubicación de importación:  Reemplazar la hoja actual
+   Tipo de separador:         Detectar automáticamente
+   → Importar datos
+Tiene que quedar como la tabla de arriba: 6 filas de paquetes, más la fila de títulos
+La pestaña de abajo se llama "Hoja 1" (no la renombres)
+Copiás el link de la barra del navegador: lo vas a pegar en n8n
+```
+
+- **Si no querés importar el CSV:** también se puede escribir a mano, copiando la tabla de arriba. Lo importante es
+  que la fila 1 tenga esos títulos, escritos igual (`Destino`, con mayúscula y sin tilde en `Dias`).
+
+**En clase**, abrís la planilla en otra pestaña y la mostrás:
 
 ```text
 Otra pestaña → Google Drive → Paquetes Rumbo Sur
-Columnas: Destino | Paquete | Dias | Precio_USD | Cupos | Incluye   (6 paquetes; el Bariloche Nieve con 0 cupos)
 ```
 
-<p style="color:#1a7f37">Esta es la planilla de la agencia: seis paquetes, con destino, días, precio en dólares, cupos y qué incluye. Fíjense que el Bariloche Nieve tiene cero cupos: lo vamos a usar después. La primera herramienta va a leer esta planilla.</p>
+<p style="color:#1a7f37">Esta es la planilla de la agencia: seis paquetes, con destino, días, precio en dólares, cupos y qué incluye. No tiene nada raro: es una tabla. Fíjense que el Bariloche Nieve tiene cero cupos: lo vamos a usar después. La primera herramienta de Ana va a leer esta planilla.</p>
 
-- **La columna `Destino`** es la que va a usar la herramienta para buscar. Los destinos están escritos así:
+**Qué va a hacer el modelo con esta planilla.** El modelo **nunca abre la planilla**. Él solo ve el nombre y la
+descripción de la herramienta. Cuando un cliente pregunta por un destino, pasa esto:
+
+```text
+1. El cliente escribe:   "Quiero ir a Bariloche 5 días…"
+2. El MODELO lee las herramientas que tiene, y decide:  "uso consultar_paquetes, con destino = Bariloche"
+3. N8N corre la herramienta:  lee la planilla y se queda solo con las filas donde Destino = Bariloche
+4. N8N le devuelve al modelo esas 2 filas (el Clásico y el Nieve), como texto
+5. El MODELO las lee y arma la respuesta:  "El Bariloche Clásico, 5 días, sale USD 950…"
+```
+
+- **Lo único que completa el modelo es el destino** (el paso 2). Todo lo demás (qué planilla, qué pestaña, qué
+  columna) lo dejamos fijo nosotros en el panel. Así el modelo no puede leer otra planilla aunque se equivoque.
+- **La columna `Destino`** es la que se usa para buscar. Por eso los destinos tienen que estar escritos siempre igual:
   Bariloche, Mendoza, Salta, Ushuaia, Cataratas.
 
 **P3-2 · La herramienta 1: `consultar_paquetes` (Google Sheets)**
 
+Se arma en siete micro-pasos: buscar el nodo, la credencial, la descripción, qué hace, qué planilla, el filtro, y
+cerrar.
+
+**P3-2a · Buscar el nodo**
+
 ```text
-Abajo de "Ana, la asesora", en el enchufe Tool, clic en + → buscá "Google Sheets" → Google Sheets Tool
+En el lienzo, abajo de "Ana, la asesora", el enchufe que dice "Tool" → clic en su +
+Se abre el buscador, a la derecha, con la lista de herramientas → escribís:  Google Sheets  → clic en "Google Sheets"
+Si aparece una lista de acciones (Append row, Get row(s), Update row…) → clic en "Get row(s) in sheet"
+Si se abre directo el panel del nodo → seguís igual: la acción se elige abajo, en Operation
 ```
 
-<p style="color:#1a7f37">La primera mano: el nodo de Google Sheets de las Semanas 4 y 5, pero en su versión herramienta. Es el mismo nodo; la diferencia es que no corre en una fila, sino cuando el agente lo pide.</p>
+<p style="color:#1a7f37">La primera mano. Toco el más del enchufe Tool, el de abajo del agente, y busco Google Sheets: el mismo de las Semanas 4 y 5, pero en su versión herramienta. Es el mismo nodo; la diferencia es que no corre cuando le llega una fila por la flecha, sino cuando el agente lo pide.</p>
+
+- **Desde el enchufe *Tool*, n8n solo muestra herramientas:** el nodo se agrega ya colgado del agente, con una línea
+  punteada. No hay que conectarlo a mano.
+- **Si en cambio usás el + de la derecha del agente**, se agrega el Google Sheets común, conectado con flecha: no es
+  lo que queremos. Si te pasa, lo borrás (Supr) y lo agregás desde el enchufe *Tool*.
+- **"Get row(s) in sheet"** quiere decir "traer filas de una hoja": leer.
+
+**P3-2b · La credencial**
+
+Se abre el panel del nodo. Arriba de todo:
 
 ```text
-Credential to connect with:  tu credencial de Google Sheets (la de la Semana 4)
-Tool Description:            Set Manually → pegás:
+Credential to connect with:  clic → elegís tu credencial de Google Sheets (la de la Semana 4)
+```
+
+- **Es la misma credencial de las Semanas 4 y 5:** no se crea de nuevo, se elige de la lista.
+- **Si la lista está vacía:** se arma como en la Semana 4 (ver el anexo de la
+  [Clase 4](../Semana%204/Clase04-beta/README.md#anexo-del-flujo-03--conectar-google-sheets-por-primera-vez-n8n-local)).
+  Hacelo antes de la clase: en vivo lleva varios minutos.
+
+**P3-2c · La descripción de la herramienta**
+
+```text
+Tool Description:  viene en "Set Automatically" → lo cambiás a  Set Manually
+Aparece el campo Description → pegás:
    Busca en la planilla de la agencia los paquetes de UN destino: nombre del paquete, días, precio en dólares
    por persona, cupos disponibles y qué incluye. Destinos disponibles: Bariloche, Mendoza, Salta, Ushuaia o Cataratas.
-Resource:   Sheet Within Document   (viene así)
-Operation:  Get Row(s)              (leer filas)
-Document:   By URL → pegás el link de la planilla "Paquetes Rumbo Sur"
-Sheet:      From list → Hoja 1
 ```
 
-- **Tool Description** es lo que lee el modelo para decidir si la usa. Con *Set Manually* la escribimos nosotros; si
-  se deja en automático, n8n pone algo genérico ("Get rows from a sheet") y el modelo no sabe para qué sirve.
-- **La descripción dice qué hace, qué devuelve y con qué datos funciona.** "De UN destino" y la lista de destinos le
-  avisan al modelo que tiene que buscar de a uno, y cómo se escriben.
-- **Get Row(s)** es solo leer. Esta herramienta no puede cambiar nada de la planilla: es la forma más segura.
-- **Document By URL:** pegás el link entero de la planilla; n8n saca el ID solo. *El ID es el pasaporte*, Semana 5.
-- **Si no tenés la credencial de Sheets:** se arma como en la Semana 4 (ver el anexo de la
-  [Clase 4](../Semana%204/Clase04-beta/README.md#anexo-del-flujo-03--conectar-google-sheets-por-primera-vez-n8n-local)).
+<p style="color:#1a7f37">Esto es lo más importante del panel, aunque parezca un detalle. El modelo no ve la planilla ni este panel: ve solo esta descripción. Con esto decide si usa la herramienta. Por eso digo qué hace, qué devuelve, y con qué destinos funciona.</p>
 
-Después, el filtro, que es lo más importante de esta herramienta:
+| Opción | Qué hace | ¿La usamos? |
+|---|---|---|
+| **Set Automatically** (viene así) | n8n escribe una descripción genérica, en inglés, a partir de la operación ("Get rows from a sheet") | No: el modelo no sabría que son paquetes de viaje |
+| **Set Manually** | La escribimos nosotros | **Sí** |
+
+La descripción, parte por parte:
+
+| Parte | Para qué está |
+|---|---|
+| "Busca en la planilla de la agencia los paquetes" | **Qué hace**: el modelo sabe que acá están los paquetes |
+| "de UN destino" | **Cómo se usa**: un destino por vez. Si el cliente pregunta por dos, la usa dos veces |
+| "nombre del paquete, días, precio en dólares por persona, cupos y qué incluye" | **Qué devuelve**: sabe que acá encuentra el precio y los cupos. "En dólares por persona" le avisa que después hay que multiplicar y pasar a pesos |
+| "Destinos disponibles: Bariloche, Mendoza…" | **Con qué datos funciona**: si le preguntan por Córdoba, sabe que no está, sin buscar |
+
+**P3-2d · Qué hace: leer filas**
+
+```text
+Resource:   Sheet Within Document   (viene así: no se toca)
+Operation:  Get Row(s)              (si elegiste "Get row(s) in sheet" en el P3-2a, ya viene así)
+```
+
+<p style="color:#1a7f37">Le digo qué tiene que hacer con la planilla: leer filas. Nada más. No puede agregar, ni cambiar, ni borrar.</p>
+
+| Campo | Opciones | Qué ponemos y por qué |
+|---|---|---|
+| **Resource** ("sobre qué trabaja") | *Document* (el archivo entero: crear o borrar planillas) o *Sheet Within Document* (una hoja de adentro) | *Sheet Within Document*: trabajamos con las filas de una hoja |
+| **Operation** ("qué hace") | *Append Row* (agregar), *Append or Update Row*, *Update Row* (cambiar), *Delete Rows or Columns* (borrar), *Clear* (vaciar), *Get Row(s)* (leer), y otras | *Get Row(s)*: Ana solo tiene que leer. Si no puede escribir, no puede romper nada aunque se equivoque |
+
+**P3-2e · Qué planilla y qué hoja**
+
+```text
+Document:  a la izquierda del campo, la lista dice "From list" → la cambiás a  By URL
+           → pegás el link de "Paquetes Rumbo Sur" (el que copiaste de la barra del navegador)
+Sheet:     From list (viene así) → clic → elegís  Hoja 1
+```
+
+<p style="color:#1a7f37">Ahora le digo cuál planilla: pego el link. Y cuál hoja de adentro: la Hoja 1. Esto lo dejo fijo yo: el modelo no elige qué planilla leer.</p>
+
+| Campo | Opciones | Qué ponemos y por qué |
+|---|---|---|
+| **Document** (el archivo) | *From list* (lo buscás por nombre), *By URL* (pegás el link), *By ID* (pegás solo el código) | *By URL*: pegás el link entero y n8n saca el ID solo (*el ID es el pasaporte*, Semana 5). Con *From list* también anda |
+| **Sheet** (la pestaña de abajo) | *From list*, *By URL*, *By ID*, *By Name* | *From list*: n8n ya leyó la planilla y muestra sus pestañas. Hay una sola: *Hoja 1* |
+
+- **Primero el Document, después la Sheet:** hasta que n8n no sabe cuál es la planilla, la lista de hojas aparece
+  vacía.
+- **Si la lista de hojas da error:** la credencial no tiene permiso sobre esa planilla. Fijate que la planilla sea
+  de la misma cuenta de Google que usaste en la credencial.
+
+**P3-2f · El filtro: el único dato que completa el modelo**
+
+Abajo de *Sheet* aparece **Filters**, vacío.
 
 ```text
 Filters → Add Filter
-   Column:  Destino
+   Column:  clic → aparecen los títulos de la fila 1 → elegís  Destino
    Value:   pasás el mouse → clic en el botón ✨ ("Let the model define this parameter")
             → queda escrito:  {{ $fromAI('destino', '...', 'string') }}
             → en la descripción del dato (la segunda parte), escribís:
               El destino, escrito exactamente así: Bariloche, Mendoza, Salta, Ushuaia o Cataratas
-Cerrás → renombrás el nodo:  consultar_paquetes
 ```
 
 <p style="color:#1a7f37">Esto es lo nuevo de hoy. El filtro busca en la columna Destino, pero ¿qué destino? No lo sé: depende de lo que pregunte el cliente. Por eso no lo escribo yo. Le aprieto a las estrellitas, y queda fromAI: este dato lo completa el modelo.</p>
+
+- **Column** muestra los títulos de la fila 1 de la planilla: por eso es importante que estén bien escritos.
+- **El filtro es "Destino igual a…":** de las 6 filas, n8n devuelve solo las que coinciden. Con Bariloche, 2.
 
 **`$fromAI`, parte por parte:**
 
@@ -1642,6 +1756,21 @@ Cerrás → renombrás el nodo:  consultar_paquetes
   menos un dato que complete el modelo: sin ningún `$fromAI`, da error (*properties: should be non-empty*).
 - **"Exactamente así"** está porque el filtro busca igual, letra por letra: "bariloche" en minúscula no encuentra
   "Bariloche".
+
+**P3-2g · Lo que no se toca, y cerrar**
+
+```text
+Options:  vacío (no se agrega ninguna)
+Cerrás (la X) → clic en el nombre del nodo → renombrás:  consultar_paquetes → Ctrl + S
+```
+
+<p style="color:#1a7f37">Y le pongo un nombre claro, en minúscula y con guion bajo: consultar_paquetes. Este nombre también lo lee el modelo. "Google Sheets" no le dice nada; "consultar paquetes", sí.</p>
+
+- **Options** tiene ajustes extra (en qué fila empiezan los títulos, devolver solo la primera fila que coincida, el
+  formato de las fechas). La planilla es simple: lo que viene alcanza.
+- **El nombre, sin espacios:** `consultar_paquetes`, con guion bajo. Es la costumbre para nombres de herramientas, y
+  algunos modelos se confunden con espacios o acentos.
+- **Se prueba hablándole al agente**, en el P3-5, cuando estén las tres herramientas.
 
 **Por qué cada elección:**
 
