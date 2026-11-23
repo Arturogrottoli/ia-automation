@@ -10,7 +10,8 @@ la Entrega Final, sin clase.
 | `Modulo_8_AI_Automation.pptx` | Las filminas del módulo (33). |
 | `Semana 8.docx` | El material de lectura: RAG y Supabase (bases vectoriales, embeddings, chunks), el cuestionario de 6 preguntas, el podcast, la consigna de la Pre-entrega 4 y el guion sugerido de la clase. |
 | [ejercicios-alumnos.md](ejercicios-alumnos.md) | Lo que hay que hacer **antes de la clase** (la app de Meta), los ejercicios en clase y los de casa, con la Pre-entrega 4 paso a paso. Se comparte con los alumnos. |
-| [n8n/](n8n/) | Ocho workflows: el eco por WhatsApp, el asistente completo, el mismo asistente con WhatsApp simulado, el "celular de mentira" que le manda mensajes, un RAG con las preguntas frecuentes de la agencia, y tres ejemplos extra sobre el asistente (06 fuera de horario, 07 pasar a una persona, 08 Ana con las herramientas de la Semana 6). |
+| [n8n/](n8n/) | Nueve workflows: el eco por WhatsApp, el asistente completo, el mismo asistente con WhatsApp simulado, el "celular de mentira" que le manda mensajes, un RAG con las preguntas frecuentes de la agencia, tres ejemplos extra sobre el asistente (06 fuera de horario, 07 pasar a una persona, 08 Ana con las herramientas de la Semana 6) y el **09, el mismo asistente por Telegram** (plan B si WhatsApp falla). |
+| [entrega-final.md](entrega-final.md) | **La Entrega Final explicada para los alumnos:** los 7 requisitos en criollo, qué quiere decir "desplegado", cómo subirlo a GitHub paso a paso, un modelo de README, el checklist y la rúbrica. Se comparte al final de la clase. |
 | [ejercicios-docente.md](ejercicios-docente.md) | Respuestas, las salidas reales de los flujos, las trabas y cómo corregir la Pre-entrega 4. **No se comparte.** |
 
 ## Los ejercicios
@@ -18,6 +19,7 @@ la Entrega Final, sin clase.
 | Cuándo | Ejercicio | Duración |
 |---|---|---|
 | Antes de la clase | 0 · Tu app de Meta y el número de prueba | 30 min |
+| Antes de la clase | 0-B · Plan B: tu bot de Telegram | 5 min |
 | En clase | 1 · ¿Qué WhatsApp necesita? (la cacería de funciones) | 5 min |
 | En clase | 2 · El humano detrás de la IA (reescribir una respuesta de robot) | 5 min |
 | En clase | 3 · La práctica: el canal, el cerebro, la memoria, la voz y los bordes | 40 min |
@@ -32,13 +34,27 @@ la Entrega Final, sin clase.
   flujo en n8n con una ejecución. El programa acepta capturas **"con webhook simulando WhatsApp si no hay integración
   real disponible"**: para eso están los flujos 03 y 04. La rúbrica está en `ejercicios-docente.md`.
 - El cuestionario del módulo en la plataforma: 6 preguntas, se aprueba con 70 %, 15 minutos, 3 intentos.
-- **La Entrega Final** (Semana 9): el asistente autónomo de WhatsApp desplegado. Se presenta en la filmina 28 y se
-  cierra con las recomendaciones de la filmina 30.
+- **La Entrega Final** (se entrega en la Semana 9, sin clase): el asistente autónomo desplegado. **Se explica entera
+  en esta clase**, en la Sección 04 (filminas 28 a 30 y la consigna completa: los 7 requisitos, cómo se entrega en un
+  repositorio y cómo se corrige). Para los alumnos: [entrega-final.md](entrega-final.md).
 
 ## A tener en cuenta
 
 - **Es la última clase.** La Sección 04 (filminas 25 a 33) es el cierre del curso y la presentación de la Entrega
   Final. No la recortes: es lo último que escuchan antes de entregar.
+- **Si WhatsApp falla, plan B: Telegram.** Meta puede trabar la clase (la cuenta pide verificación, el número da
+  error 131030, el token venció). El mismo asistente anda por **Telegram**: el bot se crea en 5 minutos con
+  @BotFather, sin cuenta de empresa, sin lista de números permitidos y con un token que no vence. Cambian solo la
+  entrada (*Telegram Trigger*) y la respuesta (*Telegram · Send a text message*); el agente, la memoria, el prompt y
+  los porteros son los mismos. Está armado en el flujo **09** y explicado en la práctica ("Plan B: Telegram", después
+  del Paso 1). **Ojo: Telegram también necesita la dirección https pública** (n8n Cloud o el túnel): si lo que falla
+  es el túnel, el plan B es el simulador, no Telegram. **Slack** también se puede, pero no lo armamos: hay que crear
+  una app de Slack con permisos, suscribir eventos e instalarla en un espacio de trabajo (unos 15 minutos y una
+  cuenta de Slack para cada alumno). Para un plan B en vivo, Telegram es lo más corto.
+- **La Entrega Final no obliga a WhatsApp.** El título del programa dice "asistente de WhatsApp", pero el requisito 6
+  dice *"si usás WhatsApp Business"* y acepta otras salidas (un mail, una fila en Sheets, un evento en Calendar). En
+  [entrega-final.md](entrega-final.md) dice que Telegram vale, contando en el README por qué se eligió. **Confirmalo
+  con Romina** antes de la clase.
 - **La Pre-entrega 4 dice dos cosas distintas.** El programa (`program-summary.pdf`, la fuente oficial) pide caso de
   uso, decisión local o nube, el plan de la conexión con WhatsApp, el system prompt y la reflexión. **La versión de la
   plataforma** (`Semana 8.docx`) agrega dos puntos de **RAG**: cargar un documento en una base vectorial y conectar
@@ -102,7 +118,9 @@ la Entrega Final, sin clase.
     usa embeddings locales (`embeddinggemma`) y **Gemini** como cerebro (Gemini no se pudo probar ahí);
   - **los cinco flujos de la carpeta se importan sin errores** en n8n 2.46;
   - **no se probó:** el WhatsApp Trigger recibiendo de Meta, el túnel `cloudflared` (el entorno de prueba no permitía
-    abrir túneles públicos), el error 131030 con números argentinos, ni Gemini.
+    abrir túneles públicos), el error 131030 con números argentinos, ni Gemini;
+  - **el flujo 09 (Telegram) tampoco se ejecutó:** es el 02 con la entrada y la respuesta cambiadas, armado con los
+    parámetros de los nodos de Telegram de n8n. **Probalo vos con tu bot** el día anterior (con el túnel abierto).
 - **El cuestionario pregunta cosas que las filminas no dicen:** las herramientas de la app WhatsApp Business
   (respuestas rápidas, etiquetas, catálogo, mensaje de ausencia), las plantillas y los límites de mensajería. Van
   explicadas en la filmina 7 y en el Ejercicio 1.
@@ -123,8 +141,8 @@ la Entrega Final, sin clase.
 | 10–30 | **01 · La plataforma de Meta** | 6–10 | Ej. 1 (5 min) |
 | 30–55 | **02 · El asistente con IA** | 11–16 | Ej. 2 (5 min) |
 | 55–65 | Break | 17 | |
-| 65–105 | **03 · Práctica en vivo:** el canal, el cerebro, la memoria, la voz y los bordes | 18–24 | Ej. 3 |
-| 105–115 | **04 · El cierre del curso** y la Entrega Final | 25–30 | |
+| 65–102 | **03 · Práctica en vivo:** el canal, el cerebro, la memoria, la voz y los bordes (plan B: Telegram) | 18–24 | Ej. 3 |
+| 102–115 | **04 · El cierre del curso** y la **Entrega Final completa** (requisitos, entrega, corrección) | 25–30 | |
 | 115–120 | Preguntas y despedida | 31–33 | |
 
 **Al final hay tres ejemplos extra** para el asistente (fuera de horario, pasar a una persona, Ana con las
@@ -138,8 +156,10 @@ se toca.
 **Si el tiempo se aprieta**, recortá en este orden:
 1. Los casos de uso (filmina 9): se leen.
 2. El Ejercicio 1: se responde en voz alta con dos escenarios.
-3. El Paso 5 (los bordes): mostrás solo la foto, y el resto lo prueban en casa.
-4. El Debug Challenge (filmina 19): lo contás en un minuto, sin que adivinen.
+3. El Debug Challenge (filmina 19): lo contás en un minuto, sin que adivinen.
+
+**El Paso 5 ya va corto de entrada** (los porteros y la foto; el abogado, la reserva y el enojado quedan para casa):
+esos 3 minutos pasan a la Sección 04, para explicar la Entrega Final completa.
 
 Lo último que se recorta es la Sección 04: es el cierre del curso y la Entrega Final.
 
@@ -156,6 +176,11 @@ Lo último que se recorta es la Sección 04: es el cierre del curso y la Entrega
     `cloudflared tunnel --url http://localhost:5678`, copiá la dirección `https://…trycloudflare.com` y volvé a crear
     el contenedor de n8n con `-e WEBHOOK_URL=https://…trycloudflare.com/` (el comando está en el Ejercicio 5). Esa
     dirección cambia cada vez que se reinicia el túnel: **dejalo abierto toda la clase**.
+- [ ] **El plan B de Telegram listo** (5 min, Ejercicio 0-B): en Telegram, @BotFather → `/newbot` → nombre y
+  usuario terminado en `bot` → copiás el token → en n8n, credencial **Telegram API** con ese token. Importá
+  `09-asistente-telegram.json`, poné la credencial en los tres nodos de Telegram y Gemini en el cerebro, **publicalo**
+  (con el túnel abierto) y escribile "Hola" al bot desde el celular. Si contesta, **despublicalo** hasta que lo
+  necesites: así, si Meta falla en la clase, lo publicás y seguís.
 - [ ] **Las dos credenciales de WhatsApp en n8n** (ver el bloque de la filmina 8):
   - *WhatsApp OAuth API* (para el trigger): App ID y App Secret;
   - *WhatsApp API* (para responder): el token y el WhatsApp Business Account ID.
@@ -744,7 +769,7 @@ Para explicar:
 
 ---
 
-### 65–105 · Sección 03 · Práctica en vivo
+### 65–102 · Sección 03 · Práctica en vivo
 
 **Filmina 18 · Separador "03: Práctica en vivo"**
 
@@ -771,6 +796,8 @@ Camino SIMULADOR: todos los demás →
    2. En el 03: credencial de Gemini en "Cerebro: Gemini" → Save → Publish
    3. En el 04: Execute workflow → abrí "Mandar al simulador": ahí está la respuesta de Ana
    En cada paso, abrís el nodo que yo armo y lo mirás (o lo cambiás) en tu 03.
+Camino TELEGRAM (plan B): si WhatsApp no te anda pero tenés dirección pública y el bot del Ejercicio 0-B
+   → "Plan B: Telegram" al final del Ejercicio 3. Cambian la entrada y la respuesta; lo demás es igual.
 ```
 
 **Para el camino simulador, una vez** (lo mostrás en tu pantalla, 1 min): el flujo 04 hace de celular. Arma el mismo
@@ -888,8 +915,86 @@ Volvés a publicar. Mandás "Hola". Llega.
 
 <p style="color:#1a7f37">Era que no estaba publicado. Y fíjense que el token no estaba en la lista de lo primero: el token es para mandar, no para recibir. Separar "no llega" de "no sale" es la mitad del diagnóstico.</p>
 
-**Plan B:** si a vos no te llega el mensaje en vivo, seguís con el simulador y lo decís: "Meta hoy no colabora, pero
-del Paso 2 en adelante es exactamente igual".
+**Plan B:** si a vos no te llega el mensaje en vivo, **pasás a Telegram** (abajo). Si lo que falla es el túnel
+(Telegram tampoco llegaría), seguís con el simulador. En los dos casos lo decís: "Meta hoy no colabora, pero del Paso
+2 en adelante es exactamente igual".
+
+#### Plan B: Telegram · si WhatsApp no anda (5 min, solo si hace falta)
+
+▶ **Cuándo:** el mensaje de WhatsApp no llega (o la respuesta no sale) y en 2 minutos no lo resolviste. No te quedes
+peleando con Meta delante de la clase.
+
+<p style="color:#1a7f37">Meta hoy no colabora. Esto en la vida real pasa, y por eso siempre conviene tener un plan B. Vamos a hacer exactamente el mismo asistente, pero por Telegram. Fíjense que lo único que cambia es por dónde entra el mensaje y por dónde sale: el cerebro, la memoria y el prompt son los mismos. Eso es lo bueno de la arquitectura de tres fases.</p>
+
+**1. El bot (lo tenés de la preparación).** Mostrás en el celular el chat con **@BotFather** y tu bot. Decís:
+
+<p style="color:#1a7f37">En Telegram, los bots se crean hablando con otro bot, BotFather. Le escribo barra newbot, le doy un nombre, un usuario que termine en bot, y me da un token. Ese token es la llave del bot: no se comparte. Sin cuenta de empresa, sin verificar nada.</p>
+
+**2. La entrada.** En el mismo workflow, **borrás** el *WhatsApp Trigger* (o hacés un workflow nuevo: *Asistente de
+Telegram*). Pegás en el chat:
+
+```text
+PLAN B · Telegram, la entrada
+1. + → buscá "Telegram" → Telegram Trigger → On message
+2. Credential → Create new → Telegram API → Access Token: el token de BotFather → Save
+3. Trigger On: Message
+4. Datos del mensaje (Edit Fields) → cambiá los campos por estos tres:
+   chatId  → {{ $json.message?.chat?.id }}
+   nombre  → {{ $json.message?.from?.first_name }}
+   texto   → {{ $json.message?.text }}
+5. Execute workflow → escribile "Hola" al bot
+```
+
+Lo que llega al trigger (los números son de ejemplo):
+
+```json
+{
+  "update_id": 912345678,
+  "message": {
+    "message_id": 12,
+    "from": { "id": 7001234567, "is_bot": false, "first_name": "Arturo", "language_code": "es" },
+    "chat": { "id": 7001234567, "first_name": "Arturo", "type": "private" },
+    "date": 1795000000,
+    "text": "Hola"
+  }
+}
+```
+
+<p style="color:#1a7f37">Es más corto que el de Meta. El texto está en message, text. El nombre, en from, first name. Y lo que en WhatsApp era el teléfono, acá es el chat id: el número de esta conversación. Lo vamos a usar para dos cosas: para saber a quién contestarle y como etiqueta de la memoria.</p>
+
+Para explicar:
+- **¿Por qué no hay "tipo"?** En Telegram, una foto o un audio llegan **sin** `text`. Con saber si `texto` está vacío
+  alcanza (el portero del Paso 5).
+- **¿Por qué no hay "phoneNumberId"?** En WhatsApp hacía falta decir **desde qué número** se responde. En Telegram el
+  que responde es el bot, que ya sabe quién es por el token.
+- **El primer mensaje es `/start`.** Cuando alguien abre el bot y aprieta *Iniciar*, Telegram manda `/start`. A Ana le
+  llega como un saludo y contesta: no hace falta hacer nada.
+
+**3. Lo que cambia en los Pasos 2 a 5** (al llegar a cada uno, lo hacés así en lugar de WhatsApp):
+
+| Paso | Con WhatsApp | Con Telegram |
+|---|---|---|
+| 2 · La respuesta | *WhatsApp Business Cloud* → *Send*, número de origen y teléfono | **Telegram → Send a text message**. *Chat ID:* arrastrás `chatId`. *Text:* `{{ $json.output }}`. **Add Field → Append n8n Attribution → apagado** |
+| 3 · La memoria | *Key:* el `telefono` | *Key:* `{{ $('Datos del mensaje').item.json.chatId }}` |
+| 4 · La voz | "atendés por WhatsApp", negrita con un asterisco | "atendés por Telegram" y **texto plano**: "no uses asteriscos, ni #, ni guiones bajos para resaltar" |
+| 5 · Los bordes | *¿Es un mensaje?* + *¿Es texto?* (`tipo` = text) | Solo *¿Es texto?*: `{{ $json.texto }}` **is not empty**. Telegram no manda avisos de leído |
+
+Para explicar:
+- **Append n8n Attribution:** viene prendido, y agrega al final de cada respuesta *"This message was sent
+  automatically with n8n"*. Para un bot de un negocio, se apaga.
+- **Por qué texto plano:** Telegram muestra los asteriscos tal cual, salvo que se active un "modo de formato" (*Parse
+  Mode*). Ese modo da error si el modelo deja un asterisco sin cerrar. En un plan B, lo más seguro es texto plano.
+- **Una ventaja para la clase:** el bot no tiene lista de números permitidos. Pegás el link `t.me/…` en el chat y
+  **todos le pueden escribir** desde su celular: es la prueba de los dos chats del Paso 3, con toda la clase.
+
+**4. Publicar.** *Save* → *Publish*. Y avisás:
+
+<p style="color:#1a7f37">Una diferencia con WhatsApp: con el flujo publicado, no aprieten Execute workflow. Para la prueba, n8n le cambia la dirección al bot, y cuando termina, el bot deja de llegar al flujo publicado. Si les pasa, despublican y publican de nuevo.</p>
+
+**Si no querés armarlo en vivo:** el flujo `09-asistente-telegram.json` es la práctica terminada por Telegram.
+Solo hay que publicarlo (lo dejaste listo en la preparación).
+
+■ **Vuelve a:** el Paso 2, con la tabla de arriba a mano.
 
 #### Paso 2 · El cerebro (77–85)
 
@@ -913,6 +1018,9 @@ PRÁCTICA · Paso 2: el cerebro
    MessageType: Text · Text Body: {{ $json.output }}
 4. Save → Publish → mandá "Hola, qué paquetes tienen?" desde tu celular
 ```
+
+**Si vas por Telegram:** el paso 3 es **Telegram → Send a text message** (Chat ID = `chatId`, Text =
+`{{ $json.output }}`, *Append n8n Attribution* apagado). Ver la tabla del plan B.
 
 Para explicar mientras lo hacés:
 - **`{{ $json.texto }}`**: lo que escribió la persona, que sacamos en *Datos del mensaje*. Es la entrada del agente.
@@ -984,6 +1092,9 @@ PRÁCTICA · Paso 3: la memoria
    (en el 04 cambiá el texto en "Mensaje de prueba" y ejecutalo dos veces)
 ```
 
+**Si vas por Telegram:** la *Key* es `{{ $('Datos del mensaje').item.json.chatId }}`. Y el segundo celular sobra:
+pegás el link del bot en el chat de la clase y le escriben ellos.
+
 13. Probás el clásico. Ahora sí sabe. Después, **desde el segundo celular** (el de Romina): *"¿Cómo me llamo?"*. No
     sabe el tuyo. Decís:
 
@@ -1021,7 +1132,7 @@ No session ID found
 
 <p style="color:#1a7f37">Esa opción es para el chat de prueba de n8n, que manda su propio número de sesión. WhatsApp no lo manda: hay que decirle cuál usar. Lo vuelvo a poner en Define below con el teléfono.</p>
 
-#### Paso 4 · La voz (93–100)
+#### Paso 4 · La voz (93–98)
 
 14. **Filmina 23.** Decís:
 
@@ -1064,6 +1175,9 @@ Para explicar mientras lo pegan:
   persona.
 - **El nombre del cliente** viene del perfil de WhatsApp. Ana puede saludar por el nombre sin preguntarlo.
 
+**Si vas por Telegram:** en el prompt, "atendés por Telegram", y la línea de la negrita cambia por *"Texto plano: no
+uses asteriscos, ni #, ni guiones bajos para resaltar (Telegram los muestra tal cual)."* Está en el flujo 09.
+
 16. **Save → Publish.** Mandás la misma pregunta del Paso 2. Comparás en voz alta. Decís:
 
 <p style="color:#1a7f37">El mismo agente, otra voz. Corto, con negrita de WhatsApp, y termina con una pregunta. El prompt es el código fuente del comportamiento.</p>
@@ -1082,7 +1196,7 @@ Mejoró (negrita de WhatsApp, sabe qué vende, cierra con una pregunta), pero no
 emojis. Es un modelo chico. Con Gemini, las reglas se respetan mucho mejor. Si les pasa con el suyo, la solución es la
 misma de la Semana 1: ser más explícito ("si te piden la lista, nombrá solo los destinos, sin detalles").
 
-#### Paso 5 · Los bordes (100–105)
+#### Paso 5 · Los bordes (98–102) · versión corta
 
 17. **Filmina 24.** Decís:
 
@@ -1108,8 +1222,12 @@ PRÁCTICA · Paso 5: los bordes
 4. Sticky note (Shift + S) explicando el flujo → menú … → Download (el .json para la entrega)
 ```
 
-20. Probás la foto (respuesta fija), la pregunta de abogado (desvía) y, si hay tiempo, un mensaje enojado (deriva).
-    Lo real, con el simulador y `llama3.2`:
+**Si vas por Telegram:** no hay *¿Es un mensaje?*. *¿Es texto?* → `{{ $json.texto }}` → **is not empty**; el
+*false* va a **Telegram → Send a text message** con la respuesta fija.
+
+20. Probás **la foto** (respuesta fija) y listo: lo demás (abogado, reserva, enojado) queda para casa, es el Paso 5 del
+    Ejercicio 3. Así se liberan 3 minutos para la Entrega Final. Si te sobra tiempo, lo probás. Lo real, con el
+    simulador y `llama3.2`:
 
 ```text
 [una foto]  → "Por ahora solo puedo leer mensajes de texto 🙏 ¿Me lo escribís?"   (no pasa por la IA: 0 segundos)
@@ -1169,16 +1287,20 @@ publicarlo (y despublicar el que armaste: un solo trigger por app).
 | "Tarda mucho en contestar" | Si usás Ollama, es esperable (Semana 7). Para WhatsApp, conviene la nube o una máquina con placa de video. |
 | "Uso el simulador y el 04 da error de conexión" | El 03 no está publicado, o la URL no es la tuya. n8n Cloud: copiá la *Production URL* del webhook del 03 en el 04. |
 | "El 04 dice *Error in workflow*" | El que falló es el 03. Abrí el 03 → pestaña **Executions** → la última: ahí está el error de verdad (credencial de Gemini, por ejemplo). |
+| Telegram: "*Bad Request: bad webhook: An HTTPS URL must be provided*" | n8n no tiene dirección pública: es `localhost`. Igual que con WhatsApp: n8n Cloud, o el túnel con `WEBHOOK_URL`. |
+| Telegram: "Anduvo una vez y después no llega nada" | Apretaron *Execute workflow* con el flujo publicado: la prueba le cambió la dirección al bot. Despublicar y publicar de nuevo. |
+| Telegram: la respuesta termina con "*This message was sent automatically with n8n*" | En *Send a text message* → *Add Field* → *Append n8n Attribution* → apagado. |
+| Telegram: "*Unauthorized*" en la credencial | El token mal copiado (tiene que incluir el número, los dos puntos y lo que sigue). Si se filtró, en BotFather `/revoke`. |
 | "El 04 dice *The connection was aborted*" | El 03 tardó más de lo que el 04 espera. Pasa con Ollama en frío. El 04 de la carpeta espera 10 minutos; si lo armaste vos, *Options* → *Timeout*. |
 
 ---
-### 105–115 · Sección 04 · El cierre del curso
+### 102–115 · Sección 04 · El cierre del curso y la Entrega Final
 
 **Filmina 25 · Separador "04: El cierre del curso"**
 
 <p style="color:#1a7f37">Llegamos al final. Antes de hablar del proyecto, miremos para atrás un minuto: todo lo que armaron hoy usa algo de cada semana.</p>
 
-#### Filmina 26 · De dónde venimos: módulos 1 al 4 (2 min)
+#### Filmina 26 · De dónde venimos: módulos 1 al 4 (1 min)
 
 <p style="color:#1a7f37">Módulo 1: aprendieron a hablarle a un modelo, tokens, alucinaciones y prompts que devuelven JSON. Módulo 2: a decidir qué vale la pena automatizar, y conocieron n8n. Módulo 3: el primer flujo con lógica, IF, Switch, Merge, Aggregate y Wait. Módulo 4: el flujo habló con el mundo, APIs, HTTP y credenciales.</p>
 
@@ -1219,9 +1341,11 @@ Para explicar:
   lo use otra gente, sin que vos estés mirando.
   - *Ejemplo:* No es "un flujo con IA, otro con Sheets y otro con WhatsApp": es uno donde el mensaje entra, el agente
     consulta la planilla y responde.
-- **"El canal: WhatsApp, con la Cloud API que configuraste hoy."** El programa también acepta otras salidas (un mail,
-  una fila en Sheets, un evento en Calendar), pero el título del proyecto es el asistente de WhatsApp.
-  - *Ejemplo:* La app de Meta que armaron en el Ejercicio 0 es la del proyecto.
+- **"El canal: WhatsApp, con la Cloud API que configuraste hoy."** El título del proyecto es el asistente de
+  WhatsApp, pero el requisito 6 dice *"si usás WhatsApp Business"*: acepta otros canales y otras salidas (un mail,
+  una fila en Sheets, un evento en Calendar). **Telegram vale**, contando en el README por qué se eligió (confirmalo con Romina antes de decirlo).
+  - *Ejemplo:* La app de Meta que armaron en el Ejercicio 0 es la del proyecto. Si Meta los traba, el bot de Telegram
+    del Ejercicio 0-B.
 - **"El cerebro: el AI Agent del módulo 6, con su system prompt, su memoria y sus tools."** El programa pide que el
   agente **tome una decisión real** (elegir una acción, clasificar, derivar), no solo que escriba texto, y que expliquen
   por qué hace falta un agente y no alcanzaba un nodo de IA simple.
@@ -1231,19 +1355,72 @@ Para explicar:
   - *Ejemplo:* n8n Cloud, o n8n en Docker con un túnel de dirección fija (ngrok con su dominio gratis) o en un
     servidor. Y el token de usuario del sistema, no el de 24 horas.
 
-**Los requisitos mínimos del programa** (pegás en el chat; están completos en `program-summary.pdf`):
+#### La consigna completa, punto por punto (sin filmina, 5 min)
+
+Las filminas presentan el proyecto, pero no dicen **qué se entrega ni cómo se corrige**. Esto es lo que más preguntan
+después, y no hay otra clase: se explica hoy. Compartís [entrega-final.md](entrega-final.md) (es la consigna de
+`program-summary.pdf`, páginas 45 a 48, explicada en criollo) y lo recorrés en pantalla.
+
+<p style="color:#1a7f37">Les comparto el documento de la Entrega Final. Es la consigna oficial, explicada en simple, con un ejemplo para cada punto y un modelo de README para copiar. Lo recorremos rápido, porque no hay otra clase: lo que no pregunten hoy, lo preguntan por los canales de siempre.</p>
+
+**1. Los siete requisitos.** Pegás en el chat:
 
 ```text
-ENTREGA FINAL · Requisitos mínimos
-1. Caso de negocio con ROI: qué proceso manual automatizás, cuánto tiempo/plata cuesta hoy, y hasta dónde conviene
-2. Al menos DOS fuentes de entrada distintas (webhook o WhatsApp, una API por HTTP, un servicio de Google)
-3. Lógica de control con criterio: cada nodo, por una razón (documentada con notas adhesivas)
-4. Un AI Agent (no un nodo de IA simple): system prompt completo y una decisión real dentro del flujo
-5. Decisión de modelo local o nube, justificada (costo, privacidad, independencia)
-6. Una salida a un lugar real: WhatsApp, mail, una fila en Sheets, un evento en Calendar
+ENTREGA FINAL · Los 7 requisitos (detalle en entrega-final.md)
+1. Caso de negocio con ROI: qué tarea manual automatizás, cuánto cuesta hoy, y hasta dónde conviene
+2. Dos fuentes de entrada distintas (el chat + una planilla de Google, o una API por HTTP)
+3. Lógica con criterio: cada nodo por una razón, explicada con notas adhesivas
+4. Un AI Agent (no un nodo de IA simple): system prompt completo y una decisión real
+5. Modelo local o nube, justificado (costo, privacidad, independencia)
+6. Una salida a un lugar real: WhatsApp o Telegram, un mail, una fila en Sheets, un evento en Calendar
+7. Al menos DOS cosas que pueden salir mal, y cómo las prevé tu flujo
 ```
 
-#### Filmina 29 · Lo que ya tenés: no arrancás de cero (2 min)
+<p style="color:#1a7f37">Siete puntos, y casi todos ya los tienen. Dos entradas: el chat y la planilla de la Semana 6. El agente: Ana, que decide si consulta la planilla o si deriva. Local o nube: la decisión de la Pre-entrega 4. La salida: la respuesta en el chat. Y los errores: el portero de las fotos de hoy es uno; el segundo puede ser una regla del prompt, "si la cotización no llega, no inventes".</p>
+
+Para explicar (lo que más se confunde):
+- **ROI** (*return on investment*, "retorno de la inversión"): cuánto ahorra comparado con lo que cuesta armarlo y
+  mantenerlo. No hace falta un cálculo exacto: una estimación honesta, y **hasta dónde conviene** (con dos consultas
+  por semana, no vale la pena).
+  - *Ejemplo:* "40 consultas por día × 3 minutos = 2 horas por día de una persona; el bot cuesta unos USD 5 por mes".
+- **"Dos fuentes de entrada"** no son dos triggers: es que el flujo **reciba o busque** datos en dos lugares. El
+  mensaje del chat y la planilla de precios ya son dos.
+  - *Ejemplo:* El flujo 08 (Ana con la planilla y el dólar) ya cumple con tres.
+- **"Una decisión real":** que el agente **elija** algo (qué herramienta usar, a quién derivar, cómo clasificar), no
+  que solo escriba. Y explicar en el README **por qué un nodo de IA simple no alcanzaba**.
+  - *Ejemplo:* Una *Basic LLM Chain* contesta siempre igual; Ana decide si consulta la planilla, si calcula, o si pasa
+    la conversación a un vendedor.
+- **"Dos cosas que pueden salir mal":** puede ser un IF, un límite en el prompt, o una validación antes de anotar
+  algo en una planilla.
+  - *Ejemplo:* La foto que hoy rompía el agente, y la API del dólar que no responde.
+
+**2. Cómo se entrega.** Decís:
+
+<p style="color:#1a7f37">No se entrega un PDF: se entrega un repositorio. Un repositorio es una carpeta en internet, en GitHub, con cuatro cosas: el json del flujo, que se descarga desde el menú de los tres puntos; un README que explica el caso, el ROI, el modelo, por qué un agente y los dos errores; el system prompt completo; y las capturas del canvas y de una ejecución que salió bien. En el documento tienen el paso a paso para subirlo desde la página, sin instalar nada, y un README de modelo para copiar.</p>
+
+Para explicar:
+- **Repositorio (repo):** una carpeta en internet, en una página como GitHub, que se comparte con un link. Se entrega
+  el link.
+- **El aviso del programa sobre las claves:** n8n no exporta las credenciales, pero **sí lo que pegaste a mano en un
+  campo** (una API Key escrita en un header, por ejemplo). Antes de subir el `.json`, lo abren con el Bloc de notas y
+  buscan "key", "token" y "Bearer".
+  - *Ejemplo:* La clave de NewsAPI de la Semana 4: guardada en la credencial *Header Auth*, no viaja; pegada a mano
+    en un header del HTTP Request, sí.
+- **Desplegado:** publicado, con dirección https fija (n8n Cloud, o ngrok con su dominio gratis) y credenciales que no
+  vencen (en WhatsApp, el token de usuario del sistema; el de Telegram no vence).
+
+**3. Cómo se corrige.** Mostrás la tabla de [entrega-final.md](entrega-final.md):
+
+| Qué se mira | Peso |
+|---|---|
+| El flujo en n8n: anda y junta bien las piezas | 50 % |
+| El agente y el modelo: system prompt ordenado, elección justificada | 25 % |
+| Los errores: qué pasa con fallas, mensajes raros o una API caída | 15 % |
+| El caso de negocio: el problema, el ROI, por qué vale la pena | 10 % |
+
+<p style="color:#1a7f37">La mitad de la nota es que el flujo ande. Así que el orden es: primero que entre y salga, como hoy; después las herramientas; y al final, el README. Se aprueba con 70 sobre 100.</p>
+
+#### Filmina 29 · Lo que ya tenés: no arrancás de cero (1 min)
 
 <p style="color:#1a7f37">No arrancan de cero. Del módulo 2, el criterio para elegir un caso. Del 5, el método para planificar y la clínica de errores. Del 6, el diseño del agente y su prompt. Del 8, el canal funcionando y la arquitectura de tres fases. Lo que falta: elegir el caso, ensamblar las piezas y desplegar.</p>
 
@@ -1287,7 +1464,8 @@ TAREA · Semana 8
 2. El cuestionario del módulo en la plataforma (6 preguntas).
 3. Si llegaste con el simulador: Ejercicio 5, pasar al WhatsApp de verdad (lo vas a necesitar en el final).
 4. Desafío: Ejercicio 6, RAG con las preguntas frecuentes.
-5. Entrega Final: elegí tu caso esta semana. Arrancá por el caso, no por la herramienta.
+5. Entrega Final: leé entrega-final.md y elegí tu caso esta semana. Arrancá por el caso, no por la herramienta.
+   Canal: WhatsApp o, si Meta te traba, Telegram (Ejercicio 0-B). Se entrega el link a tu repo de GitHub.
 ```
 
 ---
@@ -1306,6 +1484,8 @@ Para explicar (respuestas listas para las tres preguntas de la filmina):
   plantillas (marketing, utilidad fuera de la ventana, autenticación), por mensaje y según el país. Un asistente que
   solo responde, casi no paga a Meta: lo que más cuesta es el modelo de IA. Antes de presupuestar, la página de precios
   de Meta.
+- **"¿Puedo hacerlo con Telegram?"** Sí: el requisito 6 acepta otros canales. Es el mismo asistente (flujo 09);
+  conviene contar en el README por qué lo eligieron.
 - **El despliegue:** n8n Cloud es lo más simple. Con Docker en tu computadora, el túnel tiene que tener una dirección
   fija y la computadora tiene que estar prendida mientras el bot atiende.
 
@@ -1549,7 +1729,9 @@ Cambiá un precio en la planilla → preguntá de nuevo → Ana ya dice el preci
 - [ ] Tienen un system prompt con las cuatro reglas del formato móvil.
 - [ ] Saben qué revisar cuando "no pasa nada" (publicado, dirección pública, App Secret, un trigger por app) y cuando
   "no sale" (token, destinatario).
-- [ ] Saben qué entregan en la Pre-entrega 4 y qué pide la Entrega Final.
+- [ ] Saben qué entregan en la Pre-entrega 4.
+- [ ] Saben qué pide la Entrega Final (los 7 requisitos), que se entrega en un repo de GitHub y cómo se corrige.
+- [ ] Tienen [entrega-final.md](entrega-final.md) y saben que Telegram es una opción si Meta los traba.
 
 ---
 
@@ -1590,3 +1772,8 @@ Cambiá un precio en la planilla → preguntá de nuevo → Ana ya dice el preci
 | **Base vectorial** | Una base de datos que encuentra los textos de significado más parecido. | *Simple Vector Store*, Supabase. |
 | **Chunk** | Un pedazo de un documento. Se corta antes de guardarlo. | 600 caracteres. |
 | **Desplegar** | Dejar el sistema funcionando para que lo use otra gente, sin que estés mirando. | La Entrega Final. |
+| **Telegram** | Una app de mensajería parecida a WhatsApp. Sus bots se crean gratis y en minutos. | El plan B de la práctica (flujo 09). |
+| **BotFather** | El bot oficial de Telegram con el que se crean los demás bots. Te da el token. | `/newbot`. |
+| **Chat ID** | El número de una conversación de Telegram. Es el "teléfono" del cliente en Telegram. | La *Key* de la memoria en el flujo 09. |
+| **Repositorio (repo)** | Una carpeta en internet (en GitHub) con los archivos de un proyecto. Se comparte con un link. | Así se entrega la Entrega Final. |
+| **ROI** | *Return on investment*: cuánto ahorra algo comparado con lo que cuesta. | El requisito 1 de la Entrega Final. |

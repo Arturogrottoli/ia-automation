@@ -1,0 +1,271 @@
+{
+  "name": "S8 · 09 · Asistente de Telegram (plan B)",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "id": "7d66477d-eb86-4a6c-8c4a-f93b98b1bbaa",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "616e9abd-0a95-43fc-af77-bb8ea2f613cb"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b49c13e6-42bb-4d62-af16-4413a58da8ae",
+              "name": "chatId",
+              "value": "={{ $json.message?.chat?.id }}",
+              "type": "string"
+            },
+            {
+              "id": "777223fa-3834-4f43-8ea3-5931cbb62a49",
+              "name": "nombre",
+              "value": "={{ $json.message?.from?.first_name }}",
+              "type": "string"
+            },
+            {
+              "id": "a601feea-f005-420e-bdd6-29379e2b3820",
+              "name": "texto",
+              "value": "={{ $json.message?.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "71419d92-3af0-4d87-a8f5-a76f863ad246",
+      "name": "Datos del mensaje",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6c18fd15-14e6-46ea-a247-eb4ce5591790",
+              "leftValue": "={{ $json.texto }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "b0373529-b00e-4fb5-bfc4-251e44f1bf43",
+      "name": "¿Es texto?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.texto }}",
+        "options": {
+          "systemMessage": "=Sos Ana, la asesora de la agencia de viajes \"Rumbo Sur\", y atendés por Telegram. Hoy es {{ $now.format('dd/MM/yyyy') }}. El cliente se llama {{ $('Datos del mensaje').item.json.nombre }}.\n\nQUÉ PODÉS HACER: contar qué paquetes hay, qué incluyen, cuántos días son y cuánto cuestan. Estos son los únicos paquetes (precio en dólares, por persona):\n- Bariloche Clásico: 5 días, USD 950. Aéreo, hotel 3 estrellas con desayuno y excursión al Circuito Chico.\n- Bariloche Nieve: 7 días, USD 1450. Hoy NO tiene cupos.\n- Caminos del Vino (Mendoza): 4 días, USD 780. Aéreo, hotel boutique y dos visitas a bodegas con degustación.\n- Norte Mágico (Salta): 6 días, USD 890. Aéreo, hotel con desayuno y excursiones a Cafayate y Purmamarca.\n- Fin del Mundo (Ushuaia): 5 días, USD 1320. Aéreo, hotel con media pensión y navegación por el Canal Beagle.\n- Cataratas Express: 3 días, USD 640. Aéreo, hotel con desayuno y entrada al lado argentino de las Cataratas.\n\nFORMATO (es un chat: se lee en el celular):\n- Mensajes cortos: párrafos de 2 o 3 líneas, como mucho 2 párrafos.\n- Texto plano: no uses asteriscos, ni #, ni guiones bajos para resaltar (Telegram los muestra tal cual).\n- Si listás opciones, una por línea, empezando con guion.\n- Como mucho un emoji por mensaje.\n- Terminá SIEMPRE con una pregunta o con el próximo paso.\n\nLÍMITES (aunque el cliente insista):\n- No confirmes reservas ni tomes pagos. Para reservar, pedí nombre completo, destino y fechas, y avisá que un vendedor lo contacta por este mismo chat.\n- No pases precios a pesos ni inventes promociones, fechas de salida ni datos que no estén arriba. Si no sabés algo, decí que lo consultás con un vendedor.\n- Si el tema no tiene que ver con los viajes de la agencia, decilo con amabilidad y volvé a los paquetes.\n- Si el cliente está enojado o pide hablar con una persona, decile que lo pasás con un vendedor del equipo."
+        }
+      },
+      "id": "00686073-d383-47c6-b01e-568547aed58e",
+      "name": "Ana por Telegram",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        700,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3-flash-preview",
+        "options": {
+          "temperature": 0.3
+        }
+      },
+      "id": "6e4f5ddd-1da5-4525-a56b-b807ebbd5e50",
+      "name": "Cerebro: Gemini",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        600,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Datos del mensaje').item.json.chatId }}",
+        "contextWindowLength": 10
+      },
+      "id": "518849ee-a23f-4462-9a06-68f4d244b3a0",
+      "name": "Memoria por chat",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        800,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Datos del mensaje').item.json.chatId }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "2730cf69-3463-4212-81bd-4500bfc6a9d9",
+      "name": "Responder por Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1000,
+        -120
+      ],
+      "webhookId": "4216b07d-cf65-4ee1-a23e-86d33e1fef0b"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Datos del mensaje').item.json.chatId }}",
+        "text": "Por ahora solo puedo leer mensajes de texto 🙏 ¿Me lo escribís?",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "c8315a72-da0f-4e59-a43e-3bf4f3ea57ea",
+      "name": "Responder: solo texto",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        700,
+        260
+      ],
+      "webhookId": "e9a62a1f-6c79-418d-b5d2-ca3e6160a76a"
+    },
+    {
+      "parameters": {
+        "content": "## El asistente, por Telegram (plan B si WhatsApp falla)\n\nEs el **mismo asistente del flujo 02**: solo cambian la entrada y la respuesta.\n\n1. **Entrada:** *Telegram Trigger* (Trigger On: Message) → *Datos del mensaje* (chatId, nombre y texto).\n2. **Portero:** *¿Es texto?* manda las fotos, audios y stickers (llegan sin texto) a una respuesta fija.\n3. **Procesamiento:** *Ana por Telegram* con Gemini y *Memoria por chat*: el Session ID es el **chatId**, un chat por persona.\n4. **Respuesta:** *Responder por Telegram* manda `{{ $json.output }}` al mismo chat. *Append n8n Attribution* apagado.\n\n**Antes de usarlo:** el bot creado con @BotFather y su token en una credencial *Telegram API* (en los tres nodos de Telegram), y Gemini en el cerebro. Igual que WhatsApp, Telegram solo manda mensajes a una dirección **https pública** (n8n Cloud, o Docker con el túnel y `WEBHOOK_URL`). **Publicalo** y probá escribiéndole al bot; no uses *Execute workflow* con el flujo publicado (le cambia la dirección al bot).",
+        "height": 330,
+        "width": 1000,
+        "color": 4
+      },
+      "id": "5b251247-c68f-4d41-9e82-443284c610f4",
+      "name": "Nota: el asistente",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -420
+      ]
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Datos del mensaje",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Datos del mensaje": {
+      "main": [
+        [
+          {
+            "node": "¿Es texto?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Es texto?": {
+      "main": [
+        [
+          {
+            "node": "Ana por Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Responder: solo texto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ana por Telegram": {
+      "main": [
+        [
+          {
+            "node": "Responder por Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cerebro: Gemini": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Ana por Telegram",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memoria por chat": {
+      "ai_memory": [
+        [
+          {
+            "node": "Ana por Telegram",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

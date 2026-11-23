@@ -50,7 +50,33 @@ clase solo lo conectás.
 Al final tenés que tener anotados **cinco datos**: el token, el Phone number ID, el WhatsApp Business Account ID, el
 App ID y el App Secret. **No los compartas con nadie** (ni en el chat de la clase): son las llaves de tu WhatsApp.
 
-**Si algo no anda**, no te trabes: en clase hay un camino con un simulador, sin Meta.
+**Si algo no anda**, no te trabes: en clase hay un camino con un simulador, sin Meta, y el plan B de Telegram
+(Ejercicio 0-B).
+
+### Ejercicio 0-B · Plan B: tu bot de Telegram (5 min)
+
+Si Meta no te deja avanzar (te pide verificar la empresa, no te llega el código, el número da error), el mismo
+asistente anda por **Telegram**. Crear un bot ahí lleva cinco minutos y no pide cuentas de empresa.
+
+**Lo que necesitás:** Telegram instalado en el celular (o Telegram Web, en la computadora) con tu cuenta.
+
+```text
+1. En Telegram, buscá  @BotFather  (el que tiene la tilde azul de verificado) → Iniciar (o escribí /start)
+2. Escribile:  /newbot
+3. Te pide el NOMBRE del bot (el que se ve en el chat): Ana de Rumbo Sur (o el de tu negocio)
+4. Te pide el USUARIO (con el que lo encuentran): tiene que terminar en "bot" y no puede estar usado
+   → por ejemplo: rumbosur_tunombre_bot
+5. BotFather te contesta con un link (t.me/rumbosur_tunombre_bot) y un TOKEN, algo así:
+   123456789:AAH...  → copialo y guardalo en un bloc de notas
+6. Abrí el link → Iniciar: ese es el chat con tu bot (todavía no contesta: falta n8n)
+```
+
+Al final tenés **un dato**: el token del bot. **No lo compartas** (ni en el chat de la clase): con el token, cualquiera
+maneja tu bot. Si se te escapa, en BotFather: `/revoke` te da uno nuevo.
+
+**Lo mismo que WhatsApp:** para recibir mensajes, tu n8n necesita una dirección https pública (n8n Cloud, o Docker con
+túnel: Ejercicio 5). **Lo distinto:** no hay lista de números permitidos ni token de 24 horas; cualquiera que tenga
+el link puede escribirle, y el token no vence.
 
 **Y además, para la clase:**
 - importá los flujos `03` y `04` (el simulador) y poné tu credencial de Gemini en *Cerebro: Gemini* del 03;
@@ -96,8 +122,10 @@ Lo hacemos a la par, en cinco pasos. Hay dos caminos:
 - **Real:** hiciste el Ejercicio 0 y tu n8n tiene una dirección https pública (n8n Cloud, o Docker con túnel: ver
   Ejercicio 5).
 - **Simulador:** todos los demás. Usás los flujos 03 (el asistente) y 04 (el celular de mentira).
+- **Telegram (plan B):** si WhatsApp no anda pero tenés dirección pública y el bot del Ejercicio 0-B. Cambian el
+  Paso 1 (la entrada) y el nodo de respuesta: está en "Plan B: Telegram", al final de este ejercicio.
 
-Del Paso 2 en adelante, los dos caminos son iguales.
+Del Paso 2 en adelante, los caminos son iguales.
 
 **Para el simulador, una vez:**
 
@@ -233,6 +261,42 @@ Save → Publish → mandá la misma pregunta del Paso 2.
 
 ✅ Sale bien si: la foto recibe la respuesta fija, lo de abogado lo desvía, y la reserva la deriva a un vendedor sin
 pedir la tarjeta.
+
+#### Plan B: Telegram (si WhatsApp no anda)
+
+Lo terminado está en `09-asistente-telegram.json`. Para armarlo vos, cambian tres cosas; el resto es igual:
+
+```text
+PASO 1 · La entrada (en lugar del WhatsApp Trigger)
+1. Workflow nuevo → nombre: Asistente de Telegram
+2. Add first step → buscá "Telegram" → Telegram Trigger → On message
+3. Credential → Create new → Telegram API → Access Token: el token de BotFather → Save
+4. Trigger On: Message
+5. + → Edit Fields (Set) → renombralo: Datos del mensaje → Add Field, tres veces:
+   chatId  → {{ $json.message?.chat?.id }}
+   nombre  → {{ $json.message?.from?.first_name }}
+   texto   → {{ $json.message?.text }}
+6. Execute workflow → escribile "Hola" a tu bot en Telegram
+
+PASO 2 · La respuesta (en lugar de WhatsApp Business Cloud)
++ después del agente → buscá "Telegram" → Send a text message
+   Credential: la misma Telegram API
+   Chat ID: arrastrá "chatId" de Datos del mensaje
+   Text: {{ $json.output }}
+   Add Field → Append n8n Attribution → apagado (si no, cada respuesta termina con una propaganda de n8n)
+
+PASO 3 · La memoria: Key = {{ $('Datos del mensaje').item.json.chatId }}   (el chat, en vez del teléfono)
+
+PASO 4 · La voz: el mismo system prompt, cambiando "atendés por WhatsApp" por "atendés por Telegram" y la regla
+de la negrita por: "Texto plano: no uses asteriscos, ni #, ni guiones bajos para resaltar."
+
+PASO 5 · Los bordes: no hace falta el Filter "¿Es un mensaje?" (Telegram no manda avisos de leído).
+   ¿Es texto? → Condición: {{ $json.texto }} → is not empty   (una foto llega sin texto)
+```
+
+**Ojo:** cuando el flujo ya está publicado, probá escribiéndole al bot y mirando **Executions**. Si apretás *Execute
+workflow*, n8n le cambia la dirección al bot para la prueba y, al terminar, el bot deja de llegar al flujo publicado:
+despublicá y volvé a publicar.
 
 ---
 
@@ -398,6 +462,13 @@ Para pensar:
   dos son no, va en el system prompt.
 
 ✅ Sale bien si: las tres primeras respuestas coinciden con el documento, y la de jubilados no inventa un descuento.
+
+---
+
+### La Entrega Final
+
+La consigna completa, explicada punto por punto, con el modelo de README y cómo subirlo a GitHub, está en
+[entrega-final.md](entrega-final.md). El canal puede ser WhatsApp o Telegram (plan B del Ejercicio 3).
 
 ---
 
