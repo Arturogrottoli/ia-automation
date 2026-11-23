@@ -1,0 +1,119 @@
+{
+  "name": "S8 · 10 · Eco por Telegram",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "id": "3c778f23-bb3e-455c-ab0c-7cad167aa326",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "a8e2e40d-3e93-4891-96c0-35cdf547a321"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0fd76aa6-3820-4ec8-9fbf-cb4738326418",
+              "name": "chatId",
+              "value": "={{ $json.message?.chat?.id }}",
+              "type": "string"
+            },
+            {
+              "id": "85d7f7f6-3918-4e09-bab3-14c1d21e4dce",
+              "name": "nombre",
+              "value": "={{ $json.message?.from?.first_name }}",
+              "type": "string"
+            },
+            {
+              "id": "7ec3fe7c-7710-4603-b820-1bcaf98d4bcb",
+              "name": "texto",
+              "value": "={{ $json.message?.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b11c53b1-798b-46d1-b235-59f1248407b1",
+      "name": "Datos del mensaje",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chatId }}",
+        "text": "=Hola {{ $json.nombre }}, recibí tu mensaje: \"{{ $json.texto }}\"",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "4448843b-497b-4180-84d4-bd19265dad97",
+      "name": "Responder por Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        440,
+        0
+      ],
+      "webhookId": "29421375-2193-4898-b55d-45f26f9dcf34"
+    },
+    {
+      "parameters": {
+        "content": "## El eco, por Telegram (la versión Telegram del flujo 01)\n\nLo que le escribís al bot, vuelve.\n\n- **Telegram Trigger:** Trigger On: *Message*. Credencial *Telegram API* con el token de @BotFather.\n- **Datos del mensaje:** saca el `chatId` (la conversación), el nombre y el texto.\n- **Responder por Telegram:** *Send a text message* al mismo `chatId`. *Append n8n Attribution* apagado.\n\n**¿Anda en local?** No solo: Telegram necesita una dirección **https pública** (n8n Cloud, o Docker con túnel y `WEBHOOK_URL`). Publicado, probalo escribiéndole al bot; no uses *Execute workflow* con el flujo publicado.",
+        "height": 300,
+        "width": 760,
+        "color": 4
+      },
+      "id": "5bc5db42-74d5-4659-b4ed-a0f52ee8f3ac",
+      "name": "Nota: el eco",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -360
+      ]
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Datos del mensaje",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Datos del mensaje": {
+      "main": [
+        [
+          {
+            "node": "Responder por Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

@@ -14,6 +14,13 @@ from File** → **Save**.
 | `03-asistente-simulado.json` | El mismo asistente, pero recibe los mensajes de un simulador en vez de Meta. |
 | `04-mandar-mensaje-simulado.json` | El "celular de mentira": le manda mensajes al 03. |
 | `05-rag-preguntas-frecuentes.json` | El desafío: Ana responde con las preguntas frecuentes de la agencia (RAG). |
+| `09-asistente-telegram.json` | El asistente completo, por Telegram (plan B si WhatsApp no anda). |
+| `10-eco-telegram.json` | El eco, por Telegram: lo que le escribís al bot, vuelve. |
+| `11-eco-slack.json` | El eco, por Slack: lo que escribís en un canal, el bot lo repite. Trae un filtro para que el bot no se conteste a sí mismo. |
+
+Los tres últimos necesitan, igual que WhatsApp, que tu n8n tenga dirección https pública (n8n Cloud, o túnel). El
+paso a paso para crear la app de Slack está en el guion de la clase ("El eco por Slack"): te lo compartimos si lo
+querés probar.
 
 ---
 

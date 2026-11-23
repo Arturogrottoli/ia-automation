@@ -10,7 +10,7 @@ la Entrega Final, sin clase.
 | `Modulo_8_AI_Automation.pptx` | Las filminas del módulo (33). |
 | `Semana 8.docx` | El material de lectura: RAG y Supabase (bases vectoriales, embeddings, chunks), el cuestionario de 6 preguntas, el podcast, la consigna de la Pre-entrega 4 y el guion sugerido de la clase. |
 | [ejercicios-alumnos.md](ejercicios-alumnos.md) | Lo que hay que hacer **antes de la clase** (la app de Meta), los ejercicios en clase y los de casa, con la Pre-entrega 4 paso a paso. Se comparte con los alumnos. |
-| [n8n/](n8n/) | Nueve workflows: el eco por WhatsApp, el asistente completo, el mismo asistente con WhatsApp simulado, el "celular de mentira" que le manda mensajes, un RAG con las preguntas frecuentes de la agencia, tres ejemplos extra sobre el asistente (06 fuera de horario, 07 pasar a una persona, 08 Ana con las herramientas de la Semana 6) y el **09, el mismo asistente por Telegram** (plan B si WhatsApp falla). |
+| [n8n/](n8n/) | Once workflows: el eco por WhatsApp, el asistente completo, el mismo asistente con WhatsApp simulado, el "celular de mentira" que le manda mensajes, un RAG con las preguntas frecuentes de la agencia, tres ejemplos extra sobre el asistente (06 fuera de horario, 07 pasar a una persona, 08 Ana con las herramientas de la Semana 6) el **09, el mismo asistente por Telegram** (plan B si WhatsApp falla), y los ejemplos más sencillos en otros canales: **10, el eco por Telegram** y **11, el eco por Slack**. |
 | [entrega-final.md](entrega-final.md) | **La Entrega Final explicada para los alumnos:** los 7 requisitos en criollo, qué quiere decir "desplegado", cómo subirlo a GitHub paso a paso, un modelo de README, el checklist y la rúbrica. Se comparte al final de la clase. |
 | [ejercicios-docente.md](ejercicios-docente.md) | Respuestas, las salidas reales de los flujos, las trabas y cómo corregir la Pre-entrega 4. **No se comparte.** |
 
@@ -181,6 +181,8 @@ Lo último que se recorta es la Sección 04: es el cierre del curso y la Entrega
   `09-asistente-telegram.json`, poné la credencial en los tres nodos de Telegram y Gemini en el cerebro, **publicalo**
   (con el túnel abierto) y escribile "Hola" al bot desde el celular. Si contesta, **despublicalo** hasta que lo
   necesites: así, si Meta falla en la clase, lo publicás y seguís.
+- [ ] **Si vas a mostrar el eco por Slack** (opcional, 15 min): la app de Slack armada y probada con el flujo 11
+  (los pasos están en "El eco por Slack", antes de los ejemplos extra).
 - [ ] **Las dos credenciales de WhatsApp en n8n** (ver el bloque de la filmina 8):
   - *WhatsApp OAuth API* (para el trigger): App ID y App Secret;
   - *WhatsApp API* (para responder): el token y el WhatsApp Business Account ID.
@@ -991,6 +993,9 @@ Para explicar:
 
 <p style="color:#1a7f37">Una diferencia con WhatsApp: con el flujo publicado, no aprieten Execute workflow. Para la prueba, n8n le cambia la dirección al bot, y cuando termina, el bot deja de llegar al flujo publicado. Si les pasa, despublican y publican de nuevo.</p>
 
+**Si primero querés ver solo el canal:** el eco por Telegram (flujo 10, "El eco por otros canales", más abajo) es el
+Paso 1 por Telegram con una respuesta fija, sin IA.
+
 **Si no querés armarlo en vivo:** el flujo `09-asistente-telegram.json` es la práctica terminada por Telegram.
 Solo hay que publicarlo (lo dejaste listo en la preparación).
 
@@ -1290,6 +1295,10 @@ publicarlo (y despublicar el que armaste: un solo trigger por app).
 | Telegram: "*Bad Request: bad webhook: An HTTPS URL must be provided*" | n8n no tiene dirección pública: es `localhost`. Igual que con WhatsApp: n8n Cloud, o el túnel con `WEBHOOK_URL`. |
 | Telegram: "Anduvo una vez y después no llega nada" | Apretaron *Execute workflow* con el flujo publicado: la prueba le cambió la dirección al bot. Despublicar y publicar de nuevo. |
 | Telegram: la respuesta termina con "*This message was sent automatically with n8n*" | En *Send a text message* → *Add Field* → *Append n8n Attribution* → apagado. |
+| Slack: la *Request URL* no dice "Verified" | El flujo no está publicado, la dirección no es pública, o pegaste la *Test URL* en vez de la *Production URL*. |
+| Slack: "Escribo en el canal y no pasa nada" | Falta el evento `message.channels` en *Event Subscriptions*, o el bot no está en el canal (`/invite @tu-bot`), o no reinstalaste la app después de agregar permisos. |
+| Slack: el bot se contesta a sí mismo sin parar | Falta el filtro *¿Lo escribió una persona?* (`bot_id` y `subtype` vacíos). **Despublicá ya** y agregalo. |
+| Slack: "*missing_scope*" o "*not_in_channel*" | Falta un permiso (*Bot Token Scopes*, y reinstalar) o invitar al bot al canal. |
 | Telegram: "*Unauthorized*" en la credencial | El token mal copiado (tiene que incluir el número, los dos puntos y lo que sigue). Si se filtró, en BotFather `/revoke`. |
 | "El 04 dice *The connection was aborted*" | El 03 tardó más de lo que el 04 espera. Pasa con Ollama en frío. El 04 de la carpeta espera 10 minutos; si lo armaste vos, *Options* → *Timeout*. |
 
@@ -1496,6 +1505,202 @@ Para explicar (respuestas listas para las tres preguntas de la filmina):
 **Filmina 33 · Gracias** — cierre.
 
 <p style="color:#1a7f37">Gracias por estudiar con nosotros. Mucha suerte con la entrega final: cualquier duda, por los canales de siempre.</p>
+
+---
+
+### Extra · El eco por otros canales: Telegram y Slack (los ejemplos más sencillos)
+
+Son la versión Telegram y la versión Slack del **flujo 01** (el eco por WhatsApp): **lo que entra, vuelve**, sin IA.
+Sirven para una sola cosa: ver que el canal anda antes de ponerle el agente. Si WhatsApp falla en la clase, el de
+Telegram se puede mostrar en vivo (5 min); el de Slack, si sobra tiempo o para casa.
+
+| Ejemplo | Flujo | Lo que hace | Min |
+|---|---|---|---|
+| T · El eco por Telegram | `10-eco-telegram.json` | Le escribís al bot "Hola" y te contesta *Hola Arturo, recibí tu mensaje: "Hola"* | 5 |
+| S · El eco por Slack | `11-eco-slack.json` | Escribís en un canal de Slack y el bot contesta ahí mismo, mencionándote | 15 |
+
+**¿Andan en local?** ❌ No solos. Igual que WhatsApp, Telegram y Slack **mandan** los mensajes a tu n8n, y para eso
+necesitan una dirección **https pública**: n8n Cloud, o n8n en Docker con el túnel y la `WEBHOOK_URL` (Ejercicio 5).
+Es la regla de las dos direcciones: n8n puede **salir** a cualquier lado desde `localhost`, pero nadie puede **entrar**.
+
+> **Para vos:** los dos flujos están armados con los parámetros de los nodos de n8n, pero **no se ejecutaron**.
+> Probalos con tu bot y tu app de Slack antes de mostrarlos.
+
+#### Ejemplo T · El eco por Telegram (flujo 10) (5 min)
+
+> **En pocas palabras:** un bot de Telegram que repite lo que le escribís. Tres nodos: escuchar, sacar los datos y
+> contestar. Es el Paso 1 de la práctica, por Telegram.
+
+▶ **Dónde arranca:** con el bot ya creado (Ejercicio 0-B) y n8n con dirección pública. Workflow vacío.
+■ **Dónde termina:** le escribís "Hola" al bot desde el celular y te contesta con tu nombre.
+
+<p style="color:#1a7f37">El ejemplo más chico posible con Telegram: lo que le escribo al bot, vuelve. Sin inteligencia artificial. Si esto anda, el canal anda, y después le ponemos el cerebro.</p>
+
+**T-1 · El bot.** Si no lo tenés: en Telegram, buscás **@BotFather** (el de la tilde azul) → *Iniciar* → `/newbot` →
+nombre (*Ana de Rumbo Sur*) → usuario terminado en `bot` (*rumbosur_prueba_bot*) → te da el **token**.
+
+<p style="color:#1a7f37">BotFather es el bot oficial para crear bots. Le pido uno nuevo, le pongo nombre y usuario, y me da un token. El token es la llave del bot: quien lo tiene, lo maneja. No se pega en el chat de la clase.</p>
+
+**T-2 · La entrada.** Workflow nuevo → nombre: *Eco por Telegram*. **Add first step** → buscás `telegram` → en la
+lista aparecen las acciones y, arriba o al final, **Triggers** → **On message**.
+
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Credential to connect with* | **Create new credential** → *Access Token*: el token de BotFather → **Save** | n8n se presenta ante Telegram como tu bot. Si dice *Connection tested successfully*, el token está bien |
+| *Trigger On* | **Message** (viene así) | Solo los mensajes nuevos. Hay otras opciones (mensajes editados, botones), que hoy no usamos |
+| *Additional Fields* | Nada | Sirve, por ejemplo, para bajar las fotos que llegan. El eco solo usa texto |
+
+<p style="color:#1a7f37">Un trigger, como siempre: lo que despierta al flujo. Este escucha a mi bot. Arriba dice que es un trigger, con el rayito: es el primer nodo.</p>
+
+**T-3 · Probar la entrada.** **Execute workflow** → queda *Waiting for trigger event* → desde el celular, le escribís
+**Hola** al bot → el nodo se pone verde. Abrís la salida: el paquete de Telegram (`message.text`, `message.from.first_name`,
+`message.chat.id`), el que está en el plan B.
+
+<p style="color:#1a7f37">Llegó. El texto está en message, text. Mi nombre, en from, first name. Y el chat id es el número de esta conversación: ahí le vamos a contestar.</p>
+
+**T-4 · Datos del mensaje.** **+** a la derecha del trigger → buscás `edit` → **Edit Fields (Set)** → lo renombrás
+**Datos del mensaje** (doble clic en el título). *Add Field*, tres veces; en cada uno, a la izquierda el nombre y a la
+derecha arrastrás el dato desde el panel de la izquierda (o lo pegás):
+
+```text
+chatId  → {{ $json.message?.chat?.id }}
+nombre  → {{ $json.message?.from?.first_name }}
+texto   → {{ $json.message?.text }}
+```
+
+- **Por qué este nodo:** el paquete viene con cajas adentro de cajas. Sacamos una vez lo que importa y el nodo
+  siguiente usa nombres cortos.
+- **El `?.`** quiere decir "si existe": si llega una foto, `text` no existe y el campo queda vacío en vez de dar
+  error.
+- **Execute step:** a la derecha, en *OUTPUT*, tienen que aparecer los tres campos con tus datos.
+
+**T-5 · La respuesta.** **+** a la derecha de *Datos del mensaje* → buscás `telegram` → en **Actions**, **Send a text
+message** → lo renombrás **Responder por Telegram**.
+
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Credential to connect with* | La misma de T-2 | El que contesta es el mismo bot |
+| *Resource* / *Operation* | **Message** / **Send Message** (vienen así al elegir *Send a text message*) | Mandar un mensaje de texto |
+| *Chat ID* | Arrastrás `chatId` desde la izquierda → `{{ $json.chatId }}` | A quién: a la misma conversación que escribió |
+| *Text* | `Hola {{ $json.nombre }}, recibí tu mensaje: "{{ $json.texto }}"` | El eco: lo mismo que llegó, con el nombre |
+| *Additional Fields* | **Add Field** → **Append n8n Attribution** → **apagado** | Si no, cada respuesta termina con *"This message was sent automatically with n8n"* |
+
+<p style="color:#1a7f37">Para contestar hacen falta dos cosas: a quién y qué. A quién, el chat id que guardamos. Qué, el texto con el nombre. Y apago la propaganda de n8n, que viene prendida.</p>
+
+**T-6 · Probar y publicar.** **Execute workflow** → le escribís *Hola* al bot → te llega *Hola Arturo, recibí tu
+mensaje: "Hola"*. Después **Save** → **Publish**, y le escribís de nuevo: contesta solo, sin que apretes nada.
+
+- **Ojo con el orden:** con el flujo publicado, no aprietes *Execute workflow*. La prueba le cambia la dirección al
+  bot y, al terminar, el publicado deja de recibir. Si pasó: despublicar y publicar.
+- **Mandale una foto:** contesta *recibí tu mensaje: ""*. No se rompe, pero no sirve: por eso el asistente tiene el
+  portero *¿Es texto?*.
+
+■ **Termina el Ejemplo T.** Si es el plan B en clase, seguís con el Paso 2 por Telegram (la tabla del plan B).
+
+#### Ejemplo S · El eco por Slack (flujo 11) (15 min)
+
+> **En pocas palabras:** lo mismo, en Slack: escribís en un canal y el bot te contesta ahí, mencionándote. Tiene un
+> nodo más que Telegram: un filtro para que el bot **no se conteste a sí mismo** para siempre.
+
+**Qué es Slack, para el que no lo usa:** un chat de trabajo. Cada empresa tiene su **espacio de trabajo**
+(*workspace*), con **canales** por tema (`#ventas`, `#soporte`). Un bot de Slack es útil para avisos internos: "llegó
+una consulta nueva", "el cliente pidió hablar con una persona".
+
+▶ **Dónde arranca:** con una cuenta de Slack y un espacio de trabajo propio (gratis: slack.com → *Crear un espacio de
+trabajo*), n8n con dirección pública. Workflow vacío.
+■ **Dónde termina:** escribís "Hola" en un canal y el bot contesta en el mismo canal, con tu nombre.
+
+<p style="color:#1a7f37">Slack es el chat de muchas empresas. Un bot ahí sirve para lo interno: que el equipo se entere de algo sin mirar una planilla. Armarlo lleva más pasos que Telegram, porque Slack pide que digamos qué puede hacer el bot. Vamos por partes.</p>
+
+**S-1 · La app de Slack (en api.slack.com).** En Slack, los bots se llaman **apps**.
+
+```text
+1. api.slack.com/apps → Create New App → From scratch
+   App Name: Eco de Rumbo Sur · Pick a workspace: tu espacio de trabajo → Create App
+2. Menú izquierdo: OAuth & Permissions → bajá a "Scopes" → Bot Token Scopes → Add an OAuth Scope:
+   chat:write          (escribir mensajes)
+   channels:history    (leer los mensajes de los canales públicos donde está el bot)
+   channels:read       (ver la lista de canales, para elegirlos en n8n)
+3. Arriba en esa misma pantalla: Install to <tu espacio> → Permitir
+   → aparece el "Bot User OAuth Token", empieza con xoxb- → copialo
+4. Menú izquierdo: Basic Information → App Credentials → Signing Secret → Show → copialo
+```
+
+<p style="color:#1a7f37">Los scopes son los permisos del bot: escribir, leer los mensajes de los canales y ver qué canales hay. Nada más. Es la misma idea que los permisos de Google en la Semana 6: se pide solo lo que hace falta. Al instalarla, Slack me da el token del bot, el que empieza con xoxb.</p>
+
+**S-2 · La credencial y el trigger (en n8n).** Workflow nuevo → *Eco por Slack* → **Add first step** → `slack` →
+**Triggers** → **On new message posted to channel**.
+
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Credential to connect with* | **Create new credential** → *Access Token*: el `xoxb-…` · *Signature Secret*: el Signing Secret → **Save** | El token deja que n8n conteste como el bot. El *Signing Secret* le permite a n8n comprobar que el mensaje vino de Slack de verdad |
+| *Trigger On* | **New Message Posted to Channel** | Un mensaje nuevo en un canal |
+| *Watch Whole Workspace* | **Prendido** | Escucha todos los canales donde esté el bot, sin elegir uno. Apagado, elegís un canal de la lista |
+| *Options* | Nada | |
+
+Arriba del panel, en **Webhook URLs**, elegís **Production URL** y la copiás (empieza con tu dirección pública).
+**Save** → **Publish**.
+
+<p style="color:#1a7f37">Acá hay una diferencia con Telegram y WhatsApp: n8n no le avisa solo a Slack dónde mandar los mensajes. Hay que copiar esta dirección y pegarla en la app de Slack. Y publico primero, porque Slack la prueba apenas la pego: tiene que haber alguien escuchando.</p>
+
+**S-3 · Decirle a Slack adónde mandar los mensajes (en api.slack.com).**
+
+```text
+1. Tu app → menú izquierdo: Event Subscriptions → Enable Events: On
+2. Request URL: pegás la Production URL de n8n → tiene que aparecer "Verified" ✔
+3. Subscribe to bot events → Add Bot User Event → message.channels → Save Changes
+4. Si aparece un cartel amarillo "reinstall your app" → clic → Permitir
+5. En Slack, en el canal donde vas a probar (#general sirve): escribí  /invite @Eco de Rumbo Sur
+```
+
+- **"Verified"** quiere decir que Slack mandó una prueba (un *challenge*) y n8n le contestó. Si no aparece: el flujo
+  no está publicado, la dirección no es pública, o copiaste la *Test URL*.
+- **`message.channels`** = "avisame de los mensajes en canales públicos". Sin este evento, Slack no manda nada.
+- **El `/invite`:** el bot solo ve los canales donde está, como una persona.
+
+**S-4 · El filtro que evita el eco infinito.** **+** a la derecha del trigger → `filter` → **Filter** → lo
+renombrás **¿Lo escribió una persona?**. Dos condiciones (**Add condition**), con *AND*:
+
+```text
+{{ $json.bot_id }}   → String → is empty
+{{ $json.subtype }}  → String → is empty
+```
+
+<p style="color:#1a7f37">Este nodo es el más importante del ejemplo. El bot contesta en el canal. Su respuesta es un mensaje nuevo en el canal. Slack se lo manda a n8n. n8n contesta otra vez. Y así para siempre. Los mensajes de un bot traen un bot id; los de una persona, no. Y subtype aparece cuando un mensaje se edita o se borra. Dejo pasar solo los que no tienen ninguno de los dos: los que escribió una persona.</p>
+
+- Es lo mismo que **Receive Message Status Updates** en WhatsApp: no todo lo que llega es un mensaje para contestar.
+
+**S-5 · Datos del mensaje.** **+** → **Edit Fields (Set)** → **Datos del mensaje**, tres campos:
+
+```text
+canal    → {{ $json.channel }}
+usuario  → {{ $json.user }}
+texto    → {{ $json.text }}
+```
+
+- En Slack no llega el nombre: llega el **ID** del usuario (algo como `U07ABC123`). Para nombrarlo, Slack tiene un
+  truco: escribir `<@U07ABC123>` en el mensaje lo muestra como una mención (*@Arturo*).
+
+**S-6 · La respuesta.** **+** → `slack` → **Actions** → **Send a message** → **Responder en Slack**.
+
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Credential* | La misma | |
+| *Send Message To* | **Channel** | Contesta en el canal, no por mensaje privado |
+| *Channel* | **By ID** → arrastrás `canal` → `{{ $json.canal }}` | El mismo canal donde escribieron. *From list* elegiría siempre uno fijo |
+| *Message Type* | **Simple Text Message** | Texto común |
+| *Message Text* | `Hola <@{{ $json.usuario }}>, recibí tu mensaje: "{{ $json.texto }}"` | El eco, con la mención |
+| *Options* | **Add option** → **Include Link to Workflow** → **apagado** | Si no, cada respuesta lleva *"Automated with this n8n workflow"* |
+
+**S-7 · Probar.** **Save** → **Publish**. En el canal, escribís **Hola**. El bot contesta *Hola @Arturo, recibí tu
+mensaje: "Hola"*, **una sola vez**. En **Executions** vas a ver **dos** ejecuciones: la de tu mensaje (verde, de punta
+a punta) y la de la respuesta del bot, que **frenó en el filtro**. Esa segunda es la prueba de que el filtro anda.
+
+<p style="color:#1a7f37">Dos ejecuciones: la mía, que llegó hasta el final, y la del bot, que se frenó en el filtro. Sin ese filtro, la segunda habría contestado, y habría una tercera, y una cuarta.</p>
+
+■ **Termina el Ejemplo S.** Para el proyecto final, Slack sirve más como **salida** que como canal del cliente: el
+asistente atiende por WhatsApp o Telegram y le avisa al equipo por Slack ("Juan quiere reservar Bariloche para 3").
+Es el Ejemplo B (pasar a una persona) con Slack en lugar de mail.
 
 ---
 
@@ -1775,5 +1980,8 @@ Cambiá un precio en la planilla → preguntá de nuevo → Ana ya dice el preci
 | **Telegram** | Una app de mensajería parecida a WhatsApp. Sus bots se crean gratis y en minutos. | El plan B de la práctica (flujo 09). |
 | **BotFather** | El bot oficial de Telegram con el que se crean los demás bots. Te da el token. | `/newbot`. |
 | **Chat ID** | El número de una conversación de Telegram. Es el "teléfono" del cliente en Telegram. | La *Key* de la memoria en el flujo 09. |
+| **Slack** | Un chat de trabajo: cada empresa tiene su espacio, con canales por tema. Sus bots se llaman "apps". | El eco del flujo 11. |
+| **Scope** | Un permiso que pide una app (de Slack o de Google): leer, escribir, ver canales. | `chat:write`. |
+| **Request URL** | La dirección de n8n que se pega en la app de Slack para que le mande los mensajes. | La *Production URL* del Slack Trigger. |
 | **Repositorio (repo)** | Una carpeta en internet (en GitHub) con los archivos de un proyecto. Se comparte con un link. | Así se entrega la Entrega Final. |
 | **ROI** | *Return on investment*: cuánto ahorra algo comparado con lo que cuesta. | El requisito 1 de la Entrega Final. |

@@ -1,0 +1,181 @@
+{
+  "name": "S8 · 11 · Eco por Slack",
+  "nodes": [
+    {
+      "parameters": {
+        "trigger": [
+          "message"
+        ],
+        "watchWorkspace": true,
+        "options": {}
+      },
+      "id": "3eaa5d9f-e35f-426b-a358-dbd3943b425e",
+      "name": "Slack Trigger",
+      "type": "n8n-nodes-base.slackTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "d07d3f8b-720a-4663-90a2-1a7ee0815ebc"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "43ff16e9-3685-45a8-b0a4-0a0d994adcbb",
+              "leftValue": "={{ $json.bot_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "b446c7d5-5bab-4376-b5b1-580d690d49bd",
+              "leftValue": "={{ $json.subtype }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "6a98588d-78dc-46d4-8db9-7002cc5d3071",
+      "name": "¿Lo escribió una persona?",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a67a5370-bd0b-4fae-91c4-353c850b9a37",
+              "name": "canal",
+              "value": "={{ $json.channel }}",
+              "type": "string"
+            },
+            {
+              "id": "623ff898-7cf4-43e5-acbd-ea4c88de171e",
+              "name": "usuario",
+              "value": "={{ $json.user }}",
+              "type": "string"
+            },
+            {
+              "id": "cc13d023-734a-4640-8864-cdf44f92c3f1",
+              "name": "texto",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1ede8338-9ef8-40fd-b38d-7d8eaff35b8f",
+      "name": "Datos del mensaje",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $json.canal }}",
+          "mode": "id"
+        },
+        "text": "=Hola <@{{ $json.usuario }}>, recibí tu mensaje: \"{{ $json.texto }}\"",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "id": "194a8592-21ae-4b20-ae75-99739113db1a",
+      "name": "Responder en Slack",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        660,
+        0
+      ],
+      "webhookId": "440e1b55-b3c3-4509-9084-e7dc6ef46792"
+    },
+    {
+      "parameters": {
+        "content": "## El eco, por Slack (la versión Slack del flujo 01)\n\nLo que escribís en un canal donde está el bot, vuelve.\n\n- **Slack Trigger:** Trigger On: *New Message Posted to Channel*, *Watch Whole Workspace* prendido. Credencial *Slack API* con el *Bot User OAuth Token* (`xoxb-…`).\n- **¿Lo escribió una persona?:** deja pasar solo mensajes sin `bot_id` ni `subtype`. **Sin este filtro, la respuesta del bot dispara el flujo otra vez: un eco infinito.**\n- **Datos del mensaje:** canal, usuario y texto.\n- **Responder en Slack:** *Send a message* al mismo canal. `<@usuario>` lo menciona. *Include Link to Workflow* apagado.\n\n**En Slack:** la dirección de este trigger (*Production URL*) va en tu app → *Event Subscriptions* → *Request URL*, con el evento `message.channels`. Y el bot tiene que estar en el canal (`/invite @tu-bot`).\n**¿Anda en local?** No solo: dirección **https pública** (n8n Cloud, o túnel).",
+        "height": 360,
+        "width": 860,
+        "color": 4
+      },
+      "id": "0ff2c4f4-16b7-4d9b-a081-04147bc40cb6",
+      "name": "Nota: el eco",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -360
+      ]
+    }
+  ],
+  "connections": {
+    "Slack Trigger": {
+      "main": [
+        [
+          {
+            "node": "¿Lo escribió una persona?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Lo escribió una persona?": {
+      "main": [
+        [
+          {
+            "node": "Datos del mensaje",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Datos del mensaje": {
+      "main": [
+        [
+          {
+            "node": "Responder en Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}
