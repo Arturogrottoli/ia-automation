@@ -858,6 +858,46 @@ PRÁCTICA · Paso 1: el canal (camino REAL)
 7. Execute workflow → queda "Waiting for trigger event" → mandá "Hola" desde tu celular
 ```
 
+**Nodo por nodo, en tu pantalla:**
+
+**P1-a · El que escucha a WhatsApp** (*WhatsApp Trigger*)
+
+```text
+Overview → Create workflow → nombre:  Asistente de WhatsApp
+Add first step → escribí  whatsapp  → WhatsApp Trigger   (el del rayito: es un trigger)
+→ si muestra una lista de eventos: On messages
+```
+
+- **Cuándo se coloca:** primero. Es el disparador: el flujo arranca cada vez que Meta avisa que llegó algo.
+
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Credential to connect with* | **Create new credential** → **WhatsApp OAuth API** → *Client ID* = el **App ID** · *Client Secret* = el **App Secret** (del Ejercicio 0) → **Save** | Con estos datos n8n se anota en tu app de Meta para recibir los mensajes. Si el *App Secret* está mal, los mensajes llegan y n8n los tira sin avisar |
+| *Trigger On* | **Messages** | Solo lo que tiene que ver con mensajes. Hay otros eventos (cambios en la cuenta, plantillas) que no nos importan |
+| *Options* → **Add option** → *Receive Message Status Updates* | Sacás **All**: que no quede nada elegido | Si no, los avisos de "enviado", "entregado" y "leído" también disparan el flujo: tres ejecuciones vacías por cada respuesta |
+
+<p style="color:#1a7f37">El trigger de WhatsApp. La credencial es la de la app de Meta: el App ID y el App Secret. Elijo solo los mensajes, y saco los avisos de leído: si no, cada vez que el cliente lee una respuesta, se dispara el flujo.</p>
+
+**P1-b · Ordenar los datos** (*Edit Fields*)
+
+```text
++ a la derecha de "WhatsApp Trigger" → escribí  edit  → Edit Fields (Set) → renombralo:  Datos del mensaje
+```
+
+- **Cuándo se coloca:** enseguida del trigger, antes que cualquier otra cosa. Todos los nodos que siguen van a usar
+  estos cinco casilleros.
+
+| Campo (*Mode: Manual Mapping* → **Add Field**, cinco veces, todos **String**) | Valor | De dónde sale |
+|---|---|---|
+| `telefono` | `{{ $json.messages?.[0]?.from }}` | Quién escribió. Es a quién le contestamos y la etiqueta de la memoria |
+| `nombre` | `{{ $json.contacts?.[0]?.profile?.name }}` | El nombre del perfil de WhatsApp |
+| `tipo` | `{{ $json.messages?.[0]?.type }}` | `text`, `image`, `audio`… Lo usa el portero del Paso 5 |
+| `texto` | `{{ $json.messages?.[0]?.text?.body }}` | Lo que escribió. Es la entrada del agente |
+| `phoneNumberId` | `{{ $json.metadata?.phone_number_id }}` | Desde qué número de la empresa se responde |
+
+*Include Other Input Fields*: apagado. Lo que no está en esta lista no se usa.
+
+
 Para explicar mientras lo hacés:
 - **El paso 5 es el de los avisos.** Meta no solo avisa cuando llega un mensaje: también cuando uno que mandamos se
   envió, se entregó y se leyó. Sin sacar "All", cada respuesta del bot dispara tres ejecuciones más, sin mensaje.
@@ -933,7 +973,8 @@ peleando con Meta delante de la clase.
 <p style="color:#1a7f37">En Telegram, los bots se crean hablando con otro bot, BotFather. Le escribo barra newbot, le doy un nombre, un usuario que termine en bot, y me da un token. Ese token es la llave del bot: no se comparte. Sin cuenta de empresa, sin verificar nada.</p>
 
 **2. La entrada.** En el mismo workflow, **borrás** el *WhatsApp Trigger* (o hacés un workflow nuevo: *Asistente de
-Telegram*). Pegás en el chat:
+Telegram*). **Cada campo, con su porqué, está en las tablas del Ejemplo T** ("El eco por otros canales", T-2, T-4 y
+T-5): es el mismo trigger, el mismo *Datos del mensaje* y el mismo nodo de respuesta. Pegás en el chat:
 
 ```text
 PLAN B · Telegram, la entrada
@@ -1024,6 +1065,55 @@ PRÁCTICA · Paso 2: el cerebro
 4. Save → Publish → mandá "Hola, qué paquetes tienen?" desde tu celular
 ```
 
+**Nodo por nodo, en tu pantalla:**
+
+**P2-a · El agente** (*AI Agent*)
+
+```text
++ a la derecha de "Datos del mensaje" → escribí  agent  → AI Agent → renombralo:  Ana por WhatsApp
+```
+
+- **Cuándo se coloca:** después de ordenar los datos. Es el cerebro del asistente, el de la Semana 6.
+- **Por qué un agente y no una chain:** necesita memoria (Paso 3) y, más adelante, herramientas.
+
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Source for Prompt (User Message)* | **Define below** | *Connected Chat Trigger Node* espera el chat de prueba de n8n. El mensaje viene de WhatsApp |
+| *Prompt (User Message)* | Arrastrás `texto` → `{{ $json.texto }}` | Lo que escribió el cliente |
+| *Require Specific Output Format* / *Enable Fallback Model* | Apagados | Respuesta en texto libre, un solo modelo |
+| *Options* | Nada, por ahora | El *System Message* va en el Paso 4 |
+
+**P2-b · El cerebro** (*Google Gemini Chat Model*)
+
+```text
+Abajo del agente, conector "Chat Model" → + → escribí  gemini  → Google Gemini Chat Model → renombralo:  Cerebro: Gemini
+```
+
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Credential* | La de Gemini (Semanas 2 y 6) | |
+| *Model* | El **flash** de la lista | Rápido: en WhatsApp la respuesta tiene que llegar en segundos |
+| *Options* → *Sampling Temperature* | **0.3** | Respuestas parecidas cada vez, con algo de naturalidad |
+
+**P2-c · La respuesta** (*WhatsApp Business Cloud*)
+
+```text
++ a la derecha de "Ana por WhatsApp" → escribí  whatsapp  → WhatsApp Business Cloud → en "Actions": Send message
+→ renombralo:  Responder por WhatsApp
+```
+
+- **Cuándo se coloca:** al final, después del agente. Es la tercera fase: la salida.
+
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Credential* | **Create new credential** → **WhatsApp API** → *Access Token*: el token · *Business Account ID*: el de API Setup → **Save** | Es **otra** credencial que la del trigger: esta es para **mandar** |
+| *Resource* | **Message** | |
+| *Operation* | **Send** (viene en *Send Template*: cambialo) | *Send Template* manda una plantilla aprobada. Para contestar con texto libre dentro de las 24 horas, *Send* |
+| *Sender Phone Number (or ID)* | El número de prueba, de la lista | Desde qué número de la empresa sale |
+| *Recipient's Phone Number* | Arrastrás `telefono` desde *Datos del mensaje* → `{{ $('Datos del mensaje').item.json.telefono }}` | A quién: al que escribió. Se busca "atrás" porque el agente solo devuelve `output` |
+| *Message Type* | **Text** | |
+| *Text Body* | `{{ $json.output }}` | La respuesta del agente |
+
 **Si vas por Telegram:** el paso 3 es **Telegram → Send a text message** (Chat ID = `chatId`, Text =
 `{{ $json.output }}`, *Append n8n Attribution* apagado). Ver la tabla del plan B.
 
@@ -1097,6 +1187,20 @@ PRÁCTICA · Paso 3: la memoria
    (en el 04 cambiá el texto en "Mensaje de prueba" y ejecutalo dos veces)
 ```
 
+**P3-a · La memoria** (*Simple Memory*), en tu pantalla:
+
+```text
+Abajo de "Ana por WhatsApp", conector "Memory" → + → escribí  simple  → Simple Memory → renombralo:  Memoria por teléfono
+```
+
+- **Cuándo se coloca:** colgada del agente, como el cerebro. Es un sub-nodo.
+
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Session ID* | **Define below** | *Connected Chat Trigger Node* busca el número de sesión del chat de prueba, y WhatsApp no lo manda: da *No session ID found* |
+| *Key* | Arrastrás `telefono` desde *Datos del mensaje* → `{{ $('Datos del mensaje').item.json.telefono }}` | Una conversación por teléfono. Si ponés un texto fijo, todos los clientes comparten la memoria |
+| *Context Window Length* | **10** | Recuerda los últimos 10 mensajes. Más, gasta más tokens; menos, se olvida rápido |
+
 **Si vas por Telegram:** la *Key* es `{{ $('Datos del mensaje').item.json.chatId }}`. Y el segundo celular sobra:
 pegás el link del bot en el chat de la clase y le escriben ellos.
 
@@ -1143,8 +1247,9 @@ No session ID found
 
 <p style="color:#1a7f37">Paso cuatro: que deje de responder como un robot aburrido. Escribimos el system prompt con el rol, el negocio, el tono y lo prohibido; forzamos el formato de WhatsApp; y exigimos el micro-cierre.</p>
 
-15. Pegás en el chat el system prompt (está en el flujo 02 y en el Ejercicio 3). Lo pegan en **Ana por WhatsApp** →
-    **Add Option** → **System Message**:
+15. Pegás en el chat el system prompt. **Dónde va:** doble clic en **Ana por WhatsApp** → abajo de todo, *Options* →
+    **Add Option** → **System Message** → aparece una caja con un texto de ejemplo → lo borrás → arriba a la derecha
+    de la caja, **Expression** (por las `{{ }}` de la fecha y el nombre) → pegás:
 
 ```text
 Sos Ana, la asesora de la agencia de viajes "Rumbo Sur", y atendés por WhatsApp. Hoy es {{ $now.format('dd/MM/yyyy') }}. El cliente se llama {{ $('Datos del mensaje').item.json.nombre }}.
@@ -1226,6 +1331,45 @@ PRÁCTICA · Paso 5: los bordes
 3. Save → Publish → mandá una foto, un audio, y "me recomendás un buen abogado?"
 4. Sticky note (Shift + S) explicando el flujo → menú … → Download (el .json para la entrega)
 ```
+
+**Nodo por nodo, en tu pantalla:**
+
+**P5-a · El primer portero** (*Filter*)
+
+```text
+Pasá el mouse sobre la flecha entre "Datos del mensaje" y "Ana por WhatsApp" → aparece un + en el medio → clic
+→ escribí  filter  → Filter → renombralo:  ¿Es un mensaje?
+```
+
+- **Cuándo se coloca:** entre los datos y el agente. Un *Filter* deja pasar o frena; no tiene rama "falso".
+
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Conditions* · izquierda | `{{ $json.telefono }}` | Si no hay teléfono, no es un mensaje (es un aviso de Meta) |
+| *Conditions* · el del medio | **String** → **is not empty** | "Que tenga algo". No lleva valor a la derecha |
+
+**P5-b · El segundo portero** (*If*)
+
+```text
++ en el medio de la flecha entre "¿Es un mensaje?" y "Ana por WhatsApp" → if → If → renombralo:  ¿Es texto?
+```
+
+- **Cuándo se coloca:** justo antes del agente. A diferencia del Filter, **sí** queremos hacer algo con lo que no
+  pasa: contestar algo fijo.
+
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Conditions* · izquierda | `{{ $json.tipo }}` | El tipo de mensaje |
+| *Conditions* · el del medio | **String** → **is equal to** | |
+| *Conditions* · derecha | `text` | En minúscula, como lo manda Meta |
+
+La salida **true** queda conectada al agente. En la salida **false**: **+** → `whatsapp` → **Send message** →
+**Responder: solo texto**, con los mismos campos que *Responder por WhatsApp* salvo uno:
+
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Text Body* | `Por ahora solo puedo leer mensajes de texto 🙏 ¿Me lo escribís?` | Fijo, sin IA: una foto no necesita un modelo para recibir esta respuesta |
+
 
 **Si vas por Telegram:** no hay *¿Es un mensaje?*. *¿Es texto?* → `{{ $json.texto }}` → **is not empty**; el
 *false* va a **Telegram → Send a text message** con la respuesta fija.
@@ -1743,55 +1887,98 @@ queda una fila en la planilla "Pendientes".
 **A-1 · Partir del asistente de la clase**
 
 ```text
-Abrí el flujo 03 (el simulado) → menú … → Duplicate → nombre:  Asistente con horario
-En "Simulador: entra el mensaje" → Path:  whatsapp-horario
+Abrí el flujo de la clase (el 03, el simulado) → arriba, menú … → Duplicate → nombre:  Asistente con horario
+En la copia, doble clic en "Simulador: entra el mensaje" (el Webhook)
 ```
+
+| Campo (*Simulador: entra el mensaje*) | Qué ponés | Por qué |
+|---|---|---|
+| *Path* | `whatsapp-horario` | Cada flujo publicado necesita su propia dirección. Si dos tienen el mismo *Path*, el segundo no se puede publicar |
+| *HTTP Method* · *Respond* | No se tocan (**POST** · **When Last Node Finishes**) | El celular de mentira manda por POST y espera la respuesta de Ana |
+
+- **Por qué duplicar:** el asistente ya anda (trigger, datos, porteros, Ana, memoria, respuesta). El ejemplo le suma
+  **una** cosa; todo lo demás queda igual.
+- **Con WhatsApp real:** duplicás el flujo de WhatsApp en lugar del 03, y no hay *Path* que cambiar. Ojo: un solo
+  WhatsApp Trigger publicado por app de Meta (despublicá el otro).
 
 <p style="color:#1a7f37">No arrancamos de cero: duplicamos el de la clase. Le cambio el Path, para que no choque con el original.</p>
 
-**A-2 · La planilla de pendientes**
+**A-2 · La planilla de pendientes** (en Google, no en n8n)
 
 ```text
-sheets.new → nombre:  Pendientes → Fila 1:  fecha | nombre | telefono | mensaje → copiá el link
+sheets.new → arriba a la izquierda, nombre:  Pendientes
+Fila 1:   A1 fecha   B1 nombre   C1 telefono   D1 mensaje
 ```
 
-**A-3 · ¿Estamos atendiendo? Un IF con tres condiciones**
+- Los títulos de la fila 1 son los casilleros que va a llenar n8n: en minúscula y sin tildes, igual que en el nodo.
+
+**A-3 · ¿Estamos atendiendo?** (*If* con tres condiciones)
 
 ```text
-Borrá la flecha entre "¿Es un mensaje?" y "¿Es texto?" (tachito) → en el medio, + → If
-   Condición 1:  {{ $now.weekday }}  · Number → is less than or equal to · 5     (lunes a viernes)
-   Add condition → Condición 2:  {{ $now.hour }}  · Number → is greater than or equal to · 9
-   Add condition → Condición 3:  {{ $now.hour }}  · Number → is less than · 18
-   Arriba de las condiciones:  AND   (se tienen que cumplir las tres)
+Pasá el mouse sobre la flecha entre "¿Es un mensaje?" y "¿Es texto?" → + en el medio → if → If
 → renombralo:  ¿Estamos atendiendo?
-true → conectalo a "¿Es texto?"
 ```
 
-<p style="color:#1a7f37">El IF con tres preguntas a la vez: ¿es día de semana? ¿son las 9 o más? ¿son menos de las 18? Con AND, tienen que cumplirse las tres. Es el $now.weekday del IF de la Semana 4, y $now.hour, la hora.</p>
+- **Cuándo se coloca:** después de saber que es un mensaje y **antes** de todo lo demás. Fuera de horario no hace
+  falta ver si es texto ni llamar a la IA.
 
-- **AND: todas. OR: alcanza con una.** Para "estamos atendiendo" hacen falta las tres.
-- **`$now` usa la zona horaria del flujo:** en *Settings* del flujo, *America/Argentina/Buenos_Aires*.
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| Condición 1 | `{{ $now.weekday }}` · **Number** → **is less than or equal to** · `5` | `weekday` va de 1 (lunes) a 7 (domingo): hasta 5 es de lunes a viernes |
+| **Add condition** → Condición 2 | `{{ $now.hour }}` · **Number** → **is greater than or equal to** · `9` | Desde las 9 |
+| **Add condition** → Condición 3 | `{{ $now.hour }}` · **Number** → **is less than** · `18` | Hasta las 17:59 |
+| Entre las condiciones | **AND** (viene así) | Se tienen que cumplir las tres. Con *OR*, alcanzaría una |
 
-**A-4 · Fuera de horario: anotar y avisar**
+Las salidas: **true** ya va a *¿Es texto?* (quedó conectada al insertarlo en la flecha). **false**, por ahora libre.
+
+<p style="color:#1a7f37">El IF con tres preguntas a la vez: ¿es día de semana? ¿son las 9 o más? ¿son menos de las 18? Con AND, tienen que cumplirse las tres. Number, porque son números: compararlos como texto daría resultados raros.</p>
+
+- **`$now` usa la zona horaria del flujo.** Menú **…** del flujo → **Settings** → *Timezone*:
+  **America/Argentina/Buenos_Aires** → **Save**. Si queda en otra, "las 9" son las 9 de otro país.
+
+**A-4 · Fuera de horario: anotar** (*Google Sheets*)
 
 ```text
-false → Google Sheets → Append row in sheet · "Pendientes" · Mapping: Map Each Column Manually
-   fecha {{ $now.toFormat('dd/MM/yyyy HH:mm') }} · nombre, telefono, mensaje: arrastrados de "Datos del mensaje"
++ en la salida "false" de "¿Estamos atendiendo?" → sheets → Google Sheets → Actions: Append row in sheet
 → renombralo:  Anotar para mañana
-+ → Edit Fields:  para = telefono · texto = ¡Hola {nombre}! Ahora estamos fuera de horario (…). Ya anotamos tu
-  mensaje: mañana a primera hora te escribe un vendedor.
-→ renombralo:  Respuesta: fuera de horario → Save → Publish
 ```
 
-<p style="color:#1a7f37">Fuera de horario, dos cosas: anotar el mensaje en la planilla, para que mañana alguien lo llame, y contestarle al cliente con un mensaje fijo. No hace falta IA para esto: siempre es el mismo mensaje.</p>
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Credential* | La de Google Sheets | |
+| *Resource* · *Operation* | **Sheet Within Document** · **Append Row** | Una fila nueva abajo de todo |
+| *Document* · *Sheet* | **From list** → **Pendientes** · **From list** → **Hoja 1** | |
+| *Mapping Column Mode* | **Map Each Column Manually** | Los datos no tienen los nombres de las columnas: los ponemos a mano, columna por columna |
+| *fecha* | `{{ $now.format('dd/MM/yyyy HH:mm') }}` | Cuándo escribió |
+| *nombre* | Arrastrás `nombre` desde *Datos del mensaje* | |
+| *telefono* | Arrastrás `telefono` desde *Datos del mensaje* | Para que el vendedor lo llame |
+| *mensaje* | Arrastrás `texto` desde *Datos del mensaje* | Qué pidió |
 
-**A-5 · Probar sin esperar a la noche**
+- **Por qué "a mano" y no *Map Automatically*:** lo que llega a este nodo es lo que salió del IF, con los nombres de
+  *Datos del mensaje* (`texto`, no `mensaje`), y no queremos guardar `tipo` ni `phoneNumberId`.
+
+**A-5 · Fuera de horario: avisar** (*Edit Fields*)
 
 ```text
-En "¿Estamos atendiendo?", cambiá el 18 por la hora de ahora (por ejemplo, 10) → Save
-Flujo 04 (el celular de mentira) → URL terminada en  /webhook/whatsapp-horario → Execute workflow
-→ la respuesta fija, y una fila en "Pendientes"
-Volvé a poner el 18
++ a la derecha de "Anotar para mañana" → edit → Edit Fields (Set) → renombralo:  Respuesta: fuera de horario
+```
+
+| Campo | Tipo | Valor | Por qué |
+|---|---|---|---|
+| `para` | String | `{{ $('Datos del mensaje').item.json.telefono }}` | A quién (en el simulador, se ve; en WhatsApp real, este nodo es un *Send message*) |
+| `texto` | String | `¡Hola {{ $('Datos del mensaje').item.json.nombre }}! Ahora estamos fuera de horario (atendemos de lunes a viernes, de 9 a 18). Ya anotamos tu mensaje: mañana a primera hora te escribe un vendedor.` | Un mensaje fijo: no hace falta IA |
+
+**Save** → **Publish**.
+
+<p style="color:#1a7f37">Fuera de horario, dos cosas: anotar el mensaje en la planilla, para que mañana alguien lo llame, y contestarle al cliente con un mensaje fijo. No hace falta IA: siempre es el mismo mensaje.</p>
+
+**A-6 · Probar sin esperar a la noche**
+
+```text
+En "¿Estamos atendiendo?", cambiá el 18 por la hora de ahora (por ejemplo, 10) → Save → Publish
+Flujo 04 (el celular de mentira) → nodo "Mandar al simulador" → URL terminada en  /webhook/whatsapp-horario
+→ Execute workflow → la respuesta fija, y una fila en "Pendientes"
+Volvé a poner el 18 → Save → Publish
 ```
 
 <p style="color:#1a7f37">Para probar el "fuera de horario" sin quedarme hasta la noche, hago trampa: cambio el 18 por la hora de ahora. Y llega la respuesta fija, y la fila en la planilla.</p>
@@ -1814,32 +2001,56 @@ a un vendedor: te escribe por acá en menos de una hora."*
 **B-1 · Partir del asistente de la clase**
 
 ```text
-Flujo 03 → … → Duplicate → nombre:  Asistente con vendedor · Path del simulador:  whatsapp-humano
+Abrí el flujo de la clase (el 03, el simulado) → arriba, menú … → Duplicate → nombre:  Asistente con vendedor
+En la copia, doble clic en "Simulador: entra el mensaje" (el Webhook)
 ```
 
-**B-2 · La herramienta: un mail al vendedor**
+| Campo (*Simulador: entra el mensaje*) | Qué ponés | Por qué |
+|---|---|---|
+| *Path* | `whatsapp-humano` | Cada flujo publicado necesita su propia dirección. Si dos tienen el mismo *Path*, el segundo no se puede publicar |
+| *HTTP Method* · *Respond* | No se tocan (**POST** · **When Last Node Finishes**) | El celular de mentira manda por POST y espera la respuesta de Ana |
+
+- **Por qué duplicar:** el asistente ya anda (trigger, datos, porteros, Ana, memoria, respuesta). El ejemplo le suma
+  **una** cosa; todo lo demás queda igual.
+- **Con WhatsApp real:** duplicás el flujo de WhatsApp en lugar del 03, y no hay *Path* que cambiar. Ojo: un solo
+  WhatsApp Trigger publicado por app de Meta (despublicá el otro).
+
+**B-2 · La herramienta: un mail al vendedor** (*Gmail Tool*)
 
 ```text
-En "Ana por WhatsApp", Tool + → Gmail Tool → renombralo:  avisar_vendedor
-   Credential: tu Gmail · Operation: Send
-   Description:  Le manda un mail al vendedor de turno para que tome la conversación. Usala cuando el cliente
-                 quiere reservar o pagar, está enojado o pide hablar con una persona. Una sola vez por conversación.
-   To:       el mail del vendedor (el tuyo, para probar)
-   Subject:  WhatsApp: {nombre} necesita un vendedor            ← arrastrado de "Datos del mensaje"
-   Message:  Cliente: {nombre} · Teléfono: {telefono}
-             Qué necesita: {{ $fromAI('resumen', 'Un resumen corto de lo que quiere el cliente', 'string') }}
-   Options → Append n8n Attribution: apagado
+Abajo de "Ana por WhatsApp", conector "Tool" → + → escribí  gmail  → Gmail Tool → renombralo:  avisar_vendedor
 ```
 
-<p style="color:#1a7f37">La herramienta es un Gmail. El nombre y el teléfono los pongo yo, arrastrados: no quiero que el modelo los escriba, porque se puede equivocar. Lo único que completa el modelo es el resumen de lo que quiere el cliente. Y en la descripción, cuándo usarla.</p>
+- **Cuándo se coloca:** colgada del agente, como en la Semana 6. No va en la fila: la usa Ana **solo cuando
+  decide** que hace falta.
 
-- **Lo que se puede arrastrar, se arrastra; el modelo completa solo lo que no se sabe de antes.** Así hay menos
-  lugar para errores.
-
-**B-3 · El manual: cuándo pasar a una persona**
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Credential* | Tu cuenta de Gmail (**Sign in with Google**) | Desde qué casilla sale el mail |
+| *Tool Description* | **Set Manually** → `Le manda un mail al vendedor de turno para que tome la conversación. Usala cuando el cliente quiere reservar o pagar, está enojado o pide hablar con una persona. Una sola vez por conversación.` | Es lo que lee Ana para decidir **cuándo** usarla |
+| *Resource* · *Operation* | **Message** · **Send** | Mandar un mail |
+| *To* | El mail del vendedor (el tuyo, para probar) | Fijo: no lo elige el modelo |
+| *Subject* | `WhatsApp: ` + arrastrás `nombre` desde *Datos del mensaje* + ` necesita un vendedor` | El asunto, con el nombre puesto por n8n, no por el modelo |
+| *Email Type* | **Text** | Texto común |
+| *Message* | El bloque de abajo (en **Expression**) | Los datos fijos los pone n8n; el resumen, el modelo |
+| *Options* → **Add option** → *Append n8n Attribution* | **Apagado** | Si no, el mail termina con una propaganda de n8n |
 
 ```text
-En "Ana por WhatsApp" → System Message, al final, agregá:
+Cliente: {{ $('Datos del mensaje').item.json.nombre }}
+Teléfono: {{ $('Datos del mensaje').item.json.telefono }}
+
+Qué necesita: {{ $fromAI('resumen', 'Un resumen corto de lo que quiere el cliente y por qué hay que pasarlo a una persona', 'string') }}
+```
+
+<p style="color:#1a7f37">La herramienta es un Gmail. El nombre y el teléfono los pongo yo, arrastrados: no quiero que el modelo los escriba, porque se puede equivocar. Lo único que completa el modelo es el resumen, con fromAI, como en la Semana 6. Y en la descripción, cuándo usarla.</p>
+
+- **Lo que se puede arrastrar, se arrastra; el modelo completa solo lo que no se sabe de antes.**
+- El `$fromAI` se escribe a mano, entero, como en la Semana 6 (el ✨ no le pone descripción).
+
+**B-3 · El manual: cuándo pasar a una persona** (el *System Message*)
+
+```text
+Doble clic en "Ana por WhatsApp" → Options → System Message → al final del texto, agregá:
    PASAR A UNA PERSONA: si el cliente quiere reservar o pagar, está enojado, o pide hablar con una persona, usá
    avisar_vendedor UNA sola vez, con un resumen de lo que quiere. Después decile: "Listo, ya le pasé tu consulta
    a un vendedor: te escribe por acá en menos de una hora." No inventes horarios ni nombres de vendedores.
@@ -1851,12 +2062,14 @@ En "Ana por WhatsApp" → System Message, al final, agregá:
 **B-4 · Probar los cuatro casos**
 
 ```text
-Con el celular de mentira (URL terminada en /webhook/whatsapp-humano):
-   "¿Cuánto sale Mendoza?"                       → contesta Ana, sin avisar a nadie
-   "Quiero reservar el Bariloche Clásico"         → mail al vendedor + "ya le pasé tu consulta…"
+Celular de mentira (flujo 04) → URL terminada en  /webhook/whatsapp-humano → cambiás el texto y ejecutás cada vez:
+   "¿Cuánto sale Mendoza?"                              → contesta Ana, sin avisar a nadie
+   "Quiero reservar el Bariloche Clásico"               → mail al vendedor + "ya le pasé tu consulta…"
    "Hace dos días que nadie me contesta, ¡un desastre!" → mail al vendedor (cliente enojado)
-   "¿Me pasás con una persona?"                   → mail al vendedor
+   "¿Me pasás con una persona?"                         → mail al vendedor
 ```
+
+En la ejecución del 03-copia, *Logs*: en los tres últimos aparece **avisar_vendedor** entre Gemini y la respuesta.
 
 <p style="color:#1a7f37">Una pregunta de precio la contesta Ana sola. Reservar, un cliente enojado o pedir una persona: le llega el mail al vendedor. Así el vendedor solo atiende lo que vale la pena, y nadie queda sin respuesta.</p>
 
@@ -1878,26 +2091,53 @@ calculadora, y contesta por WhatsApp con el precio en pesos de hoy.
 **C-1 · Partir del asistente de la clase**
 
 ```text
-Flujo 03 → … → Duplicate → nombre:  Asistente completo · Path del simulador:  whatsapp-completo
+Abrí el flujo de la clase (el 03, el simulado) → arriba, menú … → Duplicate → nombre:  Asistente completo
+En la copia, doble clic en "Simulador: entra el mensaje" (el Webhook)
 ```
 
-**C-2 · Traer las tres herramientas de la Semana 6**
+| Campo (*Simulador: entra el mensaje*) | Qué ponés | Por qué |
+|---|---|---|
+| *Path* | `whatsapp-completo` | Cada flujo publicado necesita su propia dirección. Si dos tienen el mismo *Path*, el segundo no se puede publicar |
+| *HTTP Method* · *Respond* | No se tocan (**POST** · **When Last Node Finishes**) | El celular de mentira manda por POST y espera la respuesta de Ana |
+
+- **Por qué duplicar:** el asistente ya anda (trigger, datos, porteros, Ana, memoria, respuesta). El ejemplo le suma
+  **una** cosa; todo lo demás queda igual.
+- **Con WhatsApp real:** duplicás el flujo de WhatsApp en lugar del 03, y no hay *Path* que cambiar. Ojo: un solo
+  WhatsApp Trigger publicado por app de Meta (despublicá el otro).
+
+**C-2 · Traer las tres herramientas de la Semana 6** (copiar y pegar)
 
 ```text
-Abrí el flujo 03 de la Semana 6 (el agente de la agencia) → seleccioná  consultar_paquetes, cotizacion_dolar
-y calculadora  (clic en uno, Shift + clic en los otros) → Ctrl + C
-Volvé al Asistente completo → Ctrl + V → conectá cada una al enchufe Tool de "Ana por WhatsApp"
-En consultar_paquetes: tu credencial de Sheets y el link de "Paquetes Rumbo Sur"
+Abrí el flujo de Ana de la Semana 6 ("Agente en vivo") → clic en consultar_paquetes → Shift + clic en
+cotizacion_dolar y en calculadora → Ctrl + C
+Volvé a "Asistente completo" → clic en un lugar vacío → Ctrl + V
+→ arrastrá desde el rombito de arriba de cada herramienta hasta el conector "Tool" de "Ana por WhatsApp"
 ```
 
-<p style="color:#1a7f37">No hace falta armarlas de nuevo: las copio del agente de la Semana 6 y las pego acá. Copiar y pegar nodos entre flujos funciona como con cualquier texto: Control C, Control V. Después conecto cada una al enchufe de herramientas.</p>
+- **Cuándo se colocan:** colgadas del agente, como la memoria y el cerebro. Son sus "manos".
+- **Copiar nodos entre flujos** copia la configuración, pero revisá la credencial en cada uno.
 
-- **Copiar nodos entre flujos** copia la configuración, pero no siempre la credencial: revisala en cada uno.
+Abrís cada una y revisás que esté así (es la configuración de la Semana 6):
 
-**C-3 · Cambiar el manual: de la lista a las herramientas**
+| Herramienta | Campo | Qué tiene que tener | Por qué |
+|---|---|---|---|
+| *consultar_paquetes* (Google Sheets Tool) | *Credential* | La de Google Sheets (si dice *needs to be reconnected*: la de la Semana 6, 7 días) | |
+| | *Tool Description* | `Devuelve TODOS los paquetes de la agencia: destino, nombre del paquete, días, precio en dólares por persona, cupos disponibles y qué incluye. Usala siempre que pregunten por un destino, un precio o los cupos, y buscá en la lista los del destino que pidió el cliente. Destinos: Bariloche, Mendoza, Salta, Ushuaia y Cataratas.` | Le dice a Ana cuándo usarla |
+| | *Resource* · *Operation* | **Sheet Within Document** · **Get Row(s)** | Leer filas |
+| | *Document* · *Sheet* | **From list** → **Paquetes Rumbo Sur** · **From list** → **Hoja 1** | |
+| | *Filters* | **Ninguno** | Trae las 6 filas y Ana elige. Con un filtro `$fromAI`, en la Semana 6 devolvía vacío |
+| *cotizacion_dolar* (HTTP Request Tool) | *Description* | `Devuelve la cotización del dólar en Argentina hoy, en pesos. Usá el campo 'venta' para pasar dólares a pesos.` | |
+| | *Method* | **GET** | Pedir un dato |
+| | *URL* (en **Expression**) | `https://dolarapi.com/v1/dolares/{{ $fromAI('tipo', 'El tipo de dólar: oficial, blue o tarjeta. Si el cliente no dice nada, oficial.', 'string') }}` | El tipo de dólar lo completa Ana |
+| *calculadora* (Calculator) | — | No tiene campos | Las cuentas, sin que el modelo las haga "de memoria" |
+
+<p style="color:#1a7f37">No hace falta armarlas de nuevo: las copio del agente de la Semana 6 y las pego acá. Después conecto cada una al enchufe de herramientas. Y reviso la credencial de la planilla, que es la que más falla.</p>
+
+**C-3 · Cambiar el manual: de la lista a las herramientas** (el *System Message*)
 
 ```text
-En el System Message, borrá la parte "QUÉ PODÉS HACER" con la lista de los seis paquetes y poné:
+Doble clic en "Ana por WhatsApp" → Options → System Message → borrá la parte "QUÉ PODÉS HACER" con la lista de los
+seis paquetes y poné:
    QUÉ PODÉS HACER: contar qué paquetes hay para un destino, qué incluyen, cuántos días son, cuánto cuestan en
    dólares y en pesos, y si hay cupos.
    HERRAMIENTAS:
@@ -1905,16 +2145,18 @@ En el System Message, borrá la parte "QUÉ PODÉS HACER" con la lista de los se
      precios de memoria.
    - cotizacion_dolar: cuando pidan el precio en pesos. Usá el campo 'venta'.
    - calculadora: para las cuentas (precio por persona × personas × dólar).
-(lo demás, el FORMATO para WhatsApp y los límites, queda igual)
+(lo demás, el FORMATO para WhatsApp y los límites, queda igual, salvo un límite: cambiá
+ "No pases precios a pesos ni inventes … que no estén arriba" por
+ "No inventes promociones, fechas de salida ni datos que no salgan de las herramientas")
 → Save → Publish
 ```
 
-<p style="color:#1a7f37">En el manual, saco la lista de paquetes y pongo cuándo usar cada herramienta. Lo de WhatsApp, mensajes cortos, negrita con un asterisco, queda igual: eso no cambia.</p>
+<p style="color:#1a7f37">En el manual, saco la lista de paquetes y pongo cuándo usar cada herramienta. Y borro la regla de no pasar a pesos: ahora tiene el dólar. Lo de WhatsApp, mensajes cortos, negrita con un asterisco, queda igual.</p>
 
 **C-4 · Probar**
 
 ```text
-Con el celular de mentira (URL terminada en /webhook/whatsapp-completo):
+Celular de mentira (flujo 04) → URL terminada en  /webhook/whatsapp-completo:
    "¿Cuánto sale Bariloche para dos en pesos?"   → planilla + dólar + calculadora → precio en pesos de hoy
    "¿Y el de nieve?"                              → planilla (memoria: sabe que es Bariloche) → sin cupos
 Cambiá un precio en la planilla → preguntá de nuevo → Ana ya dice el precio nuevo

@@ -952,23 +952,90 @@ Lo cambiás → **Save** → *Connection tested successfully*.
 
 <p style="color:#1a7f37">...y ahora sí. host.docker.internal es la forma de decir, desde adentro de la caja, "la computadora de afuera".</p>
 
-19. **El flujo.** Pegás en el chat:
+19. **El flujo, nodo por nodo.** Primero pegás en el chat el resumen, para los que siguen a la par:
 
 ```text
-PRÁCTICA · Paso 4: el flujo
-1. Workflow nuevo → nombre: Hola Ollama
-2. Add first step → Trigger manually
-3. + → Edit Fields (Set) → Add Field → name: pregunta → value: (la pregunta de Bariloche del Paso 2)
-   Renombralo: La pregunta
-4. + → buscá "basic llm" → Basic LLM Chain
-   Source for Prompt: Define below · Prompt: arrastrá "pregunta" desde la izquierda
-   Renombralo: Preguntarle al modelo local
-5. Abajo del nodo, en Chat Model: + → Ollama Chat Model
-   Credencial: Ollama local (si no aparece: botón "Connect to Ollama") · Model: llama3.2:latest
-6. Execute workflow
+PRÁCTICA · Paso 4: el flujo (4 nodos)
+Arrancar a mano → La pregunta → Preguntarle al modelo local
+                                      └ abajo, en Model: Cerebro local: Ollama
 ```
 
-20. Lo hacés a la par. Mientras corre, mostrás dos cosas:
+Y lo armás despacio, nodo por nodo:
+
+**P4-a · El workflow y el disparador** (*Trigger manually*)
+
+```text
+Overview → Create workflow → arriba a la izquierda, clic en "My workflow" → escribí  Hola Ollama → Enter
+En el centro: Add first step → se abre el buscador a la derecha → escribí  manual  → Trigger manually
+```
+
+- **Cuándo se coloca:** siempre primero. Es el "botón de arranque": sin disparador, el flujo no corre.
+- **Por dentro:** no tiene nada que configurar. Se cierra con la cruz.
+- En el lienzo aparece como *When clicking 'Execute workflow'*. Doble clic en el título → **Arrancar a mano**.
+
+<p style="color:#1a7f37">Todo flujo empieza con un disparador. Hoy uso el más simple: arranca cuando aprieto el botón. Más adelante, el disparador va a ser un mensaje de WhatsApp.</p>
+
+**P4-b · La pregunta** (*Edit Fields*)
+
+```text
+Pasá el mouse sobre "Arrancar a mano" → clic en el + de su derecha → escribí  edit  → Edit Fields (Set)
+```
+
+- **Cuándo se coloca:** después del disparador. Es donde escribimos el dato que le vamos a mandar al modelo.
+
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Mode* | **Manual Mapping** (viene así) | Escribimos los campos uno por uno. *JSON* es para pegar una ficha entera (lo usamos en los ejemplos B y C) |
+| *Fields to Set* → **Add Field** | Nombre: `pregunta` · Tipo: **String** · Valor: `Sos la asesora de una agencia de viajes. En 3 líneas, recomendale a un cliente qué llevar para ir a Bariloche en invierno.` | Un casillero con la pregunta. *String* = texto |
+| *Include Other Input Fields* | Apagado (viene así) | El disparador no trae nada que valga la pena pasar |
+
+Cerrás → renombrás **La pregunta** → clic derecho → **Execute step** (o el botón dentro del nodo): en *OUTPUT* aparece
+`pregunta` con el texto.
+
+<p style="color:#1a7f37">Un Edit Fields con un solo casillero: la pregunta. Lo separo del modelo a propósito: si mañana quiero preguntar otra cosa, cambio este nodo y no toco el resto.</p>
+
+**P4-c · El que le pregunta al modelo** (*Basic LLM Chain*)
+
+```text
++ a la derecha de "La pregunta" → escribí  basic llm  → Basic LLM Chain
+(si buscás "AI" aparecen muchos: el que va es Basic LLM Chain, no AI Agent)
+```
+
+- **Cuándo se coloca:** cuando ya tenemos el texto que queremos preguntar. Es el mismo nodo de la Semana 6.
+- **Por qué no un AI Agent:** acá no hay herramientas ni memoria. Una pregunta, una respuesta: con la chain alcanza.
+
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Source for Prompt (User Message)* | **Define below** | *Connected Chat Trigger Node* es para cuando el mensaje viene del chat de prueba. Acá viene de *La pregunta* |
+| *Prompt (User Message)* | Arrastrás `pregunta` desde *INPUT* (a la izquierda) → queda `{{ $json.pregunta }}` | Lo que le preguntamos al modelo: el casillero del nodo anterior |
+| *Require Specific Output Format* | Apagado (viene así) | Queremos texto libre, no una ficha |
+| *Chat Messages* | Nada | Sirve para instrucciones fijas. No hacen falta |
+
+Cerrás → renombrás **Preguntarle al modelo local**. Abajo del nodo quedó un conector que dice **Model** con un
+asterisco rojo: la chain todavía no tiene cerebro.
+
+<p style="color:#1a7f37">La chain es la que arma el pedido y se lo manda a un modelo. Pero fíjense abajo: Model, con un asterisco. Le falta el cerebro. Eso es lo de hoy: en vez de Gemini, le pongo Ollama.</p>
+
+**P4-d · El cerebro** (*Ollama Chat Model*)
+
+```text
+Abajo de la chain, en el conector "Model", clic en el + → se abre la lista de modelos → escribí  ollama
+→ Ollama Chat Model   (no "Ollama Model", que es para otros nodos)
+```
+
+- **Cuándo se coloca:** colgado de la chain. Es un **sub-nodo**: no va en la fila principal, va abajo, enchufado.
+
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Credential to connect with* | **Ollama local** (la de recién). Si no hay ninguna: botón **Connect to Ollama** → *Base URL* `http://host.docker.internal:11434` → *API Key* vacía → **Save** | Le dice a n8n dónde está Ollama. Con n8n en Docker, `localhost` no anda |
+| *Model* | **llama3.2:latest** (de la lista) | La lista la trae n8n preguntándole a tu Ollama. Si está vacía, Ollama está apagado o la credencial está mal |
+| *Options* → **Add Option** → *Sampling Temperature* | **0.3** | Un poco de variedad, no mucha. Más alto, más "creativo" (y más inventos) |
+
+Cerrás → renombrás **Cerebro local: Ollama**. El asterisco rojo desapareció. **Save** → **Execute workflow**.
+
+<p style="color:#1a7f37">El mismo enchufe de la semana pasada, otro cerebro. Elijo la credencial, que es la dirección de Ollama, y el modelo, que aparece en la lista porque n8n le preguntó a mi Ollama qué tiene. Si la lista sale vacía, ya saben: Ollama apagado o la dirección mal.</p>
+
+20. Mientras corre, mostrás dos cosas:
     - el **Administrador de tareas**: la memoria sube;
     - el **registro de Ollama**: clic derecho en el ícono de la llama → **View logs** → abrís `server.log` (en Mac,
       `~/.ollama/logs/server.log`). Al final aparece una línea por cada pedido de n8n:
@@ -998,20 +1065,101 @@ credencial.
 
 <p style="color:#1a7f37">Último paso: entender qué ganamos y qué perdemos. El mismo prompt al modelo local y a Gemini, y comparamos calidad, tiempo y costo. Y cada uno decide, para su caso, cuál conviene.</p>
 
-23. Abrís el flujo **02 · Comparar: el mismo prompt, local y en la nube** (ya importado y con las dos credenciales).
-    Mostrás el prompt en *El mismo prompt*: una familia con un nene que quiere ir 5 días a Salta en julio. Pegás en
-    el chat:
+23. **Lo armás en vivo** (son 6 nodos, y dos los copiás del flujo anterior). Pegás el resumen en el chat:
 
 ```text
 PRÁCTICA · Paso 5: comparar
-1. Importá 02-local-vs-nube.json (carpeta n8n/ de la semana)
-2. Credencial de Ollama en "Cerebro local: Ollama" y de Gemini en "Cerebro nube: Gemini"
-3. Execute workflow (dos veces: la primera, el local carga el modelo)
-4. En "Juntar las dos", completá la tabla del Paso 5 del Ejercicio 3
+Arrancar a mano → El mismo prompt ─┬→ Responder (local) ─┐
+                                   │   └ Cerebro local: Ollama   ├→ Juntar las dos
+                                   └→ Responder (nube)  ─┘
+                                       └ Cerebro nube: Gemini
 ```
 
-24. **Execute workflow.** Abrís *Juntar las dos*: dos items, uno por modelo, con `modelo`, `segundos`, `costo` y
-    `respuesta`. Leés en voz alta la del modelo local. La de la prueba (llama3.2, 26 segundos):
+**P5-a · El disparador y el prompt**
+
+```text
+Overview → Create workflow → nombre:  Local vs nube
+Add first step → manual → Trigger manually → renombralo:  Arrancar a mano
++ → edit → Edit Fields (Set) → renombralo:  El mismo prompt
+```
+
+| Campo (*El mismo prompt*) | Qué ponés | Por qué |
+|---|---|---|
+| *Mode* | **Manual Mapping** | Un solo casillero |
+| **Add Field** | Nombre: `prompt` · Tipo: **String** · Valor: `Un cliente escribe: "Hola, somos 2 adultos y un nene de 8 años. Queremos ir 5 días a Salta en julio, ¿qué nos recomendás?". Respondé como asesora de una agencia de viajes argentina, en español rioplatense, en no más de 5 líneas.` | El **mismo** texto va a ir a los dos modelos: así la comparación es justa |
+
+<p style="color:#1a7f37">Para comparar en serio, los dos modelos tienen que recibir exactamente lo mismo. Por eso el prompt va en un solo nodo, y de ahí sale para los dos lados.</p>
+
+**P5-b · La rama local: copiarla del flujo anterior**
+
+```text
+Abrí "Hola Ollama" (en otra pestaña) → clic en "Preguntarle al modelo local" → Ctrl + clic en "Cerebro local: Ollama"
+→ Ctrl + C → volvé a "Local vs nube" → clic en un lugar vacío → Ctrl + V
+→ arrastrá desde el puntito de salida de "El mismo prompt" hasta la entrada de la chain
+```
+
+| Campo (la chain) | Qué cambiás | Por qué |
+|---|---|---|
+| *Prompt (User Message)* | Borrás lo que hay y arrastrás `prompt` → `{{ $json.prompt }}` | En este flujo el casillero se llama `prompt`, no `pregunta`. Si lo dejás, la chain recibe vacío |
+| Nombre del nodo | **Responder (local)** | Para saber cuál es cuál en los resultados |
+
+El *Cerebro local: Ollama* no se toca: copiado, trae su credencial y su modelo.
+
+<p style="color:#1a7f37">No lo armo de nuevo: lo copio. Los nodos se copian como texto, con Control C y Control V, de un flujo a otro, y vienen con su configuración. Lo único que cambio es el nombre del casillero: acá se llama prompt.</p>
+
+- **Para unir dos nodos a mano:** se arrastra desde el circulito de la derecha de uno hasta el de la izquierda del
+  otro.
+
+**P5-c · La rama de la nube: una segunda salida del mismo nodo**
+
+```text
+Desde el puntito de salida de "El mismo prompt", arrastrá hacia abajo, a un lugar VACÍO → se abre el buscador
+→ basic llm → Basic LLM Chain → renombralo:  Responder (nube)
+```
+
+- **Cuándo se coloca:** al mismo tiempo que la local. Una salida puede ir a dos nodos: el mismo item viaja a los dos.
+- **Por qué arrastrando:** el **+** solo aparece cuando la salida está libre. Como ya va a la rama local, la segunda
+  conexión se hace arrastrando.
+
+| Campo (*Responder (nube)*) | Qué ponés | Por qué |
+|---|---|---|
+| *Source for Prompt* | **Define below** | Igual que la local |
+| *Prompt (User Message)* | `{{ $json.prompt }}` | El mismo prompt |
+
+Abajo, en **Model** → **+** → `gemini` → **Google Gemini Chat Model** → renombralo **Cerebro nube: Gemini**:
+
+| Campo (*Cerebro nube: Gemini*) | Qué ponés | Por qué |
+|---|---|---|
+| *Credential* | La de Gemini (Semanas 2 y 6) | La clave de Google |
+| *Model* | El **flash** de la lista (el mismo de la Semana 6) | Rápido y con plan gratis |
+| *Options* → *Sampling Temperature* | **0.3** | La misma que el local: si no, no es una comparación justa |
+
+<p style="color:#1a7f37">Abajo, la misma chain con otro cerebro: Gemini. Misma temperatura que el local. Lo único distinto entre las dos ramas es dónde está el modelo.</p>
+
+**P5-d · Juntar las dos respuestas** (*Merge*)
+
+```text
++ a la derecha de "Responder (local)" → escribí  merge  → Merge → renombralo:  Juntar las dos
+Después: arrastrá desde la salida de "Responder (nube)" hasta la entrada de abajo del Merge (Input 2)
+```
+
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Mode* | **Append** (viene así) | Pone las respuestas una debajo de la otra: dos items. Es el Merge de la Semana 3 |
+| *Number of Inputs* | **2** | Dos ramas, dos entradas |
+
+- **Cuándo se coloca:** al final, cuando hay dos ramas que queremos ver juntas. El Merge **espera** a que lleguen las
+  dos: Gemini termina primero y espera al local.
+
+<p style="color:#1a7f37">El Merge de la Semana 3: junta las dos ramas. Modo Append, una debajo de la otra. Y espera: Gemini va a terminar mucho antes, pero el Merge no sigue hasta que llega la del local.</p>
+
+**Save** → **Execute workflow** (dos veces: la primera, el local carga el modelo).
+
+> El flujo `02-local-vs-nube.json` de la carpeta tiene, además, nodos que calculan los segundos y anotan el costo.
+> Armándolo en vivo no hacen falta: **los segundos se leen en *Logs***, al lado de cada nodo (*Success in 26.3s*).
+
+24. **Los resultados.** Abrís *Juntar las dos* → *OUTPUT*: dos items, cada uno con su `text`; el primero es el del
+    modelo local y el segundo, el de Gemini. En *Logs*, el tiempo de cada uno. Leés en voz alta la del modelo local. La de la prueba (llama3.2, 26 segundos):
 
 ```text
 Hola! Salta en julio es una excelente elección. Recomiendo visitar el Cerro del Comandante, el Mercado de Artesanías
@@ -1156,61 +1304,111 @@ Ana volvió de Salta disconforme… Llamarlo hoy."*
 
 <p style="color:#1a7f37">Primer ejemplo. La agencia manda una encuesta al volver del viaje. Los comentarios son de clientes: no hace falta mandarlos a Google para saber si alguien volvió enojado. Un modelo chico, en nuestra computadora, alcanza para eso.</p>
 
-**A-1 · La encuesta**
+**A-1 · La encuesta** (*n8n Form*)
 
 ```text
 Overview → Create workflow → nombre:  Encuestas con IA local
-+ → form → n8n Form → On new n8n Form event
-   Form Title: ¿Cómo estuvo tu viaje?
-   Preguntas:  Nombre (Text) · Destino (Text) · Comentario (Element Type: Textarea)
-   Options → Path:  encuesta-de-viaje
-Cerrá → renombralo:  Encuesta de viaje
-Execute workflow → completala:  Ana · Salta · "El hotel estaba sucio y nadie nos fue a buscar" → Submit
+Add first step → escribí  form  → n8n Form → en la lista, debajo de "Triggers": On new n8n Form event
 ```
 
-<p style="color:#1a7f37">El formulario, como en la Semana 4: nombre, destino y un comentario libre. Lo completo una vez, con una queja, así tengo datos.</p>
+- **Cuándo se coloca:** primero. Es el disparador: el flujo arranca cada vez que alguien manda la encuesta.
+- Es el formulario de la Semana 4: un webhook con una página de preguntas.
 
-**A-2 · Clasificar con el modelo local**
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Authentication* | **None** | Cualquier cliente con el link la puede completar |
+| *Form Title* | `¿Cómo estuvo tu viaje?` | Lo que ve el cliente arriba, en grande |
+| *Form Description* | `Contanos en pocas palabras. Nos ayuda a mejorar.` | El textito de abajo del título |
+| *Form Elements* (la primera ya viene) | *Field Name* `Nombre` · *Element Type* **Text** · *Required Field* prendido | Cada pregunta llega a n8n como un casillero con ese mismo nombre |
+| **Add Form Element** | `Destino` · **Text** · obligatoria | |
+| **Add Form Element** | `Comentario` · **Textarea** · obligatoria | *Textarea* es una caja grande, para escribir varias líneas |
+| *Respond When* | **Form Is Submitted** (viene así) | Le muestra "gracias" al cliente apenas manda, sin esperar a la IA |
+| *Options* → **Add option** → *Form Path* | `encuesta-de-viaje` | El final de la dirección del formulario: una palabra que se entienda |
+
+Cerrás → renombrás **Encuesta de viaje** → **Execute workflow** → se abre el formulario → completás *Ana · Salta ·
+"El hotel estaba sucio y nadie nos fue a buscar"* → **Submit**. En *OUTPUT*: `Nombre`, `Destino`, `Comentario`.
+
+<p style="color:#1a7f37">El formulario, como en la Semana 4: nombre, destino y un comentario libre, en una caja grande. Lo completo una vez, con una queja, así tengo datos para armar lo que sigue.</p>
+
+**A-2 · Clasificar con el modelo local** (*Basic LLM Chain* + *Ollama Chat Model*)
 
 ```text
-+ → buscá  llm  → Basic LLM Chain · Source for Prompt: Define below
-   Prompt:  Leé el comentario de un cliente sobre su viaje y respondé SOLO una palabra, sin punto:
-            Positivo, Negativo o Neutro.
-            Comentario: (arrastrá Comentario)
-Abajo, Model: + → Ollama Chat Model → la credencial de la práctica → Model: llama3.2:latest
-   Options → Sampling Temperature: 0.1
-→ renombralo:  Clasificar (local)
++ a la derecha de "Encuesta de viaje" → escribí  basic llm  → Basic LLM Chain
 ```
 
-<p style="color:#1a7f37">Una chain, con el cerebro de hoy: Ollama. Un prompt bien cerrado: una sola palabra, de tres posibles. Y la temperatura baja, 0,1, para que no se ponga creativo: acá queremos siempre la misma respuesta.</p>
+- **Cuándo se coloca:** apenas llega el comentario. Es la única parte que necesita IA: entender si el cliente está
+  contento o no.
 
-- **Una tarea, una palabra.** Para un modelo de 3B, cuanto más cerrada la consigna, mejor. Pedirle "analizá el
-  comentario" daría un párrafo; pedirle una palabra de una lista, da una palabra.
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Source for Prompt (User Message)* | **Define below** | El texto viene del formulario, no de un chat |
+| *Prompt (User Message)* | `Leé el comentario de un cliente sobre su viaje y respondé SOLO una palabra, sin punto: Positivo, Negativo o Neutro.` + Enter dos veces + `Comentario: ` y arrastrás `Comentario` desde *INPUT* | Una consigna cerrada: una palabra, de tres posibles |
+| *Require Specific Output Format* | Apagado | Es una palabra: no hace falta una ficha |
 
-**A-3 · Limpiar la respuesta**
+Cerrás → renombrás **Clasificar (local)**. Abajo, en **Model** → **+** → `ollama` → **Ollama Chat Model** → renombrás
+**Cerebro local: Ollama**:
+
+| Campo (*Cerebro local: Ollama*) | Qué ponés | Por qué |
+|---|---|---|
+| *Credential* | **Ollama local** (la de la práctica) | La dirección de tu Ollama: `http://host.docker.internal:11434` |
+| *Model* | **llama3.2:latest** | El modelo que bajaste |
+| *Options* → **Add Option** → *Sampling Temperature* | **0.1** | Lo más "quieto" posible: queremos siempre la misma respuesta, no creatividad |
+
+<p style="color:#1a7f37">Una chain, con el cerebro de hoy. El prompt, bien cerrado: una sola palabra de tres posibles. Y la temperatura en 0,1: acá no queremos que se ponga creativo, queremos que diga siempre lo mismo para el mismo comentario.</p>
+
+- **Una tarea, una palabra.** Para un modelo de 3B, cuanto más cerrada la consigna, mejor. "Analizá el comentario"
+  daría un párrafo; "una palabra de esta lista", da una palabra.
+
+**A-3 · Limpiar la respuesta** (*Edit Fields*)
 
 ```text
-Execute step → OUTPUT:  text: Negativo
-+ → Edit Fields (Set):
-   sentimiento  String  {{ $json.text.trim().replace('.', '') }}     ← saca espacios y un punto, si lo puso
-   nombre, destino, comentario: arrastrados de "Encuesta de viaje"
-→ renombralo:  Limpiar la respuesta
+Execute step en "Clasificar (local)" → OUTPUT:  text: Negativo
++ a la derecha → edit → Edit Fields (Set) → renombralo:  Limpiar la respuesta
 ```
 
-<p style="color:#1a7f37">Los modelos chicos a veces agregan un punto, o un espacio, aunque les digamos que no. Lo limpio, y de paso junto los datos de la encuesta.</p>
+- **Cuándo se coloca:** después de la IA y antes de decidir. El IF compara textos exactos: "Negativo." con punto no
+  es igual a "Negativo".
 
-**A-4 · Decidir con un IF**
+| Campo (**Add Field**, cuatro veces) | Tipo | Valor | Por qué |
+|---|---|---|---|
+| `sentimiento` | String | `{{ $json.text.trim().replace('.', '') }}` | `trim()` saca los espacios de los costados; `replace('.', '')`, el punto si lo puso |
+| `nombre` | String | Arrastrás `Nombre` desde *Encuesta de viaje* (en *INPUT*, desplegás ese nodo) → `{{ $('Encuesta de viaje').item.json.Nombre }}` | Los datos del formulario no llegan solos después de la IA: la chain solo devuelve `text`. Se buscan "atrás" |
+| `destino` | String | Igual, con `Destino` | |
+| `comentario` | String | Igual, con `Comentario` | |
+
+<p style="color:#1a7f37">Los modelos chicos a veces agregan un punto o un espacio, aunque les digamos que no. Lo limpio. Y de paso traigo los datos del formulario: después de la chain solo queda el text, así que los busco en el nodo de la encuesta.</p>
+
+**A-4 · Decidir** (*If*) **y las dos salidas** (*Edit Fields*)
 
 ```text
-+ → If · {{ $json.sentimiento }} · String → is equal to · Negativo → renombralo:  ¿Es negativo?
-true  → Edit Fields:  aviso = URGENTE: {nombre} volvió de {destino} disconforme: "{comentario}". Llamarlo hoy.
-false → Edit Fields:  resena = {sentimiento} · {nombre} ({destino}): {comentario}
-→ Save
++ a la derecha de "Limpiar la respuesta" → escribí  if  → If → renombralo:  ¿Es negativo?
 ```
 
-<p style="color:#1a7f37">Y el IF de siempre: si es negativo, aviso urgente al equipo; si no, se guarda como reseña. En la vida real, el aviso sería un mail o un WhatsApp, y la reseña una fila en una planilla.</p>
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Conditions* · izquierda | Arrastrás `sentimiento` → `{{ $json.sentimiento }}` | Lo que miramos |
+| *Conditions* · el del medio | **String** → **is equal to** | Comparar textos |
+| *Conditions* · derecha | `Negativo` | Con mayúscula, como lo pide el prompt |
+
+El IF tiene dos salidas: **true** (arriba) y **false** (abajo).
+
+```text
++ en la salida "true"  → Edit Fields (Set) → renombralo:  Aviso urgente al equipo
++ en la salida "false" → Edit Fields (Set) → renombralo:  Guardar como reseña
+```
+
+| Nodo | Campo | Valor (Expression) |
+|---|---|---|
+| *Aviso urgente al equipo* | `aviso` (String) | `URGENTE: {{ $json.nombre }} volvió de {{ $json.destino }} disconforme: "{{ $json.comentario }}". Llamarlo hoy.` |
+| *Guardar como reseña* | `resena` (String) | `{{ $json.sentimiento }} · {{ $json.nombre }} ({{ $json.destino }}): {{ $json.comentario }}` |
+
+**Save**.
+
+<p style="color:#1a7f37">El IF de siempre: si es negativo, aviso urgente; si no, reseña. Acá son dos Edit Fields para que se vea el resultado; en la vida real, el aviso sería un mail o un WhatsApp, y la reseña una fila en una planilla.</p>
 
 **A-5 · Probar con tres comentarios**
+
+Para cada uno: **Execute workflow** → completás el formulario → mirás por qué rama salió.
 
 ```text
 "El hotel estaba sucio y nadie nos fue a buscar"           → Negativo → Aviso urgente
@@ -1232,64 +1430,132 @@ fila `13/11/2026 10:30 | Carla Gómez | Salta | 4` en "Consultas de la agencia" 
 
 <p style="color:#1a7f37">La gente no escribe como un formulario. Escribe "somos 6 amigos y queremos conocer Ushuaia". Este ejemplo saca de ese texto los tres datos que necesitamos, nombre, destino y personas, y los anota en la planilla. Con el modelo local, el mensaje del cliente no sale de nuestra computadora.</p>
 
-**B-1 · Los mensajes de prueba**
+**B-1 · El disparador y los mensajes de prueba** (*Trigger manually* + *Edit Fields* en modo JSON)
 
 ```text
 Overview → Create workflow → nombre:  De mensaje a planilla
-+ (Add first step) → Trigger manually
-+ → Edit Fields (Set) · Mode: JSON → pegá la lista de mensajes del flujo 06 (tres textos)
-+ → buscá  split  → Split Out · Field To Split Out:  mensajes → renombralo:  Uno por uno
+Add first step → manual → Trigger manually → renombralo:  Arrancar a mano
++ → edit → Edit Fields (Set) → renombralo:  Mensajes de prueba
 ```
 
-<p style="color:#1a7f37">Tres mensajes de prueba, escritos como escribe la gente. Y el Split Out, como en la práctica de las quejas: los separa en tres items, uno por mensaje.</p>
+- **Cuándo se coloca:** el *Edit Fields* va después del disparador y hace de "bandeja de entrada": en lugar de
+  esperar mensajes de verdad, escribimos tres. La semana que viene, ese lugar lo ocupa WhatsApp.
 
-**B-2 · Pedirle un JSON al modelo**
+| Campo (*Mensajes de prueba*) | Qué ponés | Por qué |
+|---|---|---|
+| *Mode* | **JSON** | Para pegar una lista entera de una vez, en vez de campo por campo |
+| *JSON* | El bloque de abajo | Tres mensajes escritos como escribe la gente |
+
+```json
+{
+  "mensajes": [
+    { "texto": "Hola! soy Carla Gómez, queremos ir a Salta con mi marido y mis dos hijos en julio" },
+    { "texto": "buenas, me llamo Pedro. Somos 6 amigos y queremos conocer Ushuaia" },
+    { "texto": "Hola, quisiera info de Mendoza para mí sola. Gracias! Lucía" }
+  ]
+}
+```
+
+**B-2 · Uno por uno** (*Split Out*)
 
 ```text
-+ → Basic LLM Chain · Prompt:
-   Del mensaje de un cliente, sacá tres datos y respondé SOLO con un JSON, sin texto antes ni después, así:
-   {"nombre": "...", "destino": "...", "personas": 0}
-   Reglas: personas es un número (contá a la persona que escribe). Si un dato no está, poné "".
-   Mensaje: (arrastrá texto)
-Model: Ollama Chat Model · llama3.2:latest · Options → Temperature: 0.1 · Output Format: JSON (si tu versión no lo muestra, alcanza con el prompt)
-→ renombralo:  Sacar los datos (local)
-Execute step → text:  {"nombre": "Carla Gómez", "destino": "Salta", "personas": 4}
++ a la derecha de "Mensajes de prueba" → escribí  split  → Split Out → renombralo:  Uno por uno
 ```
 
-<p style="color:#1a7f37">Le pido una respuesta con una forma fija: un JSON, la ficha con llaves que conocemos desde la Semana 4. Le muestro el molde, y le pongo una regla para lo difícil: contar personas. Y en el modelo, una opción que ayuda mucho: Output Format JSON, que obliga a Ollama a contestar solo con un JSON.</p>
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Fields To Split Out* | `mensajes` | El nombre de la lista. Si está mal escrito, sale 1 item en vez de 3 |
+| *Include* | **No Other Fields** (viene así) | No hay otros datos que conservar |
 
-- **Mostrar el molde es la mitad del trabajo.** El modelo copia la forma que ve. Sin el molde, cada respuesta
-  vendría distinta.
-- **Contar personas es lo más difícil.** "Con mi marido y mis dos hijos" son 4: el modelo chico a veces dice 3. Por
-  eso la regla "contá a la persona que escribe".
+- **Cuándo se coloca:** después de la lista y antes de la IA. Separa la lista en items, uno por mensaje, y así cada
+  nodo siguiente corre **una vez por mensaje** (Semana 3).
 
-**B-3 · Convertir el texto en casilleros**
+<p style="color:#1a7f37">Tres mensajes de prueba, escritos como escribe la gente, sin orden. El Split Out los separa: tres items, uno por mensaje. Desde acá, todo lo que sigue corre tres veces.</p>
+
+**B-3 · Pedirle un JSON al modelo** (*Basic LLM Chain* + *Ollama Chat Model*)
 
 ```text
-+ → Edit Fields (Set):
-   fecha     String  {{ $now.toFormat('dd/MM/yyyy HH:mm') }}
-   nombre    String  {{ JSON.parse($json.text.replace(/```json|```/g, '').trim()).nombre }}
-   destino   String  (igual, terminando en  .destino )
-   personas  Number  (igual, terminando en  .personas )
-→ renombralo:  Armar la fila
++ a la derecha de "Uno por uno" → basic llm → Basic LLM Chain → renombralo:  Sacar los datos (local)
 ```
 
-<p style="color:#1a7f37">El modelo devuelve el JSON como texto, todo junto en el casillero text. JSON.parse lo convierte en una ficha de verdad, y de ahí saco cada dato. Y el replace es un seguro: a veces el modelo encierra el JSON entre tres comillas invertidas, y eso lo saca.</p>
-
-- **`JSON.parse(texto)` = "leé este texto como una ficha".** Es lo mismo que hace n8n cuando una API le contesta en
-  JSON, pero acá lo hacemos nosotros.
-- **Si da error *Unexpected token*:** el modelo agregó texto antes o después del JSON. Mirá su respuesta en el
-  OUTPUT de la chain y ajustá el prompt.
-
-**B-4 · Guardar en la planilla**
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Source for Prompt* | **Define below** | |
+| *Prompt (User Message)* | El texto de abajo; al final, arrastrás `texto` | Le mostramos el molde exacto de la respuesta |
+| *Require Specific Output Format* | Apagado | El formato lo pedimos en el prompt y en el modelo |
 
 ```text
-+ → Google Sheets → Append row in sheet · "Consultas de la agencia" · Hoja 1 · Map Automatically
-→ renombralo:  Guardar en la planilla → Save → Execute workflow
-→ tres filas nuevas:  Carla Gómez | Salta | 4 · Pedro | Ushuaia | 6 · Lucía | Mendoza | 1
+Del mensaje de un cliente, sacá tres datos y respondé SOLO con un JSON, sin texto antes ni después, así:
+{"nombre": "...", "destino": "...", "personas": 0}
+
+Reglas: personas es un número (contá a la persona que escribe). Si un dato no está, poné "".
+
+Mensaje: {{ $json.texto }}
 ```
 
-<p style="color:#1a7f37">Y lo de la Semana 4: agregar fila, con Map Automatically. Tres mensajes escritos como sea, tres filas ordenadas. Esto, conectado al WhatsApp de la semana que viene, anota solo cada consulta que llega.</p>
+Abajo, **Model** → **+** → **Ollama Chat Model** → **Cerebro local: Ollama**:
+
+| Campo (*Cerebro local: Ollama*) | Qué ponés | Por qué |
+|---|---|---|
+| *Credential* | **Ollama local** (la de la práctica) | La dirección de tu Ollama: `http://host.docker.internal:11434` |
+| *Model* | **llama3.2:latest** | El modelo que bajaste |
+| *Options* → **Add Option** → *Sampling Temperature* | **0.1** | Lo más "quieto" posible: queremos siempre la misma respuesta, no creatividad |
+| *Options* → **Add Option** → *Format* (o *Output Format*) | **JSON** | Obliga a Ollama a contestar solo con un JSON. Si tu versión no lo muestra, alcanza con el prompt |
+
+**Execute step** → *OUTPUT*: `text: {"nombre": "Carla Gómez", "destino": "Salta", "personas": 4}` (tres veces, una por
+mensaje).
+
+<p style="color:#1a7f37">Le pido una respuesta con forma fija: un JSON, la ficha con llaves de la Semana 4. Le muestro el molde, y le pongo una regla para lo difícil: contar personas. Y en el modelo, la opción Format JSON, que lo obliga a contestar solo con la ficha.</p>
+
+- **Mostrar el molde es la mitad del trabajo.** El modelo copia la forma que ve.
+- **Contar personas es lo más difícil.** "Con mi marido y mis dos hijos" son 4: el modelo chico a veces dice 3.
+
+**B-4 · Convertir el texto en casilleros** (*Edit Fields*)
+
+```text
++ a la derecha de "Sacar los datos (local)" → edit → Edit Fields (Set) → renombralo:  Armar la fila
+```
+
+- **Cuándo se coloca:** entre la IA y la planilla. La chain devuelve **un texto** (`text`) que parece una ficha; la
+  planilla necesita **casilleros**. Este nodo lo convierte.
+
+| Campo (**Add Field**) | Tipo | Valor | Por qué |
+|---|---|---|---|
+| `fecha` | String | `{{ $now.format('dd/MM/yyyy HH:mm') }}` | Cuándo llegó |
+| `nombre` | String | `{{ JSON.parse($json.text.replace(/```json\|```/g, '').trim()).nombre }}` | Lee el texto como ficha y saca `nombre` |
+| `destino` | String | Igual, terminando en `.destino` | |
+| `personas` | **Number** | Igual, terminando en `.personas` | Número, para poder sumar después |
+
+Los nombres `fecha`, `nombre`, `destino`, `personas` son **los mismos de la fila 1 de la planilla**: eso hace que el
+paso siguiente funcione solo.
+
+<p style="color:#1a7f37">El modelo devuelve la ficha como texto, todo junto. JSON punto parse lo lee como una ficha de verdad, y de ahí saco cada dato. El replace es un seguro: a veces el modelo encierra el JSON entre tres comillas invertidas, y eso lo saca.</p>
+
+- **`JSON.parse(texto)` = "leé este texto como una ficha".**
+- **Si da error *Unexpected token*:** el modelo agregó texto antes o después del JSON. Mirá su `text` en la chain y
+  ajustá el prompt.
+
+**B-5 · Guardar en la planilla** (*Google Sheets*)
+
+```text
++ a la derecha de "Armar la fila" → escribí  sheets  → Google Sheets → en "Actions": Append row in sheet
+```
+
+- **Cuándo se coloca:** al final: es la salida, adonde queda el resultado.
+
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Credential* | Tu credencial de Google Sheets (la de las Semanas 4 y 6) | Si dice *needs to be reconnected*, es el vencimiento de 7 días de la Semana 6 |
+| *Resource* | **Sheet Within Document** | Trabajamos con una hoja de la planilla |
+| *Operation* | **Append Row** | Agregar una fila abajo de todo |
+| *Document* | **From list** → **Consultas de la agencia** | La planilla de la Semana 4 (títulos `fecha`, `nombre`, `destino`, `personas`). *From list* es lo que mejor anduvo |
+| *Sheet* | **From list** → **Hoja 1** | La pestaña de adentro |
+| *Mapping Column Mode* | **Map Automatically** | Cada casillero va a la columna que se llama igual |
+
+Cerrás → renombrás **Guardar en la planilla** → **Save** → **Execute workflow** → en la planilla, tres filas nuevas:
+*Carla Gómez | Salta | 4 · Pedro | Ushuaia | 6 · Lucía | Mendoza | 1*.
+
+<p style="color:#1a7f37">Y lo de la Semana 4: agregar fila, con Map Automatically. Tres mensajes escritos como sea, tres filas ordenadas. Conectado al WhatsApp de la semana que viene, esto anota solo cada consulta que llega.</p>
 
 #### Ejemplo C · El router de privacidad: lo sensible, al local; lo demás, a la nube (flujo 07) (10 min)
 
@@ -1305,22 +1571,43 @@ Ushuaia?" va a **Gemini**.
 
 <p style="color:#1a7f37">Este junta todo lo de hoy. ¿Local o nube? No hace falta elegir uno para siempre: se puede decidir mensaje por mensaje. Si el mensaje trae un dato sensible, una tarjeta o un DNI, lo responde el modelo de nuestra computadora. Si no, Gemini, que es más rápido y contesta mejor. Y lo decide el flujo, con una regla fija, no el modelo.</p>
 
-**C-1 · Los mensajes de prueba**
+**C-1 · El disparador, los mensajes y uno por uno**
 
 ```text
 Overview → Create workflow → nombre:  Router de privacidad
-Trigger manually → Edit Fields (Mode: JSON, los tres mensajes del flujo 07) → Split Out (mensajes) → "Uno por uno"
+Add first step → manual → Trigger manually → renombralo:  Arrancar a mano
++ → edit → Edit Fields (Set) → renombralo:  Mensajes de prueba   (Mode: JSON, el bloque de abajo)
++ → split → Split Out → renombralo:  Uno por uno   (Fields To Split Out: mensajes)
 ```
 
-<p style="color:#1a7f37">Tres mensajes: uno con un número de tarjeta, uno con un DNI, y uno común.</p>
+Son los mismos tres primeros nodos del Ejemplo B (mirá ahí la tabla de cada uno), con otros mensajes:
 
-**C-2 · ¿Tiene datos sensibles? Un IF con una expresión regular**
+```json
+{
+  "mensajes": [
+    { "cliente": "Marta", "texto": "Quiero pagar la seña con la tarjeta 4517 6601 2345 9087, ¿cómo hago?" },
+    { "cliente": "Jorge", "texto": "Para el seguro de viaje necesitan mi DNI? es 30.123.456" },
+    { "cliente": "Sofía", "texto": "¿Qué conviene llevar para Ushuaia en julio?" }
+  ]
+}
+```
+
+<p style="color:#1a7f37">Tres mensajes: uno con un número de tarjeta, uno con un DNI, y uno común. Los mismos tres nodos de antes: disparador, la lista, y el Split Out que los separa.</p>
+
+**C-2 · ¿Tiene datos sensibles?** (*If* con una expresión regular)
 
 ```text
-+ → If · izquierda: {{ $json.texto }} · medio: String → matches regex · derecha:
-   (\d{4}[ -]?){3}\d{4}|\d{1,2}\.?\d{3}\.?\d{3}
-→ renombralo:  ¿Tiene datos sensibles?
++ a la derecha de "Uno por uno" → if → If → renombralo:  ¿Tiene datos sensibles?
 ```
+
+- **Cuándo se coloca:** **antes** de cualquier IA. La decisión de adónde va el mensaje se toma sin mandárselo a
+  ningún modelo.
+
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Conditions* · izquierda | Arrastrás `texto` → `{{ $json.texto }}` | El mensaje del cliente |
+| *Conditions* · el del medio | **String** → **matches regex** | "¿Tiene esta forma?", no "¿es igual a?" |
+| *Conditions* · derecha | `(\d{4}[ -]?){3}\d{4}\|\d{1,2}\.?\d{3}\.?\d{3}` | La forma de una tarjeta **o** de un DNI |
 
 <p style="color:#1a7f37">El IF pregunta: ¿el texto tiene algo con forma de tarjeta o de DNI? Para eso uso una expresión regular: un molde que describe una forma. Parece jeroglífico, pero dice algo simple: cuatro grupos de cuatro números, o un número de siete u ocho cifras, con puntos o sin puntos.</p>
 
@@ -1331,19 +1618,50 @@ Trigger manually → Edit Fields (Mode: JSON, los tres mensajes del flujo 07) �
 **C-3 · Dos chains, dos cerebros**
 
 ```text
-true  → Basic LLM Chain "Responder (local)" · Model: Ollama Chat Model (llama3.2)
-false → Basic LLM Chain "Responder (nube)"  · Model: Google Gemini Chat Model
-   Prompt (el mismo en las dos):  Sos la asesora de "Rumbo Sur". Respondé en 3 líneas como mucho.
-                                  Nunca repitas números de tarjeta ni de documento.  Mensaje: (arrastrá texto)
-Después de cada una, un Edit Fields: cliente, cerebro ("Ollama (local)" o "Gemini (nube)"), respuesta
++ en la salida "true"  → basic llm → Basic LLM Chain → renombralo:  Responder (local)
+   abajo, Model → + → Ollama Chat Model → Cerebro local: Ollama
++ en la salida "false" → basic llm → Basic LLM Chain → renombralo:  Responder (nube)
+   abajo, Model → + → Google Gemini Chat Model → Cerebro nube: Gemini
 ```
 
-<p style="color:#1a7f37">Dos chains con el mismo prompt, pero con cerebros distintos. Arriba, Ollama. Abajo, Gemini. Y al final de cada una, anoto qué cerebro respondió, para verlo.</p>
-
-**C-4 · Probar**
+| Campo (en **las dos** chains) | Qué ponés | Por qué |
+|---|---|---|
+| *Source for Prompt* | **Define below** | |
+| *Prompt (User Message)* | El texto de abajo (el mismo en las dos) | Mismo pedido; lo único distinto es el cerebro |
 
 ```text
-Execute workflow →
+Sos la asesora de la agencia de viajes "Rumbo Sur". Respondé este mensaje en 3 líneas como mucho, en español rioplatense. Nunca repitas números de tarjeta ni de documento.
+
+Mensaje: {{ $json.texto }}
+```
+
+| Sub-nodo | Campo | Qué ponés | Por qué |
+|---|---|---|---|
+| *Cerebro local: Ollama* | *Credential* · *Model* · *Temperature* | Ollama local · `llama3.2:latest` · **0.1** | Lo sensible se queda en tu computadora |
+| *Cerebro nube: Gemini* | *Credential* · *Model* · *Temperature* | La de Gemini · el **flash** · **0.3** | Lo común va al modelo más rápido y mejor |
+
+- **"Nunca repitas números de tarjeta ni de documento"** va en los dos: aunque el local no los manda afuera, la
+  respuesta igual no tiene por qué repetirlos.
+
+**C-4 · Anotar qué cerebro respondió** (*Edit Fields*, uno en cada rama)
+
+```text
++ a la derecha de "Responder (local)" → Edit Fields (Set) → renombralo:  Respuesta local
++ a la derecha de "Responder (nube)"  → Edit Fields (Set) → renombralo:  Respuesta nube
+```
+
+| Campo | Tipo | *Respuesta local* | *Respuesta nube* | Por qué |
+|---|---|---|---|---|
+| `cliente` | String | `{{ $('Uno por uno').item.json.cliente }}` | igual | El nombre quedó "atrás", antes de la chain |
+| `cerebro` | String | `Ollama (local): tenía datos sensibles` | `Gemini (nube)` | Para ver, en el resultado, quién contestó |
+| `respuesta` | String | `{{ $json.text }}` | igual | Lo que escribió el modelo |
+
+<p style="color:#1a7f37">Dos chains con el mismo prompt y cerebros distintos. Arriba, Ollama. Abajo, Gemini. Y al final de cada una, anoto quién respondió, para verlo.</p>
+
+**C-5 · Probar**
+
+```text
+Save → Execute workflow →
    Marta (tarjeta)  → Respuesta local · Ollama
    Jorge (DNI)      → Respuesta local · Ollama
    Sofía (Ushuaia)  → Respuesta nube  · Gemini

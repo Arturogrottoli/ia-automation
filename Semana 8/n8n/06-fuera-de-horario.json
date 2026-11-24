@@ -322,7 +322,7 @@
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "fecha": "={{ $now.toFormat('dd/MM/yyyy HH:mm') }}",
+            "fecha": "={{ $now.format('dd/MM/yyyy HH:mm') }}",
             "nombre": "={{ $('Datos del mensaje').item.json.nombre }}",
             "telefono": "={{ $('Datos del mensaje').item.json.telefono }}",
             "mensaje": "={{ $('Datos del mensaje').item.json.texto }}"
