@@ -107,8 +107,9 @@ Lo último que se recorta es el Paso 4 (el puente con n8n): es lo que conecta es
 
 ### Preparación (antes de la clase)
 
-- [ ] **Ollama instalado en tu computadora** (ollama.com → *Download*) y `llama3.2` descargado (`ollama pull
-  llama3.2`). Probá antes la práctica entera.
+- [ ] **Ollama instalado en tu computadora** (en PowerShell: `irm https://ollama.com/install.ps1 | iex`, o
+  ollama.com → *Download*) y `llama3.2` descargado (`ollama pull llama3.2`). Probá antes la práctica entera. Si algo
+  falla, el recuadro "Antes del primer ejemplo", antes del Paso 1.
 - [ ] **`llama3.2:1b` sin descargar**, para mostrar la descarga en vivo en el Paso 2 (1,3 GB). Si ya lo tenés,
   borralo antes con `ollama rm llama3.2:1b`.
 - [ ] **Tu n8n en Docker prendido**, con la credencial de Gemini (la de las Semanas 2 y 6).
@@ -735,6 +736,46 @@ Si no: mirá mi pantalla; lo hacés en casa con el mismo paso a paso.
 Si usás n8n Cloud: los Pasos 1 a 3 los podés hacer; el 4 miralo en mi pantalla.
 ```
 
+#### Antes del primer ejemplo: Ollama listo, paso a paso (por si las dudas)
+
+Si al ejecutar un flujo de esta semana aparece **"Error in sub-node 'Cerebro local: Ollama'"** o **"Node does not
+have any credentials set"**, casi siempre falta una de estas cosas. Es el camino completo, probado el 24/11/2026 en
+Windows con n8n 2.46 en Docker (Ollama 0.40.18):
+
+```text
+1. INSTALAR OLLAMA · en PowerShell (también la terminal de VS Code, sin importar la carpeta):
+      irm https://ollama.com/install.ps1 | iex
+   → termina con "Install complete. Run 'ollama' from the command line."
+   (o ollama.com → Download → Windows, el instalador común)
+
+2. ABRIR UNA TERMINAL NUEVA. Si dice "ollama no se reconoce como nombre de un cmdlet":
+   → en PowerShell suelta: cerrarla y abrir otra
+   → en VS Code: cerrar VS Code ENTERO y volver a abrirlo (una terminal nueva no alcanza)
+   → o, sin cerrar nada, usar la dirección completa:
+      & "$env:LOCALAPPDATA\Programs\Ollama\ollama.exe" pull llama3.2
+
+3. BAJAR EL MODELO (2 GB, unos minutos):
+      ollama pull llama3.2
+      ollama list            → tiene que aparecer  llama3.2:latest   2.0 GB
+
+4. EN n8n · doble clic en el nodo "Cerebro local: Ollama"
+   → Credential: botón "Connect to Ollama" (si no hay ninguna) o "Create new credential"
+   → Base URL:  http://host.docker.internal:11434   (n8n en Docker; NO localhost)
+   → API Key: VACÍA (es para un Ollama ajeno con contraseña; el tuyo no pide)
+   → Save → "Connection tested successfully"
+   → Model: llama3.2:latest (el nombre exacto de ollama list)
+
+5. Execute workflow → la primera vez tarda (en la prueba, 45 segundos: el modelo arranca en frío)
+   → todos los nodos en verde. La respuesta: Logs → "Preguntarle al modelo local" → Output
+```
+
+<p style="color:#1a7f37">Si a alguien le da error el cerebro local, son estas cinco cosas en orden: Ollama instalado, la terminal que se entere, el modelo bajado, la credencial con host.docker.internal, y el nombre exacto del modelo.</p>
+
+- **Cómo saber si Ollama está prendido:** la llamita al lado del reloj, o `http://localhost:11434` en el navegador
+  dice *Ollama is running*. Si no, abrilo desde el menú Inicio (**Ollama**).
+- **Por qué la API Key va vacía:** Ollama en tu computadora no tiene usuario ni contraseña. El campo existe para
+  cuando Ollama corre en un servidor de otro que lo protege.
+
 #### Paso 1 · El motor (70–76)
 
 2. **Filmina 23.** Decís:
@@ -773,7 +814,8 @@ PRÁCTICA · Paso 1: el motor
 <p style="color:#1a7f37">Miren cuánta memoria están usando ahora, antes de cargar ningún modelo. Anótenlo: después comparamos.</p>
 
 **Plan B:** si `ollama --version` dice *no se reconoce como nombre de un cmdlet*, cerrá PowerShell y abrí otra: la
-terminal que estaba abierta no se enteró de la instalación.
+terminal que estaba abierta no se enteró de la instalación. **En la terminal de VS Code no alcanza con abrir otra:**
+hay que cerrar VS Code entero, o usar `& "$env:LOCALAPPDATA\Programs\Ollama\ollama.exe" --version`.
 
 #### Paso 2 · El modelo (76–85)
 
@@ -922,7 +964,7 @@ PRÁCTICA · Paso 4: el flujo
    Source for Prompt: Define below · Prompt: arrastrá "pregunta" desde la izquierda
    Renombralo: Preguntarle al modelo local
 5. Abajo del nodo, en Chat Model: + → Ollama Chat Model
-   Credencial: Ollama local · Model: llama3.2:latest
+   Credencial: Ollama local (si no aparece: botón "Connect to Ollama") · Model: llama3.2:latest
 6. Execute workflow
 ```
 
