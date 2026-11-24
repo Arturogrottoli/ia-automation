@@ -1,14 +1,15 @@
 # Semana 7 · Ejercicios: IA local con Ollama
 
-Esta semana bajamos el modelo de IA a nuestra propia computadora. Los ejercicios 1 a 3 son de la clase; del 4 al 7,
-para casa. No hay pre-entrega, pero el Ejercicio 7 te deja listo el cerebro para la Pre-entrega 4.
+Esta semana bajamos el modelo de IA a nuestra propia computadora. **En clase no hay ejercicios:** el profe arma en
+vivo los siete ejemplos de la carpeta `n8n/`. **Todos estos ejercicios son para casa.** No hay pre-entrega, pero el
+Ejercicio 7 te deja listo el cerebro para la Pre-entrega 4.
 
-**Antes de la clase** hacé los Pasos 1 y 2 del Ejercicio 3: instalar Ollama y descargar `llama3.2` (2 GB). En clase
-no da el tiempo ni la conexión para que 30 personas bajen lo mismo a la vez.
+**Si querés seguir la clase a la par** (no hace falta), hacé antes los Pasos 1 y 2 del Ejercicio 3: instalar Ollama y
+descargar `llama3.2` (2 GB). En clase no da el tiempo ni la conexión para que 30 personas bajen lo mismo a la vez.
 
 ---
 
-## Ejercicio 1 · ¿Local o nube? (en clase, 5 min)
+## Ejercicio 1 · ¿Local o nube? (casa, 5 min)
 
 Para cada caso, decidí si el paso de IA conviene **local** (Ollama) o **en la nube** (Gemini, ChatGPT, Claude), y
 escribí por qué en una línea. Pensá en las tres razones (costo, privacidad, independencia) y en la contrapartida
@@ -23,7 +24,7 @@ escribí por qué en una línea. Pensá en las tres razones (costo, privacidad, 
 
 ---
 
-## Ejercicio 2 · ¿Qué modelo te entra? (en clase, 2 min)
+## Ejercicio 2 · ¿Qué modelo te entra? (casa, 2 min)
 
 1. Fijate cuánta memoria RAM tiene tu computadora:
    - Windows: **Configuración** → **Sistema** → **Información** → *RAM instalada*;
@@ -37,11 +38,13 @@ escribí por qué en una línea. Pensá en las tres razones (costo, privacidad, 
 | 16 GB | hasta 7 u 8B | `llama3.2` (y en casa, probá `llama3.1:8b`) |
 | 32 GB o más, o placa de video de 8 GB o más | 13B o más | `llama3.2` (y en casa, lo que quieras) |
 
-3. Escribí en el chat: cuánta RAM tenés y qué modelo te toca.
+3. Anotá cuánta RAM tenés y qué modelo te toca.
 
 ---
 
-## Ejercicio 3 · La práctica (en clase, 40 min)
+## Ejercicio 3 · Instalá Ollama y rehacé los Ejemplos 1 y 2 (casa, 40 min)
+
+Lo que el profe mostró en la clase (la terminal y los Ejemplos 1 y 2), ahora en tu computadora.
 
 ### Paso 1 · El motor: instalar Ollama
 
@@ -102,7 +105,7 @@ Por último, abrí el monitor de memoria y dejalo a la vista:
 ### Paso 4 · El puente: n8n + Ollama
 
 Para este paso, n8n tiene que estar en tu computadora (en Docker, como en la Semana 2). Si usás n8n Cloud, miralo en
-la pantalla del profe: n8n Cloud no puede ver tu Ollama.
+la grabación de la clase: n8n Cloud no puede ver tu Ollama.
 
 1. En n8n: **Credentials** → **Create credential** → buscá **Ollama** → elegí **Ollama**.
 2. **Base URL**:
@@ -126,10 +129,14 @@ Si da error de conexión, revisá la *Base URL*: es el error más común de hoy.
 
 ### Paso 5 · Comparar: local contra nube
 
-1. Importá `02-local-vs-nube.json` (de la carpeta `n8n/` de la semana): workflow nuevo → menú **…** → **Import from
-   File**.
-2. Elegí tu credencial de Ollama en *Cerebro local: Ollama* y la de Gemini en *Cerebro nube: Gemini*.
-3. **Execute workflow** dos veces (la primera, el local tarda más porque carga el modelo).
+1. Armalo como en el Ejemplo 2 de la clase: workflow nuevo `Local vs nube` → **Trigger manually** → **Edit Fields**
+   con un campo `prompt` (la consulta de la familia que va a Salta) → copiá de `Hola Ollama` la chain y su Ollama
+   (**Ctrl + C** / **Ctrl + V**) y cambiá el prompt a `{{ $json.prompt }}` → arrastrando desde la salida de *El mismo
+   prompt*, una segunda **Basic LLM Chain** con **Google Gemini Chat Model** → un **Merge** (*Append*) con las dos.
+   Si te trabás, importá `02-local-vs-nube.json` y comparalo con el tuyo.
+2. Credencial de Ollama en la rama local y la de Gemini en la de la nube.
+3. **Execute workflow** dos veces (la primera, el local tarda más porque carga el modelo). Los segundos de cada rama
+   están en *Logs*.
 4. En el último nodo, *Juntar las dos*, completá esta tabla con lo que ves:
 
 | | Local (Ollama) | Nube (Gemini) |
@@ -166,19 +173,21 @@ Si da error de conexión, revisá la *Base URL*: es el error más común de hoy.
 
 ---
 
-## Ejercicio 5 · Quejas privadas (casa, 20 min)
+## Ejercicio 5 · Quejas privadas: mejorá la clasificación (casa, 20 min)
 
-El caso del banco: tres quejas de clientes, dos con número de tarjeta. El modelo local las clasifica y las resume, y
-ningún dato sale de tu computadora.
+El caso del banco, que el profe armó en el Ejemplo 3: tres quejas de clientes, dos con número de tarjeta. En la
+clase, el modelo local no repitió las tarjetas, pero puso las tres en "Cobro". Tu tarea es que clasifique mejor.
 
-1. Importá `03-quejas-privadas.json` y elegí tu credencial de Ollama.
+1. Armá el flujo como en el Ejemplo 3 (o importá `03-quejas-privadas.json`) y elegí tu credencial de Ollama.
 2. Ejecutalo. Mirá la salida de *Para el equipo*: para cada cliente, la categoría y el resumen.
 3. Revisá:
    - ¿Clasificó bien las tres (Cobro, Fraude, Atención)?
    - ¿Respetó la regla de **no escribir el número de tarjeta** en el resumen?
    - ¿Respondió solo las dos líneas, o agregó texto de más?
-4. Mejorá el prompt del nodo *Clasificar y resumir (local)* para que falle menos, y volvé a ejecutar. Pistas: dar un
-   ejemplo de la respuesta esperada; bajar la temperatura a 0; decir qué hacer si duda.
+4. Mejorá el prompt del nodo *Clasificar y resumir (local)* para que falle menos, y volvé a ejecutar. Pistas: definir
+   cada categoría (Fraude: el cliente dice que NO hizo la compra; Cobro: le cobraron mal algo que sí compró; Atención:
+   no lo atienden o quiere cambiar algo); dar un ejemplo de la respuesta esperada; bajar la temperatura a 0.
+5. Anotá qué cambio mejoró más la clasificación.
 
 ---
 
@@ -202,12 +211,14 @@ quedan (nombre, viaje)?
 
 ---
 
-## Ejercicio 7 · Ana con cerebro local (casa, 30 min)
+## Ejercicio 7 · Ana con cerebro local, con tus preguntas (casa, 30 min)
 
-Ana, la asesora de la Semana 6, con el cerebro en tu máquina. Mismas herramientas, mismo system prompt.
+Ana, la asesora de la Semana 6, con el cerebro en tu máquina: lo que el profe mostró en el Ejemplo 4. Mismas
+herramientas, mismo system prompt. Ahora lo armás vos y la probás con más preguntas.
 
 **Opción A · desde el archivo:** importá `04-agente-ana-local.json`. Elegí la credencial de Ollama en *Cerebro:
-Ollama (local)*, y en *consultar_paquetes* tu credencial de Sheets y el link de tu planilla de paquetes.
+Ollama (local)*, y en *consultar_paquetes* tu credencial de Sheets y tu planilla de paquetes (*Document* y
+*Sheet* **From list**, sin filtros).
 
 **Opción B · cambiarle el cerebro a tu agente:**
 1. Abrí tu agente de la Semana 6 (o el `03-agente-agencia.json`) → menú **…** → **Duplicate** → nombre: `Ana local`.

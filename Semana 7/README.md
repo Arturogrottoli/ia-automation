@@ -8,21 +8,36 @@ Fuente: `program-summary.pdf` (Módulo 7). **Una clase de 2 horas.**
 |---|---|
 | `Modulo_7_AI_Automation.pptx` | Las filminas del módulo (30). |
 | `Semana 7.docx` | El material de lectura: por qué correr un modelo local, qué es Ollama, cómo elegir el modelo según el hardware, el cuestionario de 4 preguntas, el podcast y el guion sugerido de la clase. |
-| [ejercicios-alumnos.md](ejercicios-alumnos.md) | Ejercicios en clase y para casa, con el paso a paso de la instalación. Se comparte con los alumnos. |
-| [n8n/](n8n/) | Siete workflows listos para importar: el "hola mundo" con Ollama, la comparación local contra nube, la clasificación de quejas con datos de tarjeta, Ana (el agente de la Semana 6) con el cerebro en Ollama, y tres ejemplos extra (05 la IA local lee las encuestas, 06 de un mensaje escrito como sea a la planilla, 07 el router de privacidad). |
+| [ejercicios-alumnos.md](ejercicios-alumnos.md) | Los ejercicios, **todos para casa** (en clase no hay ejercicios), con el paso a paso de la instalación. Se comparte con los alumnos. |
+| [n8n/](n8n/) | Siete workflows, **uno por cada ejemplo de la clase y con el mismo número**: 01 el "hola mundo" con Ollama, 02 local contra nube, 03 las quejas con datos de tarjeta, 04 Ana con el cerebro en Ollama, 05 la IA local lee las encuestas, 06 de un mensaje escrito como sea a la planilla, 07 el router de privacidad. **En clase no se importan: se arman en vivo.** El `.json` queda de respaldo. |
 | [ejercicios-docente.md](ejercicios-docente.md) | Respuestas, las salidas reales de los flujos y las trabas más comunes. **No se comparte.** |
 
-## Los ejercicios
+## La clase y la tarea
 
-| Cuándo | Ejercicio | Duración |
-|---|---|---|
-| En clase | 1 · ¿Local o nube? (el banco y la clínica de la filmina 12) | 5 min |
-| En clase | 2 · ¿Qué modelo te entra? | 2 min |
-| En clase | 3 · La práctica: motor, modelo, sin internet, puente y comparación | 40 min |
-| Casa | 4 · Dos tamaños, la misma pregunta | 20 min |
-| Casa | 5 · Quejas privadas | 20 min |
-| Casa | 6 · Tapar los datos antes de la IA | 15 min |
-| Casa | 7 · Ana con cerebro local | 30 min |
+**En clase no hay ejercicios.** Se da la teoría de las filminas y se arman en vivo, cada uno en su lugar, los siete
+ejemplos de la carpeta [n8n/](n8n/):
+
+| Ejemplo | Flujo | Dónde va | Qué muestra |
+|---|---|---|---|
+| 1 · Hola Ollama | `01` | Filmina 26 (el puente) | n8n le pregunta a un modelo que corre en tu computadora |
+| 2 · Local contra nube | `02` | Filmina 27 (comparar) | El mismo prompt a Ollama y a Gemini, lado a lado |
+| 3 · Quejas privadas | `03` | Después de la 27 (es la filmina 12, en vivo) | Datos de tarjeta que no salen de la máquina |
+| 4 · Ana con cerebro local | `04` | Después de la 27 (es la filmina 11, en vivo) | El agente de la Semana 6 con Ollama: dónde no alcanza |
+| 5 · La IA local lee las encuestas | `05` | Después de la 27 | Clasificar texto privado y decidir con un IF |
+| 6 · De un mensaje a la planilla | `06` | Después de la 27 | Pedirle un JSON al modelo y guardarlo en Sheets |
+| 7 · El router de privacidad | `07` | Después de la 27, antes de la 28 | Lo sensible al local; lo demás, a la nube |
+
+**Para casa** ([ejercicios-alumnos.md](ejercicios-alumnos.md)):
+
+| Ejercicio | Duración |
+|---|---|
+| 1 · ¿Local o nube? | 5 min |
+| 2 · ¿Qué modelo te entra? | 2 min |
+| 3 · Instalá Ollama y rehacé los Ejemplos 1 y 2 | 40 min |
+| 4 · Dos tamaños, la misma pregunta | 20 min |
+| 5 · Quejas privadas: mejorá la clasificación | 20 min |
+| 6 · Tapar los datos antes de la IA | 15 min |
+| 7 · Ana con cerebro local, con tus preguntas | 30 min |
 
 ## Evaluación
 
@@ -40,7 +55,7 @@ Fuente: `program-summary.pdf` (Módulo 7). **Una clase de 2 horas.**
   - en clase vos mostrás la descarga del chico, `llama3.2:1b` (1,3 GB), para que vean cómo es;
   - el que llega sin nada, sigue en tu pantalla y lo hace en casa.
 - **Los modelos de la clase son `llama3.2` (3B) y `llama3.2:1b`.** `llama3.2` es el que el nodo de n8n trae por
-  defecto, habla castellano aceptable y sabe usar herramientas (lo necesita la Ana del Ejercicio 7). El de 1B es para
+  defecto, habla castellano aceptable y sabe usar herramientas (lo necesita la Ana del Ejemplo 4). El de 1B es para
   las máquinas con poca memoria.
 - **Qué está probado** (7 de noviembre de 2026, Ollama 0.40 y n8n 2.46, en Docker con 4 núcleos y 4 GB de memoria, sin
   placa de video, algo parecido a una notebook común):
@@ -51,7 +66,7 @@ Fuente: `program-summary.pdf` (Módulo 7). **Una clase de 2 horas.**
     traba que les va a pasar;
   - Ana (el agente de la Semana 6) con `llama3.2` tardó **más de 5 minutos** en responder una pregunta, usó la
     calculadora pero no consultó el dólar, e **inventó el precio en pesos**. Es la razón para no usar un modelo de 3B
-    como cerebro de un agente con varias herramientas (Ejercicio 7, versión docente);
+    como cerebro de un agente con varias herramientas (Ejemplo 4);
   - los errores de la práctica son los reales: `localhost` desde Docker da **`fetch failed`**, y un nombre de modelo
     equivocado, **`model 'llama3' not found`**;
   - los cuatro flujos de la carpeta [n8n/](n8n/) se ejecutaron contra ese Ollama. La rama de Gemini del flujo 02 no
@@ -68,10 +83,12 @@ Fuente: `program-summary.pdf` (Módulo 7). **Una clase de 2 horas.**
     así;
   - la filmina 11 nombra GPT-4o como modelo de punta: en 2026 ya hay modelos más nuevos. Se dice "los grandes de la
     nube: los de OpenAI, Claude, Gemini".
+- **En clase no hay ejercicios: los alumnos miran.** Vos mostrás la terminal y armás los siete ejemplos en vivo,
+  despacio y explicando cada clic, sin esperar a que todos lleguen. El que quiere seguir a la par, sigue; el que
+  tiene un problema puntual, lo plantea al final. Los ejercicios son la tarea.
 - **Esta clase no tiene filmina de "Para practicar".** La tarea va al final, con la filmina 28.
 - **En la teoría hay bloques "En la terminal, paso a paso" y "En n8n, paso a paso"**, con los comandos y los clics.
-  Están para mostrarlos en un minuto mientras lo contás; si vas corto, pegá el bloque en el chat y seguí: en la
-  práctica lo hacen completo.
+  Están para mostrarlos en un minuto mientras lo contás; los flujos completos se arman en la Sección 03.
 
 ---
 
@@ -79,29 +96,56 @@ Fuente: `program-summary.pdf` (Módulo 7). **Una clase de 2 horas.**
 
 ### Agenda
 
-| Min | Tramo | Filminas | En clase |
+| Min | Tramo | Filminas | En n8n |
 |---|---|---|---|
-| 0–15 | Apertura y **repaso de la Semana 6** (8 min: qué es un agente, sus piezas, las tools, el manual, lo que cuesta) | 1–5 | Pregunta rápida en el chat |
-| 10–35 | **01 · Por qué correr IA local** | 6–12 | Ej. 1 (5 min) |
-| 35–60 | **02 · Ollama y los modelos** | 13–19 | Ej. 2 (2 min) |
-| 60–70 | Break | 20 | |
-| 70–113 | **03 · Práctica en vivo:** el motor, el modelo, sin internet, el puente y comparar | 21–27 | Ej. 3 |
-| 113–117 | Cómo sigue y la tarea | 28 | |
-| 117–120 | Preguntas y cierre | 29–30 | |
+| 0–15 | Apertura y **repaso de la Semana 6** (8 min: qué es un agente, sus piezas, las tools, el manual, lo que cuesta) | 1–5 | — |
+| 15–40 | **01 · Por qué correr IA local** | 6–12 | — (la 11 y la 12 se ven en vivo en los Ejemplos 3 y 4) |
+| 40–65 | **02 · Ollama y los modelos** | 13–19 | — |
+| 65–75 | Break | 20 | — |
+| 75–90 | **03 · En la terminal:** el motor, el modelo y sin internet | 21–25 | — (terminal) |
+| 90–112 | **03 · En n8n:** el puente y comparar | 26–27 | **Ejemplo 1** (filmina 26) y **Ejemplo 2** (filmina 27) |
+| 112–155 | **03 · Cinco ejemplos más con IA local** | — | **Ejemplos 3 a 7** |
+| 155–159 | Cómo sigue y la tarea | 28 | — |
+| 159–162 | Preguntas y cierre | 29–30 | — |
 
-**Al final hay tres ejemplos extra** con IA local (las encuestas, de mensaje a planilla, el router de privacidad): si
-sobra tiempo, se muestra uno; si no, quedan para casa.
+**Ojo con el tiempo: así completa, son unos 2 h 42 min, no 2 horas.** Armar siete ejemplos en vivo, y con un modelo
+local que tarda, lleva más que las filminas solas. Para que entre en 120 minutos, recortá en este orden:
+1. El **Ejemplo 7** (el router) pasa a la tarea (−10 min).
+2. El **Ejemplo 6** (mensaje a planilla) pasa a la tarea (−10 min).
+3. El **Ejemplo 5** (las encuestas) pasa a la tarea (−8 min).
+4. El **Paso 3** (sin internet): lo hacés vos solo, en un minuto (−4 min).
+5. Los cinco detalles (**filmina 17**): se leen (−2 min).
+6. En la **filmina 12**, solo la respuesta en una línea, sin las tres preguntas del material (−2 min).
+7. En el **Ejemplo 4**, mandás una sola pregunta y, mientras Ana piensa, seguís hablando (−3 min).
 
-**El repaso dura 8 minutos** (antes eran 3): los 5 de más salen de hacer **de entrada** los recortes 2 y 3 de
-abajo. Los minutos de las secciones siguientes quedan corridos 5 minutos.
+Lo último que se recorta son los Ejemplos 1 y 2 (el puente y la comparación) y el 3 (las quejas): son los que conectan
+el módulo con el resto del curso.
 
-**Si el tiempo se aprieta**, recortá en este orden:
-1. El Paso 3 (sin internet): lo hacés vos solo, en un minuto, y ellos lo prueban en casa.
-2. Los cinco detalles (filmina 17): se leen.
-3. El Ejercicio 2: se responde en voz alta con un par de ejemplos.
-4. El Paso 5 (comparar): ejecutás el flujo 02 ya importado y comentan el resultado.
+---
 
-Lo último que se recorta es el Paso 4 (el puente con n8n): es lo que conecta este módulo con el resto del curso.
+### Mapa de la clase: el PowerPoint, la terminal y n8n, en orden
+
+Para seguir la clase con las pantallas: qué filmina va (`Modulo_7_AI_Automation.pptx`) y qué se hace en la terminal o
+en n8n en cada momento. **No se importa ningún flujo:** todo se arma en vivo.
+
+| Min | Filminas | Tramo | En la terminal o en n8n |
+|---|---|---|---|
+| 0–15 | 1–5 | Apertura y repaso | Nada |
+| 15–40 | 6–12 | 01 · Por qué correr IA local | Nada |
+| 40–65 | 13–19 | 02 · Ollama y los modelos | A lo sumo, `ollama list` en la filmina 18 |
+| 65–75 | 20 | Break | Dejás abiertos la terminal, el monitor de memoria y n8n |
+| 75–80 | 21–23 | Paso 1 · El motor | Terminal: `ollama --version`, `localhost:11434` |
+| 80–86 | 24 | Paso 2 · El modelo | Terminal: `ollama pull`, `ollama run`, `ollama ps` |
+| 86–90 | 25 | Paso 3 · Sin internet | Terminal, con el WiFi apagado |
+| 90–102 | 26 | Paso 4 · El puente | **Ejemplo 1:** workflow nuevo, `Hola Ollama` |
+| 102–112 | 27 | Paso 5 · Comparar | **Ejemplo 2:** workflow nuevo, `Local vs nube` |
+| 112–120 | — | Las quejas | **Ejemplo 3:** workflow nuevo, `Quejas privadas` |
+| 120–127 | — | Ana local | **Ejemplo 4:** copia de `Agente en vivo` (Semana 6), `Ana local` |
+| 127–135 | — | Las encuestas | **Ejemplo 5:** workflow nuevo, `Encuestas con IA local` |
+| 135–145 | — | Mensaje a planilla | **Ejemplo 6:** workflow nuevo, `De mensaje a planilla` |
+| 145–155 | — | El router | **Ejemplo 7:** workflow nuevo, `Router de privacidad` |
+| 155–159 | 28 | Cómo sigue y la tarea | Nada |
+| 159–162 | 29–30 | Preguntas y cierre | — |
 
 ---
 
@@ -113,14 +157,14 @@ Lo último que se recorta es el Paso 4 (el puente con n8n): es lo que conecta es
 - [ ] **`llama3.2:1b` sin descargar**, para mostrar la descarga en vivo en el Paso 2 (1,3 GB). Si ya lo tenés,
   borralo antes con `ollama rm llama3.2:1b`.
 - [ ] **Tu n8n en Docker prendido**, con la credencial de Gemini (la de las Semanas 2 y 6).
-- [ ] **Los workflows importados** (carpeta [n8n/](n8n/)). Para cada uno: workflow nuevo → menú **…** → **Import from
-  File** → **Save**. En cada nodo de Ollama, creá o elegí la credencial **Ollama** con la *Base URL*
-  `http://host.docker.internal:11434`.
-  - `01-hola-ollama.json`: el puente terminado (plan B del Paso 4).
-  - `02-local-vs-nube.json`: elegí también la credencial de Gemini en *Cerebro nube: Gemini*. Ejecutalo dos veces
-    (la primera, el local carga el modelo).
-  - `03-quejas-privadas.json` y `04-agente-ana-local.json`: los Ejercicios 5 y 7. Para el 04, la credencial de Sheets
-    y el link de la planilla de paquetes de la Semana 6.
+- [ ] **Los siete ejemplos ensayados, armándolos** (no importándolos: en clase se arman en vivo). Lo que necesitan:
+  - la credencial **Ollama** con la *Base URL* `http://host.docker.internal:11434` (Ejemplo 1; después se reusa);
+  - la credencial de **Gemini** (Ejemplos 2 y 7);
+  - el workflow **`Agente en vivo`** de la Semana 6, con Ana completa, y la planilla `Paquetes Rumbo Sur` (Ejemplo 4).
+    La credencial de Google Sheets vence a los 7 días: revisala el día anterior;
+  - la planilla **`Consultas de la agencia`** de la Semana 4, con `fecha`, `nombre`, `destino`, `personas` en la fila 1
+    (Ejemplo 6).
+  - Los `.json` de [n8n/](n8n/) son el respaldo: si un ejemplo no te sale en el ensayo, importalo y comparalo con el tuyo.
 - [ ] **El Administrador de tareas** a mano: **Ctrl + Shift + Esc** → pestaña **Rendimiento** → **Memoria**. En Mac,
   **Monitor de Actividad** → pestaña **Memoria**.
 - [ ] **Una terminal abierta** (PowerShell en Windows, Terminal en Mac) con letra grande: **Ctrl + rueda del mouse**.
@@ -128,9 +172,10 @@ Lo último que se recorta es el Paso 4 (el puente con n8n): es lo que conecta es
   **la clase de Zoom también se corta**. Avisalo antes, y que Romina sostenga el chat esos 30 segundos. Si no querés
   arriesgar, mostrá la prueba grabada en un video corto.
 - [ ] **El día anterior**, avisales a los alumnos:
-  - que instalen Ollama y descarguen `llama3.2` en casa, con el paso a paso del Ejercicio 3 (Pasos 1 y 2);
-  - que se fijen cuánta memoria RAM tiene su computadora (Ejercicio 2): **Configuración → Sistema → Información** en
-    Windows, ** → Acerca de esta Mac** en Mac;
+  - que, si quieren seguir a la par, instalen Ollama y descarguen `llama3.2` en casa, con el paso a paso del
+    Ejercicio 3 (Pasos 1 y 2). Si no, miran: en clase no hay ejercicios;
+  - que se fijen cuánta memoria RAM tiene su computadora: **Configuración → Sistema → Información** en Windows,
+    ** → Acerca de esta Mac** en Mac;
   - que entren con n8n prendido.
 - [ ] [ejercicios-alumnos.md](ejercicios-alumnos.md) listo para compartir.
 - [ ] Avisar que la clase queda grabada.
@@ -288,7 +333,7 @@ Para explicar:
 
 ---
 
-### 10–35 · Sección 01 · Por qué correr IA local
+### 15–40 · Sección 01 · Por qué correr IA local
 
 **Filmina 6 · Separador "01: Por qué correr IA local"**
 
@@ -304,14 +349,22 @@ Para explicar:
   lo que responde. Un **request** es un pedido, como en la Semana 4.
   - *Ejemplo:* Resumir mil mails por día en la nube se paga mil veces. En local, la computadora trabaja mil veces,
     pero no llega ninguna factura.
+  - *Otro ejemplo:* Una inmobiliaria quiere que la IA escriba la descripción de sus 400 propiedades, y rehacerla cada
+    vez que cambia un precio. En la nube, cada versión se paga. En local, la pueden rehacer 20 veces hasta que les
+    guste.
 - **"Privacidad: los datos nunca salen de tu infraestructura. Crítico si el flujo procesa información sensible."**
   **Información sensible** es la que puede hacer daño si se filtra: salud, plata, documentos, datos personales.
   - *Ejemplo:* Un mail con el número de tarjeta de un cliente. Con Gemini, viaja a Google. Con Ollama, no sale de tu
     computadora.
+  - *Otro ejemplo:* Un estudio de abogados quiere resumir los mails con sus clientes. El secreto profesional le impide
+    mandárselos a otra empresa; con un modelo local, no se los manda a nadie.
 - **"Independencia: no dependés de un proveedor externo, ni de su disponibilidad, sus precios o sus límites. Y podés
   operar sin internet."** **Proveedor** es la empresa que da el servicio.
   - *Ejemplo:* Los proveedores anuncian fechas en las que un modelo deja de funcionar, y los flujos que lo usan hay
     que cambiarlos. Un modelo descargado, en cambio, no se lo pueden apagar a nadie.
+  - *Otro ejemplo:* Google ya anunció que el modelo gemini-3.1-flash-lite se deja de ofrecer el 7 de mayo de 2027:
+    cada flujo que lo use va a haber que cambiarlo. El archivo de llama3.2 que bajaron hoy va a seguir andando igual
+    dentro de cinco años.
 
 **Las tres razones, en una tabla** (para decirlo una vez):
 
@@ -333,22 +386,32 @@ Para explicar:
   también va el system prompt entero y la memoria, en **cada** pedido.
   - *Ejemplo:* El system prompt de Ana tiene unas 300 palabras. Viaja (y se cobra) en cada vuelta del ciclo, aunque el
     cliente solo haya escrito "hola".
+  - *Otro ejemplo:* Con memoria, en el décimo mensaje de una conversación viajan otra vez los nueve anteriores: la
+    entrada crece en cada vuelta. En local, da lo mismo que sean 10 o 100.
 - **"En workflows que procesan grandes volúmenes de texto, el costo escala linealmente con el uso."** **Escala
   linealmente** quiere decir que crece en la misma proporción: el doble de uso, el doble de costo. No hay descuento
   por cantidad.
   - *Ejemplo:* Si resumir 100 contratos por mes cuesta X, resumir 1.000 cuesta 10 veces X.
+  - *Otro ejemplo:* Una tienda que resume 50 reseñas por día casi no paga nada. Si crece a 5.000 por día, la cuenta de
+    la nube se multiplica por 100; la computadora con Ollama es la misma.
 - **"El modelo local: no tiene costo por request. Una vez descargado, las inferencias son gratuitas."** **Inferencia**
   es cada vez que el modelo genera una respuesta. Es la palabra técnica para "usar el modelo" (lo contrario de
   **entrenarlo**, que es cuando aprende).
   - *Ejemplo:* Le preguntás 500 veces a `llama3.2` en tu máquina. No hay ninguna cuenta que crezca.
+  - *Otro ejemplo:* En la tarea, con las quejas del Ejemplo 3, cada uno va a ejecutar el flujo 10 o 20 veces ajustando el
+    prompt. Con Ollama no gastan nada ni chocan con ningún límite.
 - **"El único costo: el hardware."** Y la luz. Y si el modelo es grande, una computadora más cara.
   - *Ejemplo:* Una notebook con 16 GB de RAM ya corre un modelo de 7B u 8B. Una placa de video potente cuesta como
     muchos meses de API: conviene si se va a usar mucho.
+  - *Otro ejemplo:* Para esta clase, la máquina ya la tenían: la misma notebook. El costo real fueron 2 GB de disco y
+    la paciencia de esperar la respuesta.
 - **"Dónde más brilla: en prototipado y testing. Podés iterar un workflow cientos de veces sin gastar un centavo en
   tokens."** **Prototipar** es armar una primera versión para probar la idea. **Iterar** es repetir: probar, ajustar,
   volver a probar.
   - *Ejemplo:* Mientras arman la pre-entrega, prueban el flujo 50 veces con Ollama. Cuando funciona, si quieren, le
     cambian el cerebro a uno de la nube.
+  - *Otro ejemplo:* Es lo que hacemos con Ana: el flujo es el mismo y se cambia solo el sub-nodo del cerebro. Se
+    prueba gratis con Ollama y se publica con el que mejor responde.
 
 **Ejemplo: ¿cuándo pesa el costo?**
 
@@ -377,19 +440,27 @@ Para explicar:
   se analiza, ni la respuesta. Todo pasa adentro de la memoria de tu computadora.
   - *Ejemplo:* Le pedís a Ollama "resumí este contrato". El contrato va de n8n a Ollama, los dos en tu máquina. Nada
     cruza internet.
+  - *Otro ejemplo:* Lo van a ver en el Paso 3: apagamos el WiFi y el modelo sigue contestando. Si no hay internet, no
+    hay por dónde salir.
 - **"Cuándo es crítico: historias clínicas, contratos, datos de clientes, código propietario."** **Código
   propietario** es el código de una empresa, que no es público y vale plata.
   - *Ejemplo:* Una historia clínica dice qué enfermedades tiene alguien. Si se filtra, el daño no se arregla.
+  - *Otro ejemplo:* Una consultora de recursos humanos analiza CVs y notas de entrevistas: hay datos de salud, de
+    familia y de sueldo.
 - **"Lo que habilita: cumplir con regulaciones de protección de datos sin depender de los términos de servicio de un
   tercero."** **Regulaciones** son leyes y normas. En la Argentina rige la **Ley 25.326 de Protección de Datos
   Personales**, y los datos de salud son "sensibles": tienen más protección. Los **términos de servicio** son el
   contrato que aceptamos al usar un servicio (el "Acepto" que nadie lee).
   - *Ejemplo:* Una clínica que manda historias clínicas a una IA en la nube depende de lo que esa empresa haga con
     ellas. Con un modelo local, la pregunta ni se plantea.
+  - *Otro ejemplo:* Un estudio contable lee los recibos de sueldo de sus clientes (CUIL, sueldo, embargos). Con
+    Ollama, la IA los ordena sin que salgan del estudio.
 - **"El escenario natural: entornos sin conexión a internet, o corporativos con políticas estrictas de manejo de
   información."** **Corporativo** es de una empresa grande. **Políticas** son las reglas internas.
   - *Ejemplo:* Muchos bancos prohíben pegar datos de clientes en ChatGPT. Con un modelo en un servidor del propio
     banco, se puede usar IA sin romper la regla.
+  - *Otro ejemplo:* Un programador en una empresa que no deja subir su código a la nube usa un modelo local para que
+    le explique una función o le encuentre un error.
 
 **Ejemplo: privacidad de verdad**
 
@@ -417,18 +488,25 @@ Para explicar:
   funcionando cuando lo necesitás.
   - *Ejemplo:* Si la API de Google se cae un viernes a la noche, Ana deja de atender. Con un modelo local, sigue,
     mientras tu computadora esté prendida.
+  - *Otro ejemplo:* Cuando un servicio de IA de la nube tiene un corte (pasa varias veces por año), todos los flujos
+    que lo usan dan error al mismo tiempo. Los locales ni se enteran.
 - **"Qué deja de afectarte: caídas de servicio, cambios de precio, deprecación de modelos, límites de rate."**
   **Deprecación** es cuando una empresa anuncia que un modelo se deja de ofrecer. **Límites de rate** ("de ritmo")
   son los topes de pedidos por minuto: el **429** de la Semana 4.
   - *Ejemplo:* En la Semana 6, con el plan gratis de Gemini, un agente podía dar 429 por hacer muchos pedidos
     seguidos. Ollama no tiene ese límite: el único límite es la velocidad de tu máquina.
+  - *Otro ejemplo:* Clasificar 3.000 facturas de golpe con el plan gratis de la nube choca con el límite por minuto.
+    Con Ollama tarda, pero no se corta.
 - **"Podés operar sin internet: valioso para demos, entornos de desarrollo aislados o lugares con conectividad
   limitada."** Una **demo** es una demostración. Un **entorno aislado** es una computadora que, a propósito, no está
   conectada a internet. **Conectividad limitada** es internet que anda mal o se corta.
   - *Ejemplo:* Mostrarle tu automatización a un cliente en un lugar sin WiFi. O un campo en el interior, con internet
     que va y viene.
+  - *Otro ejemplo:* Un guía de turismo: un asistente en la notebook, en la montaña, sin señal.
 - **"El resumen: pasás de consumidor de APIs a dueño de tu propia infraestructura de IA."**
   - *Ejemplo:* Es la diferencia entre alquilar y tener la casa propia: más control, pero el mantenimiento es tuyo.
+  - *Otro ejemplo:* Si mañana sale un modelo local mejor, lo bajan con `ollama pull` y cambian el nombre en el nodo.
+    Nadie se lo impone ni se lo saca.
 
 #### Filmina 11 · La contrapartida: nada de esto es gratis (3 min)
 
@@ -440,17 +518,26 @@ Para explicar:
   de las empresas de IA, con placas de video que cuestan miles de dólares cada una.
   - *Ejemplo:* En una notebook de 8 GB entra un modelo de 3B. Los de la nube se estiman en cientos de miles de
     millones de parámetros: cien veces más grandes, o más.
+  - *Otro ejemplo:* Probado para esta clase (Paso 5): a la familia que quería ir a Salta, llama3.2 le recomendó un
+    "Lago Milicia" que no existe y "ropa fresca" para julio, que allá es invierno. En otra prueba ubicó el Teatro
+    Colón en Salta. (Cuando ensayes el Paso 5, anotá acá qué contestó Gemini con la misma pregunta.)
 - **"Dónde se nota: en tareas de razonamiento complejo tienden a rendir por debajo de los modelos de punta en la
   nube."** **Razonamiento complejo** es lo que necesita varios pasos: resolver un problema, planificar, usar bien
   varias herramientas. **De punta** es "lo mejor que hay hoy".
   - *Ejemplo:* Probado para esta clase: le pedimos a `llama3.2:1b` qué llevar a Bariloche en invierno, y recomendó
     "un casco ligero" y "un reloj suave y resistente al frío". El de 3B respondió bien: ropa abrigada, botas de nieve.
+  - *Otro ejemplo:* Probado el 24/11/2026: Ana con el cerebro en Ollama (flujo 04) tardó más de 5 minutos, no consultó
+    el dólar e inventó "$ 1.900.000". La misma Ana con Gemini, en la Semana 6, usó la planilla, el dólar y la
+    calculadora, y dio $ 3.011.500 en segundos.
 - **"Los de punta: GPT-4o, Claude, Gemini."** Son ejemplos de modelos grandes de la nube. (La filmina nombra GPT-4o,
   que ya tiene versiones más nuevas: lo importante es la idea.)
 - **"El trade-off: costo y privacidad de un lado, capacidad bruta del modelo del otro. Depende del caso, no hay una
   respuesta única."** **Capacidad bruta** es la inteligencia pura del modelo.
   - *Ejemplo:* Clasificar mails en "urgente" o "no urgente": un modelo local alcanza. Analizar un contrato de 40
     páginas y detectar cláusulas peligrosas: conviene uno grande, si la privacidad lo permite.
+  - *Otro ejemplo:* Probado el 24/11/2026 con las quejas del Ejemplo 3: llama3.2 no repitió ningún número de tarjeta
+    (la privacidad, bien), pero clasificó las tres quejas como "Cobro", incluso la compra en Miami que el cliente no
+    hizo, que es un fraude (entender, mal).
 
 **Ejemplo: elegir según la tarea**
 
@@ -470,15 +557,40 @@ Paso sin datos sensibles y tarea difícil (razonar, varias herramientas) → nub
 
 Por qué: en un mismo flujo puede haber pasos de los dos tipos. Es el criterio que arman en el Paso 5 de la práctica.
 
-#### Filmina 12 · Para pensar: el banco y la clínica (5 min) — Ejercicio 1
+**¿Qué tan buena es la IA local? Lo que pasó al armar esta clase** (para mostrarlo en pantalla, 2 min)
 
-<p style="color:#1a7f37">Trabajás para un banco y tenés que resumir quejas de clientes que incluyen números de tarjeta. O para una clínica que tiene prohibido por ley subir historias clínicas a la nube. ¿Por qué usarías Ollama y no un modelo en la nube? Respondan en el chat: elijan uno de los dos casos y den el argumento en una línea.</p>
+Todo con `llama3.2` (3B) en una computadora común, sin placa de video, contra Gemini flash en la nube. **La columna
+de Gemini se completa con tu ensayo:** al armar la clase solo se probó Gemini con Ana (Semana 6).
+
+| Tarea | Local (Ollama, `llama3.2`) | Nube (Gemini) | ¿Alcanza lo local? |
+|---|---|---|---|
+| Qué llevar a Bariloche en invierno (flujo 01) | Bien: ropa abrigada, botas, guantes. 45 a 71 segundos la primera vez | (tu ensayo) | ✅ Sí |
+| Lo mismo, con el modelo de 1B | "Un casco ligero" y "un reloj resistente al frío" | — | ❌ No: demasiado chico |
+| Recomendar Salta a una familia (Paso 5) | 26 segundos. Inventó un lago, "ropa fresca" en invierno, y se olvidó del nene | (tu ensayo del Paso 5) | ❌ No, para recomendar lugares |
+| Clasificar quejas con tarjetas (flujo 03) | No repitió ninguna tarjeta, pero puso las tres en "Cobro" | No se probó (los datos irían a Google) | ⚠️ A medias: mejor prompt o un modelo más grande |
+| Ana, con 3 herramientas (flujo 04) | Más de 5 minutos, no usó el dólar, precio inventado | Las tres herramientas y $ 3.011.500, bien calculado (ensayo de la Semana 6) | ❌ No |
+
+<p style="color:#1a7f37">Miren la tabla. Donde la tarea es corta y cerrada, una respuesta simple, lo local anda. Donde hay que saber cosas del mundo o encadenar herramientas, se cae: inventa, tarda, se saltea pasos. No es que la IA local sea mala: es que es chica. Un modelo de 3 mil millones de parámetros contra uno cien veces más grande.</p>
+
+- **La regla que sale de la tabla:** local para tareas **cortas, cerradas y privadas** (clasificar, extraer datos,
+  resumir corto); nube para **razonar, saber del mundo o usar varias herramientas**.
+- **Con una máquina mejor, la tabla cambia.** Con 16 GB de RAM entra un modelo de 7B u 8B (`qwen2.5:7b`,
+  `llama3.1:8b`), y con una placa de video, uno de 14B o más: ahí lo local se acerca bastante a la nube en tareas
+  medianas, y responde en segundos. Lo de la tabla es lo peor posible: el modelo más chico útil, sin placa.
+  - *Ejemplo:* Una empresa que pone un servidor con placa de video y un modelo de 70B tiene IA privada de muy buen
+    nivel. Cuesta lo que muchos meses de API: conviene si la usa mucho.
+
+
+#### Filmina 12 · Para pensar: el banco y la clínica (3 min)
+
+<p style="color:#1a7f37">Trabajás para un banco y tenés que resumir quejas de clientes que incluyen números de tarjeta. O para una clínica que tiene prohibido por ley subir historias clínicas a la nube. ¿Por qué usarías Ollama y no un modelo en la nube? Piénsenlo un segundo... En los dos casos, la respuesta es la misma: los datos no pueden salir. Si la ley prohíbe subirlos, la única forma de usar IA es que el modelo esté adentro.</p>
 
 Para explicar:
-- **La dinámica.** Les das 2 minutos para escribir. Después leés tres o cuatro respuestas en voz alta. El material de
-  lectura propone hacerlo en grupos de 3 durante 20 minutos: no entra en la clase, así que es individual y por el
-  chat.
-  - *Ejemplo de respuesta buena:* "La clínica: si la ley prohíbe subir los datos, la única forma de usar IA es que el
+- **La dinámica.** Una pregunta que planteás y respondés vos (en clase no hay ejercicios). El material de lectura
+  propone hacerlo en grupos de 3 durante 20 minutos: queda como Ejercicio 1 de la tarea.
+- **El caso del banco lo armamos en n8n** en el Ejemplo 3, después de la práctica: tres quejas con números de
+  tarjeta, que un modelo local clasifica sin que salgan de la computadora. Decilo: "esto lo vamos a ver andando".
+  - *La respuesta, en una línea:* "La clínica: si la ley prohíbe subir los datos, la única forma de usar IA es que el
     modelo esté adentro de la clínica."
 - **Las tres preguntas del material de lectura** (si sobra un minuto, las tirás en voz alta):
   - ¿Qué tamaño de modelo elegirían? → Para resumir, alcanza con uno de 7B u 8B; mejor que el de 3B si hay plata para
@@ -494,7 +606,7 @@ Para explicar:
 
 ---
 
-### 35–60 · Sección 02 · Ollama y los modelos
+### 40–65 · Sección 02 · Ollama y los modelos
 
 **Filmina 13 · Separador "02: Ollama y los modelos"**
 
@@ -544,7 +656,7 @@ Para explicar:
   - *Ejemplo:* `llama3.2` es generalista. `qwen2.5-coder` está entrenado para programar. Hay modelos que también
     entienden imágenes.
 
-#### Filmina 16 · Elegir por hardware: el límite es la memoria, no el saber (5 min) — Ejercicio 2
+#### Filmina 16 · Elegir por hardware: el límite es la memoria, no el saber (5 min)
 
 <p style="color:#1a7f37">Esta es la tabla para elegir. De 1 a 3B, entre 4 y 8 GB de memoria: una notebook común. De 7 a 8B, entre 8 y 16 GB: una notebook con 16 de RAM. De 13 a 14B, entre 16 y 24: una PC con buena placa de video. Y de ahí para arriba, equipos de gama alta o servidores. El límite no es cuánto sabe el modelo, es cuánta memoria tenés.</p>
 
@@ -575,11 +687,11 @@ Para explicar:
   - *Ejemplo:* `ollama show llama3.2` dice *quantization Q4_K_M*: cada número guardado en unos 4 bits en vez de 16.
     Sin comprimir pesaría más de 6 GB; comprimido, 2 GB.
 
-**Ejercicio 2 · ¿Qué modelo te entra?** (2 min)
+**Para que cada uno lo ubique en casa** (sin pregunta al chat: es el Ejercicio 2 de la tarea)
 
-<p style="color:#1a7f37">Fíjense cuánta RAM tiene su computadora: en Windows, Configuración, Sistema, Información; en Mac, el menú de la manzanita, Acerca de esta Mac. Escriban en el chat cuánta tienen y qué tramo de la tabla les toca.</p>
+<p style="color:#1a7f37">En casa, fíjense cuánta RAM tiene su computadora: en Windows, Configuración, Sistema, Información; en Mac, el menú de la manzanita, Acerca de esta Mac. Y buscan su tramo en esta tabla.</p>
 
-Respuestas esperables: "8 GB → 1 a 3B, `llama3.2`"; "16 GB → hasta 7 u 8B, pero hoy usamos el de 3B para que ande
+Los casos típicos: "8 GB → 1 a 3B, `llama3.2`"; "16 GB → hasta 7 u 8B, pero hoy usamos el de 3B para que ande
 rápido"; "4 GB → el de 1B, y cerrando todo lo demás".
 
 #### Filmina 17 · Cinco detalles: lo que conviene tener claro (3 min)
@@ -704,7 +816,7 @@ Base URL: http://host.docker.internal:11434
 
 ---
 
-### 60–70 · Break
+### 65–75 · Break
 
 **Filmina 20 · Break** (10 min)
 
@@ -712,29 +824,38 @@ Base URL: http://host.docker.internal:11434
 
 ---
 
-### 70–113 · Sección 03 · Práctica en vivo
+### 75–155 · Sección 03 · En vivo: la terminal y siete ejemplos en n8n
 
 **Filmina 21 · Separador "03: Práctica en vivo"**
 
 #### Filmina 22 · Ejemplo en vivo: instalación y primer prompt local (1 min)
 
-<p style="color:#1a7f37">Ahora lo hacemos. Yo voy a mostrar Ollama andando, la pregunta desde la terminal, cuánto sube la memoria, y después apago el WiFi y el modelo sigue respondiendo. Los que llegaron con Ollama instalado, lo hacen a la par. Los que no, miran y lo hacen en casa con el Ejercicio 3.</p>
+<p style="color:#1a7f37">Ahora lo vemos andando. Primero en la terminal: Ollama, la pregunta, cuánto sube la memoria, y el WiFi apagado. Después, n8n hablándole a Ollama, y cinco ejemplos más de para qué sirve una IA local. Ustedes miren: no hace falta que lo hagan a la par. Todo lo que hago queda en el material, para que lo repitan en casa.</p>
 
-La demo de la filmina son los Pasos 1 a 3, hechos por vos con la clase siguiendo.
+**Cómo leer esta sección.** La clase va y viene entre el PowerPoint, la terminal y n8n. Cada cambio de pantalla está
+marcado:
 
-#### La práctica: qué vamos a armar (para decirlo una vez)
+| Marca | Qué quiere decir |
+|---|---|
+| ▶ **Dónde arranca** / ■ **Dónde termina** | Al principio de cada ejemplo: desde dónde venís, y adónde vas al terminar |
+| 🖥️ **PowerPoint · filmina N** | Compartís el PowerPoint, en esa filmina, y decís el texto verde que sigue |
+| 💻 **Pasás a la terminal** | Cambiás a PowerShell (o Terminal) y escribís los comandos que siguen |
+| 🛠️ **Pasás a n8n** | Cambiás a la pestaña de n8n y armás los micro-pasos que siguen |
+| ↩️ **Volvés al PowerPoint · filmina N** | Terminó esa parte: volvés al PowerPoint, a esa filmina |
 
-<p style="color:#1a7f37">Cinco pasos. Uno: el motor, Ollama corriendo. Dos: el modelo, bajarlo y preguntarle. Tres: sin internet. Cuatro: el puente, n8n hablando con Ollama. Y cinco: el mismo prompt al modelo local y al de la nube, para comparar.</p>
+**El orden de la sección:**
 
-1. Compartís [ejercicios-alumnos.md](ejercicios-alumnos.md). Pegás en el chat:
-
-```text
-PRÁCTICA · Semana 7
-Vamos a seguir el Ejercicio 3 de ejercicios-alumnos.md.
-Si llegaste con Ollama y llama3.2 instalados: hacé los pasos a la par.
-Si no: mirá mi pantalla; lo hacés en casa con el mismo paso a paso.
-Si usás n8n Cloud: los Pasos 1 a 3 los podés hacer; el 4 miralo en mi pantalla.
-```
+| Min | Qué | Filminas | Dónde |
+|---|---|---|---|
+| 75–90 | Pasos 1 a 3: el motor, el modelo, sin internet | 23, 24, 25 | Terminal |
+| 90–102 | **Ejemplo 1 · Hola Ollama** (Paso 4, el puente) | 26 | n8n, workflow nuevo `Hola Ollama` |
+| 102–112 | **Ejemplo 2 · Local contra nube** (Paso 5, comparar) | 27 | n8n, workflow nuevo `Local vs nube` |
+| 112–120 | **Ejemplo 3 · Quejas privadas** | — (la 27 queda atrás) | n8n, workflow nuevo |
+| 120–127 | **Ejemplo 4 · Ana con cerebro local** | — | n8n, copia de `Agente en vivo` |
+| 127–135 | **Ejemplo 5 · La IA local lee las encuestas** | — | n8n, workflow nuevo |
+| 135–145 | **Ejemplo 6 · De un mensaje a la planilla** | — | n8n, workflow nuevo |
+| 145–155 | **Ejemplo 7 · El router de privacidad** | — | n8n, workflow nuevo |
+| 155 | Volvés al PowerPoint | **28** | — |
 
 #### Antes del primer ejemplo: Ollama listo, paso a paso (por si las dudas)
 
@@ -776,11 +897,15 @@ Windows con n8n 2.46 en Docker (Ollama 0.40.18):
 - **Por qué la API Key va vacía:** Ollama en tu computadora no tiene usuario ni contraseña. El campo existe para
   cuando Ollama corre en un servidor de otro que lo protege.
 
-#### Paso 1 · El motor (70–76)
+#### Paso 1 · El motor (75–80) · en la terminal
 
-2. **Filmina 23.** Decís:
+> ▶ **Dónde arranca.** Filmina 22 → avanzás a la **23**. ■ **Dónde termina:** en la filmina 25, con el WiFi prendido otra vez.
+
+2. 🖥️ **PowerPoint · filmina 23.** Decís:
 
 <p style="color:#1a7f37">Paso uno: tener Ollama corriendo. Se descarga del sitio oficial, se instala como cualquier programa y queda escuchando en la computadora.</p>
+
+💻 **Pasás a la terminal** (y al navegador).
 
 3. Mostrás **ollama.com** → **Download**: las tres opciones (Windows, Mac, Linux). No instalás de nuevo: ya lo tenés.
    Mostrás el ícono de la llama al lado del reloj. Decís:
@@ -799,10 +924,10 @@ Y en el navegador, `http://localhost:11434`: aparece **Ollama is running**. Dec�
 <p style="color:#1a7f37">Dos pruebas. La terminal responde con la versión: el programa está instalado. Y el navegador, en el puerto 11434, dice "Ollama is running": está escuchando. Es la misma idea que n8n en el puerto 5678. Ese número, 11434, lo vamos a necesitar en el Paso 4.</p>
 
 5. **El monitor de recursos.** **Ctrl + Shift + Esc** → **Rendimiento** → **Memoria**. Lo dejás en un costado de la
-   pantalla. Pegás en el chat:
+   pantalla. Pegás en el chat, para que lo repitan en casa:
 
 ```text
-PRÁCTICA · Paso 1: el motor
+PARA CASA · Paso 1: el motor
 1. ollama.com → Download → instalalo
 2. En PowerShell (o Terminal):  ollama --version
 3. En el navegador:  http://localhost:11434  → "Ollama is running"
@@ -811,17 +936,21 @@ PRÁCTICA · Paso 1: el motor
    Mac: Monitor de Actividad → Memoria
 ```
 
-<p style="color:#1a7f37">Miren cuánta memoria están usando ahora, antes de cargar ningún modelo. Anótenlo: después comparamos.</p>
+<p style="color:#1a7f37">Miren cuánta memoria estoy usando ahora, antes de cargar ningún modelo. Fíjense el número: después comparamos.</p>
 
 **Plan B:** si `ollama --version` dice *no se reconoce como nombre de un cmdlet*, cerrá PowerShell y abrí otra: la
 terminal que estaba abierta no se enteró de la instalación. **En la terminal de VS Code no alcanza con abrir otra:**
 hay que cerrar VS Code entero, o usar `& "$env:LOCALAPPDATA\Programs\Ollama\ollama.exe" --version`.
 
-#### Paso 2 · El modelo (76–85)
+#### Paso 2 · El modelo (80–86) · en la terminal
 
-6. **Filmina 24.** Decís:
+↩️ **Volvés al PowerPoint · filmina 24.**
 
-<p style="color:#1a7f37">Paso dos: elegir y bajar el modelo que su equipo aguanta. Con la tabla del Ejercicio 2: 8 gigas, llama3.2; 4 gigas, el de 1B.</p>
+6. 🖥️ **PowerPoint · filmina 24.** Decís:
+
+<p style="color:#1a7f37">Paso dos: elegir y bajar el modelo que su equipo aguanta. Con la tabla de la filmina 16: 8 gigas, llama3.2; 4 gigas, el de 1B.</p>
+
+💻 **Pasás a la terminal.**
 
 7. **La descarga en vivo**, con el modelo chico (el grande ya lo tenés):
 
@@ -873,33 +1002,36 @@ llama3.2:latest    2.6 GB    100% CPU     4096       4 minutes from now
 
 <p style="color:#1a7f37">Esto dice qué modelo está cargado: llama3.2, ocupando 2,6 gigas, corriendo cien por ciento en el procesador, porque esta máquina no tiene placa de video. Y "4 minutes from now": si nadie le pregunta nada en cinco minutos, Ollama lo saca de la memoria solo.</p>
 
-11. Pegás en el chat:
+11. Pegás en el chat, para que lo repitan en casa:
 
 ```text
-PRÁCTICA · Paso 2: el modelo
+PARA CASA · Paso 2: el modelo
 1. Bajá tu modelo:  ollama pull llama3.2     (4 GB de RAM: ollama pull llama3.2:1b)
 2. Comprobá:  ollama list
 3. Preguntá (mirando la memoria):
    ollama run llama3.2 "Sos la asesora de una agencia de viajes. En 3 líneas, recomendale a un cliente qué llevar para ir a Bariloche en invierno."
 4. Preguntá otra cosa y compará el tiempo
 5. ollama ps  → ¿cuánta memoria usa? ¿CPU o GPU?
-Escribí en el chat: cuánto tardó la primera y cuánto la segunda.
+Anotá cuánto tardó la primera y cuánto la segunda.
 ```
 
-12. Leés tiempos del chat en voz alta. Van a ser muy distintos: el que tiene placa de video, segundos; el que tiene
-    8 GB y el navegador lleno, minutos. Decís:
+12. Decís:
 
-<p style="color:#1a7f37">¿Ven las diferencias? Es la tabla de la filmina 16 en vivo: el mismo modelo, en máquinas distintas, tarda distinto. Con una placa de video, vuela. Sin placa, anda, pero con paciencia.</p>
+<p style="color:#1a7f37">En sus máquinas va a tardar distinto. Es la tabla de la filmina 16: el mismo modelo, en máquinas distintas, tarda distinto. Con una placa de video, vuela. Sin placa, anda, pero con paciencia.</p>
 
 **Si a alguien le sale `signal: killed` o `model requires more system memory`:** no le alcanza la memoria. Que cierre
 pestañas y programas, que haga `ollama stop` del modelo que no usa, o que baje el de 1B. Al probar esta clase pasó
 exactamente eso: con el de 1B todavía cargado, el de 3B se cortó con `signal: killed`.
 
-#### Paso 3 · Sin internet (85–90)
+#### Paso 3 · Sin internet (86–90) · en la terminal
 
-13. **Filmina 25.** Decís:
+↩️ **Volvés al PowerPoint · filmina 25.**
+
+13. 🖥️ **PowerPoint · filmina 25.** Decís:
 
 <p style="color:#1a7f37">Paso tres: comprobar que la autonomía es real y no un discurso. Voy a apagar el WiFi. Ojo: el Zoom también se corta, así que me van a perder unos segundos. Romina sigue con ustedes.</p>
+
+💻 **Pasás a la terminal.**
 
 14. Apagás el WiFi. Preguntás:
 
@@ -911,31 +1043,89 @@ Responde. Lo mostrás (si el Zoom se reconectó) o lo contás al volver. Prendé
 
 <p style="color:#1a7f37">Respondió sin internet. El modelo está en el disco, el motor en la computadora: no hay nadie más en el medio. Es el GPS con el mapa descargado.</p>
 
-15. Pegás en el chat:
+15. Pegás en el chat, para que lo repitan en casa:
 
 ```text
-PRÁCTICA · Paso 3: sin internet
+PARA CASA · Paso 3: sin internet
 1. Apagá el WiFi
 2. ollama run llama3.2 "Escribí un saludo de bienvenida para un cliente que llega a Salta. Dos líneas."
 3. ¿Respondió? ¿Cuánto tardó?
 4. Prendé el WiFi de nuevo
 ```
 
-<p style="color:#1a7f37">Y fíjense en el tiempo: anótenlo. La latencia, el tiempo que tarda en responder, es el precio de la autonomía. No es un error: es procesamiento.</p>
+<p style="color:#1a7f37">Y fíjense en el tiempo. La latencia, el tiempo que tarda en responder, es el precio de la autonomía. No es un error: es procesamiento.</p>
 
 **Plan B:** si no querés cortar tu Zoom, mostrá un video corto grabado antes con la prueba, o pedile a un alumno que
 lo haga y cuente el resultado por el chat cuando vuelva.
 
-#### Paso 4 · El puente (90–103)
+#### Paso 4 · El puente = Ejemplo 1 en n8n · Hola Ollama (flujo `01`) (90–102)
 
-16. **Filmina 26.** Decís:
+> **En pocas palabras.** El "hola mundo" de la IA local: n8n le hace una pregunta a un modelo que corre en tu
+> computadora, y no en Google.
+>
+> ```text
+> Arrancar a mano  →  La pregunta  →  Basic LLM Chain  →  Ollama (llama3.2)
+> ```
+>
+> Le preguntás qué llevar a Bariloche en invierno, y contesta `llama3.2` desde tu máquina.
+>
+> **La idea para los alumnos:** es la misma chain de la Semana 6; lo único que cambia es el cerebro enchufado abajo.
+
+> ▶ **Dónde arranca.** Terminaste el Paso 3 en la terminal (filmina 25). Avanzás a la **filmina 26**.
+>
+> ■ **Dónde termina.** Con la respuesta de `llama3.2` en la salida de la chain. Volvés al PowerPoint, a la filmina 27.
+
+> **¿Anda en local (Docker)?** ✅ Sí: es justamente la idea. Ollama corre en tu computadora y n8n le habla por
+> `http://host.docker.internal:11434`. No hace falta dirección pública ni túnel.
+
+**Qué va a hacer este flujo (y qué no).** Hace un único recorrido: una pregunta fija, una respuesta. No tiene chat,
+ni memoria, ni herramientas. Sirve para ver que el puente n8n ↔ Ollama anda; todos los demás ejemplos lo reusan.
+
+16. 🖥️ **PowerPoint · filmina 26.** Decís:
 
 <p style="color:#1a7f37">Paso cuatro, el más importante: que n8n le hable a nuestro Ollama. Es la misma Basic LLM Chain de la semana pasada, pero con el cerebro de Ollama.</p>
 
-17. **La credencial.** Pegás en el chat:
+**Si alguien no instaló Ollama** (pasa siempre). Es la primera vez que n8n usa Ollama: sin Ollama instalado y el
+modelo bajado, el nodo da *Error in sub-node 'Cerebro local: Ollama'*. Pegás esto en el chat; el que no lo tiene lo hace
+mientras vos seguís (no esperás: lo termina en casa si no llega).
 
 ```text
-PRÁCTICA · Paso 4: la credencial
+SI NO INSTALASTE OLLAMA · paso a paso
+WINDOWS
+1. Abrí PowerShell (tecla Windows → escribí powershell → Enter). Sirve también la terminal de VS Code,
+   en cualquier carpeta
+2. Pegá:   irm https://ollama.com/install.ps1 | iex
+   → termina con "Install complete. Run 'ollama' from the command line."
+   (otra forma: ollama.com → Download → Windows → instalador común: siguiente, siguiente)
+3. Cerrá esa terminal y abrí una NUEVA. En VS Code: cerrá VS Code entero y volvé a abrirlo
+4. ollama pull llama3.2        (2 GB: unos minutos)
+5. ollama list                 → tiene que aparecer  llama3.2:latest
+MAC
+1. ollama.com → Download → macOS → abrí el archivo que bajó → arrastrá Ollama a Aplicaciones → abrilo
+   → aparece la llamita arriba, en la barra
+2. Abrí Terminal (Cmd + Espacio → terminal) → ollama pull llama3.2 → ollama list
+LAS DOS
+6. En el navegador: http://localhost:11434 → "Ollama is running"
+7. En n8n: Connect to Ollama → Base URL: http://host.docker.internal:11434 · API Key: vacía → Save
+```
+
+Para explicar (mientras lo pegás):
+- **¿Hace falta una carpeta especial?** No. Ollama se instala solo en su lugar, y los modelos se guardan aparte.
+- **"ollama no se reconoce como nombre de un cmdlet"**: la terminal se abrió antes de instalar y no se enteró. Con
+  una terminal nueva se arregla; en VS Code hay que cerrarlo entero. Mientras tanto, anda con la dirección completa:
+  `& "$env:LOCALAPPDATA\Programs\Ollama\ollama.exe" pull llama3.2`.
+- **¿Está prendido?** La llamita al lado del reloj (Windows) o arriba en la barra (Mac). Si no está, se abre
+  **Ollama** desde el menú Inicio o desde Aplicaciones.
+- **La API Key va vacía:** es para un Ollama en un servidor ajeno con contraseña. El tuyo no pide.
+
+<p style="color:#1a7f37">Si alguno no llegó a instalarlo, no pasa nada: les dejo el paso a paso en el chat. Son dos comandos y una espera. Lo hacen mientras sigo; si no llegan, lo terminan en casa con esto.</p>
+
+🛠️ **Pasás a n8n.**
+
+17. **La credencial.** Pegás en el chat, para que lo tengan:
+
+```text
+PARA CASA · Paso 4: la credencial
 1. n8n → Credentials → Create credential → buscá "Ollama" → Ollama
 2. Base URL:
    n8n en Docker            → http://host.docker.internal:11434
@@ -944,7 +1134,7 @@ PRÁCTICA · Paso 4: la credencial
 4. Tiene que decir "Connection tested successfully"
 ```
 
-18. Lo hacés a la par. **Primero, a propósito, con `http://localhost:11434`**: aparece el error de conexión. Decís:
+18. **Primero, a propósito, con `http://localhost:11434`**: aparece el error de conexión. Decís:
 
 <p style="color:#1a7f37">Lo hice mal a propósito. Mi n8n está en Docker, y puse localhost. Adentro de la caja de Docker, localhost es la caja misma, y ahí no hay ningún Ollama. Es el Coder Tip de antes. Lo cambio por host.docker.internal...</p>
 
@@ -952,10 +1142,10 @@ Lo cambiás → **Save** → *Connection tested successfully*.
 
 <p style="color:#1a7f37">...y ahora sí. host.docker.internal es la forma de decir, desde adentro de la caja, "la computadora de afuera".</p>
 
-19. **El flujo, nodo por nodo.** Primero pegás en el chat el resumen, para los que siguen a la par:
+19. **El flujo, nodo por nodo.** Primero pegás en el chat el resumen, para que lo tengan:
 
 ```text
-PRÁCTICA · Paso 4: el flujo (4 nodos)
+PARA CASA · Paso 4: el flujo (4 nodos)
 Arrancar a mano → La pregunta → Preguntarle al modelo local
                                       └ abajo, en Model: Cerebro local: Ollama
 ```
@@ -1056,19 +1246,44 @@ Cerrás → renombrás **Cerebro local: Ollama**. El asterisco rojo desapareció
 
 <p style="color:#1a7f37">Ahí está: el hola mundo de n8n con un modelo local. El mismo nodo de la semana pasada, el mismo casillero text en la salida. Lo único que cambió es el cerebro de abajo. Y ninguna palabra salió de mi computadora.</p>
 
-**Plan B:** el flujo **01 · Hola mundo: n8n + Ollama** es este mismo paso, terminado. Solo hay que elegir la
-credencial.
+**Si algo no anda:** la tabla de trabas, al final de la sección (casi siempre es la *Base URL* o el nombre del
+modelo). El `01-hola-ollama.json` es este mismo flujo terminado: sirve para comparar en el ensayo, no para importarlo
+en clase.
 
-#### Paso 5 · Comparar (103–113)
+↩️ **Volvés al PowerPoint · filmina 27.**
 
-22. **Filmina 27.** Decís:
+#### Paso 5 · Comparar = Ejemplo 2 en n8n · Local contra nube (flujo `02`) (102–112)
+
+> **En pocas palabras.** El mismo prompt va, al mismo tiempo, a Ollama y a Gemini, y se ven las dos respuestas
+> juntas.
+>
+> ```text
+> Arrancar a mano  →  El mismo prompt  ─┬─  Chain + Ollama  ─┐
+>                                       └─  Chain + Gemini  ─┴─  Juntar las dos
+> ```
+>
+> Una familia quiere ir 5 días a Salta en julio. El modelo local tarda más e inventa lugares; Gemini, no.
+>
+> **La idea para los alumnos:** no se trata de "cuál es mejor", sino de cuál conviene para cada paso.
+
+> ▶ **Dónde arranca.** Filmina **27**, con el Ejemplo 1 terminado (de ahí se copia la rama local).
+>
+> ■ **Dónde termina.** Con el criterio de "local o nube" en pantalla. **No volvés al PowerPoint:** seguís en n8n
+> con los Ejemplos 3 a 7.
+
+> **¿Anda en local (Docker)?** ✅ Sí. La rama de Ollama queda en tu computadora; la de Gemini es un pedido que sale
+> hacia Google (hace falta internet y la credencial de Gemini). Si Gemini da **429**, esperá un minuto.
+
+22. 🖥️ **PowerPoint · filmina 27.** Decís:
 
 <p style="color:#1a7f37">Último paso: entender qué ganamos y qué perdemos. El mismo prompt al modelo local y a Gemini, y comparamos calidad, tiempo y costo. Y cada uno decide, para su caso, cuál conviene.</p>
+
+🛠️ **Pasás a n8n.**
 
 23. **Lo armás en vivo** (son 6 nodos, y dos los copiás del flujo anterior). Pegás el resumen en el chat:
 
 ```text
-PRÁCTICA · Paso 5: comparar
+PARA CASA · Paso 5: comparar
 Arrancar a mano → El mismo prompt ─┬→ Responder (local) ─┐
                                    │   └ Cerebro local: Ollama   ├→ Juntar las dos
                                    └→ Responder (nube)  ─┘
@@ -1166,7 +1381,7 @@ Hola! Salta en julio es una excelente elección. Recomiendo visitar el Cerro del
 y el Lago Milicia. No olvides llevar ropa fresca y protector solar, ya que el sol es intenso en esa época. ...
 ```
 
-Preguntás en el chat: *"¿Ven algo raro?"*. Lo que tienen que encontrar:
+Preguntás en voz alta *"¿ven algo raro?"* y lo señalás vos:
 - el "Lago Milicia" **no existe**: el modelo lo inventó. Y el cerro famoso de la ciudad es el **San Bernardo**, no
   "del Comandante";
 - "ropa fresca" en **julio**, que en Salta es invierno, con noches frías;
@@ -1177,121 +1392,248 @@ precisa y más completa.
 
 <p style="color:#1a7f37">Esto es la contrapartida de la filmina 11, en vivo. El modelo chico escribe lindo y con seguridad, pero inventa. Para recomendar lugares a un cliente, no alcanza. Para clasificar un mail en tres categorías, quizás sí. Por eso la pregunta no es "¿cuál es mejor?", sino "¿cuál conviene para este paso?".</p>
 
-25. **El criterio.** Pegás en el chat:
+25. **El criterio.** Lo mostrás en pantalla (y lo pegás en el chat, para que lo tengan):
 
 ```text
-PRÁCTICA · El criterio: ¿local o nube para este paso?
+EL CRITERIO · ¿local o nube para este paso?
 ¿Hay datos sensibles (salud, tarjetas, documentos)?      → sí: local (o tapar los datos antes)
 ¿La tarea es simple (clasificar, extraer, resumir corto)? → sí: local alcanza
 ¿Tiene que saber cosas del mundo o razonar varios pasos?  → sí: nube
 ¿Tiene que responder rápido (un chat, WhatsApp)?          → sí: nube, o una máquina potente
 ¿Se ejecuta miles de veces o hay que probar mucho?        → sí: local ahorra plata
 
-Escribí en el chat, para TU flujo de la pre-entrega: ¿local o nube? ¿Por qué?
+Para tu flujo de la pre-entrega: ¿local o nube? ¿Por qué? (tarea, Ejercicio 1)
 ```
 
-26. Leés tres o cuatro respuestas.
+26. Lo aplicás a dos casos de la clase: las quejas con tarjeta → local; Ana por WhatsApp → nube.
 
 <p style="color:#1a7f37">No hay una respuesta única: depende del paso. Y en un mismo flujo pueden convivir los dos. Lo importante es que lo decidan ustedes, con argumentos, y no por costumbre.</p>
 
-**Plan B:** si Gemini da **429** (el límite del plan gratis), ejecutalo de nuevo en un minuto, o mostrá solo la rama
-local y leé la respuesta de Gemini que guardaste al probarlo antes de la clase.
+**Si Gemini da 429** (el límite del plan gratis): ejecutalo de nuevo en un minuto, o mostrá solo la rama local y leé
+la respuesta de Gemini que guardaste en el ensayo.
 
-#### Las trabas más comunes durante la práctica
+■ **Termina el Ejemplo 2.** Seguís en n8n: workflow nuevo para el Ejemplo 3.
 
-| Lo que escriben en el chat | Qué les respondés |
-|---|---|
-| "*ollama* no se reconoce como nombre de un cmdlet" | Cerrá PowerShell y abrí otra. Si sigue, Ollama no se instaló: volvé a correr el instalador. |
-| "`http://localhost:11434` no carga" | Ollama no está corriendo. Buscá "Ollama" en el menú Inicio y abrilo: aparece la llama al lado del reloj. |
-| "Se queda girando y no responde" | Es la primera carga: puede tardar varios minutos en una máquina sin placa de video. Mirá el monitor: si la memoria está al 100 %, cerrá programas. |
-| "`signal: killed`" o "*model requires more system memory*" | No alcanza la memoria. Cerrá pestañas, `ollama stop` de otro modelo cargado, o usá `llama3.2:1b`. |
-| "`ollama run` se puso a descargar" | El modelo no estaba descargado: `run` lo baja solo. Es el "instalé Ollama, ya tengo la IA" de la filmina 18. |
-| La credencial da error de conexión, o el nodo dice **`fetch failed`** | n8n en Docker con `localhost`. Cambiá la *Base URL* por `http://host.docker.internal:11434`. |
-| "Uso n8n Cloud y no conecta" | n8n Cloud no puede ver tu computadora. Hacé los Pasos 1 a 3 y el 4 miralo; en casa, n8n en Docker con la guía de la Semana 2. |
-| "En *Model* no aparece ningún modelo" | La credencial no conecta, o no bajaste ninguno. Probá `ollama list`. |
-| **`model 'llama3' not found`** (en n8n o en la terminal) | El nombre tiene que ser exacto, el de `ollama list`: `llama3.2:latest`, no `llama3`. |
-| La respuesta está en inglés o es rara | Es un modelo chico. Pedí "respondé en español" en el prompt, y no esperes la calidad de Gemini. |
----
+#### Ejemplo 3 en n8n · Quejas privadas: el banco de la filmina 12, andando (flujo `03`) (8 min)
 
-### 113–117 · Cómo sigue y la tarea
+> **En pocas palabras.** Tres quejas de clientes, dos con el número de tarjeta. Un modelo local las clasifica
+> (Fraude, Cobro o Atención) y las resume, sin que ningún dato salga de la computadora.
+>
+> ```text
+> Arrancar a mano  →  Quejas de prueba  →  Una por una  →  Chain + Ollama  →  Para el equipo
+> ```
+>
+> **La idea para los alumnos:** lo local resuelve la privacidad, pero no la inteligencia: el modelo chico cumple la
+> regla fácil (no repetir la tarjeta) y se equivoca en la difícil (entender qué tipo de queja es).
 
-#### Filmina 28 · ¿Cómo sigue? Del laboratorio al canal real (2 min)
+> ▶ **Dónde arranca.** Terminaste el Ejemplo 2. Seguís en n8n, sin volver al PowerPoint.
+>
+> ■ **Dónde termina.** Con las tres quejas clasificadas y la mejora del prompt. Seguís con el Ejemplo 4.
 
-<p style="color:#1a7f37">Lo que ya tienen: un agente que puede correr con un modelo en la nube o en su propia máquina. Lo que le falta: un canal por donde la gente le hable de verdad. El Módulo 8 es WhatsApp Business, con la API de Meta y n8n. El mismo agente, pero atendiendo mensajes reales de personas reales.</p>
+> **¿Anda en local (Docker)?** ✅ Sí: es justamente la idea. Ollama corre en tu computadora y n8n le habla por
+> `http://host.docker.internal:11434`. No hace falta dirección pública ni túnel.
 
-Para explicar:
-- **"Lo que ya tenés: un agente que puede correr con un modelo en la nube o en tu propia máquina."** El cerebro es
-  una pieza que se cambia: hoy lo vimos con una chain, y en el Ejercicio 7 lo hacen con Ana.
-  - *Ejemplo:* Ana con Gemini, o Ana con `llama3.2`. Mismas herramientas, mismo system prompt.
-- **"Lo que le falta: un canal por donde la gente le hable de verdad."** Un **canal** es el medio por donde llegan
-  los mensajes: el chat de prueba de n8n, un formulario, WhatsApp.
-  - *Ejemplo:* Hasta ahora, a Ana le escribimos solo nosotros, desde el botón *Open chat* de n8n.
-- **"Módulo 8: WhatsApp Business, con Meta Cloud API y n8n."** **Meta** es la empresa dueña de WhatsApp. La **Meta
-  Cloud API** es su API para que un programa mande y reciba mensajes de WhatsApp.
-  - *Ejemplo:* Un cliente escribe al WhatsApp de la agencia, n8n recibe el mensaje, Ana responde.
-- **"La conexión: el mismo agente, pero atendiendo mensajes reales de personas reales."** Y ahí aparece una decisión
-  de hoy: para responder rápido por WhatsApp, ¿alcanza un modelo local?
-  - *Ejemplo:* Al preparar esta clase, la Ana local (`llama3.2`, sin placa de video) tardó más de 5 minutos en
-    responder y, además, inventó el precio en pesos. Para WhatsApp, eso no sirve: conviene la nube, o un modelo
-    local más grande en una máquina potente.
+<p style="color:#1a7f37">¿Se acuerdan del banco de la filmina 12? Quejas con números de tarjeta, que no pueden viajar a otra empresa. Bueno, armémoslo. Tres quejas, un modelo local, y miramos dos cosas: si protege la tarjeta y si entiende la queja.</p>
 
-**La tarea** (2 min, sin filmina). Pegás en el chat:
+**Qué va a hacer este flujo (y qué no).** Lee tres quejas escritas a mano (no de un mail real), le pide al modelo una
+categoría y un resumen por cada una, y junta el resultado con el nombre del cliente. No manda nada a nadie: el
+resultado queda en la salida del último nodo.
+
+**E3-1 · El disparador y las quejas** (*Trigger manually* + *Edit Fields* en modo JSON)
 
 ```text
-TAREA · Semana 7 (no hay pre-entrega)
-1. Si no llegaste en clase: instalá Ollama y bajá llama3.2 (Ejercicio 3, Pasos 1 a 4).
-2. Ejercicio 4: dos tamaños, la misma pregunta.
-3. Ejercicios 5 y 6: quejas privadas, y tapar los datos antes de la IA.
-4. Ejercicio 7: Ana con cerebro local. Anotá en qué se equivoca: te sirve para elegir el cerebro de la Pre-entrega 4.
-5. El cuestionario del módulo en la plataforma (4 preguntas).
+Overview → Create workflow → nombre:  Quejas privadas
+Add first step → manual → Trigger manually → renombralo:  Arrancar a mano
++ → edit → Edit Fields (Set) → renombralo:  Quejas de prueba
 ```
 
-<p style="color:#1a7f37">Esta semana no hay pre-entrega, pero la que viene es la cuarta: el asistente de WhatsApp. El Ejercicio 7 les deja el agente listo con los dos cerebros, para elegir con datos y no a ojo.</p>
+| Campo (*Quejas de prueba*) | Qué ponés | Por qué |
+|---|---|---|
+| *Mode* | **JSON** | Para pegar la lista entera de una vez |
+| *JSON* | El bloque de abajo | Tres quejas: dos con tarjeta, una sin |
 
----
+```json
+{
+  "quejas": [
+    { "cliente": "Marta Suárez", "queja": "Me cobraron dos veces el mismo pasaje en la tarjeta 4517 6601 2345 9087. Necesito que me devuelvan uno de los cobros ya." },
+    { "cliente": "Jorge Benítez", "queja": "Aparece una compra en Miami que yo no hice, con mi tarjeta 5299 1120 8834 0012. ¡Yo nunca viajé a Miami!" },
+    { "cliente": "Lucía Fernández", "queja": "Llamé tres veces al número de atención y nadie me atendió. Quiero cambiar la fecha de mi viaje a Mendoza." }
+  ]
+}
+```
 
-### 117–120 · Preguntas y cierre
+**E3-2 · Una por una** (*Split Out*)
 
-**Filmina 29 · Abrimos micrófonos y chat** (2 min)
+```text
++ a la derecha de "Quejas de prueba" → split → Split Out → renombralo:  Una por una
+```
 
-<p style="color:#1a7f37">¿Cuánta RAM libre tienen y qué tramo de modelo les entra? ¿A alguien le dio error de conexión entre n8n y Ollama? Puede ser Docker. ¿Tienen algún caso donde la privacidad sea el argumento decisivo? Abrimos micrófonos y chat.</p>
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Fields To Split Out* | `quejas` | El nombre de la lista. Así salen 3 items y el modelo lee una queja por vez |
+| *Include* | **No Other Fields** | No hay nada más que conservar |
 
-Para explicar:
-- **Si alguien quedó con el puente sin andar**, que pegue en el chat su *Base URL* y dónde corre su n8n. Nueve de
-  cada diez veces es `localhost` con n8n en Docker.
-- **Si alguien tiene un caso de privacidad**, es material para la pre-entrega: el paso con datos sensibles va local,
-  y el resto puede ir a la nube.
+**E3-3 · Clasificar y resumir** (*Basic LLM Chain* + *Ollama Chat Model*)
 
-**Filmina 30 · Gracias** (1 min)
+```text
++ a la derecha de "Una por una" → basic llm → Basic LLM Chain → renombralo:  Clasificar y resumir (local)
+Abajo, Model → + → ollama → Ollama Chat Model → renombralo:  Cerebro local: Ollama
+```
 
-<p style="color:#1a7f37">Gracias por estudiar con nosotros. Nos vemos la semana que viene con WhatsApp.</p>
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Source for Prompt* | **Define below** | |
+| *Prompt (User Message)* | El texto de abajo; al final, arrastrás `queja` | Formato fijo de dos líneas, y la regla de privacidad |
+| *Cerebro local: Ollama* → *Credential* · *Model* | **Ollama local** · `llama3.2:latest` | El de los ejemplos anteriores |
+| *Cerebro local: Ollama* → *Options* → *Sampling Temperature* | **0.1** | Clasificar no necesita creatividad |
 
----
+```text
+Sos un asistente interno de una agencia de viajes. Leé esta queja de un cliente y respondé SOLO con dos líneas, sin nada más:
+Categoría: (una sola palabra: Fraude, Cobro o Atención)
+Resumen: (una oración corta)
 
-### Extra, si sobra tiempo o para casa · Tres ejemplos más con IA local
+Regla: en el resumen NUNCA escribas números de tarjeta.
 
-**Si sobra tiempo** después de la práctica, mostrá uno (el C es el que mejor resume la clase). Si no, quedan para
-casa: los flujos están en la carpeta [n8n/](n8n/) (`05`, `06` y `07`). Los tres son **tareas cortas y de un solo
-paso**, que es para lo que un modelo chico local anda bien (lo vimos: como cerebro de un agente con muchas
-herramientas, no).
+Queja: {{ $json.queja }}
+```
 
-| Ejemplo | Flujo | La idea | Min |
+<p style="color:#1a7f37">El prompt pide dos cosas: una categoría de tres posibles, y un resumen. Y una regla: nunca escribir el número de tarjeta. El modelo es local, así que la tarjeta no sale de acá. Pero el resumen lo va a leer el equipo: tampoco tiene por qué verla.</p>
+
+**E3-4 · Para el equipo** (*Edit Fields*)
+
+```text
++ a la derecha de la chain → edit → Edit Fields (Set) → renombralo:  Para el equipo
+```
+
+| Campo | Tipo | Valor | Por qué |
 |---|---|---|---|
-| A · La IA local lee las encuestas | `05-encuestas-con-ia-local.json` | Clasificar texto privado sin que salga de la computadora | 8 |
-| B · De un mensaje escrito como sea, a la planilla | `06-de-mensaje-a-planilla.json` | Pedirle al modelo un JSON y convertirlo en casilleros | 10 |
-| C · El router de privacidad | `07-router-de-privacidad.json` | Lo sensible va al modelo local; lo demás, a la nube | 10 |
+| `cliente` | String | `{{ $('Una por una').item.json.cliente }}` | El nombre quedó antes de la chain: se busca atrás |
+| `clasificacion` | String | `{{ $json.text }}` | Lo que contestó el modelo |
 
-**¿Andan en local?** ✅ Sí: es justamente la idea. Ollama prendido (`ollama serve` o la app abierta), `llama3.2`
-descargado, y en el sub-nodo de Ollama la dirección de la práctica (`http://host.docker.internal:11434` si n8n está
-en Docker). El B necesita además la credencial de Sheets; el C, la de Gemini.
+**E3-5 · Probar.** **Save** → **Execute workflow** → abrís *Para el equipo*. Lo que salió en el ensayo (24/11/2026,
+`llama3.2`):
 
-> **Para vos:** los flujos se armaron con los mismos nodos y versiones que los de hoy, pero **no se ejecutaron**
-> contra Ollama ni contra Gemini (las respuestas del modelo pueden variar). Lo que sí se probó: la expresión regular
-> del C detecta la tarjeta y el DNI de los ejemplos, y no marca "Somos 4 y vamos 15 días en 2026"; y la limpieza del
-> JSON del B funciona aunque el modelo lo encierre entre ```` ``` ````. Con `llama3.2` sin placa de video, contá con
-> que cada ejecución tarde (la primera, minutos).
+```text
+Marta Suárez     → "Categoría: Cobro  · Me cobraron dos veces el mismo pasaje en una tarjeta."
+Jorge Benítez    → "Categoría: Cobro  · Resumen: Aparece una compra en Miami con tarjeta que no pertenece al cliente."
+Lucía Fernández  → "Categoría: Cobro  · Resumen: Quiero cambiar la fecha de mi viaje a Mendoza."
+```
 
-#### Ejemplo A · La IA local lee las encuestas (flujo 05) (8 min)
+Preguntás en voz alta *"¿ven algo raro?"* y lo señalás vos:
+- **Lo bueno:** ningún resumen tiene el número de tarjeta. La privacidad, bien.
+- **Lo malo:** **las tres dicen "Cobro"**. Jorge (una compra que no hizo) es **Fraude**; Lucía (no la atienden) es
+  **Atención**. Además, a Marta le faltó "Resumen:" y dos resúmenes están en primera persona: copió en vez de resumir.
+
+<p style="color:#1a7f37">Esto es la filmina 11 en vivo. Cumplió la regla fácil, no repetir la tarjeta. Pero en lo que hay que entender, falló: el fraude de Jorge, en un banco, iría a la fila de cobros y se atendería tarde. Lo local resolvió la privacidad; no resolvió la inteligencia.</p>
+
+**E3-6 · Mejorarlo con el prompt** (si hay tiempo, 2 min). En la chain, debajo de la línea de "Categoría", agregás:
+
+```text
+Fraude: el cliente dice que NO hizo una compra o que le usaron la tarjeta.
+Cobro: le cobraron mal, de más o dos veces algo que sí compró.
+Atención: no le contestan, no lo atienden o quiere cambiar algo de su viaje.
+```
+
+**Execute workflow** otra vez. (Esta versión no se probó al armar la clase: anotá en el ensayo qué cambia.)
+
+- **Definir cada categoría** es lo primero que se prueba con un modelo chico. Si igual falla, el paso siguiente es
+  un modelo más grande (7B u 8B) en una máquina con más memoria.
+
+#### Ejemplo 4 en n8n · Ana con cerebro local: la filmina 11, andando (flujo `04`) (7 min)
+
+> **En pocas palabras.** Ana, la asesora de la Semana 6, con un solo cambio: el cerebro es Ollama en vez de Gemini.
+> Mismas herramientas, misma memoria, mismo manual.
+>
+> ```text
+> Chat  →  Ana  ─┬─ Ollama (antes: Gemini)
+>                ├─ memoria
+>                └─ consultar_paquetes · cotizacion_dolar · calculadora
+> ```
+>
+> **La idea para los alumnos:** un modelo de 3B no es buen cerebro para un agente con varias herramientas: tarda
+> minutos, se saltea herramientas e inventa. Para eso, la nube (o un modelo local mucho más grande).
+
+> ▶ **Dónde arranca.** Terminaste el Ejemplo 3. Seguís en n8n.
+>
+> ■ **Dónde termina.** Con la respuesta de Ana local comparada con la de la Semana 6. Seguís con el Ejemplo 5.
+
+> **¿Anda en local (Docker)?** ✅ Sí. El cerebro queda en tu computadora; la planilla y el dólar son pedidos que salen
+> de n8n (hace falta internet y la credencial de Google Sheets de la Semana 6).
+
+<p style="color:#1a7f37">Y ahora la pregunta que se estarán haciendo: ¿y si a Ana, la de la semana pasada, le pongo el cerebro local? Gratis y privado. Probémoslo. Es un solo cambio: el sub-nodo del cerebro.</p>
+
+**E4-1 · Copiar a Ana**
+
+```text
+Overview → abrí "Agente en vivo" (la Ana de la Semana 6) → arriba, menú … → Duplicate → nombre:  Ana local
+```
+
+- **Por qué duplicar:** la Ana de Gemini queda intacta, para comparar.
+
+**E4-2 · Sacar el cerebro de la nube**
+
+```text
+Clic en el sub-nodo "Cerebro: Gemini" (abajo del agente) → tecla Supr
+```
+
+El agente queda con el conector **Chat Model** vacío y un asterisco rojo.
+
+**E4-3 · Poner el cerebro local** (*Ollama Chat Model*)
+
+```text
+Conector "Chat Model" → + → ollama → Ollama Chat Model → renombralo:  Cerebro: Ollama (local)
+```
+
+| Campo | Qué ponés | Por qué |
+|---|---|---|
+| *Credential* | **Ollama local** | La del Ejemplo 1 |
+| *Model* | `llama3.2:latest` | Es el que sabe usar herramientas (el de 1B, no) |
+| *Options* → *Sampling Temperature* | **0.2** | La misma que tenía con Gemini: así la comparación es justa |
+
+- **Lo demás no se toca:** la memoria, las tres herramientas y el System Message siguen iguales. Revisá solo que
+  *consultar_paquetes* tenga su credencial de Sheets y **ningún filtro** (como quedó en la Semana 6).
+
+**E4-4 · Probar.** **Save** → **Open chat** → mandás:
+
+```text
+Hola! Quiero ir a Bariloche 5 días con mi pareja, ¿cuánto sale en pesos?
+```
+
+La primera respuesta tarda **minutos**: mientras tanto, abrís *Logs* y vas mostrando qué hace. Lo que pasó en el
+ensayo, con la misma cuenta (USD 950 × 2 en pesos):
+
+```text
+Tardó más de 5 minutos.
+Usó la calculadora: 950 × 2 = 1900.  Bien.
+NO consultó el dólar.
+Respondió: "El paquete cuesta $ 1.900.000."   ← inventado (la Ana de Gemini dio $ 3.011.500, con el dólar del día)
+```
+
+<p style="color:#1a7f37">Más de cinco minutos, y un precio inventado. Rompió dos reglas de su manual: usar el dólar para pasar a pesos, y no inventar. Con Gemini, la semana pasada: planilla, dólar, calculadora, y el precio exacto en segundos. No es que la IA local sea mala: tres mil millones de parámetros no alcanzan para coordinar tres herramientas. Para WhatsApp, la semana que viene, esto pesa: nadie espera cinco minutos una respuesta.</p>
+
+- **Si sobra tiempo,** las otras dos preguntas de la Semana 6: *"¿Y el de nieve tiene lugar?"* (memoria y planilla) y
+  *"¿Cuánto está el dólar blue?"* (el `$fromAI` del dólar).
+- **Lo que la mejora:** temperatura 0; una regla más explícita ("para pasar a pesos, SIEMPRE primero
+  cotizacion_dolar, después calculadora"); o un modelo más grande (`qwen2.5:7b`, `llama3.1:8b`) con 16 GB.
+
+> **Para vos (Ejemplos 5, 6 y 7):** los flujos se armaron con los mismos nodos y versiones que los de hoy, pero **no se
+> ejecutaron** contra Ollama ni contra Gemini (las respuestas del modelo pueden variar). Lo que sí se probó: la
+> expresión regular del 7 detecta la tarjeta y el DNI de los ejemplos, y no marca "Somos 4 y vamos 15 días en 2026";
+> y la limpieza del JSON del 6 funciona aunque el modelo lo encierre entre ```` ``` ````. Ensayalos antes.
+
+#### Ejemplo 5 en n8n · La IA local lee las encuestas (flujo `05`) (8 min)
+
+> **En pocas palabras.** Un formulario de "¿cómo estuvo tu viaje?". El modelo local dice si el comentario es
+> Positivo, Negativo o Neutro, y un IF decide: si es negativo, aviso urgente; si no, se guarda como reseña.
+>
+> **La idea para los alumnos:** una tarea corta y cerrada (una palabra de tres posibles) es justo para lo que un
+> modelo chico anda bien.
+
+> ▶ **Dónde arranca.** Terminaste el Ejemplo 4. Seguís en n8n. ■ **Dónde termina:** con los tres comentarios
+> probados. Seguís con el Ejemplo 6.
+
+> **¿Anda en local (Docker)?** ✅ Sí: es justamente la idea. Ollama corre en tu computadora y n8n le habla por
+> `http://host.docker.internal:11434`. No hace falta dirección pública ni túnel. El formulario se abre con la *Test URL*, en tu navegador: también anda en local.
 
 ```text
 Encuesta de viaje → Clasificar (local) → Limpiar la respuesta → ¿Es negativo? ─ true  → Aviso urgente al equipo
@@ -1302,9 +1644,9 @@ Encuesta de viaje → Clasificar (local) → Limpiar la respuesta → ¿Es negat
 Lo que tiene que pasar: *"El hotel estaba sucio y nadie nos fue a buscar al aeropuerto"* → `Negativo` → *"URGENTE:
 Ana volvió de Salta disconforme… Llamarlo hoy."*
 
-<p style="color:#1a7f37">Primer ejemplo. La agencia manda una encuesta al volver del viaje. Los comentarios son de clientes: no hace falta mandarlos a Google para saber si alguien volvió enojado. Un modelo chico, en nuestra computadora, alcanza para eso.</p>
+<p style="color:#1a7f37">La agencia manda una encuesta al volver del viaje. Los comentarios son de clientes: no hace falta mandarlos a Google para saber si alguien volvió enojado. Un modelo chico, en nuestra computadora, alcanza para eso.</p>
 
-**A-1 · La encuesta** (*n8n Form*)
+**E5-1 · La encuesta** (*n8n Form*)
 
 ```text
 Overview → Create workflow → nombre:  Encuestas con IA local
@@ -1330,7 +1672,7 @@ Cerrás → renombrás **Encuesta de viaje** → **Execute workflow** → se abr
 
 <p style="color:#1a7f37">El formulario, como en la Semana 4: nombre, destino y un comentario libre, en una caja grande. Lo completo una vez, con una queja, así tengo datos para armar lo que sigue.</p>
 
-**A-2 · Clasificar con el modelo local** (*Basic LLM Chain* + *Ollama Chat Model*)
+**E5-2 · Clasificar con el modelo local** (*Basic LLM Chain* + *Ollama Chat Model*)
 
 ```text
 + a la derecha de "Encuesta de viaje" → escribí  basic llm  → Basic LLM Chain
@@ -1359,7 +1701,7 @@ Cerrás → renombrás **Clasificar (local)**. Abajo, en **Model** → **+** →
 - **Una tarea, una palabra.** Para un modelo de 3B, cuanto más cerrada la consigna, mejor. "Analizá el comentario"
   daría un párrafo; "una palabra de esta lista", da una palabra.
 
-**A-3 · Limpiar la respuesta** (*Edit Fields*)
+**E5-3 · Limpiar la respuesta** (*Edit Fields*)
 
 ```text
 Execute step en "Clasificar (local)" → OUTPUT:  text: Negativo
@@ -1378,7 +1720,7 @@ Execute step en "Clasificar (local)" → OUTPUT:  text: Negativo
 
 <p style="color:#1a7f37">Los modelos chicos a veces agregan un punto o un espacio, aunque les digamos que no. Lo limpio. Y de paso traigo los datos del formulario: después de la chain solo queda el text, así que los busco en el nodo de la encuesta.</p>
 
-**A-4 · Decidir** (*If*) **y las dos salidas** (*Edit Fields*)
+**E5-4 · Decidir** (*If*) **y las dos salidas** (*Edit Fields*)
 
 ```text
 + a la derecha de "Limpiar la respuesta" → escribí  if  → If → renombralo:  ¿Es negativo?
@@ -1406,7 +1748,7 @@ El IF tiene dos salidas: **true** (arriba) y **false** (abajo).
 
 <p style="color:#1a7f37">El IF de siempre: si es negativo, aviso urgente; si no, reseña. Acá son dos Edit Fields para que se vea el resultado; en la vida real, el aviso sería un mail o un WhatsApp, y la reseña una fila en una planilla.</p>
 
-**A-5 · Probar con tres comentarios**
+**E5-5 · Probar con tres comentarios**
 
 Para cada uno: **Execute workflow** → completás el formulario → mirás por qué rama salió.
 
@@ -1418,7 +1760,18 @@ Para cada uno: **Execute workflow** → completás el formulario → mirás por 
 
 <p style="color:#1a7f37">Los claros, los acierta. El del medio, "estuvo bien pero se atrasó", puede dudar. Eso es lo que hay que saber de un modelo chico: en lo obvio anda; en lo fino, se equivoca más que uno grande.</p>
 
-#### Ejemplo B · De un mensaje escrito como sea, a la planilla (flujo 06) (10 min)
+#### Ejemplo 6 en n8n · De un mensaje escrito como sea, a la planilla (flujo `06`) (10 min)
+
+> **En pocas palabras.** Tres mensajes escritos como escribe la gente ("somos 6 amigos y queremos conocer Ushuaia").
+> El modelo local saca nombre, destino y personas en un JSON, y cada mensaje queda como una fila en la planilla.
+>
+> **La idea para los alumnos:** pedirle al modelo una forma fija (un JSON) y convertirla en casilleros.
+
+> ▶ **Dónde arranca.** Terminaste el Ejemplo 5. Seguís en n8n. ■ **Dónde termina:** con tres filas nuevas en
+> "Consultas de la agencia". Seguís con el Ejemplo 7.
+
+> **¿Anda en local (Docker)?** ✅ Sí. El modelo queda en tu computadora; Google Sheets es un pedido que sale de n8n
+> (la credencial de la Semana 4).
 
 ```text
 Arrancar a mano → Mensajes de prueba → Uno por uno → Sacar los datos (local) → Armar la fila → Guardar en la planilla
@@ -1430,7 +1783,7 @@ fila `13/11/2026 10:30 | Carla Gómez | Salta | 4` en "Consultas de la agencia" 
 
 <p style="color:#1a7f37">La gente no escribe como un formulario. Escribe "somos 6 amigos y queremos conocer Ushuaia". Este ejemplo saca de ese texto los tres datos que necesitamos, nombre, destino y personas, y los anota en la planilla. Con el modelo local, el mensaje del cliente no sale de nuestra computadora.</p>
 
-**B-1 · El disparador y los mensajes de prueba** (*Trigger manually* + *Edit Fields* en modo JSON)
+**E6-1 · El disparador y los mensajes de prueba** (*Trigger manually* + *Edit Fields* en modo JSON)
 
 ```text
 Overview → Create workflow → nombre:  De mensaje a planilla
@@ -1456,7 +1809,7 @@ Add first step → manual → Trigger manually → renombralo:  Arrancar a mano
 }
 ```
 
-**B-2 · Uno por uno** (*Split Out*)
+**E6-2 · Uno por uno** (*Split Out*)
 
 ```text
 + a la derecha de "Mensajes de prueba" → escribí  split  → Split Out → renombralo:  Uno por uno
@@ -1472,7 +1825,7 @@ Add first step → manual → Trigger manually → renombralo:  Arrancar a mano
 
 <p style="color:#1a7f37">Tres mensajes de prueba, escritos como escribe la gente, sin orden. El Split Out los separa: tres items, uno por mensaje. Desde acá, todo lo que sigue corre tres veces.</p>
 
-**B-3 · Pedirle un JSON al modelo** (*Basic LLM Chain* + *Ollama Chat Model*)
+**E6-3 · Pedirle un JSON al modelo** (*Basic LLM Chain* + *Ollama Chat Model*)
 
 ```text
 + a la derecha de "Uno por uno" → basic llm → Basic LLM Chain → renombralo:  Sacar los datos (local)
@@ -1510,7 +1863,7 @@ mensaje).
 - **Mostrar el molde es la mitad del trabajo.** El modelo copia la forma que ve.
 - **Contar personas es lo más difícil.** "Con mi marido y mis dos hijos" son 4: el modelo chico a veces dice 3.
 
-**B-4 · Convertir el texto en casilleros** (*Edit Fields*)
+**E6-4 · Convertir el texto en casilleros** (*Edit Fields*)
 
 ```text
 + a la derecha de "Sacar los datos (local)" → edit → Edit Fields (Set) → renombralo:  Armar la fila
@@ -1535,7 +1888,7 @@ paso siguiente funcione solo.
 - **Si da error *Unexpected token*:** el modelo agregó texto antes o después del JSON. Mirá su `text` en la chain y
   ajustá el prompt.
 
-**B-5 · Guardar en la planilla** (*Google Sheets*)
+**E6-5 · Guardar en la planilla** (*Google Sheets*)
 
 ```text
 + a la derecha de "Armar la fila" → escribí  sheets  → Google Sheets → en "Actions": Append row in sheet
@@ -1557,7 +1910,18 @@ Cerrás → renombrás **Guardar en la planilla** → **Save** → **Execute wor
 
 <p style="color:#1a7f37">Y lo de la Semana 4: agregar fila, con Map Automatically. Tres mensajes escritos como sea, tres filas ordenadas. Conectado al WhatsApp de la semana que viene, esto anota solo cada consulta que llega.</p>
 
-#### Ejemplo C · El router de privacidad: lo sensible, al local; lo demás, a la nube (flujo 07) (10 min)
+#### Ejemplo 7 en n8n · El router de privacidad: lo sensible, al local; lo demás, a la nube (flujo `07`) (10 min)
+
+> **En pocas palabras.** Tres mensajes de clientes. Un IF mira si el texto tiene algo con forma de tarjeta o de DNI:
+> si tiene, contesta Ollama; si no, Gemini.
+>
+> **La idea para los alumnos:** "local o nube" no se elige una vez para siempre: se puede decidir mensaje por
+> mensaje. Junta todo lo de hoy.
+
+> ▶ **Dónde arranca.** Terminaste el Ejemplo 6. Seguís en n8n. ■ **Dónde termina:** con los tres mensajes
+> repartidos. **Volvés al PowerPoint, a la filmina 28.**
+
+> **¿Anda en local (Docker)?** ✅ Sí. La rama de Ollama queda en tu computadora; la de Gemini sale hacia Google.
 
 ```text
 Arrancar a mano → Mensajes de prueba → Uno por uno → ¿Tiene datos sensibles? ─ true  → Responder (local) → Respuesta local
@@ -1571,7 +1935,7 @@ Ushuaia?" va a **Gemini**.
 
 <p style="color:#1a7f37">Este junta todo lo de hoy. ¿Local o nube? No hace falta elegir uno para siempre: se puede decidir mensaje por mensaje. Si el mensaje trae un dato sensible, una tarjeta o un DNI, lo responde el modelo de nuestra computadora. Si no, Gemini, que es más rápido y contesta mejor. Y lo decide el flujo, con una regla fija, no el modelo.</p>
 
-**C-1 · El disparador, los mensajes y uno por uno**
+**E7-1 · El disparador, los mensajes y uno por uno**
 
 ```text
 Overview → Create workflow → nombre:  Router de privacidad
@@ -1580,7 +1944,7 @@ Add first step → manual → Trigger manually → renombralo:  Arrancar a mano
 + → split → Split Out → renombralo:  Uno por uno   (Fields To Split Out: mensajes)
 ```
 
-Son los mismos tres primeros nodos del Ejemplo B (mirá ahí la tabla de cada uno), con otros mensajes:
+Son los mismos tres primeros nodos del Ejemplo 6 (mirá ahí la tabla de cada uno), con otros mensajes:
 
 ```json
 {
@@ -1594,7 +1958,7 @@ Son los mismos tres primeros nodos del Ejemplo B (mirá ahí la tabla de cada un
 
 <p style="color:#1a7f37">Tres mensajes: uno con un número de tarjeta, uno con un DNI, y uno común. Los mismos tres nodos de antes: disparador, la lista, y el Split Out que los separa.</p>
 
-**C-2 · ¿Tiene datos sensibles?** (*If* con una expresión regular)
+**E7-2 · ¿Tiene datos sensibles?** (*If* con una expresión regular)
 
 ```text
 + a la derecha de "Uno por uno" → if → If → renombralo:  ¿Tiene datos sensibles?
@@ -1615,7 +1979,7 @@ Son los mismos tres primeros nodos del Ejemplo B (mirá ahí la tabla de cada un
   No hace falta aprenderlo: se copia, y se prueba.
   - *Ejemplo:* "4517 6601 2345 9087" y "30.123.456" encajan; "somos 4 y vamos 15 días" no.
 
-**C-3 · Dos chains, dos cerebros**
+**E7-3 · Dos chains, dos cerebros**
 
 ```text
 + en la salida "true"  → basic llm → Basic LLM Chain → renombralo:  Responder (local)
@@ -1643,7 +2007,7 @@ Mensaje: {{ $json.texto }}
 - **"Nunca repitas números de tarjeta ni de documento"** va en los dos: aunque el local no los manda afuera, la
   respuesta igual no tiene por qué repetirlos.
 
-**C-4 · Anotar qué cerebro respondió** (*Edit Fields*, uno en cada rama)
+**E7-4 · Anotar qué cerebro respondió** (*Edit Fields*, uno en cada rama)
 
 ```text
 + a la derecha de "Responder (local)" → Edit Fields (Set) → renombralo:  Respuesta local
@@ -1658,7 +2022,7 @@ Mensaje: {{ $json.texto }}
 
 <p style="color:#1a7f37">Dos chains con el mismo prompt y cerebros distintos. Arriba, Ollama. Abajo, Gemini. Y al final de cada una, anoto quién respondió, para verlo.</p>
 
-**C-5 · Probar**
+**E7-5 · Probar**
 
 ```text
 Save → Execute workflow →
@@ -1674,17 +2038,91 @@ Save → Execute workflow →
 - **La regex no es perfecta.** Un CBU, una dirección o un diagnóstico no los detecta. Para datos muy delicados, todo
   local.
 
+↩️ **Volvés al PowerPoint · filmina 28.**
+
+#### Las trabas más comunes (Sección 03)
+
+| Lo que escriben en el chat | Qué les respondés |
+|---|---|
+| "*ollama* no se reconoce como nombre de un cmdlet" | Cerrá PowerShell y abrí otra. Si sigue, Ollama no se instaló: volvé a correr el instalador. |
+| "`http://localhost:11434` no carga" | Ollama no está corriendo. Buscá "Ollama" en el menú Inicio y abrilo: aparece la llama al lado del reloj. |
+| "Se queda girando y no responde" | Es la primera carga: puede tardar varios minutos en una máquina sin placa de video. Mirá el monitor: si la memoria está al 100 %, cerrá programas. |
+| "`signal: killed`" o "*model requires more system memory*" | No alcanza la memoria. Cerrá pestañas, `ollama stop` de otro modelo cargado, o usá `llama3.2:1b`. |
+| "`ollama run` se puso a descargar" | El modelo no estaba descargado: `run` lo baja solo. Es el "instalé Ollama, ya tengo la IA" de la filmina 18. |
+| La credencial da error de conexión, o el nodo dice **`fetch failed`** | n8n en Docker con `localhost`. Cambiá la *Base URL* por `http://host.docker.internal:11434`. |
+| "Uso n8n Cloud y no conecta" | n8n Cloud no puede ver tu computadora. Hacé los Pasos 1 a 3 y el 4 miralo; en casa, n8n en Docker con la guía de la Semana 2. |
+| "En *Model* no aparece ningún modelo" | La credencial no conecta, o no bajaste ninguno. Probá `ollama list`. |
+| **`model 'llama3' not found`** (en n8n o en la terminal) | El nombre tiene que ser exacto, el de `ollama list`: `llama3.2:latest`, no `llama3`. |
+| La respuesta está en inglés o es rara | Es un modelo chico. Pedí "respondé en español" en el prompt, y no esperes la calidad de Gemini. |
+---
+
+### 155–159 · Cómo sigue y la tarea
+
+#### Filmina 28 · ¿Cómo sigue? Del laboratorio al canal real (2 min)
+
+<p style="color:#1a7f37">Lo que ya tienen: un agente que puede correr con un modelo en la nube o en su propia máquina. Lo que le falta: un canal por donde la gente le hable de verdad. El Módulo 8 es WhatsApp Business, con la API de Meta y n8n. El mismo agente, pero atendiendo mensajes reales de personas reales.</p>
+
+Para explicar:
+- **"Lo que ya tenés: un agente que puede correr con un modelo en la nube o en tu propia máquina."** El cerebro es
+  una pieza que se cambia: hoy lo vimos con una chain (Ejemplo 1) y con Ana (Ejemplo 4).
+  - *Ejemplo:* Ana con Gemini, o Ana con `llama3.2`. Mismas herramientas, mismo system prompt.
+- **"Lo que le falta: un canal por donde la gente le hable de verdad."** Un **canal** es el medio por donde llegan
+  los mensajes: el chat de prueba de n8n, un formulario, WhatsApp.
+  - *Ejemplo:* Hasta ahora, a Ana le escribimos solo nosotros, desde el botón *Open chat* de n8n.
+- **"Módulo 8: WhatsApp Business, con Meta Cloud API y n8n."** **Meta** es la empresa dueña de WhatsApp. La **Meta
+  Cloud API** es su API para que un programa mande y reciba mensajes de WhatsApp.
+  - *Ejemplo:* Un cliente escribe al WhatsApp de la agencia, n8n recibe el mensaje, Ana responde.
+- **"La conexión: el mismo agente, pero atendiendo mensajes reales de personas reales."** Y ahí aparece una decisión
+  de hoy: para responder rápido por WhatsApp, ¿alcanza un modelo local?
+  - *Ejemplo:* Al preparar esta clase, la Ana local (`llama3.2`, sin placa de video) tardó más de 5 minutos en
+    responder y, además, inventó el precio en pesos. Para WhatsApp, eso no sirve: conviene la nube, o un modelo
+    local más grande en una máquina potente.
+
+**La tarea** (2 min, sin filmina). Pegás en el chat:
+
+```text
+TAREA · Semana 7 (no hay pre-entrega) · ejercicios-alumnos.md
+1. Ejercicio 3: instalá Ollama, bajá llama3.2 y rehacé los Ejemplos 1 y 2 en tu n8n.
+2. Ejercicios 1 y 2: ¿local o nube? y ¿qué modelo te entra?
+3. Ejercicio 4: dos tamaños, la misma pregunta.
+4. Ejercicios 5 y 6: mejorá la clasificación de las quejas, y tapá los datos antes de la IA.
+5. Ejercicio 7: Ana con cerebro local, con tus preguntas. Te sirve para elegir el cerebro de la Pre-entrega 4.
+6. El cuestionario del módulo en la plataforma (4 preguntas).
+```
+
+<p style="color:#1a7f37">Esta semana no hay pre-entrega, pero la que viene es la cuarta: el asistente de WhatsApp. Con el Ejercicio 7 dejan el agente listo con los dos cerebros, para elegir con datos y no a ojo.</p>
+
+---
+
+### 159–162 · Preguntas y cierre
+
+**Filmina 29 · Abrimos micrófonos y chat** (2 min)
+
+<p style="color:#1a7f37">¿Cuánta RAM libre tienen y qué tramo de modelo les entra? ¿A alguien le dio error de conexión entre n8n y Ollama? Puede ser Docker. ¿Tienen algún caso donde la privacidad sea el argumento decisivo? Abrimos micrófonos y chat.</p>
+
+Para explicar:
+- **Si alguien quedó con el puente sin andar**, que pegue en el chat su *Base URL* y dónde corre su n8n. Nueve de
+  cada diez veces es `localhost` con n8n en Docker.
+- **Si alguien tiene un caso de privacidad**, es material para la pre-entrega: el paso con datos sensibles va local,
+  y el resto puede ir a la nube.
+
+**Filmina 30 · Gracias** (1 min)
+
+<p style="color:#1a7f37">Gracias por estudiar con nosotros. Nos vemos la semana que viene con WhatsApp.</p>
+
+---
+
 ---
 
 ### Checklist de salida
 
 - [ ] Todos saben la diferencia entre Ollama (el motor) y un modelo (el archivo).
-- [ ] Cada uno sabe qué tramo de modelo le entra según su RAM.
-- [ ] Los que llegaron instalados: hicieron una pregunta en la terminal y vieron subir la memoria.
-- [ ] Vieron (en tu pantalla o en la suya) que el modelo responde sin internet.
-- [ ] La mayoría conectó n8n con Ollama, y los que no, saben cuál es su traba (Base URL, n8n Cloud, falta de
-  memoria).
-- [ ] Vieron la comparación local contra nube y saben que la elección es por paso, no para todo el flujo.
+- [ ] Saben cómo elegir el tamaño de modelo según su RAM (filmina 16).
+- [ ] Vieron en tu pantalla la pregunta en la terminal, la memoria subiendo y el modelo respondiendo sin internet.
+- [ ] Vieron n8n conectado con Ollama (Ejemplo 1) y saben qué revisar si no conecta (Base URL, n8n Cloud, memoria).
+- [ ] Vieron la comparación local contra nube (Ejemplo 2) y saben que la elección es por paso, no para todo el flujo.
+- [ ] Vieron dónde alcanza lo local (quejas, encuestas, mensaje a planilla) y dónde no (Ana con herramientas).
+- [ ] Tienen la tarea: los ejercicios de [ejercicios-alumnos.md](ejercicios-alumnos.md).
 - [ ] Saben que la semana que viene es WhatsApp y la Pre-entrega 4.
 
 ---

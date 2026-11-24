@@ -2,6 +2,9 @@
 
 **No se comparte con los alumnos.** Respuestas, salidas reales de los flujos y qué mirar en cada ejercicio.
 
+**En clase no hay ejercicios:** los siete ejemplos de `n8n/` se arman en vivo (ver el README). Todos estos
+ejercicios son la tarea; el 3, el 5 y el 7 repiten en casa los Ejemplos 1-2, 3 y 4.
+
 Todo lo que dice "real" se ejecutó el 7 de noviembre de 2026 con Ollama 0.40 y n8n 2.46, en Docker con 4 núcleos y
 4 GB de memoria, sin placa de video. Los modelos responden distinto en cada ejecución: las de los alumnos no van a ser
 iguales, pero los errores van a ser del mismo tipo.
@@ -37,7 +40,7 @@ Una Mac de 16 GB anda mucho más rápido que una notebook de 16 GB sin placa.
 
 ---
 
-## Ejercicio 3 · La práctica
+## Ejercicio 3 · Instalá Ollama y rehacé los Ejemplos 1 y 2
 
 Las salidas reales de cada paso están en el guion (README, Sección 03). Resumen de lo medido:
 
@@ -104,9 +107,9 @@ primera vez), `prompt eval rate` y `eval rate` (tokens por segundo al escribir).
 
 ---
 
-## Ejercicio 5 · Quejas privadas
+## Ejercicio 5 · Quejas privadas: mejorá la clasificación
 
-**La salida real del flujo tal como viene** (`llama3.2`, temperatura 0.1):
+**La salida real del flujo tal como viene** (`llama3.2`, temperatura 0.1; el 24/11/2026 salió exactamente igual):
 
 ```text
 Marta Suárez     Categoría: Cobro
