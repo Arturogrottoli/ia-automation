@@ -39,7 +39,7 @@
         }
       },
       "id": "5da9a00d-06d2-41e2-b739-34284d4ff828",
-      "name": "Cerebro: Ollama (local)",
+      "name": "Ollama Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
       "typeVersion": 1,
       "position": [
@@ -141,7 +141,7 @@
         ]
       ]
     },
-    "Cerebro: Ollama (local)": {
+    "Ollama Chat Model": {
       "ai_languageModel": [
         [
           {

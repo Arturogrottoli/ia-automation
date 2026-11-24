@@ -197,6 +197,35 @@ Para explicar:
   famoso que se podía bajar se llamaba LLaMA.
   - *Ejemplo:* Instalamos Ollama, le decimos "bajate este modelo", y queda andando en nuestra máquina.
 
+**La pregunta que siempre aparece: "si no va a Google, ¿de dónde saca la información?"** (2 min, si la hacen; si no,
+la planteás vos)
+
+<p style="color:#1a7f37">Buena pregunta, y la respuesta sorprende: no la saca de ningún lado en el momento. Todo lo que sabe ya está adentro del archivo que bajamos. El modelo aprendió antes, en su entrenamiento, leyendo una cantidad enorme de texto, y eso quedó guardado en ese archivo de 2 gigas. Cuando le preguntamos algo, no busca: responde de memoria, como un alumno que estudió y rinde sin apuntes. Y ojo, que Gemini, en nuestros flujos, hace lo mismo: tampoco busca en Google. La diferencia no es si busca o no, es dónde está el cerebro: en la computadora de Google, o en la nuestra.</p>
+
+Para explicar:
+- **Lo que sabe, lo aprendió antes.** El **entrenamiento** es cuando el modelo "estudia": lee millones de textos
+  (libros, páginas, código) y aprende cómo sigue cada frase. Lo que aprendió queda guardado en el archivo como
+  millones de números (los **parámetros**, la "B" de 3B: 3 mil millones). Después, ese archivo ya no aprende más.
+  - *Ejemplo:* Es como bajarse una enciclopedia al celular: la podés leer en un avión, sin internet. Pero es la
+    edición del día que la bajaste.
+- **No busca en internet: ni el local ni el de la nube.** Cuando n8n le pregunta algo a Gemini, el pedido viaja a
+  Google porque **el modelo corre allá**, no porque vaya a buscar en el buscador. Los dos responden con lo que
+  aprendieron.
+  - *Ejemplo:* Le preguntás a cualquiera de los dos "¿cuánto está el dólar hoy?": no lo saben. O lo dicen mal, o lo
+    inventan.
+- **Por eso tienen fecha de corte.** Saben lo que había en los textos hasta el día que terminaron de estudiar. Lo que
+  pasó después (el dólar de hoy, un precio nuevo, una noticia), no.
+  - *Ejemplo:* Un modelo entrenado hasta el año pasado no sabe qué paquetes tiene hoy la agencia ni cuántos cupos
+    quedan.
+- **El local sabe menos, porque es más chico.** `llama3.2` pesa 2 GB; los grandes de la nube, cientos de veces más.
+  Estudió lo mismo, pero "se acuerda" de mucho menos, y cuando no se acuerda, a veces completa con algo que suena bien.
+  - *Ejemplo:* En la prueba de esta clase, le recomendó a una familia un "Lago Milicia" en Salta, que no existe.
+- **Para los datos de hoy están las herramientas** (Semana 6). El modelo no busca, pero puede **pedirle** a una
+  herramienta que busque: la planilla de paquetes, la API del dólar. La herramienta sale a internet; el modelo lee lo
+  que trae y responde con eso.
+  - *Ejemplo:* Ana con cerebro local (Ejemplo 4): la pregunta del cliente no sale de la computadora, pero la
+    herramienta del dólar sí va a dolarapi.com a buscar la cotización. Lo privado se queda; lo público se busca.
+
 **Filmina 2 · Objetivos** (2 min)
 
 <p style="color:#1a7f37">Hoy vamos a entender las tres razones para correr un modelo local, qué se gana y qué se pierde, la diferencia entre Ollama y un modelo, qué modelo aguanta cada computadora, y vamos a conectar n8n con nuestro Ollama.</p>
@@ -859,7 +888,7 @@ marcado:
 
 #### Antes del primer ejemplo: Ollama listo, paso a paso (por si las dudas)
 
-Si al ejecutar un flujo de esta semana aparece **"Error in sub-node 'Cerebro local: Ollama'"** o **"Node does not
+Si al ejecutar un flujo de esta semana aparece **"Error in sub-node 'Ollama Chat Model'"** o **"Node does not
 have any credentials set"**, casi siempre falta una de estas cosas. Es el camino completo, probado el 24/11/2026 en
 Windows con n8n 2.46 en Docker (Ollama 0.40.18):
 
@@ -879,7 +908,7 @@ Windows con n8n 2.46 en Docker (Ollama 0.40.18):
       ollama pull llama3.2
       ollama list            → tiene que aparecer  llama3.2:latest   2.0 GB
 
-4. EN n8n · doble clic en el nodo "Cerebro local: Ollama"
+4. EN n8n · doble clic en el nodo "Ollama Chat Model"
    → Credential: botón "Connect to Ollama" (si no hay ninguna) o "Create new credential"
    → Base URL:  http://host.docker.internal:11434   (n8n en Docker; NO localhost)
    → API Key: VACÍA (es para un Ollama ajeno con contraseña; el tuyo no pide)
@@ -887,7 +916,7 @@ Windows con n8n 2.46 en Docker (Ollama 0.40.18):
    → Model: llama3.2:latest (el nombre exacto de ollama list)
 
 5. Execute workflow → la primera vez tarda (en la prueba, 45 segundos: el modelo arranca en frío)
-   → todos los nodos en verde. La respuesta: Logs → "Preguntarle al modelo local" → Output
+   → todos los nodos en verde. La respuesta: Logs → "Basic LLM Chain" → Output
 ```
 
 <p style="color:#1a7f37">Si a alguien le da error el cerebro local, son estas cinco cosas en orden: Ollama instalado, la terminal que se entere, el modelo bajado, la credencial con host.docker.internal, y el nombre exacto del modelo.</p>
@@ -1064,7 +1093,7 @@ lo haga y cuente el resultado por el chat cuando vuelva.
 > computadora, y no en Google.
 >
 > ```text
-> Arrancar a mano  →  La pregunta  →  Basic LLM Chain  →  Ollama (llama3.2)
+> When clicking ‘Execute workflow’  →  Edit Fields  →  Basic LLM Chain  →  Ollama (llama3.2)
 > ```
 >
 > Le preguntás qué llevar a Bariloche en invierno, y contesta `llama3.2` desde tu máquina.
@@ -1086,7 +1115,7 @@ ni memoria, ni herramientas. Sirve para ver que el puente n8n ↔ Ollama anda; t
 <p style="color:#1a7f37">Paso cuatro, el más importante: que n8n le hable a nuestro Ollama. Es la misma Basic LLM Chain de la semana pasada, pero con el cerebro de Ollama.</p>
 
 **Si alguien no instaló Ollama** (pasa siempre). Es la primera vez que n8n usa Ollama: sin Ollama instalado y el
-modelo bajado, el nodo da *Error in sub-node 'Cerebro local: Ollama'*. Pegás esto en el chat; el que no lo tiene lo hace
+modelo bajado, el nodo da *Error in sub-node 'Ollama Chat Model'*. Pegás esto en el chat; el que no lo tiene lo hace
 mientras vos seguís (no esperás: lo termina en casa si no llega).
 
 ```text
@@ -1146,8 +1175,8 @@ Lo cambiás → **Save** → *Connection tested successfully*.
 
 ```text
 PARA CASA · Paso 4: el flujo (4 nodos)
-Arrancar a mano → La pregunta → Preguntarle al modelo local
-                                      └ abajo, en Model: Cerebro local: Ollama
+When clicking ‘Execute workflow’ → Edit Fields → Basic LLM Chain
+                                      └ abajo, en Model: Ollama Chat Model
 ```
 
 Y lo armás despacio, nodo por nodo:
@@ -1161,14 +1190,16 @@ En el centro: Add first step → se abre el buscador a la derecha → escribí  
 
 - **Cuándo se coloca:** siempre primero. Es el "botón de arranque": sin disparador, el flujo no corre.
 - **Por dentro:** no tiene nada que configurar. Se cierra con la cruz.
-- En el lienzo aparece como *When clicking 'Execute workflow'*. Doble clic en el título → **Arrancar a mano**.
+- En el lienzo aparece como *When clicking ‘Execute workflow’*.
+- **No le cambiamos el nombre a ningún nodo:** quedan como los trae n8n. Así, lo que ven en mi pantalla es
+  lo mismo que les va a aparecer en su casa. Si agregás dos nodos iguales, n8n numera el segundo: *Edit Fields1*.
 
 <p style="color:#1a7f37">Todo flujo empieza con un disparador. Hoy uso el más simple: arranca cuando aprieto el botón. Más adelante, el disparador va a ser un mensaje de WhatsApp.</p>
 
 **P4-b · La pregunta** (*Edit Fields*)
 
 ```text
-Pasá el mouse sobre "Arrancar a mano" → clic en el + de su derecha → escribí  edit  → Edit Fields (Set)
+Pasá el mouse sobre "When clicking ‘Execute workflow’" → clic en el + de su derecha → escribí  edit  → Edit Fields (Set)
 ```
 
 - **Cuándo se coloca:** después del disparador. Es donde escribimos el dato que le vamos a mandar al modelo.
@@ -1179,7 +1210,7 @@ Pasá el mouse sobre "Arrancar a mano" → clic en el + de su derecha → escrib
 | *Fields to Set* → **Add Field** | Nombre: `pregunta` · Tipo: **String** · Valor: `Sos la asesora de una agencia de viajes. En 3 líneas, recomendale a un cliente qué llevar para ir a Bariloche en invierno.` | Un casillero con la pregunta. *String* = texto |
 | *Include Other Input Fields* | Apagado (viene así) | El disparador no trae nada que valga la pena pasar |
 
-Cerrás → renombrás **La pregunta** → clic derecho → **Execute step** (o el botón dentro del nodo): en *OUTPUT* aparece
+Cerrás → clic derecho → **Execute step** (o el botón dentro del nodo): en *OUTPUT* aparece
 `pregunta` con el texto.
 
 <p style="color:#1a7f37">Un Edit Fields con un solo casillero: la pregunta. Lo separo del modelo a propósito: si mañana quiero preguntar otra cosa, cambio este nodo y no toco el resto.</p>
@@ -1187,7 +1218,7 @@ Cerrás → renombrás **La pregunta** → clic derecho → **Execute step** (o 
 **P4-c · El que le pregunta al modelo** (*Basic LLM Chain*)
 
 ```text
-+ a la derecha de "La pregunta" → escribí  basic llm  → Basic LLM Chain
++ a la derecha de "Edit Fields" → escribí  basic llm  → Basic LLM Chain
 (si buscás "AI" aparecen muchos: el que va es Basic LLM Chain, no AI Agent)
 ```
 
@@ -1196,12 +1227,12 @@ Cerrás → renombrás **La pregunta** → clic derecho → **Execute step** (o 
 
 | Campo | Qué ponés | Por qué |
 |---|---|---|
-| *Source for Prompt (User Message)* | **Define below** | *Connected Chat Trigger Node* es para cuando el mensaje viene del chat de prueba. Acá viene de *La pregunta* |
+| *Source for Prompt (User Message)* | **Define below** | *Connected Chat Trigger Node* es para cuando el mensaje viene del chat de prueba. Acá viene de *Edit Fields* |
 | *Prompt (User Message)* | Arrastrás `pregunta` desde *INPUT* (a la izquierda) → queda `{{ $json.pregunta }}` | Lo que le preguntamos al modelo: el casillero del nodo anterior |
 | *Require Specific Output Format* | Apagado (viene así) | Queremos texto libre, no una ficha |
 | *Chat Messages* | Nada | Sirve para instrucciones fijas. No hacen falta |
 
-Cerrás → renombrás **Preguntarle al modelo local**. Abajo del nodo quedó un conector que dice **Model** con un
+Cerrás. Abajo del nodo quedó un conector que dice **Model** con un
 asterisco rojo: la chain todavía no tiene cerebro.
 
 <p style="color:#1a7f37">La chain es la que arma el pedido y se lo manda a un modelo. Pero fíjense abajo: Model, con un asterisco. Le falta el cerebro. Eso es lo de hoy: en vez de Gemini, le pongo Ollama.</p>
@@ -1221,7 +1252,7 @@ Abajo de la chain, en el conector "Model", clic en el + → se abre la lista de 
 | *Model* | **llama3.2:latest** (de la lista) | La lista la trae n8n preguntándole a tu Ollama. Si está vacía, Ollama está apagado o la credencial está mal |
 | *Options* → **Add Option** → *Sampling Temperature* | **0.3** | Un poco de variedad, no mucha. Más alto, más "creativo" (y más inventos) |
 
-Cerrás → renombrás **Cerebro local: Ollama**. El asterisco rojo desapareció. **Save** → **Execute workflow**.
+Cerrás. El asterisco rojo desapareció. **Save** → **Execute workflow**.
 
 <p style="color:#1a7f37">El mismo enchufe de la semana pasada, otro cerebro. Elijo la credencial, que es la dirección de Ollama, y el modelo, que aparece en la lista porque n8n le preguntó a mi Ollama qué tiene. Si la lista sale vacía, ya saben: Ollama apagado o la dirección mal.</p>
 
@@ -1254,12 +1285,12 @@ en clase.
 
 #### Paso 5 · Comparar = Ejemplo 2 en n8n · Local contra nube (flujo `02`) (102–112)
 
-> **En pocas palabras.** El mismo prompt va, al mismo tiempo, a Ollama y a Gemini, y se ven las dos respuestas
+> **En pocas palabras.** Edit Fields va, al mismo tiempo, a Ollama y a Gemini, y se ven las dos respuestas
 > juntas.
 >
 > ```text
-> Arrancar a mano  →  El mismo prompt  ─┬─  Chain + Ollama  ─┐
->                                       └─  Chain + Gemini  ─┴─  Juntar las dos
+> When clicking ‘Execute workflow’  →  Edit Fields  ─┬─  Chain + Ollama  ─┐
+>                                       └─  Chain + Gemini  ─┴─  Merge
 > ```
 >
 > Una familia quiere ir 5 días a Salta en julio. El modelo local tarda más e inventa lugares; Gemini, no.
@@ -1284,21 +1315,21 @@ en clase.
 
 ```text
 PARA CASA · Paso 5: comparar
-Arrancar a mano → El mismo prompt ─┬→ Responder (local) ─┐
-                                   │   └ Cerebro local: Ollama   ├→ Juntar las dos
-                                   └→ Responder (nube)  ─┘
-                                       └ Cerebro nube: Gemini
+When clicking ‘Execute workflow’ → Edit Fields ─┬→ Basic LLM Chain ─┐
+                                   │   └ Ollama Chat Model   ├→ Merge
+                                   └→ Basic LLM Chain1  ─┘
+                                       └ Google Gemini Chat Model
 ```
 
 **P5-a · El disparador y el prompt**
 
 ```text
 Overview → Create workflow → nombre:  Local vs nube
-Add first step → manual → Trigger manually → renombralo:  Arrancar a mano
-+ → edit → Edit Fields (Set) → renombralo:  El mismo prompt
+Add first step → manual → Trigger manually
++ → edit → Edit Fields (Set)
 ```
 
-| Campo (*El mismo prompt*) | Qué ponés | Por qué |
+| Campo (*Edit Fields*) | Qué ponés | Por qué |
 |---|---|---|
 | *Mode* | **Manual Mapping** | Un solo casillero |
 | **Add Field** | Nombre: `prompt` · Tipo: **String** · Valor: `Un cliente escribe: "Hola, somos 2 adultos y un nene de 8 años. Queremos ir 5 días a Salta en julio, ¿qué nos recomendás?". Respondé como asesora de una agencia de viajes argentina, en español rioplatense, en no más de 5 líneas.` | El **mismo** texto va a ir a los dos modelos: así la comparación es justa |
@@ -1308,17 +1339,16 @@ Add first step → manual → Trigger manually → renombralo:  Arrancar a mano
 **P5-b · La rama local: copiarla del flujo anterior**
 
 ```text
-Abrí "Hola Ollama" (en otra pestaña) → clic en "Preguntarle al modelo local" → Ctrl + clic en "Cerebro local: Ollama"
+Abrí "Hola Ollama" (en otra pestaña) → clic en "Basic LLM Chain" → Ctrl + clic en "Ollama Chat Model"
 → Ctrl + C → volvé a "Local vs nube" → clic en un lugar vacío → Ctrl + V
-→ arrastrá desde el puntito de salida de "El mismo prompt" hasta la entrada de la chain
+→ arrastrá desde el puntito de salida de "Edit Fields" hasta la entrada de la chain
 ```
 
 | Campo (la chain) | Qué cambiás | Por qué |
 |---|---|---|
 | *Prompt (User Message)* | Borrás lo que hay y arrastrás `prompt` → `{{ $json.prompt }}` | En este flujo el casillero se llama `prompt`, no `pregunta`. Si lo dejás, la chain recibe vacío |
-| Nombre del nodo | **Responder (local)** | Para saber cuál es cuál en los resultados |
 
-El *Cerebro local: Ollama* no se toca: copiado, trae su credencial y su modelo.
+El *Ollama Chat Model* no se toca: copiado, trae su credencial y su modelo.
 
 <p style="color:#1a7f37">No lo armo de nuevo: lo copio. Los nodos se copian como texto, con Control C y Control V, de un flujo a otro, y vienen con su configuración. Lo único que cambio es el nombre del casillero: acá se llama prompt.</p>
 
@@ -1328,22 +1358,22 @@ El *Cerebro local: Ollama* no se toca: copiado, trae su credencial y su modelo.
 **P5-c · La rama de la nube: una segunda salida del mismo nodo**
 
 ```text
-Desde el puntito de salida de "El mismo prompt", arrastrá hacia abajo, a un lugar VACÍO → se abre el buscador
-→ basic llm → Basic LLM Chain → renombralo:  Responder (nube)
+Desde el puntito de salida de "Edit Fields", arrastrá hacia abajo, a un lugar VACÍO → se abre el buscador
+→ basic llm → Basic LLM Chain     → n8n lo llama  Basic LLM Chain1  (ya hay una)
 ```
 
 - **Cuándo se coloca:** al mismo tiempo que la local. Una salida puede ir a dos nodos: el mismo item viaja a los dos.
 - **Por qué arrastrando:** el **+** solo aparece cuando la salida está libre. Como ya va a la rama local, la segunda
   conexión se hace arrastrando.
 
-| Campo (*Responder (nube)*) | Qué ponés | Por qué |
+| Campo (*Basic LLM Chain1*) | Qué ponés | Por qué |
 |---|---|---|
 | *Source for Prompt* | **Define below** | Igual que la local |
-| *Prompt (User Message)* | `{{ $json.prompt }}` | El mismo prompt |
+| *Prompt (User Message)* | `{{ $json.prompt }}` | Edit Fields |
 
-Abajo, en **Model** → **+** → `gemini` → **Google Gemini Chat Model** → renombralo **Cerebro nube: Gemini**:
+Abajo, en **Model** → **+** → `gemini` → **Google Gemini Chat Model**:
 
-| Campo (*Cerebro nube: Gemini*) | Qué ponés | Por qué |
+| Campo (*Google Gemini Chat Model*) | Qué ponés | Por qué |
 |---|---|---|
 | *Credential* | La de Gemini (Semanas 2 y 6) | La clave de Google |
 | *Model* | El **flash** de la lista (el mismo de la Semana 6) | Rápido y con plan gratis |
@@ -1354,8 +1384,8 @@ Abajo, en **Model** → **+** → `gemini` → **Google Gemini Chat Model** → 
 **P5-d · Juntar las dos respuestas** (*Merge*)
 
 ```text
-+ a la derecha de "Responder (local)" → escribí  merge  → Merge → renombralo:  Juntar las dos
-Después: arrastrá desde la salida de "Responder (nube)" hasta la entrada de abajo del Merge (Input 2)
++ a la derecha de "Basic LLM Chain" → escribí  merge  → Merge
+Después: arrastrá desde la salida de "Basic LLM Chain1" hasta la entrada de abajo del Merge (Input 2)
 ```
 
 | Campo | Qué ponés | Por qué |
@@ -1373,7 +1403,7 @@ Después: arrastrá desde la salida de "Responder (nube)" hasta la entrada de ab
 > El flujo `02-local-vs-nube.json` de la carpeta tiene, además, nodos que calculan los segundos y anotan el costo.
 > Armándolo en vivo no hacen falta: **los segundos se leen en *Logs***, al lado de cada nodo (*Success in 26.3s*).
 
-24. **Los resultados.** Abrís *Juntar las dos* → *OUTPUT*: dos items, cada uno con su `text`; el primero es el del
+24. **Los resultados.** Abrís *Merge* → *OUTPUT*: dos items, cada uno con su `text`; el primero es el del
     modelo local y el segundo, el de Gemini. En *Logs*, el tiempo de cada uno. Leés en voz alta la del modelo local. La de la prueba (llama3.2, 26 segundos):
 
 ```text
@@ -1420,7 +1450,7 @@ la respuesta de Gemini que guardaste en el ensayo.
 > (Fraude, Cobro o Atención) y las resume, sin que ningún dato salga de la computadora.
 >
 > ```text
-> Arrancar a mano  →  Quejas de prueba  →  Una por una  →  Chain + Ollama  →  Para el equipo
+> When clicking ‘Execute workflow’  →  Edit Fields  →  Split Out  →  Chain + Ollama  →  Edit Fields1
 > ```
 >
 > **La idea para los alumnos:** lo local resuelve la privacidad, pero no la inteligencia: el modelo chico cumple la
@@ -1443,11 +1473,11 @@ resultado queda en la salida del último nodo.
 
 ```text
 Overview → Create workflow → nombre:  Quejas privadas
-Add first step → manual → Trigger manually → renombralo:  Arrancar a mano
-+ → edit → Edit Fields (Set) → renombralo:  Quejas de prueba
+Add first step → manual → Trigger manually
++ → edit → Edit Fields (Set)
 ```
 
-| Campo (*Quejas de prueba*) | Qué ponés | Por qué |
+| Campo (*Edit Fields*) | Qué ponés | Por qué |
 |---|---|---|
 | *Mode* | **JSON** | Para pegar la lista entera de una vez |
 | *JSON* | El bloque de abajo | Tres quejas: dos con tarjeta, una sin |
@@ -1465,7 +1495,7 @@ Add first step → manual → Trigger manually → renombralo:  Arrancar a mano
 **E3-2 · Una por una** (*Split Out*)
 
 ```text
-+ a la derecha de "Quejas de prueba" → split → Split Out → renombralo:  Una por una
++ a la derecha de "Edit Fields" → split → Split Out
 ```
 
 | Campo | Qué ponés | Por qué |
@@ -1476,16 +1506,16 @@ Add first step → manual → Trigger manually → renombralo:  Arrancar a mano
 **E3-3 · Clasificar y resumir** (*Basic LLM Chain* + *Ollama Chat Model*)
 
 ```text
-+ a la derecha de "Una por una" → basic llm → Basic LLM Chain → renombralo:  Clasificar y resumir (local)
-Abajo, Model → + → ollama → Ollama Chat Model → renombralo:  Cerebro local: Ollama
++ a la derecha de "Split Out" → basic llm → Basic LLM Chain
+Abajo, Model → + → ollama → Ollama Chat Model
 ```
 
 | Campo | Qué ponés | Por qué |
 |---|---|---|
 | *Source for Prompt* | **Define below** | |
 | *Prompt (User Message)* | El texto de abajo; al final, arrastrás `queja` | Formato fijo de dos líneas, y la regla de privacidad |
-| *Cerebro local: Ollama* → *Credential* · *Model* | **Ollama local** · `llama3.2:latest` | El de los ejemplos anteriores |
-| *Cerebro local: Ollama* → *Options* → *Sampling Temperature* | **0.1** | Clasificar no necesita creatividad |
+| *Ollama Chat Model* → *Credential* · *Model* | **Ollama local** · `llama3.2:latest` | El de los ejemplos anteriores |
+| *Ollama Chat Model* → *Options* → *Sampling Temperature* | **0.1** | Clasificar no necesita creatividad |
 
 ```text
 Sos un asistente interno de una agencia de viajes. Leé esta queja de un cliente y respondé SOLO con dos líneas, sin nada más:
@@ -1502,12 +1532,12 @@ Queja: {{ $json.queja }}
 **E3-4 · Para el equipo** (*Edit Fields*)
 
 ```text
-+ a la derecha de la chain → edit → Edit Fields (Set) → renombralo:  Para el equipo
++ a la derecha de la chain → edit → Edit Fields (Set)     → n8n lo llama  Edit Fields1  (ya hay un Edit Fields)
 ```
 
 | Campo | Tipo | Valor | Por qué |
 |---|---|---|---|
-| `cliente` | String | `{{ $('Una por una').item.json.cliente }}` | El nombre quedó antes de la chain: se busca atrás |
+| `cliente` | String | `{{ $('Split Out').item.json.cliente }}` | El nombre quedó antes de la chain: se busca atrás |
 | `clasificacion` | String | `{{ $json.text }}` | Lo que contestó el modelo |
 
 **E3-5 · Probar.** **Save** → **Execute workflow** → abrís *Para el equipo*. Lo que salió en el ensayo (24/11/2026,
@@ -1581,7 +1611,7 @@ El agente queda con el conector **Chat Model** vacío y un asterisco rojo.
 **E4-3 · Poner el cerebro local** (*Ollama Chat Model*)
 
 ```text
-Conector "Chat Model" → + → ollama → Ollama Chat Model → renombralo:  Cerebro: Ollama (local)
+Conector "Chat Model" → + → ollama → Ollama Chat Model
 ```
 
 | Campo | Qué ponés | Por qué |
@@ -1636,8 +1666,8 @@ Respondió: "El paquete cuesta $ 1.900.000."   ← inventado (la Ana de Gemini d
 > `http://host.docker.internal:11434`. No hace falta dirección pública ni túnel. El formulario se abre con la *Test URL*, en tu navegador: también anda en local.
 
 ```text
-Encuesta de viaje → Clasificar (local) → Limpiar la respuesta → ¿Es negativo? ─ true  → Aviso urgente al equipo
-(n8n Form)          (Basic LLM Chain                             (IF)           └ false → Guardar como reseña
+On form submission → Basic LLM Chain → Edit Fields → If ─ true  → Edit Fields1
+(n8n Form)          (Basic LLM Chain                             (IF)           └ false → Edit Fields2
                      + Ollama)
 ```
 
@@ -1667,7 +1697,7 @@ Add first step → escribí  form  → n8n Form → en la lista, debajo de "Trig
 | *Respond When* | **Form Is Submitted** (viene así) | Le muestra "gracias" al cliente apenas manda, sin esperar a la IA |
 | *Options* → **Add option** → *Form Path* | `encuesta-de-viaje` | El final de la dirección del formulario: una palabra que se entienda |
 
-Cerrás → renombrás **Encuesta de viaje** → **Execute workflow** → se abre el formulario → completás *Ana · Salta ·
+Cerrás → **Execute workflow** → se abre el formulario → completás *Ana · Salta ·
 "El hotel estaba sucio y nadie nos fue a buscar"* → **Submit**. En *OUTPUT*: `Nombre`, `Destino`, `Comentario`.
 
 <p style="color:#1a7f37">El formulario, como en la Semana 4: nombre, destino y un comentario libre, en una caja grande. Lo completo una vez, con una queja, así tengo datos para armar lo que sigue.</p>
@@ -1675,7 +1705,7 @@ Cerrás → renombrás **Encuesta de viaje** → **Execute workflow** → se abr
 **E5-2 · Clasificar con el modelo local** (*Basic LLM Chain* + *Ollama Chat Model*)
 
 ```text
-+ a la derecha de "Encuesta de viaje" → escribí  basic llm  → Basic LLM Chain
++ a la derecha de "On form submission" → escribí  basic llm  → Basic LLM Chain
 ```
 
 - **Cuándo se coloca:** apenas llega el comentario. Es la única parte que necesita IA: entender si el cliente está
@@ -1687,10 +1717,9 @@ Cerrás → renombrás **Encuesta de viaje** → **Execute workflow** → se abr
 | *Prompt (User Message)* | `Leé el comentario de un cliente sobre su viaje y respondé SOLO una palabra, sin punto: Positivo, Negativo o Neutro.` + Enter dos veces + `Comentario: ` y arrastrás `Comentario` desde *INPUT* | Una consigna cerrada: una palabra, de tres posibles |
 | *Require Specific Output Format* | Apagado | Es una palabra: no hace falta una ficha |
 
-Cerrás → renombrás **Clasificar (local)**. Abajo, en **Model** → **+** → `ollama` → **Ollama Chat Model** → renombrás
-**Cerebro local: Ollama**:
+Cerrás. Abajo, en **Model** → **+** → `ollama` → **Ollama Chat Model**:
 
-| Campo (*Cerebro local: Ollama*) | Qué ponés | Por qué |
+| Campo (*Ollama Chat Model*) | Qué ponés | Por qué |
 |---|---|---|
 | *Credential* | **Ollama local** (la de la práctica) | La dirección de tu Ollama: `http://host.docker.internal:11434` |
 | *Model* | **llama3.2:latest** | El modelo que bajaste |
@@ -1704,8 +1733,8 @@ Cerrás → renombrás **Clasificar (local)**. Abajo, en **Model** → **+** →
 **E5-3 · Limpiar la respuesta** (*Edit Fields*)
 
 ```text
-Execute step en "Clasificar (local)" → OUTPUT:  text: Negativo
-+ a la derecha → edit → Edit Fields (Set) → renombralo:  Limpiar la respuesta
+Execute step en "Basic LLM Chain" → OUTPUT:  text: Negativo
++ a la derecha → edit → Edit Fields (Set)
 ```
 
 - **Cuándo se coloca:** después de la IA y antes de decidir. El IF compara textos exactos: "Negativo." con punto no
@@ -1714,7 +1743,7 @@ Execute step en "Clasificar (local)" → OUTPUT:  text: Negativo
 | Campo (**Add Field**, cuatro veces) | Tipo | Valor | Por qué |
 |---|---|---|---|
 | `sentimiento` | String | `{{ $json.text.trim().replace('.', '') }}` | `trim()` saca los espacios de los costados; `replace('.', '')`, el punto si lo puso |
-| `nombre` | String | Arrastrás `Nombre` desde *Encuesta de viaje* (en *INPUT*, desplegás ese nodo) → `{{ $('Encuesta de viaje').item.json.Nombre }}` | Los datos del formulario no llegan solos después de la IA: la chain solo devuelve `text`. Se buscan "atrás" |
+| `nombre` | String | Arrastrás `Nombre` desde *On form submission* (en *INPUT*, desplegás ese nodo) → `{{ $('On form submission').item.json.Nombre }}` | Los datos del formulario no llegan solos después de la IA: la chain solo devuelve `text`. Se buscan "atrás" |
 | `destino` | String | Igual, con `Destino` | |
 | `comentario` | String | Igual, con `Comentario` | |
 
@@ -1723,7 +1752,7 @@ Execute step en "Clasificar (local)" → OUTPUT:  text: Negativo
 **E5-4 · Decidir** (*If*) **y las dos salidas** (*Edit Fields*)
 
 ```text
-+ a la derecha de "Limpiar la respuesta" → escribí  if  → If → renombralo:  ¿Es negativo?
++ a la derecha de "Edit Fields" → escribí  if  → If
 ```
 
 | Campo | Qué ponés | Por qué |
@@ -1735,14 +1764,14 @@ Execute step en "Clasificar (local)" → OUTPUT:  text: Negativo
 El IF tiene dos salidas: **true** (arriba) y **false** (abajo).
 
 ```text
-+ en la salida "true"  → Edit Fields (Set) → renombralo:  Aviso urgente al equipo
-+ en la salida "false" → Edit Fields (Set) → renombralo:  Guardar como reseña
++ en la salida "true"  → Edit Fields (Set)     → queda como  Edit Fields1
++ en la salida "false" → Edit Fields (Set)     → queda como  Edit Fields2
 ```
 
 | Nodo | Campo | Valor (Expression) |
 |---|---|---|
-| *Aviso urgente al equipo* | `aviso` (String) | `URGENTE: {{ $json.nombre }} volvió de {{ $json.destino }} disconforme: "{{ $json.comentario }}". Llamarlo hoy.` |
-| *Guardar como reseña* | `resena` (String) | `{{ $json.sentimiento }} · {{ $json.nombre }} ({{ $json.destino }}): {{ $json.comentario }}` |
+| *Edit Fields1* | `aviso` (String) | `URGENTE: {{ $json.nombre }} volvió de {{ $json.destino }} disconforme: "{{ $json.comentario }}". Llamarlo hoy.` |
+| *Edit Fields2* | `resena` (String) | `{{ $json.sentimiento }} · {{ $json.nombre }} ({{ $json.destino }}): {{ $json.comentario }}` |
 
 **Save**.
 
@@ -1774,7 +1803,7 @@ Para cada uno: **Execute workflow** → completás el formulario → mirás por 
 > (la credencial de la Semana 4).
 
 ```text
-Arrancar a mano → Mensajes de prueba → Uno por uno → Sacar los datos (local) → Armar la fila → Guardar en la planilla
+When clicking ‘Execute workflow’ → Edit Fields → Split Out → Basic LLM Chain → Edit Fields1 → Append row in sheet
                   (3 mensajes)          (Split Out)   (Chain + Ollama, JSON)    (JSON.parse)     (Sheets · Append)
 ```
 
@@ -1787,14 +1816,14 @@ fila `13/11/2026 10:30 | Carla Gómez | Salta | 4` en "Consultas de la agencia" 
 
 ```text
 Overview → Create workflow → nombre:  De mensaje a planilla
-Add first step → manual → Trigger manually → renombralo:  Arrancar a mano
-+ → edit → Edit Fields (Set) → renombralo:  Mensajes de prueba
+Add first step → manual → Trigger manually
++ → edit → Edit Fields (Set)
 ```
 
 - **Cuándo se coloca:** el *Edit Fields* va después del disparador y hace de "bandeja de entrada": en lugar de
   esperar mensajes de verdad, escribimos tres. La semana que viene, ese lugar lo ocupa WhatsApp.
 
-| Campo (*Mensajes de prueba*) | Qué ponés | Por qué |
+| Campo (*Edit Fields*) | Qué ponés | Por qué |
 |---|---|---|
 | *Mode* | **JSON** | Para pegar una lista entera de una vez, en vez de campo por campo |
 | *JSON* | El bloque de abajo | Tres mensajes escritos como escribe la gente |
@@ -1812,7 +1841,7 @@ Add first step → manual → Trigger manually → renombralo:  Arrancar a mano
 **E6-2 · Uno por uno** (*Split Out*)
 
 ```text
-+ a la derecha de "Mensajes de prueba" → escribí  split  → Split Out → renombralo:  Uno por uno
++ a la derecha de "Edit Fields" → escribí  split  → Split Out
 ```
 
 | Campo | Qué ponés | Por qué |
@@ -1828,7 +1857,7 @@ Add first step → manual → Trigger manually → renombralo:  Arrancar a mano
 **E6-3 · Pedirle un JSON al modelo** (*Basic LLM Chain* + *Ollama Chat Model*)
 
 ```text
-+ a la derecha de "Uno por uno" → basic llm → Basic LLM Chain → renombralo:  Sacar los datos (local)
++ a la derecha de "Split Out" → basic llm → Basic LLM Chain
 ```
 
 | Campo | Qué ponés | Por qué |
@@ -1846,9 +1875,9 @@ Reglas: personas es un número (contá a la persona que escribe). Si un dato no 
 Mensaje: {{ $json.texto }}
 ```
 
-Abajo, **Model** → **+** → **Ollama Chat Model** → **Cerebro local: Ollama**:
+Abajo, **Model** → **+** → **Ollama Chat Model** → **Ollama Chat Model**:
 
-| Campo (*Cerebro local: Ollama*) | Qué ponés | Por qué |
+| Campo (*Ollama Chat Model*) | Qué ponés | Por qué |
 |---|---|---|
 | *Credential* | **Ollama local** (la de la práctica) | La dirección de tu Ollama: `http://host.docker.internal:11434` |
 | *Model* | **llama3.2:latest** | El modelo que bajaste |
@@ -1866,7 +1895,7 @@ mensaje).
 **E6-4 · Convertir el texto en casilleros** (*Edit Fields*)
 
 ```text
-+ a la derecha de "Sacar los datos (local)" → edit → Edit Fields (Set) → renombralo:  Armar la fila
++ a la derecha de "Basic LLM Chain" → edit → Edit Fields (Set)     → queda como  Edit Fields1
 ```
 
 - **Cuándo se coloca:** entre la IA y la planilla. La chain devuelve **un texto** (`text`) que parece una ficha; la
@@ -1891,7 +1920,7 @@ paso siguiente funcione solo.
 **E6-5 · Guardar en la planilla** (*Google Sheets*)
 
 ```text
-+ a la derecha de "Armar la fila" → escribí  sheets  → Google Sheets → en "Actions": Append row in sheet
++ a la derecha de "Edit Fields1" → escribí  sheets  → Google Sheets → en "Actions": Append row in sheet
 ```
 
 - **Cuándo se coloca:** al final: es la salida, adonde queda el resultado.
@@ -1905,7 +1934,7 @@ paso siguiente funcione solo.
 | *Sheet* | **From list** → **Hoja 1** | La pestaña de adentro |
 | *Mapping Column Mode* | **Map Automatically** | Cada casillero va a la columna que se llama igual |
 
-Cerrás → renombrás **Guardar en la planilla** → **Save** → **Execute workflow** → en la planilla, tres filas nuevas:
+Cerrás → **Save** → **Execute workflow** → en la planilla, tres filas nuevas:
 *Carla Gómez | Salta | 4 · Pedro | Ushuaia | 6 · Lucía | Mendoza | 1*.
 
 <p style="color:#1a7f37">Y lo de la Semana 4: agregar fila, con Map Automatically. Tres mensajes escritos como sea, tres filas ordenadas. Conectado al WhatsApp de la semana que viene, esto anota solo cada consulta que llega.</p>
@@ -1924,9 +1953,9 @@ Cerrás → renombrás **Guardar en la planilla** → **Save** → **Execute wor
 > **¿Anda en local (Docker)?** ✅ Sí. La rama de Ollama queda en tu computadora; la de Gemini sale hacia Google.
 
 ```text
-Arrancar a mano → Mensajes de prueba → Uno por uno → ¿Tiene datos sensibles? ─ true  → Responder (local) → Respuesta local
+When clicking ‘Execute workflow’ → Edit Fields → Split Out → If ─ true  → Basic LLM Chain → Edit Fields1
                                                        (IF, expresión regular)  │        (Ollama)
-                                                                                └ false → Responder (nube)  → Respuesta nube
+                                                                                └ false → Basic LLM Chain1  → Edit Fields2
                                                                                          (Gemini)
 ```
 
@@ -1939,9 +1968,9 @@ Ushuaia?" va a **Gemini**.
 
 ```text
 Overview → Create workflow → nombre:  Router de privacidad
-Add first step → manual → Trigger manually → renombralo:  Arrancar a mano
-+ → edit → Edit Fields (Set) → renombralo:  Mensajes de prueba   (Mode: JSON, el bloque de abajo)
-+ → split → Split Out → renombralo:  Uno por uno   (Fields To Split Out: mensajes)
+Add first step → manual → Trigger manually
++ → edit → Edit Fields (Set)   (Mode: JSON, el bloque de abajo)
++ → split → Split Out   (Fields To Split Out: mensajes)
 ```
 
 Son los mismos tres primeros nodos del Ejemplo 6 (mirá ahí la tabla de cada uno), con otros mensajes:
@@ -1961,7 +1990,7 @@ Son los mismos tres primeros nodos del Ejemplo 6 (mirá ahí la tabla de cada un
 **E7-2 · ¿Tiene datos sensibles?** (*If* con una expresión regular)
 
 ```text
-+ a la derecha de "Uno por uno" → if → If → renombralo:  ¿Tiene datos sensibles?
++ a la derecha de "Split Out" → if → If
 ```
 
 - **Cuándo se coloca:** **antes** de cualquier IA. La decisión de adónde va el mensaje se toma sin mandárselo a
@@ -1982,10 +2011,10 @@ Son los mismos tres primeros nodos del Ejemplo 6 (mirá ahí la tabla de cada un
 **E7-3 · Dos chains, dos cerebros**
 
 ```text
-+ en la salida "true"  → basic llm → Basic LLM Chain → renombralo:  Responder (local)
-   abajo, Model → + → Ollama Chat Model → Cerebro local: Ollama
-+ en la salida "false" → basic llm → Basic LLM Chain → renombralo:  Responder (nube)
-   abajo, Model → + → Google Gemini Chat Model → Cerebro nube: Gemini
++ en la salida "true"  → basic llm → Basic LLM Chain              → queda como  Basic LLM Chain
+   abajo, Model → + → ollama → Ollama Chat Model
++ en la salida "false" → basic llm → Basic LLM Chain              → queda como  Basic LLM Chain1
+   abajo, Model → + → gemini → Google Gemini Chat Model
 ```
 
 | Campo (en **las dos** chains) | Qué ponés | Por qué |
@@ -2001,8 +2030,8 @@ Mensaje: {{ $json.texto }}
 
 | Sub-nodo | Campo | Qué ponés | Por qué |
 |---|---|---|---|
-| *Cerebro local: Ollama* | *Credential* · *Model* · *Temperature* | Ollama local · `llama3.2:latest` · **0.1** | Lo sensible se queda en tu computadora |
-| *Cerebro nube: Gemini* | *Credential* · *Model* · *Temperature* | La de Gemini · el **flash** · **0.3** | Lo común va al modelo más rápido y mejor |
+| *Ollama Chat Model* | *Credential* · *Model* · *Temperature* | Ollama local · `llama3.2:latest` · **0.1** | Lo sensible se queda en tu computadora |
+| *Google Gemini Chat Model* | *Credential* · *Model* · *Temperature* | La de Gemini · el **flash** · **0.3** | Lo común va al modelo más rápido y mejor |
 
 - **"Nunca repitas números de tarjeta ni de documento"** va en los dos: aunque el local no los manda afuera, la
   respuesta igual no tiene por qué repetirlos.
@@ -2010,13 +2039,13 @@ Mensaje: {{ $json.texto }}
 **E7-4 · Anotar qué cerebro respondió** (*Edit Fields*, uno en cada rama)
 
 ```text
-+ a la derecha de "Responder (local)" → Edit Fields (Set) → renombralo:  Respuesta local
-+ a la derecha de "Responder (nube)"  → Edit Fields (Set) → renombralo:  Respuesta nube
++ a la derecha de "Basic LLM Chain"  → Edit Fields (Set)     → queda como  Edit Fields1
++ a la derecha de "Basic LLM Chain1" → Edit Fields (Set)     → queda como  Edit Fields2
 ```
 
-| Campo | Tipo | *Respuesta local* | *Respuesta nube* | Por qué |
+| Campo | Tipo | *Edit Fields1* | *Edit Fields2* | Por qué |
 |---|---|---|---|---|
-| `cliente` | String | `{{ $('Uno por uno').item.json.cliente }}` | igual | El nombre quedó "atrás", antes de la chain |
+| `cliente` | String | `{{ $('Split Out').item.json.cliente }}` | igual | El nombre quedó "atrás", antes de la chain |
 | `cerebro` | String | `Ollama (local): tenía datos sensibles` | `Gemini (nube)` | Para ver, en el resultado, quién contestó |
 | `respuesta` | String | `{{ $json.text }}` | igual | Lo que escribió el modelo |
 
@@ -2026,9 +2055,9 @@ Mensaje: {{ $json.texto }}
 
 ```text
 Save → Execute workflow →
-   Marta (tarjeta)  → Respuesta local · Ollama
-   Jorge (DNI)      → Respuesta local · Ollama
-   Sofía (Ushuaia)  → Respuesta nube  · Gemini
+   Marta (tarjeta)  → Edit Fields1 · Ollama
+   Jorge (DNI)      → Edit Fields1 · Ollama
+   Sofía (Ushuaia)  → Edit Fields2  · Gemini
 ```
 
 <p style="color:#1a7f37">La tarjeta de Marta y el DNI de Jorge nunca salieron de esta computadora. La pregunta de Sofía, que no tiene nada privado, la contestó Gemini, rápido y bien. Lo mejor de los dos mundos. Y es lo que pregunta la Pre-entrega 4: la decisión local o nube. Esta es una tercera respuesta posible: las dos, según el mensaje.</p>

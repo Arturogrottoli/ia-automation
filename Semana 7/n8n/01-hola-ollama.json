@@ -4,7 +4,7 @@
     {
       "parameters": {},
       "id": "782f1102-5c22-4c90-b6dd-3d2af578c112",
-      "name": "Arrancar a mano",
+      "name": "When clicking ‘Execute workflow’",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
@@ -27,7 +27,7 @@
         "options": {}
       },
       "id": "c4ece1c9-c696-414c-ad99-a0c9637241fa",
-      "name": "La pregunta",
+      "name": "Edit Fields",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
@@ -42,7 +42,7 @@
         "batching": {}
       },
       "id": "cb1847e1-482d-4059-89d9-759ee5866d07",
-      "name": "Preguntarle al modelo local",
+      "name": "Basic LLM Chain",
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.9,
       "position": [
@@ -58,7 +58,7 @@
         }
       },
       "id": "1af403f7-4660-44fe-a2c1-605d771a6809",
-      "name": "Cerebro local: Ollama",
+      "name": "Ollama Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
       "typeVersion": 1,
       "position": [
@@ -68,7 +68,7 @@
     },
     {
       "parameters": {
-        "content": "## Hola mundo con IA local\n\nLa misma Basic LLM Chain de la Semana 6, pero el cerebro es **Ollama**, corriendo en tu computadora.\n\n**Antes de usarlo**, en *Cerebro local: Ollama* creá la credencial **Ollama** con la *Base URL*:\n- n8n en Docker: `http://host.docker.internal:11434`\n- n8n instalado sin Docker: `http://localhost:11434`\n\nY elegí el modelo que descargaste (`llama3.2:latest` o `llama3.2:1b`).\n\nLa primera ejecución tarda: Ollama tiene que cargar el modelo en memoria. La segunda es mucho más rápida.",
+        "content": "## Hola mundo con IA local\n\nLa misma Basic LLM Chain de la Semana 6, pero el cerebro es **Ollama**, corriendo en tu computadora.\n\n**Antes de usarlo**, en *Ollama Chat Model* creá la credencial **Ollama** con la *Base URL*:\n- n8n en Docker: `http://host.docker.internal:11434`\n- n8n instalado sin Docker: `http://localhost:11434`\n\nY elegí el modelo que descargaste (`llama3.2:latest` o `llama3.2:1b`).\n\nLa primera ejecución tarda: Ollama tiene que cargar el modelo en memoria. La segunda es mucho más rápida.",
         "height": 360,
         "width": 760,
         "color": 4
@@ -84,33 +84,33 @@
     }
   ],
   "connections": {
-    "Arrancar a mano": {
+    "When clicking ‘Execute workflow’": {
       "main": [
         [
           {
-            "node": "La pregunta",
+            "node": "Edit Fields",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "La pregunta": {
+    "Edit Fields": {
       "main": [
         [
           {
-            "node": "Preguntarle al modelo local",
+            "node": "Basic LLM Chain",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Cerebro local: Ollama": {
+    "Ollama Chat Model": {
       "ai_languageModel": [
         [
           {
-            "node": "Preguntarle al modelo local",
+            "node": "Basic LLM Chain",
             "type": "ai_languageModel",
             "index": 0
           }

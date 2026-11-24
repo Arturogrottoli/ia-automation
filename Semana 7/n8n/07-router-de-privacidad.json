@@ -11,7 +11,7 @@
     {
       "parameters": {},
       "id": "87040852-3db0-4db0-93a2-816d3eef8229",
-      "name": "Arrancar a mano",
+      "name": "When clicking ‘Execute workflow’",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
@@ -26,7 +26,7 @@
         "options": {}
       },
       "id": "f2a0a4d4-1f5c-4d54-8db8-f78193a1e269",
-      "name": "Mensajes de prueba",
+      "name": "Edit Fields",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
@@ -40,7 +40,7 @@
         "options": {}
       },
       "id": "070851e2-1f0b-48ea-95ab-c60477b4af19",
-      "name": "Uno por uno",
+      "name": "Split Out",
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
@@ -74,7 +74,7 @@
         "options": {}
       },
       "id": "2a28c29c-b8fb-4b40-9b19-4228ceae8b91",
-      "name": "¿Tiene datos sensibles?",
+      "name": "If",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
@@ -89,7 +89,7 @@
         "batching": {}
       },
       "id": "fccc0960-e335-49b3-9f87-9045fe80ccfe",
-      "name": "Responder (local)",
+      "name": "Basic LLM Chain",
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.9,
       "position": [
@@ -105,7 +105,7 @@
         }
       },
       "id": "e64eb6a8-65b7-45c7-ac31-2ca9f0aac214",
-      "name": "Cerebro local: Ollama",
+      "name": "Ollama Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
       "typeVersion": 1,
       "position": [
@@ -120,7 +120,7 @@
         "batching": {}
       },
       "id": "8cff0a0a-e9ea-4b2e-9884-51e9a4e1aa92",
-      "name": "Responder (nube)",
+      "name": "Basic LLM Chain1",
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.9,
       "position": [
@@ -136,7 +136,7 @@
         }
       },
       "id": "550200bf-8bb8-42b4-9f35-43ae3d86f2cb",
-      "name": "Cerebro nube: Gemini",
+      "name": "Google Gemini Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.2,
       "position": [
@@ -151,7 +151,7 @@
             {
               "id": "e09267a2-268d-4f23-9579-06ebb881271b",
               "name": "cliente",
-              "value": "={{ $('Uno por uno').item.json.cliente }}",
+              "value": "={{ $('Split Out').item.json.cliente }}",
               "type": "string"
             },
             {
@@ -171,7 +171,7 @@
         "options": {}
       },
       "id": "e19c9c8e-81c5-46e7-8b7c-34a55f25f5f8",
-      "name": "Respuesta local",
+      "name": "Edit Fields1",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
@@ -186,7 +186,7 @@
             {
               "id": "f3aee6c2-21fd-49f6-af8b-a75bf8847b8d",
               "name": "cliente",
-              "value": "={{ $('Uno por uno').item.json.cliente }}",
+              "value": "={{ $('Split Out').item.json.cliente }}",
               "type": "string"
             },
             {
@@ -206,7 +206,7 @@
         "options": {}
       },
       "id": "fbd54ac8-7132-40d6-a330-12b25bb063ed",
-      "name": "Respuesta nube",
+      "name": "Edit Fields2",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
@@ -216,7 +216,7 @@
     },
     {
       "parameters": {
-        "content": "## 07 · El router de privacidad\n\n1. **Mensajes de prueba**: uno con tarjeta, uno con DNI, uno común.\n2. **¿Tiene datos sensibles?** (IF con una *expresión regular*: busca 16 números de tarjeta o un DNI).\n3. **true → Responder (local)** con Ollama: el dato no sale de tu computadora.\n4. **false → Responder (nube)** con Gemini: más rápido y mejor.\n\nLo decide el **flujo**, no el modelo: es una regla fija.\n\n**Antes de ejecutar:** Ollama prendido y la credencial de Gemini.",
+        "content": "## 07 · El router de privacidad\n\n1. **Edit Fields**: uno con tarjeta, uno con DNI, uno común.\n2. **If** (IF con una *expresión regular*: busca 16 números de tarjeta o un DNI).\n3. **true → Basic LLM Chain** con Ollama: el dato no sale de tu computadora.\n4. **false → Basic LLM Chain1** con Gemini: más rápido y mejor.\n\nLo decide el **flujo**, no el modelo: es una regla fija.\n\n**Antes de ejecutar:** Ollama prendido y la credencial de Gemini.",
         "height": 380,
         "width": 700,
         "color": 4
@@ -232,95 +232,95 @@
     }
   ],
   "connections": {
-    "Arrancar a mano": {
+    "When clicking ‘Execute workflow’": {
       "main": [
         [
           {
-            "node": "Mensajes de prueba",
+            "node": "Edit Fields",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Mensajes de prueba": {
+    "Edit Fields": {
       "main": [
         [
           {
-            "node": "Uno por uno",
+            "node": "Split Out",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Uno por uno": {
+    "Split Out": {
       "main": [
         [
           {
-            "node": "¿Tiene datos sensibles?",
+            "node": "If",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "¿Tiene datos sensibles?": {
+    "If": {
       "main": [
         [
           {
-            "node": "Responder (local)",
+            "node": "Basic LLM Chain",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Responder (nube)",
+            "node": "Basic LLM Chain1",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Cerebro local: Ollama": {
+    "Ollama Chat Model": {
       "ai_languageModel": [
         [
           {
-            "node": "Responder (local)",
+            "node": "Basic LLM Chain",
             "type": "ai_languageModel",
             "index": 0
           }
         ]
       ]
     },
-    "Cerebro nube: Gemini": {
+    "Google Gemini Chat Model": {
       "ai_languageModel": [
         [
           {
-            "node": "Responder (nube)",
+            "node": "Basic LLM Chain1",
             "type": "ai_languageModel",
             "index": 0
           }
         ]
       ]
     },
-    "Responder (local)": {
+    "Basic LLM Chain": {
       "main": [
         [
           {
-            "node": "Respuesta local",
+            "node": "Edit Fields1",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Responder (nube)": {
+    "Basic LLM Chain1": {
       "main": [
         [
           {
-            "node": "Respuesta nube",
+            "node": "Edit Fields2",
             "type": "main",
             "index": 0
           }

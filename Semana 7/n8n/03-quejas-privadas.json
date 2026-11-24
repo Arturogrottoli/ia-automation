@@ -4,7 +4,7 @@
     {
       "parameters": {},
       "id": "8e350090-ccbb-40f3-8575-f90cac7e68a7",
-      "name": "Arrancar a mano",
+      "name": "When clicking ‘Execute workflow’",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
@@ -19,7 +19,7 @@
         "options": {}
       },
       "id": "ca6c5e6a-2994-4979-a270-082347556b76",
-      "name": "Quejas de prueba",
+      "name": "Edit Fields",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
@@ -33,7 +33,7 @@
         "options": {}
       },
       "id": "3fb24646-df89-4a21-b975-f00adb9c66d4",
-      "name": "Una por una",
+      "name": "Split Out",
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
@@ -48,7 +48,7 @@
         "batching": {}
       },
       "id": "a7a4f105-1cec-47e0-8df2-39615485467e",
-      "name": "Clasificar y resumir (local)",
+      "name": "Basic LLM Chain",
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.9,
       "position": [
@@ -64,7 +64,7 @@
         }
       },
       "id": "f440de99-81ae-4db1-84a9-ed7d0084501a",
-      "name": "Cerebro local: Ollama",
+      "name": "Ollama Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
       "typeVersion": 1,
       "position": [
@@ -79,7 +79,7 @@
             {
               "id": "bf4c55c7-d8da-4792-ac12-6f173fd50c6b",
               "name": "cliente",
-              "value": "={{ $('Una por una').item.json.cliente }}",
+              "value": "={{ $('Split Out').item.json.cliente }}",
               "type": "string"
             },
             {
@@ -93,7 +93,7 @@
         "options": {}
       },
       "id": "1dd4ea88-e0d2-46fd-bf24-5bde32cd757d",
-      "name": "Para el equipo",
+      "name": "Edit Fields1",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
@@ -119,55 +119,55 @@
     }
   ],
   "connections": {
-    "Arrancar a mano": {
+    "When clicking ‘Execute workflow’": {
       "main": [
         [
           {
-            "node": "Quejas de prueba",
+            "node": "Edit Fields",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Quejas de prueba": {
+    "Edit Fields": {
       "main": [
         [
           {
-            "node": "Una por una",
+            "node": "Split Out",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Una por una": {
+    "Split Out": {
       "main": [
         [
           {
-            "node": "Clasificar y resumir (local)",
+            "node": "Basic LLM Chain",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Cerebro local: Ollama": {
+    "Ollama Chat Model": {
       "ai_languageModel": [
         [
           {
-            "node": "Clasificar y resumir (local)",
+            "node": "Basic LLM Chain",
             "type": "ai_languageModel",
             "index": 0
           }
         ]
       ]
     },
-    "Clasificar y resumir (local)": {
+    "Basic LLM Chain": {
       "main": [
         [
           {
-            "node": "Para el equipo",
+            "node": "Edit Fields1",
             "type": "main",
             "index": 0
           }

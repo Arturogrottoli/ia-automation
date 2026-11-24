@@ -35,7 +35,7 @@
         }
       },
       "id": "cfe9413b-5e41-49b5-b086-ce6286b386a6",
-      "name": "Encuesta de viaje",
+      "name": "On form submission",
       "type": "n8n-nodes-base.formTrigger",
       "typeVersion": 2.2,
       "position": [
@@ -51,7 +51,7 @@
         "batching": {}
       },
       "id": "879bc21e-9a07-4663-a21e-8acef49a4dca",
-      "name": "Clasificar (local)",
+      "name": "Basic LLM Chain",
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.9,
       "position": [
@@ -67,7 +67,7 @@
         }
       },
       "id": "f4c16566-5a36-44dc-a475-e58c1f90a517",
-      "name": "Cerebro local: Ollama",
+      "name": "Ollama Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
       "typeVersion": 1,
       "position": [
@@ -88,19 +88,19 @@
             {
               "id": "c87b9871-3811-4542-bca8-28c984ebf249",
               "name": "nombre",
-              "value": "={{ $('Encuesta de viaje').item.json.Nombre }}",
+              "value": "={{ $('On form submission').item.json.Nombre }}",
               "type": "string"
             },
             {
               "id": "843dc51c-e925-42f5-8748-d75b8c878c2c",
               "name": "destino",
-              "value": "={{ $('Encuesta de viaje').item.json.Destino }}",
+              "value": "={{ $('On form submission').item.json.Destino }}",
               "type": "string"
             },
             {
               "id": "0ef08f1b-9e20-4314-a2fc-cf5d22fe8f0a",
               "name": "comentario",
-              "value": "={{ $('Encuesta de viaje').item.json.Comentario }}",
+              "value": "={{ $('On form submission').item.json.Comentario }}",
               "type": "string"
             }
           ]
@@ -108,7 +108,7 @@
         "options": {}
       },
       "id": "bc9db24f-63c6-427e-bc04-3b2616b32013",
-      "name": "Limpiar la respuesta",
+      "name": "Edit Fields",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
@@ -142,7 +142,7 @@
         "options": {}
       },
       "id": "7ed4d2fb-fcbe-41c6-aabf-3e5832849c06",
-      "name": "¿Es negativo?",
+      "name": "If",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
@@ -165,7 +165,7 @@
         "options": {}
       },
       "id": "4ecda3e1-8fb8-4f96-a450-eefff1985188",
-      "name": "Aviso urgente al equipo",
+      "name": "Edit Fields1",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
@@ -188,7 +188,7 @@
         "options": {}
       },
       "id": "f0ffb850-cb5e-4b78-a739-7d460b3fdf97",
-      "name": "Guardar como reseña",
+      "name": "Edit Fields2",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
@@ -198,7 +198,7 @@
     },
     {
       "parameters": {
-        "content": "## 05 · La IA local lee las encuestas\n\n1. **Encuesta de viaje** (formulario): Nombre, Destino, Comentario.\n2. **Clasificar (local)**: Basic LLM Chain con **Ollama** (`llama3.2`): Positivo, Negativo o Neutro.\n3. **Limpiar la respuesta**: saca espacios y el punto, y junta los datos.\n4. **¿Es negativo?** (IF): aviso urgente al equipo, o se guarda como reseña.\n\nLos comentarios de los clientes **no salen de tu computadora**.",
+        "content": "## 05 · La IA local lee las encuestas\n\n1. **On form submission** (formulario): Nombre, Destino, Comentario.\n2. **Basic LLM Chain**: Basic LLM Chain con **Ollama** (`llama3.2`): Positivo, Negativo o Neutro.\n3. **Edit Fields**: saca espacios y el punto, y junta los datos.\n4. **If** (IF): aviso urgente al equipo, o se guarda como reseña.\n\nLos comentarios de los clientes **no salen de tu computadora**.",
         "height": 340,
         "width": 700,
         "color": 4
@@ -214,62 +214,62 @@
     }
   ],
   "connections": {
-    "Encuesta de viaje": {
+    "On form submission": {
       "main": [
         [
           {
-            "node": "Clasificar (local)",
+            "node": "Basic LLM Chain",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Cerebro local: Ollama": {
+    "Ollama Chat Model": {
       "ai_languageModel": [
         [
           {
-            "node": "Clasificar (local)",
+            "node": "Basic LLM Chain",
             "type": "ai_languageModel",
             "index": 0
           }
         ]
       ]
     },
-    "Clasificar (local)": {
+    "Basic LLM Chain": {
       "main": [
         [
           {
-            "node": "Limpiar la respuesta",
+            "node": "Edit Fields",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Limpiar la respuesta": {
+    "Edit Fields": {
       "main": [
         [
           {
-            "node": "¿Es negativo?",
+            "node": "If",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "¿Es negativo?": {
+    "If": {
       "main": [
         [
           {
-            "node": "Aviso urgente al equipo",
+            "node": "Edit Fields1",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Guardar como reseña",
+            "node": "Edit Fields2",
             "type": "main",
             "index": 0
           }
