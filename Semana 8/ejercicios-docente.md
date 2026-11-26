@@ -3,6 +3,12 @@
 **No se comparte con los alumnos.** Respuestas, las salidas reales de los flujos, cómo corregir la Pre-entrega 4 y
 las trabas.
 
+**Desde el 26/11/2026 la clase cambió:** en clase no hay ejercicios y WhatsApp no se conecta en vivo. Se arman con el
+simulador el asistente (Ejemplo 1, flujos 03 y 04), RAG (Ejemplo 2, flujo 05) y los Ejemplos 3 a 5 (flujos 06 a 08),
+todos con los nombres de nodo que pone n8n (*Edit Fields*, *AI Agent*…) y sin el nodo *Code* del simulador viejo.
+Todos los ejercicios son tarea; el 0, el 0-B y el 5 son opcionales, para pasar a un canal real en la Entrega Final.
+Las salidas de abajo son de los flujos anteriores (con los nombres viejos): los resultados son los mismos.
+
 **Cómo se probó** (7 de noviembre de 2026): n8n 2.46.6 y Ollama 0.40 en Docker, sin placa de video. Sin cuenta de
 Meta: el canal se probó con el simulador (flujos 03 y 04), que recibe el mismo paquete que manda Meta. El cerebro fue
 `llama3.2` en vez de Gemini (no había clave), así que **con Gemini las respuestas van a ser mejores y mucho más
@@ -71,7 +77,7 @@ Lo que tiene que aparecer (y lo que no):
 
 ---
 
-## Ejercicio 3 · La práctica: salidas reales
+## Ejercicio 3 · Rehacé el asistente simulado: salidas reales
 
 Todas con el simulador (03 + 04) y `llama3.2` en Ollama, sin placa de video. Los tiempos son los de una
 computadora modesta sin GPU: con Gemini, la respuesta llega en 2 a 5 segundos.
@@ -151,7 +157,7 @@ referencia.
 
 ---
 
-## Ejercicio 5 · Del simulador al WhatsApp de verdad
+## Ejercicio 5 · Del simulador a un canal de verdad (opcional)
 
 No se pudo probar contra Meta. Lo que sí está verificado en el código de n8n 2.46:
 - **El WhatsApp Trigger se suscribe solo.** Al publicar (o al ejecutar para probar), n8n le pide a Meta, con el App ID
@@ -174,7 +180,7 @@ No aparece en el canvas: con el *App ID* o el *App Secret* mal, el síntoma para
 
 ---
 
-## Ejercicio 6 · RAG: salidas reales
+## Ejercicio 6 · RAG (Ejemplo 2): salidas reales
 
 **La carga:** el documento (unos 2.700 caracteres) se cortó en **5 pedazos** de hasta 600 caracteres.
 

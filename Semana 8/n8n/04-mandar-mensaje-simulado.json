@@ -4,7 +4,7 @@
     {
       "parameters": {},
       "id": "a10c7957-45cc-4519-b93c-29486fbf6b92",
-      "name": "Arrancar a mano",
+      "name": "When clicking ‘Execute workflow’",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
@@ -45,7 +45,7 @@
         "options": {}
       },
       "id": "a8b4be84-1f44-4fa6-9c9a-1741a77dd125",
-      "name": "Mensaje de prueba",
+      "name": "Edit Fields",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
@@ -65,7 +65,7 @@
         }
       },
       "id": "24157b5d-5846-45f7-abc0-27bf129e104c",
-      "name": "Mandar al simulador",
+      "name": "HTTP Request",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
@@ -75,13 +75,13 @@
     },
     {
       "parameters": {
-        "content": "## Hace de celular\n\nArma el mismo paquete que manda Meta cuando alguien escribe, y se lo manda al flujo **03** (que tiene que estar **publicado**).\n\n**Para jugar**, cambiá en *Mensaje de prueba*:\n- `texto`: lo que escribiría el cliente.\n- `telefono`: otro número = otra persona (la memoria no se mezcla).\n- `tipo`: `image` o `audio` para probar los bordes.\n\n**La URL:** con n8n en tu máquina (Docker o Desktop) es `http://localhost:5678/webhook/whatsapp-simulado`. Con n8n Cloud, copiá la *Production URL* del Webhook del flujo 03.",
+        "content": "## El celular de mentira (Ejemplo 1)\n\nArma el mismo paquete que manda Meta y se lo manda al asistente simulado (flujo 03) por HTTP.\n\n- **Edit Fields**: lo que \"escribe\" el cliente. Cambiá `texto` para otro mensaje, `telefono` para otro cliente, `tipo` (image, audio) para probar los porteros.\n- **HTTP Request**: POST a `http://localhost:5678/webhook/whatsapp-simulado`. Para los otros ejemplos, cambiá el final: `whatsapp-horario`, `whatsapp-humano`, `whatsapp-completo`.\n\nLa respuesta de Ana aparece en el OUTPUT del **HTTP Request**.",
         "height": 360,
         "width": 700,
         "color": 6
       },
       "id": "f753936c-99eb-4d40-95c1-2e1ecbabf4c4",
-      "name": "Nota: el celular de mentira",
+      "name": "Nota",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
@@ -91,22 +91,22 @@
     }
   ],
   "connections": {
-    "Arrancar a mano": {
+    "When clicking ‘Execute workflow’": {
       "main": [
         [
           {
-            "node": "Mensaje de prueba",
+            "node": "Edit Fields",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Mensaje de prueba": {
+    "Edit Fields": {
       "main": [
         [
           {
-            "node": "Mandar al simulador",
+            "node": "HTTP Request",
             "type": "main",
             "index": 0
           }

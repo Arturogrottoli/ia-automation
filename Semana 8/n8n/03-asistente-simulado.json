@@ -9,7 +9,7 @@
         "options": {}
       },
       "id": "2da64093-1b0e-4106-a50f-e6a04c2e291c",
-      "name": "Simulador: entra el mensaje",
+      "name": "Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
@@ -20,49 +20,30 @@
     },
     {
       "parameters": {
-        "jsCode": "// Hace lo mismo que el WhatsApp Trigger: Meta manda un paquete con \"entry\" y \"changes\",\n// y el trigger entrega solo la parte \"value\" de cada cambio (contactos, mensajes, etc.).\nconst body = $input.first().json.body;\nconst salida = [];\nfor (const entry of body.entry ?? []) {\n  for (const change of entry.changes ?? []) {\n    // Igual que el trigger con \"Receive Message Status Updates\" vacío:\n    // los avisos de entregado/leído no pasan.\n    if (change.value?.statuses) continue;\n    salida.push({ json: { ...change.value, field: change.field } });\n  }\n}\nreturn salida;"
-      },
-      "id": "2852f9cc-d9a4-440e-8f07-68fc48b2901b",
-      "name": "Como lo entrega el WhatsApp Trigger",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -220,
-        0
-      ]
-    },
-    {
-      "parameters": {
         "assignments": {
           "assignments": [
             {
               "id": "d2796995-2f15-4863-bb89-a28387632745",
               "name": "telefono",
-              "value": "={{ $json.messages?.[0]?.from }}",
+              "value": "={{ $json.body.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.from }}",
               "type": "string"
             },
             {
               "id": "8de98063-28e4-4d9f-8ec1-a3beaee08788",
               "name": "nombre",
-              "value": "={{ $json.contacts?.[0]?.profile?.name }}",
+              "value": "={{ $json.body.entry?.[0]?.changes?.[0]?.value?.contacts?.[0]?.profile?.name }}",
               "type": "string"
             },
             {
               "id": "612edaaa-a236-49ea-8a33-1e4922fa7290",
               "name": "tipo",
-              "value": "={{ $json.messages?.[0]?.type }}",
+              "value": "={{ $json.body.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.type }}",
               "type": "string"
             },
             {
               "id": "7eff9518-5510-4338-a00c-a36fe3798d07",
               "name": "texto",
-              "value": "={{ $json.messages?.[0]?.text?.body }}",
-              "type": "string"
-            },
-            {
-              "id": "44cbfe99-7008-4332-b798-0e3a2c913177",
-              "name": "phoneNumberId",
-              "value": "={{ $json.metadata?.phone_number_id }}",
+              "value": "={{ $json.body.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.text?.body }}",
               "type": "string"
             }
           ]
@@ -70,7 +51,7 @@
         "options": {}
       },
       "id": "7e52a499-95fc-4c54-b3a0-d8f051a5b7eb",
-      "name": "Datos del mensaje",
+      "name": "Edit Fields",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
@@ -105,7 +86,7 @@
         "options": {}
       },
       "id": "fc371122-2572-40a8-b43e-e4b7b44f9f39",
-      "name": "¿Es un mensaje?",
+      "name": "Filter",
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
@@ -139,7 +120,7 @@
         "options": {}
       },
       "id": "117a476b-3142-4a20-b7f1-227d7674204a",
-      "name": "¿Es texto?",
+      "name": "If",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
@@ -152,11 +133,11 @@
         "promptType": "define",
         "text": "={{ $json.texto }}",
         "options": {
-          "systemMessage": "=Sos Ana, la asesora de la agencia de viajes \"Rumbo Sur\", y atendés por WhatsApp. Hoy es {{ $now.format('dd/MM/yyyy') }}. El cliente se llama {{ $('Datos del mensaje').item.json.nombre }}.\n\nQUÉ PODÉS HACER: contar qué paquetes hay, qué incluyen, cuántos días son y cuánto cuestan. Estos son los únicos paquetes (precio en dólares, por persona):\n- Bariloche Clásico: 5 días, USD 950. Aéreo, hotel 3 estrellas con desayuno y excursión al Circuito Chico.\n- Bariloche Nieve: 7 días, USD 1450. Hoy NO tiene cupos.\n- Caminos del Vino (Mendoza): 4 días, USD 780. Aéreo, hotel boutique y dos visitas a bodegas con degustación.\n- Norte Mágico (Salta): 6 días, USD 890. Aéreo, hotel con desayuno y excursiones a Cafayate y Purmamarca.\n- Fin del Mundo (Ushuaia): 5 días, USD 1320. Aéreo, hotel con media pensión y navegación por el Canal Beagle.\n- Cataratas Express: 3 días, USD 640. Aéreo, hotel con desayuno y entrada al lado argentino de las Cataratas.\n\nFORMATO (es WhatsApp: se lee en el celular):\n- Mensajes cortos: párrafos de 2 o 3 líneas, como mucho 2 párrafos.\n- Negritas con UN asterisco de cada lado, así: *Bariloche Clásico*. Nunca uses ** ni #.\n- Si listás opciones, una por línea, empezando con guion.\n- Como mucho un emoji por mensaje.\n- Terminá SIEMPRE con una pregunta o con el próximo paso.\n\nLÍMITES (aunque el cliente insista):\n- No confirmes reservas ni tomes pagos. Para reservar, pedí nombre completo, destino y fechas, y avisá que un vendedor lo contacta por este mismo chat.\n- No pases precios a pesos ni inventes promociones, fechas de salida ni datos que no estén arriba. Si no sabés algo, decí que lo consultás con un vendedor.\n- Si el tema no tiene que ver con los viajes de la agencia, decilo con amabilidad y volvé a los paquetes.\n- Si el cliente está enojado o pide hablar con una persona, decile que lo pasás con un vendedor del equipo."
+          "systemMessage": "=Sos Ana, la asesora de la agencia de viajes \"Rumbo Sur\", y atendés por WhatsApp. Hoy es {{ $now.format('dd/MM/yyyy') }}. El cliente se llama {{ $('Edit Fields').item.json.nombre }}.\n\nQUÉ PODÉS HACER: contar qué paquetes hay, qué incluyen, cuántos días son y cuánto cuestan. Estos son los únicos paquetes (precio en dólares, por persona):\n- Bariloche Clásico: 5 días, USD 950. Aéreo, hotel 3 estrellas con desayuno y excursión al Circuito Chico.\n- Bariloche Nieve: 7 días, USD 1450. Hoy NO tiene cupos.\n- Caminos del Vino (Mendoza): 4 días, USD 780. Aéreo, hotel boutique y dos visitas a bodegas con degustación.\n- Norte Mágico (Salta): 6 días, USD 890. Aéreo, hotel con desayuno y excursiones a Cafayate y Purmamarca.\n- Fin del Mundo (Ushuaia): 5 días, USD 1320. Aéreo, hotel con media pensión y navegación por el Canal Beagle.\n- Cataratas Express: 3 días, USD 640. Aéreo, hotel con desayuno y entrada al lado argentino de las Cataratas.\n\nFORMATO (es WhatsApp: se lee en el celular):\n- Mensajes cortos: párrafos de 2 o 3 líneas, como mucho 2 párrafos.\n- Negritas con UN asterisco de cada lado, así: *Bariloche Clásico*. Nunca uses ** ni #.\n- Si listás opciones, una por línea, empezando con guion.\n- Como mucho un emoji por mensaje.\n- Terminá SIEMPRE con una pregunta o con el próximo paso.\n\nLÍMITES (aunque el cliente insista):\n- No confirmes reservas ni tomes pagos. Para reservar, pedí nombre completo, destino y fechas, y avisá que un vendedor lo contacta por este mismo chat.\n- No pases precios a pesos ni inventes promociones, fechas de salida ni datos que no estén arriba. Si no sabés algo, decí que lo consultás con un vendedor.\n- Si el tema no tiene que ver con los viajes de la agencia, decilo con amabilidad y volvé a los paquetes.\n- Si el cliente está enojado o pide hablar con una persona, decile que lo pasás con un vendedor del equipo."
         }
       },
       "id": "8503c3d3-17db-4dfc-b7cc-e2061f8aad06",
-      "name": "Ana por WhatsApp",
+      "name": "AI Agent",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
@@ -172,7 +153,7 @@
         }
       },
       "id": "d63883a2-5025-4da4-9a38-2911228c9b58",
-      "name": "Cerebro: Gemini",
+      "name": "Google Gemini Chat Model",
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.2,
       "position": [
@@ -183,11 +164,11 @@
     {
       "parameters": {
         "sessionIdType": "customKey",
-        "sessionKey": "={{ $('Datos del mensaje').item.json.telefono }}",
+        "sessionKey": "={{ $('Edit Fields').item.json.telefono }}",
         "contextWindowLength": 10
       },
       "id": "04f235c4-0949-470a-9fb9-a125b727f7d8",
-      "name": "Memoria por teléfono",
+      "name": "Simple Memory",
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.3,
       "position": [
@@ -202,7 +183,7 @@
             {
               "id": "1639f0a0-eb00-4286-8d90-6416efab7ea9",
               "name": "para",
-              "value": "={{ $('Datos del mensaje').item.json.telefono }}",
+              "value": "={{ $('Edit Fields').item.json.telefono }}",
               "type": "string"
             },
             {
@@ -216,7 +197,7 @@
         "options": {}
       },
       "id": "3184485b-9318-4f13-9fd7-dbfab16242f2",
-      "name": "Respuesta (saldría por WhatsApp)",
+      "name": "Edit Fields1",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
@@ -231,7 +212,7 @@
             {
               "id": "e4794ea9-7cd4-4ec0-a7d4-65177dcc920d",
               "name": "para",
-              "value": "={{ $('Datos del mensaje').item.json.telefono }}",
+              "value": "={{ $('Edit Fields').item.json.telefono }}",
               "type": "string"
             },
             {
@@ -245,7 +226,7 @@
         "options": {}
       },
       "id": "272c117b-6c07-4648-bdf6-9ac538dd38c9",
-      "name": "Respuesta: solo texto",
+      "name": "Edit Fields2",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
@@ -255,13 +236,13 @@
     },
     {
       "parameters": {
-        "content": "## El asistente, con WhatsApp simulado\n\nEs el mismo asistente del flujo 02, con dos cambios:\n\n- **Entrada:** en vez del *WhatsApp Trigger*, un *Webhook* que recibe el mismo paquete que manda Meta, y un *Code* que lo deja igual que el trigger.\n- **Salida:** en vez de mandar por WhatsApp, devuelve la respuesta en la misma llamada (`para` y `texto`).\n\nSirve para la Pre-entrega 4 si no llegás a tener la integración real: el programa acepta capturas \"con webhook simulando WhatsApp\".\n\n**Para probarlo:** publicá este flujo y usá el flujo **04 · Mandar un mensaje simulado**.",
+        "content": "## El asistente de WhatsApp, simulado (Ejemplo 1)\n\nAnda en n8n **local**: no necesita Meta ni túnel. Los mensajes los manda el flujo 04 (el celular de mentira), con el mismo paquete que manda Meta.\n\n1. **Webhook** (POST, path `whatsapp-simulado`, responde cuando termina el último nodo).\n2. **Edit Fields**: saca teléfono, nombre, tipo y texto del paquete (`body.entry[0].changes[0].value`).\n3. **Filter** (¿hay teléfono?) e **If** (¿es texto?): los porteros.\n4. **AI Agent** con Gemini y **Simple Memory** (Key = el teléfono): un chat por persona.\n5. **Edit Fields1**: la respuesta (con WhatsApp real, acá va *Send message*). **Edit Fields2**: la respuesta fija para fotos y audios.\n\n**Publish** para que escuche. Cada cambio: Save y Publish otra vez.",
         "height": 330,
         "width": 900,
         "color": 6
       },
       "id": "3bfd243d-c246-4411-a5cd-c864c2e88a14",
-      "name": "Nota: el simulador",
+      "name": "Nota",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
@@ -271,95 +252,84 @@
     }
   ],
   "connections": {
-    "Simulador: entra el mensaje": {
+    "Webhook": {
       "main": [
         [
           {
-            "node": "Como lo entrega el WhatsApp Trigger",
+            "node": "Edit Fields",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Como lo entrega el WhatsApp Trigger": {
+    "Edit Fields": {
       "main": [
         [
           {
-            "node": "Datos del mensaje",
+            "node": "Filter",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Datos del mensaje": {
+    "Filter": {
       "main": [
         [
           {
-            "node": "¿Es un mensaje?",
+            "node": "If",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "¿Es un mensaje?": {
+    "If": {
       "main": [
         [
           {
-            "node": "¿Es texto?",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "¿Es texto?": {
-      "main": [
-        [
-          {
-            "node": "Ana por WhatsApp",
+            "node": "AI Agent",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Respuesta: solo texto",
+            "node": "Edit Fields2",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Ana por WhatsApp": {
+    "AI Agent": {
       "main": [
         [
           {
-            "node": "Respuesta (saldría por WhatsApp)",
+            "node": "Edit Fields1",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Cerebro: Gemini": {
+    "Google Gemini Chat Model": {
       "ai_languageModel": [
         [
           {
-            "node": "Ana por WhatsApp",
+            "node": "AI Agent",
             "type": "ai_languageModel",
             "index": 0
           }
         ]
       ]
     },
-    "Memoria por teléfono": {
+    "Simple Memory": {
       "ai_memory": [
         [
           {
-            "node": "Ana por WhatsApp",
+            "node": "AI Agent",
             "type": "ai_memory",
             "index": 0
           }

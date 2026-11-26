@@ -45,7 +45,7 @@
         "options": {}
       },
       "id": "b11c53b1-798b-46d1-b235-59f1248407b1",
-      "name": "Datos del mensaje",
+      "name": "Edit Fields",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
@@ -62,7 +62,7 @@
         }
       },
       "id": "4448843b-497b-4180-84d4-bd19265dad97",
-      "name": "Responder por Telegram",
+      "name": "Send a text message",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
@@ -73,7 +73,7 @@
     },
     {
       "parameters": {
-        "content": "## El eco, por Telegram (la versión Telegram del flujo 01)\n\nLo que le escribís al bot, vuelve.\n\n- **Telegram Trigger:** Trigger On: *Message*. Credencial *Telegram API* con el token de @BotFather.\n- **Datos del mensaje:** saca el `chatId` (la conversación), el nombre y el texto.\n- **Responder por Telegram:** *Send a text message* al mismo `chatId`. *Append n8n Attribution* apagado.\n\n**¿Anda en local?** No solo: Telegram necesita una dirección **https pública** (n8n Cloud, o Docker con túnel y `WEBHOOK_URL`). Publicado, probalo escribiéndole al bot; no uses *Execute workflow* con el flujo publicado.",
+        "content": "## El eco, por Telegram (la versión Telegram del flujo 01)\n\nLo que le escribís al bot, vuelve.\n\n- **Telegram Trigger:** Trigger On: *Message*. Credencial *Telegram API* con el token de @BotFather.\n- **Edit Fields:** saca el `chatId` (la conversación), el nombre y el texto.\n- **Send a text message:** *Send a text message* al mismo `chatId`. *Append n8n Attribution* apagado.\n\n**¿Anda en local?** No solo: Telegram necesita una dirección **https pública** (n8n Cloud, o Docker con túnel y `WEBHOOK_URL`). Publicado, probalo escribiéndole al bot; no uses *Execute workflow* con el flujo publicado.",
         "height": 300,
         "width": 760,
         "color": 4
@@ -93,18 +93,18 @@
       "main": [
         [
           {
-            "node": "Datos del mensaje",
+            "node": "Edit Fields",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Datos del mensaje": {
+    "Edit Fields": {
       "main": [
         [
           {
-            "node": "Responder por Telegram",
+            "node": "Send a text message",
             "type": "main",
             "index": 0
           }

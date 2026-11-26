@@ -56,7 +56,7 @@
         "options": {}
       },
       "id": "6a98588d-78dc-46d4-8db9-7002cc5d3071",
-      "name": "¿Lo escribió una persona?",
+      "name": "Filter",
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
@@ -91,7 +91,7 @@
         "options": {}
       },
       "id": "1ede8338-9ef8-40fd-b38d-7d8eaff35b8f",
-      "name": "Datos del mensaje",
+      "name": "Edit Fields",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
@@ -113,7 +113,7 @@
         }
       },
       "id": "194a8592-21ae-4b20-ae75-99739113db1a",
-      "name": "Responder en Slack",
+      "name": "Send a message",
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.3,
       "position": [
@@ -124,7 +124,7 @@
     },
     {
       "parameters": {
-        "content": "## El eco, por Slack (la versión Slack del flujo 01)\n\nLo que escribís en un canal donde está el bot, vuelve.\n\n- **Slack Trigger:** Trigger On: *New Message Posted to Channel*, *Watch Whole Workspace* prendido. Credencial *Slack API* con el *Bot User OAuth Token* (`xoxb-…`).\n- **¿Lo escribió una persona?:** deja pasar solo mensajes sin `bot_id` ni `subtype`. **Sin este filtro, la respuesta del bot dispara el flujo otra vez: un eco infinito.**\n- **Datos del mensaje:** canal, usuario y texto.\n- **Responder en Slack:** *Send a message* al mismo canal. `<@usuario>` lo menciona. *Include Link to Workflow* apagado.\n\n**En Slack:** la dirección de este trigger (*Production URL*) va en tu app → *Event Subscriptions* → *Request URL*, con el evento `message.channels`. Y el bot tiene que estar en el canal (`/invite @tu-bot`).\n**¿Anda en local?** No solo: dirección **https pública** (n8n Cloud, o túnel).",
+        "content": "## El eco, por Slack (la versión Slack del flujo 01)\n\nLo que escribís en un canal donde está el bot, vuelve.\n\n- **Slack Trigger:** Trigger On: *New Message Posted to Channel*, *Watch Whole Workspace* prendido. Credencial *Slack API* con el *Bot User OAuth Token* (`xoxb-…`).\n- **Filter:** deja pasar solo mensajes sin `bot_id` ni `subtype`. **Sin este filtro, la respuesta del bot dispara el flujo otra vez: un eco infinito.**\n- **Edit Fields:** canal, usuario y texto.\n- **Send a message:** *Send a message* al mismo canal. `<@usuario>` lo menciona. *Include Link to Workflow* apagado.\n\n**En Slack:** la dirección de este trigger (*Production URL*) va en tu app → *Event Subscriptions* → *Request URL*, con el evento `message.channels`. Y el bot tiene que estar en el canal (`/invite @tu-bot`).\n**¿Anda en local?** No solo: dirección **https pública** (n8n Cloud, o túnel).",
         "height": 360,
         "width": 860,
         "color": 4
@@ -144,29 +144,29 @@
       "main": [
         [
           {
-            "node": "¿Lo escribió una persona?",
+            "node": "Filter",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "¿Lo escribió una persona?": {
+    "Filter": {
       "main": [
         [
           {
-            "node": "Datos del mensaje",
+            "node": "Edit Fields",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Datos del mensaje": {
+    "Edit Fields": {
       "main": [
         [
           {
-            "node": "Responder en Slack",
+            "node": "Send a message",
             "type": "main",
             "index": 0
           }

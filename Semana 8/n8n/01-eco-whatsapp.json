@@ -59,7 +59,7 @@
         "options": {}
       },
       "id": "a514ab1d-5927-4d8b-b80c-ebd5b0a215f2",
-      "name": "Datos del mensaje",
+      "name": "Edit Fields",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
@@ -70,13 +70,13 @@
     {
       "parameters": {
         "operation": "send",
-        "phoneNumberId": "={{ $('Datos del mensaje').item.json.phoneNumberId }}",
-        "recipientPhoneNumber": "={{ $('Datos del mensaje').item.json.telefono }}",
+        "phoneNumberId": "={{ $('Edit Fields').item.json.phoneNumberId }}",
+        "recipientPhoneNumber": "={{ $('Edit Fields').item.json.telefono }}",
         "textBody": "=Hola {{ $json.nombre }}, recibí tu mensaje: \"{{ $json.texto }}\"",
         "additionalFields": {}
       },
       "id": "9ad16de6-cb7b-425d-9a55-7325a88b80e3",
-      "name": "Responder por WhatsApp",
+      "name": "Send message",
       "type": "n8n-nodes-base.whatsApp",
       "typeVersion": 1.1,
       "position": [
@@ -86,7 +86,7 @@
     },
     {
       "parameters": {
-        "content": "## Paso 1: el canal (eco)\n\nEl flujo más chico posible: lo que entra por WhatsApp, vuelve.\n\n- **WhatsApp Trigger:** escucha los mensajes de tu app de Meta. Credencial *WhatsApp OAuth API* (App ID y App Secret). En *Options* → *Receive Message Status Updates* no hay nada elegido: así los avisos de \"entregado\" y \"leído\" no disparan el flujo.\n- **Datos del mensaje:** saca del paquete de Meta el teléfono (`from`), el nombre, el tipo y el texto (`text.body`).\n- **Responder por WhatsApp:** operación *Send*, credencial *WhatsApp API* (token y Business Account ID).\n\nSi el eco funciona, el tubo está conectado. Recién ahí se suma la IA.",
+        "content": "## Paso 1: el canal (eco)\n\nEl flujo más chico posible: lo que entra por WhatsApp, vuelve.\n\n- **WhatsApp Trigger:** escucha los mensajes de tu app de Meta. Credencial *WhatsApp OAuth API* (App ID y App Secret). En *Options* → *Receive Message Status Updates* no hay nada elegido: así los avisos de \"entregado\" y \"leído\" no disparan el flujo.\n- **Edit Fields:** saca del paquete de Meta el teléfono (`from`), el nombre, el tipo y el texto (`text.body`).\n- **Send message:** operación *Send*, credencial *WhatsApp API* (token y Business Account ID).\n\nSi el eco funciona, el tubo está conectado. Recién ahí se suma la IA.",
         "height": 300,
         "width": 720,
         "color": 4
@@ -106,18 +106,18 @@
       "main": [
         [
           {
-            "node": "Datos del mensaje",
+            "node": "Edit Fields",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Datos del mensaje": {
+    "Edit Fields": {
       "main": [
         [
           {
-            "node": "Responder por WhatsApp",
+            "node": "Send message",
             "type": "main",
             "index": 0
           }
